@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <!--<script title="DEBUG" src="http://code.jquery.com/jquery-1.11.3.js"></script>-->
+        <script src="js/vers.js"></script>
+        <!--<link rel="stylesheet" type="text/css" href="js/bootstrap.min.css"/>
+        <script src="js/jquery-2.1.4.min.js"></script>
+        <script src="js/jquery-ui.min.js"></script>-->
+        <link rel="stylesheet" type="text/css" href="https://bootswatch.com/simplex/bootstrap.min.css"/>
+        <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+    </head>
+    <body>
+        <p>
+        <h1 >Writer</h1>
+        <span id=MHEAD></span>
+        <form action="#" onsubmit="">
+            <h2>Configuration</h2>
+            <label for="dir">Directory</label>
+            <input value="assets/" id="dir" type="text" title="Image directory"><br>
+            <label for="psn_0">Page Start</label>
+            <input type="radio" id="psn_0" name="psb" checked>0<input type="radio" id="psn_1" name="psb" >1<br>
+            <label for="csn_0">Chapter Start</label>
+            <input type="radio" id="csn_0" name="csb" checked>0<input type="radio" id="csn_1" name="csb" >1<br>
+            <label for="prb">Pre-Buffer</label>
+            <input type="number" value=5 id="prb" min="1" max="100" title="How far behind images are preloaded"><br>
+            <label for="ptb">Post-Buffer</label>
+            <input type="number" value=5 id="ptb" min="1" max="100" title="How far ahead images are preloaded"><br>
+            <h2 id="CHPHEAD">Chapters</h2>
+            <button id="add2">+</button>
+            <ol id="Csort"></ol>
+            <h2 id="PGEHEAD">Pages</h2>
+            <input id="conductor" type="file" multiple>
+            <ol id="sorted"></ol>
+            <input id="ExBtn" type="submit" value="Export">
+        </form>
+        </p>
+        <script>
+            console.log("%c %c %c comic-ng Writer v"+ vers_wr.version() +" %c \u262F %c \u00A9 2015 Oluwaseun Ogedengbe %c ", "color:white; background:#B5B5B5", "background:purple","color:black; background:#E2E2E2", 'color:red; background:black', "color:black; background:#B5B5B5", "background:purple");
+            $("#CHPHEAD").data({});
+            $("#add2").click(function(){
+                var oper = $("#Csort").childElementCount;
+                $("#Csort").append("<li id=c"+oper+">"+"Chapter"+" <button>&#x2731</button><button onClick=$('#c"+oper+"').remove()>X</button> </li>").sortable({ scroll: true});
+                $("#c"+oper).data({
+                    description: "", 
+                    end: 0, 
+                    start: 0, 
+                    title: ""}).addClass("chap");
+            });
+            $("#conductor").change(function() {
+                console.log(this.files);
+                $("#sorted").innerHTML ="";
+                for (i = 0; i < this.files.length; i++){
+                    $("#sorted").append("<li id=s"+i+">"+this.files[i].name+" <button>&#x2731</button><button onClick=$('#s"+i+"').remove()>X</button></li>").sortable({ scroll: true});
+                $("#s"+i).data({
+                    alt: "", 
+                    hover: "", 
+                    title: "",
+                    url: this.files[i].name, 
+                    release: 0,
+                    note: ""}).addClass("page");
+                }
+            });
+            $("#ExBtn").click(function(){
+                var setOBJ = {
+                    config: {},
+                    chapters: [],
+                    pages: []
+                };
+                //delete window.alert;
+                //alert("Settings Configured!");
+                setOBJ.config.dir = $("#dir").val();
+                setOBJ.config.pagestartnum = document.getElementById("psn_1").checked;
+                setOBJ.config.chapterstartnum = document.getElementById("csn_1").checked;
+                setOBJ.config.imgprebuffer = $("#prb").val();
+                setOBJ.config.imgpostbuffer = $("#ptb").val();
+                
+                for (j = 0; j < document.getElementById("Csort").childElementCount; j++){
+                    setOBJ.chapters.push($(".class,li").eq(j).data());
+                }
+                for (j = 0; j < document.getElementById("sorted").childElementCount; j++){
+                    setOBJ.pages.push($(".page,li").eq(j).data());
+                }
+                console.log(setOBJ);
+                $('#setlink').remove();
+                var refh = "<a onClick=$('#setlink').remove() id='setlink' href='data: text/json;charset=utf-8," + JSON.stringify(setOBJ,["config","pages","chapters","dir","pagestartnum","chapterstartnum","imgprebuffer","imgpostbuffer","alt","hover","title","url","release","note","description","start","end","title"]) + "' download='config.json' autofocus>config.json</a>";
+                console.log(refh);
+                $(refh).appendTo("#MHEAD");
+            });
+        </script>
+    </body>
+</html>
