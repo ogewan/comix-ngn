@@ -12,6 +12,7 @@
         function updateTime() {
             set.now = 
             document.getElementById("time").textContent = Date.now();
+            document.getElementById("time").Plength = set.pages.length;
           }
         $http.get('config.json').success(function(data){
             set.config = data.config;

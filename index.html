@@ -13,32 +13,40 @@
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular.min.js"></script>
         <script src="https://code.angularjs.org/1.4.0/angular-touch.min.js"></script>-->
         <script src="js/app.js"></script>
+        <script src="js/caruso.js"></script>
     </head><body>
     <div ng-controller="StageDirector as scene">
         <p><span id="time"></span><!--{{scene.now}}--></p>
-        <div id="myCarousel" class="carousel slide" data-ride="">
+        <div id="myCarousel" class="carousel slide" data-ride="" data-interval="false" data-wrap="false">
             <!-- Wrapper for slides -->
             <div class="carousel-inner" role="listbox">
-                <div ng-repeat="page in scene.pages" ng-hide="scene.now < page.release" class="item" ng-class="{active: $first}">
+                <div ng-repeat="page in scene.pages" ng-hide="scene.now < page.release" class="item" ng-class="{active: $first, first: $first, last: $last}">
                     <h1>{{page.title}}</h1>
                     <p><img src="{{scene.config.dir + page.url}}" title="{{page.hover}}" alt="{{page.alt}}"></p>
                     <!--<p><button ng-hide="$first">|<</button>
                     <button ng-hide="$first">< Prev</button>
-                    <button>Random</button>
+                    <button>?</button>
                     <input type="number" class="tiny" ng-model="carouselIndex">
                     <button ng-hide="$last">Next ></button>
                     <button ng-hide="$last">>|</button></p>-->
                 </div>
             </div>
-          <!-- Left and right controls -->
-          <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+            <!-- Controls -->
+            <!--<button href="#myCarousel" data-slide-to=0 ng-hide="$first" onclick="caruso.frst()">|<</button>-->
+            <button onclick="caruso.frst()">|<</button>
+            <button onclick="caruso.left()">< Prev</button>
+            <button onclick="caruso.rand()">?</button>
+            <input type="number" class="tiny" onkeydown="caruso.indx(this)"/>
+            <button onclick="caruso.rght()">Next ></button>
+            <button onclick="caruso.last()">>|</button></p>
+          <!--<a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
             <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
             <span class="sr-only">Previous</span>
           </a>
           <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next"> 
             <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
             <span class="sr-only">Next</span>
-          </a>
+          </a>-->
         </div>
         <p>Images Courtesy of <a src="http://xkcd.com/">XKCD</a></p>
     </div>
