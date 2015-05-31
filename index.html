@@ -15,32 +15,27 @@
         <script src="js/app.js"></script>
         <script src="js/caruso.js"></script>
     </head><body>
+    <h1 style="margin:4px; padding:4px">comic-ng</h1>
+    <!--App Body-->
+    <!--<stage></stage><!--Future Implementation-->
     <div style="text-align:center" ng-controller="StageDirector as scene">
-        <p><span id="time"></span><!--{{scene.now}}--></p>
+        <p><span id="time">{{scene.now | date:'MM/dd/yyyy @ h:mm:ss a'}}</span></p>
         <div id="myCarousel" class="carousel slide" data-ride="" data-interval="false" data-wrap="false">
             <!-- Wrapper for slides -->
             <div class="carousel-inner" role="listbox">
-                <div ng-repeat="page in scene.pages" ng-hide="scene.now < page.release" class="item" ng-class="{active: $first, first: $first, last: $last}">
+                <div id="{{$index}}" ng-repeat="page in scene.pages" ng-hide="scene.now < page.release" class="item" ng-class="{active: $first, first: $first, last: $last}">
                     <h1>{{page.title}}</h1>
                     <p><img src="{{scene.config.dir + page.url}}" title="{{page.hover}}" alt="{{page.alt}}"></p>
-                    <!--<p><button ng-hide="$first">|<</button>
-                    <button ng-hide="$first">< Prev</button>
-                    <button>?</button>
-                    <input type="number" class="tiny" ng-model="carouselIndex">
-                    <button ng-hide="$last">Next ></button>
-                    <button ng-hide="$last">>|</button></p>-->
                 </div>
             </div>
             <!-- Controls -->
-            <button onclick="caruso.frst()">|<</button>
-            <button onclick="caruso.left()">< Prev</button>
-            <button onclick="caruso.rand()">?</button>
-            <input type="number" class="tiny" onkeydown="caruso.indx(this)"/>
-            <button onclick="caruso.rght()">Next ></button>
-            <button onclick="caruso.last()">>|</button></p>
+            <button class="frs" id="bfrs" onclick="caruso.frst()">|<</button>
+            <button class="frs" id="bpre" onclick="caruso.left()">< Prev</button>
+            <button id="bran" onclick="caruso.rand()">?</button>
+            <input id="snum" type="number" class="tiny" onkeydown="caruso.indx(this)"/>
+            <button class="las" id="bnex" onclick="caruso.rght()">Next ></button>
+            <button class="las" id="blas" onclick="caruso.last()">>|</button></p>
         </div>
-        <p>Images Courtesy of <a href="http://.xkcd.com/">XKCD</a></p>
     </div>
+    <p style="text-align:center">Images Courtesy of <a href="http://.xkcd.com/">XKCD</a></p>
 </body></html>
-
-

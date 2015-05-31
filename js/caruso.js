@@ -20,3 +20,31 @@ var caruso = {
         }
     },
 };
+
+var controlshow = function(){
+    console.log($(".active").attr("id"));
+    console.log($(".active").hasClass("first"));
+    console.log($(".active").hasClass("last"));
+    if($(".active").hasClass("first")){$(".frs").hide();}
+    else{$(".frs").show();}
+    if($(".active").hasClass("last")){$(".las").hide();}
+    else{$(".las").show();}
+}
+
+$( document ).ready(function() {
+    $("#myCarousel").on('slid.bs.carousel',function(e){
+         controlshow();
+    });
+    $(".frs").hide();/*Manually assume first page is first, will be wrong when reload to specific page*/
+    $( document ).keydown(function(e) {
+        if($("#snum").is(":focus")){
+            return;
+        }
+        if(e.keyCode == 37){
+            caruso.left();
+        }
+        else if(e.keyCode == 39){
+            caruso.rght();
+        }
+    });
+});
