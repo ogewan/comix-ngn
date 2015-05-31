@@ -1,14 +1,23 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <title id="wng">Writer</title>
         <!--<script title="DEBUG" src="http://code.jquery.com/jquery-1.11.3.js"></script>-->
         <script src="js/vers.js"></script>
         <link rel="stylesheet" type="text/css" href="js/bootstrap.min.css"/>
         <script src="js/jquery-2.1.4.min.js"></script>
         <script src="js/jquery-ui.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/angular.min.js"></script>
+        <script src="js/angular-touch.min.js"></script>
         <!--<link rel="stylesheet" type="text/css" href="https://bootswatch.com/simplex/bootstrap.min.css"/>
         <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
-        <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>-->
+        <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js" ></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular.min.js"></script>
+        <script src="https://code.angularjs.org/1.4.0/angular-touch.min.js"></script>-->
+        <script src="js/app.js"></script>
+        <script src="js/caruso.js"></script>
     </head>
     <body style="margin:4px; padding:4px">
         <h1>Writer</h1>
@@ -30,7 +39,7 @@
                     <td title="How far ahead images are preloaded"><label for="ptb">Post-Buffer</label>
                     <input type="number" value=5 id="ptb" min="1" max="100"></td></tr>
                     <tr><td style="vertical-align:top" title="If there are more images in the directory than in +the configuration file, attempt to automatically add them"><label for="pyr_0">Append on Page Mismatch</label>
-                    <input type="radio" id="pyr_0" name="pyrt" checked>On&nbsp;<input type="radio" id="yr_1" name="pyrt" >Off</td>
+                    <input type="radio" id="pyr_0" name="pyrt" checked>On&nbsp;<input type="radio" id="pyr_1" name="pyrt" >Off</td>
                     <td style="vertical-align:top" title="The order in which the images should be appended"><label for="spyr_0">Append Order</label>
                     <input type="radio" id="spyr_0" name="spyrt" checked>Modified&nbsp;<input type="radio" id="spyr_1" name="spyrt">Name&nbsp;<input type="radio" id="spyr_2" name="spyrt">Size&nbsp;<input type="radio" id="spyr_3" name="spyrt">Type&nbsp;<br>
                     <input type="radio" id="spyro_0" name="spyrto" checked>Descending&nbsp;<input type="radio" id="spyro_1" name="spyrto" >Ascending</td></tr>
@@ -43,7 +52,11 @@
                 </form>
             </div>
             <h3 class="button" role="button">* Design</h3>
-            <div><span class="error" style="color:red">This Feature is not yet implemented.</span></div>
+            <div ng-app="comicNg"><p>
+                <button id="InBtn" title="Create site template; this does not save settings it simply creates an index.html file">Site Template</button>&nbsp;
+                <button id="DsBtn" title="Save Stage Design">Save Design</button></p>
+                <stage></stage>
+            </div>
         <script>
             var jQ = jQuery.noConflict();
             console.log("%c %c %c comic-ng Writer v"+ vers_wr.version() +" %c \u262F %c \u00A9 2015 Oluwaseun Ogedengbe %c ", "color:white; background:#B5B5B5", "background:purple","color:black; background:#E2E2E2", 'color:red; background:black', "color:black; background:#B5B5B5", "background:purple");
@@ -75,7 +88,7 @@
                     description: "", 
                     end: 0, 
                     start: 0, 
-                    title: "",}
+                    title: "Chapter",}
                 }).addClass("chap");
             });
             jQ("#conductor").change(function() {
@@ -104,21 +117,13 @@
                     return;
                 }
                 console.log(this.files);
-                return;
-                jQ("#sorted").innerHTML ="";
-                for (i = 0; i < this.files.length; i++){
-                    jQ("#sorted").append("<li id=s"+i+">"+this.files[i].name+" <button onClick=settingsP('#s"+i+"');>&#x2731</button><button onClick=jQ('#s"+i+"').remove()>X</button></li>").sortable({ scroll: true});
-                jQ("#s"+i).data({
-                    open: false,
-                    body: {
-                        alt: "", 
-                        hover: "", 
-                        title: "",
-                        url: this.files[i].name, 
-                        release: 0,
-                        note: "",}
-                }).addClass("page");
-            }});
+                if(!this.files.length) return;
+                /*jQ("#sorted").innerHTML ="";*/
+                jQ("#sorted").textContent ="";
+                jQ("#Csort").textContent ="";
+                
+                jQ.getJSON(this.files[0].name, function(conf){report(conf);});
+            });
             jQ("#ExBtn").click(function(){
                 var setOBJ = {
                     config: {},
@@ -148,7 +153,19 @@
                 }
                 console.log(setOBJ);
                 jQ('#setlink').remove();
-                var refh = "<a onClick=jQ('#setlink').remove() id='setlink' href='data: text/json;charset=utf-8," + JSON.stringify(setOBJ,["config","pyr","pages","chapters","dir","pagestartnum","chapterstartnum","imgprebuffer","imgpostbuffer","appendmismatch","appendorder","appendorderdir","alt","hover","title","url","release","note","description","start","end","title"]) + "' download='config.json' autofocus>config.json</a>";
+                var refh = "<a onClick=jQ('#setlink').remove() id='setlink' href='data: text/json;charset=utf-8," + JSON.stringify(setOBJ,["config","pyr","pages","chapters","dir","pagestartnum","chapterstartnum","imgprebuffer","imgpostbuffer","appendmismatch","appendorder","appendorderdir","alt","hover","title","url","release","note","description","start","end","title"]) + "' download='config.json' autofocus>config.json<br></a>";
+                console.log(refh);
+                jQ(refh).appendTo("#MHEAD");
+            });
+            jQ("#InBtn").click(function(){
+                jQ('#indlink').remove();
+                var refh = "<a onClick=jQ('#indlink').remove() id='indlink' href='data: text/html;charset=utf-8," + '<!DOCTYPE html><html > <head> <title id="cng">comic-ng<\/title> <script src="js/vers.js"><\/script> <link rel="stylesheet" type="text/css" href="https://bootswatch.com/simplex/bootstrap.min.css"/> <script src="http://code.jquery.com/jquery-2.1.4.min.js"><\/script> <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js" ><\/script> <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular.min.js"><\/script> <script src="https://code.angularjs.org/1.4.0/angular-touch.min.js"><\/script> <script src="js/app.js"><\/script> <script src="js/caruso.js"><\/script> <\/head><body ng-app="comicNg"> <h1 style="margin:4px; padding:4px">comic-ng<\/h1> <stage><\/stage><\/body><\/html>' + "' download='index.html' autofocus>index.html<br></a>";
+                console.log(refh);
+                jQ(refh).appendTo("#MHEAD");
+            });
+            jQ("#DsBtn").click(function(){
+                jQ('#deslink').remove();/*temporary, using predefined scene*/
+                var refh = "<a onClick=jQ('#deslink').remove() id='deslink' href='data: text/html;charset=utf-8," + '<div style="text-align:center" ng-controller="StageDirector as scene"> <p><span id="time">{{scene.now | date:"MM/dd/yyyy @ h:mm:ss a"}}<\/span><\/p><div id="myCarousel" class="carousel slide" data-ride="" data-interval="false" data-wrap="false"> <div class="carousel-inner" role="listbox"> <div id="{{$index}}" ng-repeat="page in scene.pages" ng-hide="scene.now < page.release" class="item" ng-class="{active: $first, first: $first, last: $last}"> <h1>{{page.title}}<\/h1> <p><img src="{{scene.config.dir + page.url}}" title="{{page.hover}}" alt="{{page.alt}}"><\/p><\/div><\/div><button class="frs" id="bfrs" onclick="caruso.frst()">|<<\/button> <button class="frs" id="bpre" onclick="caruso.left()">< Prev<\/button> <button id="bran" onclick="caruso.rand()">?<\/button> <input id="snum" type="number" class="tiny" onkeydown="caruso.indx(this)"/> <button class="las" id="bnex" onclick="caruso.rght()">Next ><\/button> <button class="las" id="blas" onclick="caruso.last()">>|<\/button><\/p><\/div><p id="SiteNote" style="text-align:center">Images Courtesy of <a href="http://.xkcd.com/">XKCD<\/a><\/p><\/div>' + "' download='stage.html' autofocus>stage.html<br></a>";
                 console.log(refh);
                 jQ(refh).appendTo("#MHEAD");
             });
@@ -196,6 +213,77 @@
                     jQ(ele).data().open = true;
                 }
                 return true;
+            };
+            var report = function(conf){
+                document.getElementById("psn_0").checked = false;
+                document.getElementById("psn_1").checked = false;
+                document.getElementById("csn_0").checked = false;
+                document.getElementById("csn_1").checked = false;
+                document.getElementById("pyr_0").checked = false;
+                document.getElementById("pyr_1").checked = false;
+                document.getElementById("spyr_0").checked = false;
+                document.getElementById("spyr_1").checked = false;
+                document.getElementById("spyr_2").checked = false;
+                document.getElementById("spyr_3").checked = false;
+                document.getElementById("spyro_0").checked = false;
+                document.getElementById("spyro_1").checked = false;
+                
+                if(typeof conf.config === 'undefined'){/*config module dependency*/
+                    /*default settings*/
+                    jQ("#dir").val("assets/");
+                    jQ("#prb").val("5");
+                    jQ("#ptb").val("5");
+                    document.getElementById("psn_1").checked = true;
+                    document.getElementById("csn_1").checked = true;
+                } else {
+                    jQ("#dir").val(conf.config.dir);
+                    jQ("#prb").val(conf.config.imgprebuffer);
+                    jQ("#ptb").val(conf.config.imgpostbuffer);
+                    if(conf.config.pagestartnum){document.getElementById("psn_1").checked = true;}
+                    else{document.getElementById("psn_0").checked = true;}
+                    if(conf.config.chapterstartnum){document.getElementById("csn_1").checked = true;}
+                    else{document.getElementById("csn_0").checked = true;}
+                }
+                if(typeof conf.pyr === 'undefined'){/*pyr module dependency*/
+                    /*default settings*/
+                    document.getElementById("pyr_0").checked = true;
+                    document.getElementById("spyr_0").checked = true;
+                    document.getElementById("spyro_0").checked = true;
+                } else {
+                    if(conf.pyr.appendmismatch){document.getElementById("pyr_0").checked = true;}
+                    else{document.getElementById("pyr_1").checked = true;}
+                    if(conf.pyr.appendorder==0){document.getElementById("spyr_0").checked = true;}
+                    else if(conf.pyr.appendorder==1){document.getElementById("spyr_1").checked = true;}
+                    else if(conf.pyr.appendorder==2){document.getElementById("spyr_2").checked = true;}
+                    else if(conf.pyr.appendorder==3){document.getElementById("spyr_3").checked = true;}
+                    if(conf.pyr.appendorderdir){document.getElementById("spyro_0").checked = true;}
+                    else{document.getElementById("spyro_1").checked = true;}
+                }
+                
+                for (i = 0; i < conf.pages.length; i++){
+                    jQ("#sorted").append("<li id=s"+i+">"+conf.pages[i].url+" <button onClick=settingsP('#s"+i+"');>&#x2731</button><button onClick=jQ('#s"+i+"').remove()>X</button></li>").sortable({ scroll: true});
+                    jQ("#s"+i).data({
+                        open: false,
+                        body: {
+                            alt: conf.pages[i].alt, 
+                            hover: conf.pages[i].hover, 
+                            title: conf.pages[i].title,
+                            url: conf.pages[i].url, 
+                            release: conf.pages[i].rekease,
+                            note: conf.pages[i].note,}
+                    }).addClass("page");
+                }
+                for (oper = 0; oper < conf.chapters.length; oper++){
+                    jQ("#Csort").append("<li id=c"+oper+">"+conf.chapters[i].title+" <button onClick=settingsC('#c"+oper+"')>&#x2731</button><button onClick=jQ('#c"+oper+"').remove()>X</button> </li>").sortable({ scroll: true});
+                    jQ("#c"+oper).data({
+                        open: false,
+                        body: {
+                        description: conf.chapters[i].description, 
+                        end: conf.chapters[i].end, 
+                        start: conf.chapters[i].start, 
+                        title: conf.chapters[i].title,}
+                    }).addClass("chap");
+                }
             };
         </script>
     </body>
