@@ -19,6 +19,10 @@ var caruso = {
             jQuery("#myCarousel").carousel(Math.max(0, Math.min(parseInt(val.value-1), document.getElementById("time").Plength-1)));
         }
     },
+    jump: function(val){//this function is called on page load via routing
+        jQuery("#myCarousel").carousel(Math.max(0, Math.min(parseInt(val.value-1), document.getElementById("time").Plength-1)));
+        preloadctrl(val);/*might be called twice*/
+    },
 };
 
 var controlshow = function(){
@@ -31,16 +35,34 @@ var controlshow = function(){
     else{jQuery(".las").show();}
 };
 
-var preloadctrl = function(){
-    var iid;
-    var id = jQuery(".active").attr("id");
-    jQuery('[btog=1]').attr("src", ""); /*turn off all active img*/
-    for (i = 0; i < jQuery("#myCarousel").attr("pstload"); i++) {
-        iid = "#ig"+(parseInt(id)+i).toString;
-        jQuery(iid).attr("src", jQuery(iid).attr("isrc")); /*turns image on*/
-        jQuery(iid).attr("btog", 1);
+var preloadctrl = function(val){
+    var id;
+    if(typeof val === "undefined") {
+        id = jQuery(".active").attr("id");
+    } else {
+        id = val;
     }
-    /*jQuery(imgid).attr("src", "");*/ /*turns image off*/
+    var iid;
+    jQuery('[btog=1]').attr("src", ""); /*turn off all active img*/
+    jQuery('[btog=1]').attr("btog", 0); /*decrement*/
+    jQuery('[btog=2]').attr("btog", 1);
+    
+    for (i = 0; i < jQuery("#myCarousel").attr("pstload"); i++) {
+        iid = "#ig"+(parseInt(id)+i).toString();
+        console.log(iid);
+        if(jQuery(iid).attr("btog")==0){
+            jQuery(iid).attr("src", jQuery(iid).attr("isrc")); /*turns image on*/
+        }
+        jQuery(iid).attr("btog", 2);
+    }
+    for (i = -1; i > (jQuery("#myCarousel").attr("preload")*-1)-2; i--) {
+        iid = "#ig"+(parseInt(id)+i).toString();
+        console.log(iid);
+        if(jQuery(iid).attr("btog")==0){
+            jQuery(iid).attr("src", jQuery(iid).attr("isrc")); /*turns image on*/
+        }
+        jQuery(iid).attr("btog", 2);
+    }
 };
 
 jQuery( document ).ready(function() {

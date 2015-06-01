@@ -3,6 +3,12 @@
     console.log("%c pyoofreader v"+ vers_pr.version() +" for comic-ng %c ", "color:white; background:black", "background:purple");
     var app = angular.module('comicNg',[]);
     
+    app.filter('iif', function () {
+       return function(input, trueValue, falseValue) {
+            return input ? trueValue : falseValue;/*undefined should evalulate to false*/
+       };
+    });
+    
     app.directive('stage', function(){
         return {
             restrict: 'E',
