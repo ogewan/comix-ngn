@@ -107,7 +107,9 @@
                         title: "",
                         url: this.files[i].name, 
                         release: 0,
-                        note: "",}
+                        note: "",
+                        perm: false,
+                    }
                 }).addClass("page");
             }});
             jQ("#historian").change(function() {
@@ -173,6 +175,9 @@
                 var lee = ele.substring(1);
                 console.log(ele);
                 console.log(jQ(ele).data().open);
+                if(typeof jQ(ele).data().body.perm === 'undefined'){
+                    jQ(ele).data().body.perm = false;
+                }
                 if (jQ(ele).data().open){
                     /*console.log("deleting");*/
                     jQ(ele).data().body.title = jQ("#TEMP_title"+lee).val();
@@ -181,13 +186,18 @@
                     jQ(ele).data().body.alt = jQ("#TEMP_alt"+lee).val();
                     jQ(ele).data().body.release = jQ("#TEMP_release"+lee).val();
                     jQ(ele).data().body.url = jQ("#TEMP_url"+lee).val();
+                    jQ(ele).data().body.perm = document.getElementById("TEMP_perm").checked;
                     jQ("#TEMPFORM_"+lee).remove();
                     /*document.getElementById(ele.substring(1)).removeChild(document.getElementById("TEMPFORM_"+ele));fallback*/
                     jQ(ele).focus();
                     jQ(ele).data().open = false;
                     console.log(jQ(ele).data());
                 }else {
-                    jQ(ele).append("<form id='TEMPFORM_"+lee+"' autofocus><label for='TEMP_title"+lee+"'>Title&nbsp</label><input value='"+jQ(ele).data().body.title+"' id='TEMP_title"+lee+"' type='text' autofocus><br><label for='TEMP_hover"+lee+"'>Hover&nbsp</label><input value='"+jQ(ele).data().body.hover+"' id='TEMP_hover"+lee+"' type='text' title='Text on Mouse Over'><br><label for='TEMP_note"+lee+"'>Image Info&nbsp</label><input value='"+jQ(ele).data().body.note+"' id='TEMP_note"+lee+"' type='text'><br><label for='TEMP_alt"+lee+"'>Alt Text&nbsp</label><input value='"+jQ(ele).data().body.alt+"' id='TEMP_alt"+lee+"' type='text' title='If the image fails to load this text is loaded instead'><br><label for='TEMP_release"+lee+"'>Release Date&nbsp </label><input value='"+jQ(ele).data().body.release+"' id='TEMP_release"+lee+"' type='number' title='When should this slide be avaliable'><br><label for='TEMP_url"+lee+"'>URL&nbsp</label><input value='"+jQ(ele).data().body.url+"' id='TEMP_url"+lee+"' type='text' title='Filename of the image'><br></form>");
+                    var ischek = "";
+                    if(jQ(ele).data().body.perm){
+                       ischek = "checked"; 
+                    }
+                    jQ(ele).append("<form id='TEMPFORM_"+lee+"' autofocus><label for='TEMP_title"+lee+"'>Title&nbsp</label><input value='"+jQ(ele).data().body.title+"' id='TEMP_title"+lee+"' type='text' autofocus><br><label for='TEMP_hover"+lee+"'>Hover&nbsp</label><input value='"+jQ(ele).data().body.hover+"' id='TEMP_hover"+lee+"' type='text' title='Text on Mouse Over'><br><label for='TEMP_note"+lee+"'>Image Info&nbsp</label><input value='"+jQ(ele).data().body.note+"' id='TEMP_note"+lee+"' type='text'><br><label for='TEMP_alt"+lee+"'>Alt Text&nbsp</label><input value='"+jQ(ele).data().body.alt+"' id='TEMP_alt"+lee+"' type='text' title='If the image fails to load this text is loaded instead'><br><label for='TEMP_release"+lee+"'>Release Date&nbsp </label><input value='"+jQ(ele).data().body.release+"' id='TEMP_release"+lee+"' type='number' title='When should this slide be avaliable'><br><label for='TEMP_url"+lee+"'>URL&nbsp</label><input value='"+jQ(ele).data().body.url+"' id='TEMP_url"+lee+"' type='text' title='Filename of the image'><br><label for='TEMP_perm"+lee+"'>Permanent&nbsp</label><input "+ischek+" id='TEMP_perm"+lee+"' type='checkbox' title='Whether the image should always be loaded'><br></form>");
                     jQ(ele).focus();
                     jQ(ele).data().open = true;
                 }
@@ -262,6 +272,9 @@
                 
                 for (i = 0; i < conf.pages.length; i++){
                     jQ("#sorted").append("<li id=s"+i+">"+conf.pages[i].url+" <button onClick=settingsP('#s"+i+"');>&#x2731</button><button onClick=jQ('#s"+i+"').remove()>X</button></li>").sortable({ scroll: true});
+                if(typeof conf.pages[i].perm === 'undefined'){
+                    conf.pages[i].perm = false;
+                }
                     jQ("#s"+i).data({
                         open: false,
                         body: {
@@ -269,8 +282,10 @@
                             hover: conf.pages[i].hover, 
                             title: conf.pages[i].title,
                             url: conf.pages[i].url, 
-                            release: conf.pages[i].rekease,
-                            note: conf.pages[i].note,}
+                            release: conf.pages[i].release,
+                            note: conf.pages[i].note,
+                            perm: conf.pages[i].perm,
+                        }
                     }).addClass("page");
                 }
                 for (oper = 0; oper < conf.chapters.length; oper++){

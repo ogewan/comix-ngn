@@ -29,7 +29,19 @@ var controlshow = function(){
     else{jQuery(".frs").show();}
     if(jQuery(".active").hasClass("last")){jQuery(".las").hide();}
     else{jQuery(".las").show();}
-}
+};
+
+var preloadctrl = function(){
+    var iid;
+    var id = jQuery(".active").attr("id");
+    jQuery('[btog=1]').attr("src", ""); /*turn off all active img*/
+    for (i = 0; i < jQuery("#myCarousel").attr("pstload"); i++) {
+        iid = "#ig"+(parseInt(id)+i).toString;
+        jQuery(iid).attr("src", jQuery(iid).attr("isrc")); /*turns image on*/
+        jQuery(iid).attr("btog", 1);
+    }
+    /*jQuery(imgid).attr("src", "");*/ /*turns image off*/
+};
 
 jQuery( document ).ready(function() {
     jQuery("#myCarousel").on('slid.bs.carousel',function(e){

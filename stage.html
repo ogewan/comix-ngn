@@ -1,11 +1,11 @@
-<div style="text-align:center" ng-controller="StageDirector as scene">
+<div style="text-align:center">
     <p><span id="time">{{scene.now | date:'MM/dd/yyyy @ h:mm:ss a'}}</span></p>
-    <div id="myCarousel" class="carousel slide" data-ride="" data-interval="false" data-wrap="false">
+    <div id="myCarousel" class="carousel slide" data-ride="" data-interval="false" data-wrap="false" pstload={{scene.config.imgprebuffer}} preload={{scene.config.imgpostbuffer}}>
         <!-- Wrapper for slides -->
         <div class="carousel-inner" role="listbox">
             <div id="{{$index}}" ng-repeat="page in scene.pages" ng-hide="scene.now < page.release" class="item" ng-class="{active: $first, first: $first, last: $last}">
                 <h1>{{page.title}}</h1>
-                <p><img isrc="{{scene.config.dir + page.url}}" src="{{scene.config.dir + page.url}}" title="{{page.hover}}" alt="{{page.alt}}"></p>
+                <p><img id="{{'ig' + $index}}" isrc="{{scene.config.dir + page.url}}" src="{{scene.config.dir + page.url}}" title="{{page.hover}}" alt="{{page.alt}}" btog=0></p>
             </div>
         </div>
         <!-- Controls -->
@@ -16,4 +16,10 @@
         <button class="las" id="bnex" onclick="caruso.rght()">Next ></button>
         <button class="las" id="blas" onclick="caruso.last()">>|</button></p>
     </div><p id="SiteNote" style="text-align:center">Images Courtesy of <a href="http://.xkcd.com/">XKCD</a></p>
+        <script>
+            jQuery("#myCarousel").on('slid.bs.carousel',function(e){
+                 controlshow();
+            });
+            jQuery(".frs").hide();/*Manually assume first page is first, will be wrong when reload to specific page*/
+        </script>
 </div>
