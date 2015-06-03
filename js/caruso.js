@@ -9,18 +9,22 @@ var caruso = {
         jQuery("#myCarousel").carousel("next");
     },
     last: function(){
-        jQuery("#myCarousel").carousel(document.getElementById("time").Plength-1);
+        jQuery("#myCarousel").carousel(vvar1-1);
     },
     rand: function(){
-        jQuery("#myCarousel").carousel(Math.floor(Math.random() * document.getElementById("time").Plength));
+        jQuery("#myCarousel").carousel(Math.floor(Math.random() * vvar1));
     },
     indx: function(val){
         if(event.keyCode == 13) {
-            jQuery("#myCarousel").carousel(Math.max(0, Math.min(parseInt(val.value-1), document.getElementById("time").Plength-1)));
+            val = parseInt(val.value);
+            if(isNaN(val)) val = 1;//default
+            jQuery("#myCarousel").carousel(Math.max(0, Math.min(val-1, vvar1-1)));
         }
     },
-    jump: function(val){//this function is called on page load via routing
-        jQuery("#myCarousel").carousel(Math.max(0, Math.min(parseInt(val.value-1), document.getElementById("time").Plength-1)));
+    jump: function(val){/*this function is called on page load via routing*/
+        val = parseInt(val);
+        if(isNaN(val)) val = 1;//default
+        jQuery("#myCarousel").carousel(Math.max(0, Math.min(val-1, vvar1-1)));
         preloadctrl(val);/*might be called twice*/
     },
 };

@@ -1,3 +1,4 @@
+var vvar1;
 var vers_ix = {
 	status: 0,//alpha
 	major: 9,
