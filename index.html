@@ -1,46 +1,28 @@
 <!DOCTYPE html>
-<html ng-app="comicNg">
+<html >
     <head>
+        <title id="cng">comic-ng</title>
         <script src="js/vers.js"></script>
-        <!--<link rel="stylesheet" type="text/css" href="js/bootstrap.min.css"/>
+        <link rel="stylesheet" type="text/css" href="js/bootstrap.min.css"/>
+        <link rel="stylesheet" type="text/css" href="js/bootstrap-touch-carousel.css"/>
         <script src="js/jquery-2.1.4.min.js"></script>
         <script src="js/bootstrap.min.js"></script>
+        <script src="js/bootstrap-touch-carousel.js"></script>
         <script src="js/angular.min.js"></script>
-        <script src="js/angular-touch.min.js"></script>-->
-        <link rel="stylesheet" type="text/css" href="https://bootswatch.com/simplex/bootstrap.min.css"/>
+        <script src="js/angular-route.min.js"></script>
+        <script src="js/angular-touch.min.js"></script>
+        <!--<link rel="stylesheet" type="text/css" href="https://bootswatch.com/simplex/bootstrap.min.css"/>
         <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
         <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js" ></script>
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular.min.js"></script>
-        <script src="https://code.angularjs.org/1.4.0/angular-touch.min.js"></script>
+		<script src="https://code.angularjs.org/1.4.0/angular-route.min.js"></script>
+        <script src="https://code.angularjs.org/1.4.0/angular-touch.min.js"></script>-->
         <script src="js/app.js"></script>
         <script src="js/caruso.js"></script>
-    </head><body>
-    <div style="text-align:center" ng-controller="StageDirector as scene">
-        <p><span id="time"></span><!--{{scene.now}}--></p>
-        <div id="myCarousel" class="carousel slide" data-ride="" data-interval="false" data-wrap="false">
-            <!-- Wrapper for slides -->
-            <div class="carousel-inner" role="listbox">
-                <div ng-repeat="page in scene.pages" ng-hide="scene.now < page.release" class="item" ng-class="{active: $first, first: $first, last: $last}">
-                    <h1>{{page.title}}</h1>
-                    <p><img src="{{scene.config.dir + page.url}}" title="{{page.hover}}" alt="{{page.alt}}"></p>
-                    <!--<p><button ng-hide="$first">|<</button>
-                    <button ng-hide="$first">< Prev</button>
-                    <button>?</button>
-                    <input type="number" class="tiny" ng-model="carouselIndex">
-                    <button ng-hide="$last">Next ></button>
-                    <button ng-hide="$last">>|</button></p>-->
-                </div>
-            </div>
-            <!-- Controls -->
-            <button onclick="caruso.frst()">|<</button>
-            <button onclick="caruso.left()">< Prev</button>
-            <button onclick="caruso.rand()">?</button>
-            <input type="number" class="tiny" onkeydown="caruso.indx(this)"/>
-            <button onclick="caruso.rght()">Next ></button>
-            <button onclick="caruso.last()">>|</button></p>
-        </div>
-        <p>Images Courtesy of <a href="http://.xkcd.com/">XKCD</a></p>
-    </div>
+        <!--<base href="/">-->
+        <base href="/comic-ng/">
+    </head><body ng-app="comicNg">
+    <h1 style="margin:4px; padding:4px">comic-ng</h1>
+    <!--App Body-->
+    <stage></stage>
 </body></html>
-
-
