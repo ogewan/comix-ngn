@@ -9,6 +9,20 @@
        };
     });
     
+    app.filter('aiif', function () {
+       return function(input, trueValue, maybeValue, falseValue) {
+            if(input[0]){/*page is permanent?*/
+                return trueValue;
+            } else {/*undefined should evalulate to false*/
+                if(input[2]){/*Is this first page?*/
+                    return !input[1] ? maybeValue : falseValue;
+                } else {
+                    return input[1] ? maybeValue : falseValue;
+                }
+            }
+       };
+    });
+    
     app.config(function ($routeProvider, $locationProvider) {
         console.log("route");
         $routeProvider
@@ -45,6 +59,7 @@
                 function updateTime() {
                     set.now = Date.now();
                     vvar1 = set.pages.length;
+                    vvar2 = set.config.startpage;
                   }
                 $http.get('config.json').success(function(data){
                     set.config = data.config;
