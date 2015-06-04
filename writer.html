@@ -27,8 +27,8 @@
         <div id="accordion">
             <h3 class="button" role="button">* Settings</h3>
             <div>
-                <form action="#" onsubmit=""><table style="width:100%">
-                    <tr><td colspan="2"><h4>Configuration</h4></td></tr>
+                <form action="#" onsubmit=""><table id="bodtab" border="0" style="width:100%">
+                    <tr><td colspan="2"><h4 id="confhead" title="Click to toggle border">Configuration</h4></td></tr>
                     <tr><td title="Image directory"><label for="dir">Directory</label>
                     <input value="assets/" id="dir" type="text" ></td>
                     <td title="Select this if you want to continue from a previous configuration."><label for="historian">Config File</label><input id="historian" type="file" accept=".json"></td></tr>
@@ -42,9 +42,11 @@
                     <input type="number" value=5 id="ptb" min="1" max="100"></td></tr>
                     <tr><td style="vertical-align:top" title="If there are more images in the directory than in +the configuration file, attempt to automatically add them"><label for="pyr_0">Append on Page Mismatch</label>
                     <input type="radio" id="pyr_0" name="pyrt" checked>On&nbsp;<input type="radio" id="pyr_1" name="pyrt" >Off</td>
-                    <td style="vertical-align:top" title="The order in which the images should be appended"><label for="spyr_0">Append Order</label>
+                    <td rowspan="2" style="vertical-align:top" title="The order in which the images should be appended"><label for="spyr_0">Append Order</label>
                     <input type="radio" id="spyr_0" name="spyrt" checked>Modified&nbsp;<input type="radio" id="spyr_1" name="spyrt">Name&nbsp;<input type="radio" id="spyr_2" name="spyrt">Size&nbsp;<input type="radio" id="spyr_3" name="spyrt">Type&nbsp;<br>
-                    <input type="radio" id="spyro_0" name="spyrto" checked>Descending&nbsp;<input type="radio" id="spyro_1" name="spyrto" >Ascending</td></tr>
+                        <input type="radio" id="spyro_0" name="spyrto" checked>Descending&nbsp;<input type="radio" id="spyro_1" name="spyrto" >Ascending</td></tr>
+                    <tr><td title="The page that the comic loads first, either start from the beginning or the most recent"><label for="strp_0">Start Page</label>
+                    <input type="radio" id="strp_0" name="strpa" checked>First&nbsp;<input type="radio" id="strp_1" name="strpa" >Last</td></tr>
                     <tr><td><h4 id="CHPHEAD">Chapters</h4>
                     <button id="add2">+</button></td>
                     <td><h4 id="PGEHEAD">Pages</h4>
@@ -63,6 +65,10 @@
             var jQ = jQuery.noConflict();
             console.log("%c %c %c comic-ng Writer v"+ vers_wr.version() +" %c \u262F %c \u00A9 2015 Oluwaseun Ogedengbe %c ", "color:white; background:#B5B5B5", "background:purple","color:black; background:#E2E2E2", 'color:red; background:black', "color:black; background:#B5B5B5", "background:purple");
             jQ("#CHPHEAD").data({});
+            jQ("#confhead").click(function(){
+                if(jQ("#bodtab").attr("border")=="1"){ jQ("#bodtab").attr("border", "0");}
+                else {jQ("#bodtab").attr("border", "1");}
+            });
             jQ("#accordion").accordion({collapsible: true,
       heightStyle: "content"});
                 /*.sortable({
@@ -140,6 +146,7 @@
                 setOBJ.config.dir = jQ("#dir").val();
                 setOBJ.config.pagestartnum = document.getElementById("psn_1").checked;
                 setOBJ.config.chapterstartnum = document.getElementById("csn_1").checked;
+                setOBJ.config.startpage = document.getElementById("strp_1").checked;
                 setOBJ.config.imgprebuffer = jQ("#prb").val();
                 setOBJ.config.imgpostbuffer = jQ("#ptb").val();
                 setOBJ.pyr.appendmismatch = document.getElementById("pyr_0").checked;
@@ -157,7 +164,7 @@
                 }
                 console.log(setOBJ);
                 jQ('#setlink').remove();
-                var refh = "<a onClick=jQ('#setlink').remove() id='setlink' href='data: text/json;charset=utf-8," + JSON.stringify(setOBJ,["config","pyr","pages","chapters","dir","pagestartnum","chapterstartnum","imgprebuffer","imgpostbuffer","appendmismatch","appendorder","appendorderdir","alt","hover","title","url","release","note","description","start","end","title"]) + "' download='config.json' autofocus>config.json<br></a>";
+                var refh = "<a onClick=jQ('#setlink').remove() id='setlink' href='data: text/json;charset=utf-8," + JSON.stringify(setOBJ,["config","pyr","pages","chapters","dir","startpage","pagestartnum","chapterstartnum","imgprebuffer","imgpostbuffer","appendmismatch","appendorder","appendorderdir","alt","hover","title","url","release","note","description","start","end","title"]) + "' download='config.json' autofocus>config.json<br></a>";
                 console.log(refh);
                 jQ(refh).appendTo("#MHEAD");
             });
@@ -188,7 +195,7 @@
                     jQ(ele).data().body.alt = jQ("#TEMP_alt"+lee).val();
                     jQ(ele).data().body.release = jQ("#TEMP_release"+lee).val();
                     jQ(ele).data().body.url = jQ("#TEMP_url"+lee).val();
-                    jQ(ele).data().body.perm = document.getElementById("TEMP_perm").checked;
+                    jQ(ele).data().body.perm = document.getElementById("TEMP_perm"+lee).checked;
                     jQ("#TEMPFORM_"+lee).remove();
                     /*document.getElementById(ele.substring(1)).removeChild(document.getElementById("TEMPFORM_"+ele));fallback*/
                     jQ(ele).focus();
@@ -231,6 +238,8 @@
                 document.getElementById("psn_1").checked = false;
                 document.getElementById("csn_0").checked = false;
                 document.getElementById("csn_1").checked = false;
+                document.getElementById("strp_0").checked = false;
+                document.getElementById("strp_1").checked = false;
                 document.getElementById("pyr_0").checked = false;
                 document.getElementById("pyr_1").checked = false;
                 document.getElementById("spyr_0").checked = false;
@@ -240,6 +249,11 @@
                 document.getElementById("spyro_0").checked = false;
                 document.getElementById("spyro_1").checked = false;
                 
+                if(typeof conf.config.startpage === 'undefined'){
+                    document.getElementById("strp_0").checked = true;
+                } else if (conf.config.startpage){
+                    document.getElementById("strp_1").checked = true;
+                }
                 if(typeof conf.config === 'undefined'){/*config module dependency*/
                     /*default settings*/
                     jQ("#dir").val("assets/");

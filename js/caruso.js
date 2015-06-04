@@ -41,7 +41,8 @@ var controlshow = function(){
 
 var preloadctrl = function(val){
     var id;
-    if(typeof val === "undefined") {
+    val = parseInt(val);
+    if(typeof val === "undefined" || isNaN(val)) {
         id = jQuery(".active").attr("id");
     } else {
         id = val;
