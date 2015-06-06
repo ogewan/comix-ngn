@@ -1,2 +1,4 @@
 *.txt
 *.old
+_site/
+.DS_Store
