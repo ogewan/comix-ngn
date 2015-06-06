@@ -10,7 +10,8 @@
     });
     
     app.filter('aiif', function () {
-       return function(input, trueValue, maybeValue, falseValue) {
+        return function(input, trueValue, maybeValue, falseValue) {
+            if(input[3]) return maybeValue; /*system override in progress*/
             if(input[0]){/*page is permanent?*/
                 return trueValue;
             } else {/*undefined should evalulate to false*/
@@ -20,19 +21,23 @@
                     return input[1] ? maybeValue : falseValue;
                 }
             }
-       };
+        };
     });
     
     app.config(function ($routeProvider, $locationProvider) {
-        console.log("location"); /*use the HTML5 History API*/
-        $locationProvider.html5Mode(true);
+        console.log("route ready");
+        $routeProvider.when('/:page', {
+            template: function(params,path){
+                console.log("Assuming Route Control");
+                console.log(params.page);
+                console.log(path);
+                vvar3 = Math.abs(parseInt(params.page));
+                caruso.jump(params.page);
+                //return params.page;
+            }
+        });
+        //$locationProvider.html5Mode(true);
     });
-    
-    app.controller('RouteCtrl', function($scope,$routeParams) {
-        $scope.params = $routeParams;
-        console.log($routeParams.pagename);
-        caruso.jump($routeParams.pagename, 10);
-      });
     
     app.directive('stage', function(){
         return {
@@ -41,6 +46,11 @@
             controller: function($http,$interval,$scope,$route, $routeParams, $location){
                 $scope.$location = {};
                 var set = this;
+                if(typeof vvar3 == 'undefined') this.over = -1;
+                else this.over = vvar3;
+                this.OVERRIDE = function(int){
+                    return int == set.over-1;
+                };
                 this.now = Date.now();
                 this.promise = $interval(updateTime, 1000);
                 this.config = { };
