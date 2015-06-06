@@ -24,23 +24,12 @@
     });
     
     app.config(function ($routeProvider, $locationProvider) {
-        console.log("route");
-        $routeProvider
-        // set route for the dynamic page
-        .when('/:pagename',
-        {
-            controller: 'RouteCtrl',
-            template: " "
-        }) // if not match with any route config then send to home page
-         .otherwise({
-            redirectTo: '/'
-          });
-        // use the HTML5 History API
-        //$locationProvider.html5Mode(true);
+        console.log("location"); /*use the HTML5 History API*/
+        $locationProvider.html5Mode(true);
     });
     
     app.controller('RouteCtrl', function($scope,$routeParams) {
-        // create a message to display in our view 
+        $scope.params = $routeParams;
         console.log($routeParams.pagename);
         caruso.jump($routeParams.pagename, 10);
       });
@@ -49,7 +38,8 @@
         return {
             restrict: 'E',
             templateUrl: 'stage.html',
-            controller: function($http,$interval,$scope){
+            controller: function($http,$interval,$scope,$route, $routeParams, $location){
+                $scope.$location = {};
                 var set = this;
                 this.now = Date.now();
                 this.promise = $interval(updateTime, 1000);
@@ -60,7 +50,8 @@
                     set.now = Date.now();
                     vvar1 = set.pages.length;
                     vvar2 = set.config.startpage;
-                  }
+                    /*set.locale = $location.path();*/
+                  };
                 $http.get('config.json').success(function(data){
                     set.config = data.config;
                     set.chapters = data.chapters;
@@ -71,6 +62,27 @@
                 });
             },
             controllerAs: 'scene',
+        };
+    });
+    
+    app.directive('devset', function(){
+        return {
+            restrict: 'E',
+            templateUrl: 'lscripts.html',
+            /*scope: {web: '='},
+            link: function($scope, elem, attr){
+                if(attr.loc)
+            }*/
+        };
+    });
+    app.directive('scriptset', function(){
+        return {
+            restrict: 'E',
+            templateUrl: 'scripts.html',
+            /*scope: {web: '='},
+            link: function($scope, elem, attr){
+                if(attr.loc)
+            }*/
         };
     });
 })();

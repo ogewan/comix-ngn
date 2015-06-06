@@ -52,6 +52,9 @@ var preloadctrl = function(val){
     jQuery('[btog=1]').attr("btog", 0); /*decrement*/
     jQuery('[btog=2]').attr("btog", 1);
     
+    /*location.pathname = jQuery("base").attr("href") + id;
+    e
+    console.log(jQuery("base").attr("href"));*/
     for (i = 0; i < jQuery("#myCarousel").attr("pstload"); i++) {
         iid = "#ig"+(parseInt(id)+i).toString();
         console.log(iid);
@@ -74,7 +77,6 @@ jQuery( document ).ready(function() {
     jQuery("#myCarousel").on('slid.bs.carousel',function(e){
          controlshow();
     });
-    jQuery(".frs").hide();/*Manually assume first page is first, will be wrong when reload to specific page*/
     jQuery( document ).keydown(function(e) {
         if(jQuery("#snum").is(":focus")){
             return;
