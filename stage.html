@@ -6,25 +6,29 @@
             <div id="{{$index}}" ng-repeat="page in scene.pages" ng-hide="scene.now < page.release" class="item" ng-class="{active: ($first && !scene.config.startpage) || ($last && scene.config.startpage), first: $first, last: $last}">
                 <h1>{{page.title}}</h1>
                 <p><img id="{{'ig' + $index}}" isrc="{{scene.config.dir + page.url}}" src="{{[page.perm,scene.config.startpage,$first]|aiif:scene.config.dir + page.url: scene.config.dir + page.url: ''}}" title="{{page.hover}}" alt="{{page.alt}}" btog={{[page.perm,scene.config.startpage,$first]|aiif:3:2:0}}></p>
-                <p>{active: $first, first: $first, last: $last}</p>
+                
                 <!--<p>{{[page.perm,scene.config.startpage,$first]}} {{[page.perm,scene.config.startpage,$first]|aiif:scene.config.dir + page.url: scene.config.dir + page.url: ''}}</p>
                 <p>{{[page.perm,scene.config.startpage,$first]}} {{[page.perm,scene.config.startpage,$first]|aiif:3:2:0}}</p>-->
+                <p>
+                    $location = {{scene.locale}}
+                </p>
             </div>
         </div>
         <!-- Controls -->
-        <button class="frs" id="bfrs" onclick="caruso.frst()">|<</button>
+        <p><button class="frs" id="bfrs" onclick="caruso.frst()">|<</button>
         <button class="frs" id="bpre" onclick="caruso.left()">< Prev</button>
         <button id="bran" onclick="caruso.rand()">?</button>
         <input id="snum" type="number" class="tiny" onkeydown="caruso.indx(this)"/>
         <button class="las" id="bnex" onclick="caruso.rght()">Next ></button>
         <button class="las" id="blas" onclick="caruso.last()">>|</button></p>
-    </div><p id="SiteNote" style="text-align:center">Images Courtesy of <a href="http://.xkcd.com/">XKCD</a></p>
+        </div>
+        <p id="SiteNote" style="text-align:center">Images Courtesy of <a href="http://.xkcd.com/">XKCD</a></p>
         <script>
             jQuery("#myCarousel").on('slid.bs.carousel',function(e){
                 controlshow();
                 preloadctrl();
             });
-            /*Assuming Direct Control - since Carousel only actives on slid*/
+/*Assuming Direct Control - since Carousel only actives on slid*/
             if(vvar2/*scene.config.startpage/*$scope.default*/){
                 jQuery(".las").hide();}
             else {
