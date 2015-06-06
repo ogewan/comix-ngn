@@ -1,9 +1,10 @@
 var vvar1;
 var vvar2;
+var vvar3;
 var vers_ix = {
-	status: 0,//alpha
-	major: 9,
-	minor: 8,
+	status: 1,//beta
+	major: 0,
+	minor: 0,
 	version: function() {return this.status.toString()+"."+this.major.toString()+"."+this.minor.toString();},
     changelog: {
         "0.5.0": "Initial Setup, Versioning",
@@ -12,6 +13,7 @@ var vers_ix = {
         "0.7.8": "Minor Modifications, page is aligned to center, index.html is cleaned up",
         "0.8.2": "caruso updated, controls are now hid automatically, date is now formated, appifying the stage",
         "0.9.8": "stage.html template created, index html cleaned up, added isrc(imaginary source) attribute to preload images but not implemented yet",
+        "1.0.0": "routing and page updating works???Page loading works, navigate by url and back button work,
     },
 }
 var vers_wr = {
@@ -24,6 +26,7 @@ var vers_wr = {
         "0.8.0": "Huge implementations, Object config by dynamic form injection for Page and Chapter, Setting config compartmentalized, design config added",
         "0.9.0": "added pyoofreader configuration, added continue a config file, but its not implemented script wise yet, pyoofreader not fully implemented yet",
         "0.9.6": "pyoofreader gets its own version, continue config fully implemented, cosmetic changes, now able to download a stage and a template index.html",
+        "1.0.0": "Ready for beta",
     },
 }
 var vers_pr = {

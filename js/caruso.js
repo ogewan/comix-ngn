@@ -22,10 +22,10 @@ var caruso = {
         }
     },
     jump: function(val){/*this function is called on page load via routing*/
-        val = parseInt(val);
+        val = Math.abs(parseInt(val));
         if(isNaN(val)) val = 1;//default
         jQuery("#myCarousel").carousel(Math.max(0, Math.min(val-1, vvar1-1)));
-        preloadctrl(val);/*might be called twice*/
+        //preloadctrl(-val);/*might be called twice*/
     },
 };
 
@@ -52,9 +52,17 @@ var preloadctrl = function(val){
     jQuery('[btog=1]').attr("btog", 0); /*decrement*/
     jQuery('[btog=2]').attr("btog", 1);
     
-    /*location.pathname = jQuery("base").attr("href") + id;
-    e
-    console.log(jQuery("base").attr("href"));*/
+    if(!vvar2&&id==0||vvar2&&id==vvar1){
+        location.hash = '';
+    } else if(id<0){
+        id=id*-1;
+        location.hash = location.hash;
+    } else {
+        console.log("location hash :"+(parseInt(id)+1).toString());
+        location.hash = (parseInt(id)+1).toString();
+    }
+    /*location.path = jQuery("base").attr("href") + "%23" + id;*/
+    /*console.log(jQuery("base").attr("href"));*/
     for (i = 0; i < jQuery("#myCarousel").attr("pstload"); i++) {
         iid = "#ig"+(parseInt(id)+i).toString();
         console.log(iid);
