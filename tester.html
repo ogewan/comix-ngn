@@ -1,0 +1,25 @@
+<!--<script>var agent = function(a,b){return b=new XMLHttpRequest,b.open("GET",a),a=[],b.onreadystatechange=b.then=function(c,d,e){if(c&&c.call&&(a=[,c,d]),4==b.readyState&&(e=a[0|b.status/200]))try{e(JSON.parse(b.responseText),b)}catch(f){e(null,b)}},b.send(),b}</script>
+<script>
+var agetScript = agent('config.json');
+var acastList = agent('plugins.json');</script>
+<script src="comicNgn.js"></script>
+<script>
+    agetScript.then(
+    function(data, xhr) {
+        cG.script = data;
+        console.log(cG.script);
+    },
+    function(data, xhr) {
+      console.error(data, xhr.status)
+    }
+);
+acastList.then(
+    function(data, xhr) {
+      // do something useful like
+      cG.info = data;
+    },
+    function(data, xhr) {
+      console.error(data, xhr.status)
+    }
+);</script>-->
+<script src="comicNgn.js"></script>

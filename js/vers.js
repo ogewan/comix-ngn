@@ -13,7 +13,7 @@ var vers_ix = {
         "0.7.8": "Minor Modifications, page is aligned to center, index.html is cleaned up",
         "0.8.2": "caruso updated, controls are now hid automatically, date is now formated, appifying the stage",
         "0.9.8": "stage.html template created, index html cleaned up, added isrc(imaginary source) attribute to preload images but not implemented yet",
-        "1.0.0": "routing and page updating works???Page loading works, navigate by url and back button work,
+        "1.0.0": "routing and page updating works???Page loading works, navigate by url and back button work",
     },
 }
 var vers_wr = {
