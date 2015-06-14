@@ -3,17 +3,7 @@
     <div id="myCarousel" class="carousel slide" data-ride="" data-interval="false" data-wrap="false" pstload={{scene.config.imgpostbuffer}} preload={{scene.config.imgprebuffer}}>
         <!-- Wrapper for slides --> 
         <div class="carousel-inner" role="listbox">
-            <div id="{{$index}}" ng-repeat="page in scene.pages" ng-hide="scene.now < page.release" class="item" ng-class="{
-    active: scene.OVERRIDE($index) || (scene.OVERRIDE($index) && (($first && !scene.config.startpage) || ($last && scene.config.startpage))),
-    first: $first,
-    last: $last
-}">
-                <h1>{{page.title}}</h1>
-                <p><img id="{{'ig' + $index}}" isrc="{{scene.config.dir + page.url}}" src="{{[page.perm,scene.config.startpage,$first,scene.OVERRIDE($index)]|aiif:scene.config.dir + page.url: scene.config.dir + page.url: ''}}" title="{{page.hover}}" alt="{{page.alt}}" btog={{[page.perm,scene.config.startpage,$first,scene.OVERRIDE($index)]|aiif:3:2:0}}></p>
-                
-                <!--<p>{{[page.perm,scene.config.startpage,$first]}} {{[page.perm,scene.config.startpage,$first]|aiif:scene.config.dir + page.url: scene.config.dir + page.url: ''}}</p>
-                <p>{{[page.perm,scene.config.startpage,$first]}} {{[page.perm,scene.config.startpage,$first]|aiif:3:2:0}}</p>-->
-            </div>
+            
         </div>
         <!-- Controls -->
         <p><button class="frs" id="bfrs" onclick="caruso.frst()">|<</button>
