@@ -8,7 +8,7 @@ if(typeof cG === 'undefined'){
 /*if the plug in must do an action at the beginning of runtime. This is rare and typically for modifying script loading. This plugin WILL be overwritten*/
     if(typeof $GPC === 'undefined') var $GPC = 1;
     else $GPC++;}
-else window.console.debug("CNG Plug-in: [[Name]] must be loaded before comixngn.js");
+else console.error("CNG Plug-in: [[Name]] must be loaded before comixngn.js");
 
 if(typeof cG !== 'undefined'){
 /*if the plug in modifies comic-ngn.js once it has loaded. This is typical, and will assume that cG is already instantiated.
@@ -36,5 +36,5 @@ NOTE: It is is preferable to simply enter in "cG.property = value"
     }
 });
 }
-else window.console.debug("CNG Plug-in: [[Name]] must be loaded after comixngn.js");
+else console.error("CNG Plug-in: [[Name]] must be loaded after comixngn.js");
 /*If you can, minify the plug-in. Including this in to the HTML will have no effect.*/
