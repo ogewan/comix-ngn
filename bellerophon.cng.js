@@ -7,7 +7,9 @@ if(typeof cG === 'undefined'){
     if(typeof $GPC === 'undefined') var $GPC = 1;
     else $GPC++;
     var cG = {/*comic-ng*/
-        agent: function(t,e){return e=new XMLHttpRequest,e.open("GET",t),t=[],e.onreadystatechange=e.then=function(n,o,i){if(n&&n.call&&(t=[,n,o]),4==e.readyState&&(i=t[0|e.status/200]))try{i(JSON.parse(e.responseText),e)}catch(r){i(e.responseText,e)}},e.send(),e}};
+        agent: function(t,e){return e=new XMLHttpRequest,e.open("GET",t),t=[],e.onreadystatechange=e.then=function(n,o,i){if(n&&n.call&&(t=[,n,o]),4==e.readyState&&(i=t[0|e.status/200]))try{i(JSON.parse(e.responseText),e)}catch(r){i(e.responseText,e)}},e.send(),e},
+        templates: {}
+    };
     var getScript = cG.agent('script.json');
     var getStage = cG.agent('stage.html');
     var getActor = cG.agent('actor.html');
