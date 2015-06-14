@@ -62,7 +62,7 @@
                     vvar2 = set.config.startpage;
                     /*set.locale = $location.path();*/
                   };
-                $http.get('config.json').success(function(data){
+                $http.get('script.json').success(function(data){
                     set.config = data.config;
                     set.chapters = data.chapters;
                     set.pages = data.pages;
