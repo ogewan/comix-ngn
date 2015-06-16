@@ -1,30 +1,5 @@
-<div style="text-align:center">
-    <p><span id="time">{{scene.now | date:'MM/dd/yyyy @ h:mm:ss a'}}</span></p>
-    <div id="myCarousel" class="carousel slide" data-ride="" data-interval="false" data-wrap="false" pstload={{scene.config.imgpostbuffer}} preload={{scene.config.imgprebuffer}}>
-        <!-- Wrapper for slides --> 
-        <div class="carousel-inner" role="listbox">
-            
-        </div>
-        <!-- Controls -->
-        <p><button class="frs" id="bfrs" onclick="caruso.frst()">|<</button>
-        <button class="frs" id="bpre" onclick="caruso.left()">< Prev</button>
-        <button id="bran" onclick="caruso.rand()">?</button>
-        <input id="snum" type="number" class="tiny" onkeydown="caruso.indx(this)"/>
-        <button class="las" id="bnex" onclick="caruso.rght()">Next ></button>
-        <button class="las" id="blas" onclick="caruso.last()">>|</button></p>
-        </div>
-        <p id="SiteNote" style="text-align:center">Images Courtesy of <a href="http://.xkcd.com/">XKCD</a></p>
-        <script>
-            jQuery("#myCarousel").on('slid.bs.carousel',function(e){
-                controlshow();
-                preloadctrl();
-            });
-/*Assuming Direct Control - since Carousel only actives on slid*/
-            if(vvar2/*scene.config.startpage/*$scope.default*/){
-                jQuery(".las").hide();}
-            else {
-                jQuery(".frs").hide();}
-            /*Manually assume first page is first, will be wrong when reload to specific page*/
-        </script>
+<p class="controls"></p>
+<div id="stage" class="swipe">
+    <div id="target" class="swipe-wrap">
+    </div>
 </div>
-<!-- -->

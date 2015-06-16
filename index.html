@@ -1,1 +1,14 @@
-<script src="bellerophon.cng.min.js"></script><script src="comixngn.js"></script><base href="/comic-ng/">
+<!DOCTYPE html><title>comix-ngn</title><script src="bellerophon.cng.min.js"></script><script src="comixngn.js"></script><base href="/comic-ng/">
+<!--
+if script.json is in a directory other than root, you must specify that directory's path in the optional dir attribute of the script tag, preferably the first. Using different dir values will result in unpredictable behavior.
+the html templates must be in the directory specified by template, if they are not in root-->
+<div id class="venue" use script></div>
+<!--
+id-selector that will be prepended to all interior elements
+class"venue" - required class that identifies this tag as an entry point
+use - an additional attribute that specifies the plug in to use for this venue. 
+It only applies to plugins that modify the stage. By default, it is the last plug-in added.
+"default" uses factory stage, "plug-in name" applies a specific plug-in
+script - an additional attribute that specifies which script this venue shoud use, either a url or a string.
+By default it uses script.json.
+-->

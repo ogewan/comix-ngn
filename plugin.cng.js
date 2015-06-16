@@ -25,8 +25,14 @@ NOTE: It is is preferable to simply enter in "cG.property = value"
     var value_to_change_to = "";
     cG[key_to_change] = value_to_change_to;
     /*use domReady if you need anything that runs after the DOM has loaded*/
-    if(0){/*if you are changing the stage, you will probably need to modify the CSS as well*/
-        var mystyle = '[[Minified CSS Sheet/Rules]]';
+    if(0){/*if you are changing the stage, store the old one in the repo*/
+        var mystyle = '[[Minified CSS Sheet/Rules]]';/*you will probably need to modify the CSS as well*/
+        var old = {};
+        old.scenography = cG.scenography;
+        old.stage = cG.stage;
+        old.stage_ctrls = cG.stage_ctrls;
+        old.templates = cG.templates;
+        cG.stageREPO[cG.stageID] = old;
         cG.scenography.textContent = mystyle; /*overwrites previous stylesheet with mystyle*/
         document.head.removeChild(document.getElementById("scenography"));/*remove old <style> from page*/
         document.head.appendChild(cG.scenography);/*Add new <style> to the page*/

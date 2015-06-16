@@ -6,8 +6,8 @@ if(void 0===cG) var cG = {};/*check if cG is already is instantiated*/
 cG.info = {
     vers_ix: {/*comix-ngn version info*/
         status: 1,//beta
-        major: 1,
-        minor: 1,
+        major: 2,
+        minor: 0,
         version: function() {return this.status.toString()+"."+this.major.toString()+"."+this.minor.toString();},
         changelog: {
             "0.5.0": "Initial Setup, Versioning",
@@ -19,6 +19,7 @@ cG.info = {
             "1.0.0": "routing and page updating works???Page loading works, navigate by url and back button work",
             "1.1.0": "code refactor, all external dependencies removed, new micro lib dependencies are embedded",
             "1.1.1": "iCanHaz replaced with HTMLparser",
+            "1.2.0": "created machinery for initing stageInjection, created new template: costumes.html, that creates multiple pages for the app, added dir and script specification, added redundancy checks so that the program isn't broken when data fails to load, or there is a conflict.",
         },
     },
     vers_wr: {/*comix-ngn writer version info*/
@@ -54,6 +55,7 @@ function HTMLobjClean(e){for(i=0;i<e.length&&("/"==e[i].$head[0]&&e.splice(i,1),
 cG.producer = /*HTMLparser.js*/function (i){return HTMLobjClean(HTMLparser(i))};
 cG.coproducer = function(e,n){var r;for(i=0;i<e.length;i++){r=document.createElement(e[i].$head);for(var t in e[i])e[i].hasOwnProperty(t)&&"$"!=t[0]&&r.setAttribute(t,e[i][t]);return e[i].$in.length&&Obj2HTML(e[i].$in,r),n&&void 0!==n&&n.appendChild(r),r}}
 
+cG.stageID = "default";
 cG.stage = /*swipe.js*/function(t,e){"use strict";function o(){P=m.children,v=P.length,P.length<2&&(e.continuous=!1),f.transitions&&e.continuous&&P.length<3&&(m.appendChild(P[0].cloneNode(!0)),m.appendChild(m.children[1].cloneNode(!0)),P=m.children),y=Array(P.length),w=t.getBoundingClientRect().width||t.offsetWidth,m.style.width=P.length*w+"px";for(var o=P.length;o--;){var i=P[o];i.style.width=w+"px",i.setAttribute("data-index",o),f.transitions&&(i.style.left=o*-w+"px",a(o,_>o?-w:o>_?w:0,0))}e.continuous&&f.transitions&&(a(r(_-1),-w,0),a(r(_+1),w,0)),f.transitions||(m.style.left=_*-w+"px"),t.style.visibility="visible"}function i(){e.continuous?h(_-1):_&&h(_-1)}function n(){e.continuous?h(_+1):_<P.length-1&&h(_+1)}function r(t){return(P.length+t%P.length)%P.length}function h(t,o){if(_!=t){if(f.transitions){var i=Math.abs(_-t)/(_-t);if(e.continuous){var n=i;i=-y[r(t)]/w,i!==n&&(t=-i*P.length+t)}for(var h=Math.abs(_-t)-1;h--;)a(r((t>_?t:_)-h-1),w*i,0);t=r(t),a(_,w*i,o||g),a(t,0,o||g),e.continuous&&a(r(t-i),-(w*i),0)}else t=r(t),u(_*-w,t*-w,o||g);_=t,p(e.callback&&e.callback(_,P[_]))}}function a(t,e,o){s(t,e,o),y[t]=e}function s(t,e,o){var i=P[t],n=i&&i.style;n&&(n.webkitTransitionDuration=n.MozTransitionDuration=n.msTransitionDuration=n.OTransitionDuration=n.transitionDuration=o+"ms",n.webkitTransform="translate("+e+"px,0)translateZ(0)",n.msTransform=n.MozTransform=n.OTransform="translateX("+e+"px)")}function u(t,o,i){if(!i)return void(m.style.left=o+"px");var n=+new Date,r=setInterval(function(){var h=+new Date-n;return h>i?(m.style.left=o+"px",b&&l(),e.transitionEnd&&e.transitionEnd.call(event,_,P[_]),void clearInterval(r)):void(m.style.left=(o-t)*(Math.floor(h/i*100)/100)+t+"px")},4)}function l(){x=setTimeout(n,b)}function d(){b=0,clearTimeout(x)}var c=function(){},p=function(t){setTimeout(t||c,0)},f={addEventListener:!!window.addEventListener,touch:"ontouchstart"in window||window.DocumentTouch&&document instanceof DocumentTouch,transitions:function(t){var e=["transitionProperty","WebkitTransition","MozTransition","OTransition","msTransition"];for(var o in e)if(void 0!==t.style[e[o]])return!0;return!1}(document.createElement("swipe"))};if(t){var P,y,w,v,m=t.children[0];e=e||{};var _=parseInt(e.startSlide,10)||0,g=e.speed||300;e.continuous=void 0!==e.continuous?e.continuous:!0;var x,S,b=e.auto||0,k={},A={},L={handleEvent:function(t){switch(t.type){case"touchstart":this.start(t);break;case"touchmove":this.move(t);break;case"touchend":p(this.end(t));break;case"webkitTransitionEnd":case"msTransitionEnd":case"oTransitionEnd":case"otransitionend":case"transitionend":p(this.transitionEnd(t));break;case"resize":p(o)}e.stopPropagation&&t.stopPropagation()},start:function(t){var e=t.touches[0];k={x:e.pageX,y:e.pageY,time:+new Date},S=void 0,A={},m.addEventListener("touchmove",this,!1),m.addEventListener("touchend",this,!1)},move:function(t){if(!(t.touches.length>1||t.scale&&1!==t.scale)){e.disableScroll&&t.preventDefault();var o=t.touches[0];A={x:o.pageX-k.x,y:o.pageY-k.y},void 0===S&&(S=!(!S&&Math.abs(A.x)>=Math.abs(A.y))),S||(t.preventDefault(),d(),e.continuous?(s(r(_-1),A.x+y[r(_-1)],0),s(_,A.x+y[_],0),s(r(_+1),A.x+y[r(_+1)],0)):(A.x=A.x/(!_&&A.x>0||_==P.length-1&&A.x<0?Math.abs(A.x)/w+1:1),s(_-1,A.x+y[_-1],0),s(_,A.x+y[_],0),s(_+1,A.x+y[_+1],0)))}},end:function(){var t=+new Date-k.time,o=250>+t&&Math.abs(A.x)>20||Math.abs(A.x)>w/2,i=!_&&A.x>0||_==P.length-1&&A.x<0;e.continuous&&(i=!1);var n=A.x<0;S||(o&&!i?(n?(e.continuous?(a(r(_-1),-w,0),a(r(_+2),w,0)):a(_-1,-w,0),a(_,y[_]-w,g),a(r(_+1),y[r(_+1)]-w,g),_=r(_+1)):(e.continuous?(a(r(_+1),w,0),a(r(_-2),-w,0)):a(_+1,w,0),a(_,y[_]+w,g),a(r(_-1),y[r(_-1)]+w,g),_=r(_-1)),e.callback&&e.callback(_,P[_])):e.continuous?(a(r(_-1),-w,g),a(_,0,g),a(r(_+1),w,g)):(a(_-1,-w,g),a(_,0,g),a(_+1,w,g))),m.removeEventListener("touchmove",L,!1),m.removeEventListener("touchend",L,!1)},transitionEnd:function(t){parseInt(t.target.getAttribute("data-index"),10)==_&&(b&&l(),e.transitionEnd&&e.transitionEnd.call(t,_,P[_]))}};return o(),b&&l(),f.addEventListener?(f.touch&&m.addEventListener("touchstart",L,!1),f.transitions&&(m.addEventListener("webkitTransitionEnd",L,!1),m.addEventListener("msTransitionEnd",L,!1),m.addEventListener("oTransitionEnd",L,!1),m.addEventListener("otransitionend",L,!1),m.addEventListener("transitionend",L,!1)),window.addEventListener("resize",L,!1)):window.onresize=function(){o()},{setup:function(){o()},slide:function(t,e){d(),h(t,e)},prev:function(){d(),i()},next:function(){d(),n()},stop:function(){d()},getPos:function(){return _},getNumSlides:function(){return v},kill:function(){d(),m.style.width="",m.style.left="";for(var t=P.length;t--;){var e=P[t];e.style.width="",e.style.left="",f.transitions&&s(t,0,0)}f.addEventListener?(m.removeEventListener("touchstart",L,!1),m.removeEventListener("webkitTransitionEnd",L,!1),m.removeEventListener("msTransitionEnd",L,!1),m.removeEventListener("oTransitionEnd",L,!1),m.removeEventListener("otransitionend",L,!1),m.removeEventListener("transitionend",L,!1),window.removeEventListener("resize",L,!1)):window.onresize=null}}}};
 
 cG.stage_ctrls = function(holder){
@@ -72,42 +74,99 @@ cG.scenography = /*swipe style.css*//*Father forgive me for I have sinned. I pre
 cG.templates = {stage: "", actor:""};
 
 cG.script = "";
+
+cG.costumes= "";
+
+cG.stageREPO = {};
 /*END comix-ngn properties*/
 
 /*AJAX Calls*/
 /*debugging: ensures cG is correctly instaniated*//*console.log(cG);*/
+var dir = "";
+var tir = "";
+var srcs = document.getElementsByTagName("src");
+for (i = 0; i < srcs.length; i++) { 
+    dir=src[i].getAttribute("dir");
+    if(dir!="") break;
+}
+for (i = 0; i < srcs.length; i++) { 
+    tir=src[i].getAttribute("template");
+    if(tir!="") break;
+}
 if(typeof getScript === 'undefined'){/*create script.json promise if not already created*/
-    var getScript = cG.agent('script.json');
+    var getScript = cG.agent(dir+'script.json');
     getScript.then(
     function(data, xhr) {
         cG.script = data;
         /*debugging: ensures script.js is loaded*//*console.log(cG.script);*/
     },
     function(data, xhr) {
-      console.error(data, xhr.status)
+        console.error(data, xhr.status);
+        cG.script = 0;
     });
 }
 if(typeof getStage === 'undefined'){
-    var getStage = cG.agent('script.json');
+    var getStage = cG.agent(tir+'stage.html');
     getStage.then(
     function(data, xhr) {
         cG.template.stage = data;
     },
     function(data, xhr) {
-      console.error(data, xhr.status)
+        console.error(data, xhr.status);
+        cG.template.stage = 0;
+    });
+}
+if(typeof getCostumes === 'undefined'){
+    var getCostumes = cG.agent(tir+'costumes.html');
+    getCostumes.then(
+    function(data, xhr) {
+        cG.costumes = data;
+    },
+    function(data, xhr) {
+        console.error(data, xhr.status);
+        cG.costumes = 0;
     });
 }
 if(typeof getActor === 'undefined'){
-    var getActor = cG.agent('actor.html');
+    var getActor = cG.agent(tir+'actor.html');
     getActor.then(
     function(data, xhr) {
         cG.template.actor = data;
     },
     function(data, xhr) {
-      console.error(data, xhr.status)
+        console.error(data, xhr.status);
+        cG.template.actor = 0;
     });
 }
 /*END AJAX calls*/
+
+function syncJSON(filePath) {/*! http://stackoverflow.com/a/4117299*/
+  // Load json file;
+  var json = loadTextFileAjaxSync(filePath, "application/json");
+  // Parse json
+  return (json)?JSON.parse(json):0;
+}   
+
+// Load text with Ajax synchronously: takes path to file and optional MIME type
+function loadTextFileAjaxSync(filePath, mimeType)
+{
+  var xmlhttp=new XMLHttpRequest();
+  xmlhttp.open("GET",filePath,false);
+  if (mimeType != null) {
+    if (xmlhttp.overrideMimeType) {
+      xmlhttp.overrideMimeType(mimeType);
+    }
+  }
+  xmlhttp.send();
+  if (xmlhttp.status>=200&&xmlhttp.status<=304)
+  {
+    return xmlhttp.responseText;
+  }
+  else {
+    // TODO Throw exception
+    return null;
+  }
+}
 
 /*domReady.js*/!function(e,t){typeof module!="undefined"?module.exports=t():typeof define=="function"&&typeof define.amd=="object"?define(t):this[e]=t()}("domReady",function(e){function p(e){h=1;while(e=t.shift())e()}var t=[],n,r=!1,i=document,s=i.documentElement,o=s.doScroll,u="DOMContentLoaded",a="addEventListener",f="onreadystatechange",l="readyState",c=o?/^loaded|^c/:/^loaded|c/,h=c.test(i[l]);return i[a]&&i[a](u,n=function(){i.removeEventListener(u,n,r),p()},r),o&&i.attachEvent(f,n=function(){/^c/.test(i[l])&&(i.detachEvent(f,n),p())}),e=o?function(n){self!=top?h?n():t.push(n):function(){try{s.doScroll("left")}catch(t){return setTimeout(function(){e(n)},50)}n()}()}:function(e){h?e():t.push(e)}});
 /*domready cannot be embedded into the cG object, which means it is not replacable via plugin*/
@@ -190,8 +249,75 @@ function jstagecreate(){
     /*console.log(window.mySwipe);*/
 };
 
+function stageInjection(){
+    if(cG.script == '' || cG.templates.actor == '' || cG.templates.stage == '' || cG.templates.costumes == '') { //if are stuff isn't ready yet we are going to wait for it
+        setTimeout(jstagecreate, 300); 
+        return;
+    }
+    if(!cG.script) return console.error("No script.JSON found. script.JSON is REQUIRED to create stage. Please create a script.JSON or move it to the directory specified in the script tag for comix-ngn or bellerophon if it is added.");
+    var idealStage = (cG.templates.stage)?cG.producer(cG.templates.stage):0;
+    var idealStar = (cG.templates.actor)?cG.producer(cG.templates.actor):0;
+    var idealCostumes = (cG.costumes)?cG.producer(cG.costumes):0;
+    var stages = document.getElementsByClassName("venue");/*get all entry points*/
+    
+    var id_attr = "";
+    var script_attr = "";
+    var use_attr = "";
+    
+    var result;
+    var myScript;
+    var myStage = {};
+    for (i = 0; i < x.length; i++) {
+        /*initial setup*/
+        /*get attributes */
+        id_attr = stages[i].getAttribute("id");
+        script_attr = stages[i].getAttribute("script");
+        use_attr = stages[i].getAttribute("use");
+        if(id_attr==""){/*if no ID, make one*/
+            var name = "STG"+i;
+            var j = 1;
+            while(document.getElementById(name)) name = "STG"+(i+j++);
+            id_attr = name.toString();
+            stages[i].setAttribute("id", id_attr);
+        }
+        if(script_attr==""){/*if no script, use the default*/
+            myScript = cG.script;
+        } else {
+            myScript = syncJSON(script_attr);/*if given, assume it is a src*/
+            if(!myScript){/*if you get a 404, assume its an ID*/
+                myScript = cG.script.extras[parseInt(script_attr,10)];/*search for that ID in the script*/
+                if(void 0===myScript) myScript = cG.script;/*if not found use default*/
+                else if(void 0!==myScript.link){/*if the found script is a reference, load it*/
+                    myScript = syncJSON(myScript.link);
+                    if(!myScript) myScript = cG.script;/*if not found use default*/
+                }
+            }
+        }
+        if(use_attr==""){/*if no use specified, use current*/
+            myStage.stage = cG.stage;
+            myStage.stageID = cG.stageID;
+            myStage.scenography = cG.scenography;
+            myStage.stage_ctrls = cG.stage_ctrls;
+            myStage.templates = cG.templates;
+        } else {
+            myStage = cG.stageREPO[use_attr];/*use the id of the plug in to set stage*/
+            if(void 0===myStage){/*if not found specified, use current*/
+                myStage.stage = cG.stage;
+                myStage.stageID = cG.stageID;
+                myStage.scenography = cG.scenography;
+                myStage.stage_ctrls = cG.stage_ctrls;
+                myStage.templates = cG.templates;
+            } else myStage.stageID = use_attr;
+        }
+        /*END initial set up*/
+        /*index.html(venue)<-costumes.html(location)<-stage.html(target)<-actor.html*/
+        cG.coproducer(result,stages[i]);/*Inject into venue*/
+    }
+};
+
 domReady(function(){
     /*everything else occurs here*/
-    if(1){if(void 0===$GPC){$GPC=0;}/*prints version information*/ console.log("%c %c %c comic-ng  v"+ cG.info.vers_ix.version() +" %c \u262F %c \u00A9 2015 Oluwaseun Ogedengbe %c Plugins: "+$GPC, "color:white; background:#2EB531", "background:purple","color:white; background:#32E237", 'color:red; background:black', "color:white; background:#2EB531", "color:white; background:purple");}
+    if(!document.getElementById("$COMICNGWRITER$$$")){if(void 0===$GPC){$GPC=0;}/*prints version information*/ console.log("%c %c %c comix-ngn  v"+ cG.info.vers_ix.version() +" %c \u262F %c \u00A9 2015 Oluwaseun Ogedengbe %c Plugins: "+$GPC, "color:white; background:#2EB531", "background:purple","color:white; background:#32E237", 'color:red; background:black', "color:white; background:#2EB531", "color:white; background:purple");}
     jstagecreate();
+    /*stageInjection();*/
 });
