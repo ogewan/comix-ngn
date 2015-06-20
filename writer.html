@@ -1,77 +1,63 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <title id="wng">Writer</title>
-        <!--<script title="DEBUG" src="http://code.jquery.com/jquery-1.11.3.js"></script>-->
-        <script src="js/vers.js"></script>
-        <link rel="stylesheet" type="text/css" href="js/bootstrap.min.css"/>
-        <script src="js/jquery-2.1.4.min.js"></script>
-        <script src="js/jquery-ui.min.js"></script>
-        <script src="js/bootstrap.min.js"></script>
-        <script src="js/angular.min.js"></script>
-        <script src="js/angular-route.min.js"></script>
-        <script src="js/angular-touch.min.js"></script>
-        <!--<link rel="stylesheet" type="text/css" href="https://bootswatch.com/simplex/bootstrap.min.css"/>
-        <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
-        <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
-        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js" ></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular.min.js"></script>
-		<script src="https://code.angularjs.org/1.4.0/angular-route.min.js"></script>
-        <script src="https://code.angularjs.org/1.4.0/angular-touch.min.js"></script>-->
-        <script src="js/app.js"></script>
-        <script src="js/caruso.js"></script>
-    </head>
-    <body style="margin:4px; padding:4px">
-        <h1>Writer</h1>
-        <span id=MHEAD></span>
-        <div id="accordion">
-            <h3 class="button" role="button">* Settings</h3>
-            <div>
-                <form action="#" onsubmit=""><table id="bodtab" border="0" style="width:100%">
-                    <tr><td colspan="2"><h4 id="confhead" title="Click to toggle border">Configuration</h4></td></tr>
-                    <tr><td title="Image directory"><label for="dir">Directory</label>
+<title id="$COMICNGWRITER$$$">Writer</title>
+<!--<script title="DEBUG" src="http://code.jquery.com/jquery-1.11.3.js"></script>-->
+<script src="bellerophon.cng.min.js"></script>
+<script src="comixngn.js"></script><base href="/comic-ng/">
+<link rel="stylesheet" type="text/css" href="https://bootswatch.com/simplex/bootstrap.min.css"/>
+<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script src="http://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+<body style="margin:4px; padding:4px">
+    <h1>Writer</h1>
+    <span id=MHEAD></span>
+    <div id="accordion">
+        <h3 class="button" role="button">* Settings</h3>
+        <div>
+            <form action="#" onsubmit=""><table id="bodtab" border="0" style="width:100%">
+                <tr><td colspan="2"><h4 id="confhead" title="Click to toggle border">Configuration</h4></td></tr>
+                <tr><td title="Image directory"><label for="dir">Directory</label>
                     <input value="assets/" id="dir" type="text" ></td>
                     <td title="Select this if you want to continue from a previous configuration."><label for="historian">Config File</label><input id="historian" type="file" accept=".json"></td></tr>
-                    <tr><td><label for="psn_0">Page Start</label>
+                <tr><td><label for="psn_0">Page Start</label>
                     <input type="radio" id="psn_0" name="psb" checked>0&nbsp;<input type="radio" id="psn_1" name="psb" >1</td>
                     <td><label for="csn_0">Chapter Start</label>
-                    <input type="radio" id="csn_0" name="csb" checked>0&nbsp;<input type="radio" id="csn_1" name="csb" >1</td></tr>
-                    <tr><td title="How far behind images are preloaded"><label for="prb">Pre-Buffer</label>
+                        <input type="radio" id="csn_0" name="csb" checked>0&nbsp;<input type="radio" id="csn_1" name="csb" >1</td></tr>
+                <tr><td title="How far behind images are preloaded"><label for="prb">Pre-Buffer</label>
                     <input type="number" value=5 id="prb" min="1" max="100"></td>
                     <td title="How far ahead images are preloaded"><label for="ptb">Post-Buffer</label>
-                    <input type="number" value=5 id="ptb" min="1" max="100"></td></tr>
-                    <tr><td style="vertical-align:top" title="If there are more images in the directory than in +the configuration file, attempt to automatically add them"><label for="pyr_0">Append on Page Mismatch</label>
+                        <input type="number" value=5 id="ptb" min="1" max="100"></td></tr>
+                <tr><td style="vertical-align:top" title="If there are more images in the directory than in +the configuration file, attempt to automatically add them"><label for="pyr_0">Append on Page Mismatch</label>
                     <input type="radio" id="pyr_0" name="pyrt" checked>On&nbsp;<input type="radio" id="pyr_1" name="pyrt" >Off</td>
                     <td rowspan="2" style="vertical-align:top" title="The order in which the images should be appended"><label for="spyr_0">Append Order</label>
-                    <input type="radio" id="spyr_0" name="spyrt" checked>Modified&nbsp;<input type="radio" id="spyr_1" name="spyrt">Name&nbsp;<input type="radio" id="spyr_2" name="spyrt">Size&nbsp;<input type="radio" id="spyr_3" name="spyrt">Type&nbsp;<br>
+                        <input type="radio" id="spyr_0" name="spyrt" checked>Modified&nbsp;<input type="radio" id="spyr_1" name="spyrt">Name&nbsp;<input type="radio" id="spyr_2" name="spyrt">Size&nbsp;<input type="radio" id="spyr_3" name="spyrt">Type&nbsp;<br>
                         <input type="radio" id="spyro_0" name="spyrto" checked>Descending&nbsp;<input type="radio" id="spyro_1" name="spyrto" >Ascending</td></tr>
-                    <tr><td title="The page that the comic loads first, either start from the beginning or the most recent"><label for="strp_0">Start Page</label>
+                <tr><td title="The page that the comic loads first, either start from the beginning or the most recent"><label for="strp_0">Start Page</label>
                     <input type="radio" id="strp_0" name="strpa" checked>First&nbsp;<input type="radio" id="strp_1" name="strpa" >Last</td></tr>
-                    <tr><td><h4 id="CHPHEAD">Chapters</h4>
+                <tr><td><h4 id="CHPHEAD">Chapters</h4>
                     <button id="add2">+</button></td>
                     <td><h4 id="PGEHEAD">Pages</h4>
-                    <input id="conductor" type="file" multiple></td>
-                    <tr><td style="vertical-align:top"><ol id="Csort" class="empty"></ol></td><td style="vertical-align:top"><ol id="sorted" class="empty"></ol></td></tr></table>
-                    <input id="ExBtn" type="submit" value="Export" title="Save Settings">
-                </form>
-            </div>
-            <h3 class="button" role="button">* Design</h3>
-            <div ng-app="comicNg"><p>
-                <button id="InBtn" title="Create site template; this does not save settings it simply creates an index.html file">Site Template</button>&nbsp;
-                <button id="DsBtn" title="Save Stage Design">Save Design</button></p>
-                <stage></stage>
-            </div>
+                        <input id="conductor" type="file" multiple></td>
+                <tr><td style="vertical-align:top"><ol id="Csort" class="empty"></ol></td><td style="vertical-align:top"><ol id="sorted" class="empty"></ol></td></tr></table>
+                <input id="ExBtn" type="submit" value="Export" title="Save Settings">
+            </form>
+        </div>
+        <h3 class="button" role="button">* Design</h3>
+        <div><p>
+            <button id="InBtn" title="Create site template; this does not save settings it simply creates an index.html file">Site Template</button>&nbsp;
+            <button id="DsBtn" title="Save Stage Design">Save Design</button></p>
+            <div id class="venue" include script></div>
+        </div>
+    </div>
         <script>
             var jQ = jQuery.noConflict();
-            console.log("%c %c %c comic-ng Writer v"+ vers_wr.version() +" %c \u262F %c \u00A9 2015 Oluwaseun Ogedengbe %c ", "color:white; background:#B5B5B5", "background:purple","color:black; background:#E2E2E2", 'color:red; background:black', "color:black; background:#B5B5B5", "background:purple");
+            console.log("%c %c %c comix-ngn Writer v"+ cG.info.vers_wr.version() +" %c \u262F %c \u00A9 2015 Oluwaseun Ogedengbe %c ", "color:white; background:#B5B5B5", "background:purple","color:black; background:#E2E2E2", 'color:red; background:black', "color:black; background:#B5B5B5", "background:purple");
             jQ("#CHPHEAD").data({});
             jQ("#confhead").click(function(){
                 if(jQ("#bodtab").attr("border")=="1"){ jQ("#bodtab").attr("border", "0");}
                 else {jQ("#bodtab").attr("border", "1");}
             });
             jQ("#accordion").accordion({collapsible: true,
-      heightStyle: "content"});
-                /*.sortable({
+                                        heightStyle: "content"});
+            /*.sortable({
                     axis: "y",
                     handle: "h3",
                     stop: function( event, ui ) {
@@ -85,7 +71,7 @@
                   });*/
             jQ("#add2").click(function(){
                 if(jQ("#Csort").hasClass("empty")){
-                   jQ("#Csort").removeClass("empty");
+                    jQ("#Csort").removeClass("empty");
                 }
 
                 var oper = jQ("#Csort").childElementCount;
@@ -93,33 +79,33 @@
                 jQ("#c"+oper).data({
                     open: false,
                     body: {
-                    description: "", 
-                    end: 0, 
-                    start: 0, 
-                    title: "Chapter",}
+                        description: "", 
+                        end: 0, 
+                        start: 0, 
+                        title: "Chapter",}
                 }).addClass("chap");
             });
             jQ("#conductor").change(function() {
                 if(jQ("#sorted").hasClass("empty")){
-                   jQ("#sorted").removeClass("empty");
+                    jQ("#sorted").removeClass("empty");
                 }
                 console.log(this.files);
                 /*jQ("#sorted").innerHTML ="";*/
                 for (i = 0; i < this.files.length; i++){
                     jQ("#sorted").append("<li id=s"+i+">"+this.files[i].name+" <button onClick=settingsP('#s"+i+"');>&#x2731</button><button onClick=jQ('#s"+i+"').remove()>X</button></li>").sortable({ scroll: true});
-                jQ("#s"+i).data({
-                    open: false,
-                    body: {
-                        alt: "", 
-                        hover: "", 
-                        title: "",
-                        url: this.files[i].name, 
-                        release: 0,
-                        note: "",
-                        perm: false,
-                    }
-                }).addClass("page");
-            }});
+                    jQ("#s"+i).data({
+                        open: false,
+                        body: {
+                            alt: "", 
+                            hover: "", 
+                            title: "",
+                            url: this.files[i].name, 
+                            release: 0,
+                            note: "",
+                            perm: false,
+                        }
+                    }).addClass("page");
+                }});
             jQ("#historian").change(function() {
                 delete window.confirm;
                 if ((!jQ("#Csort").hasClass("empty")||!jQ("#sorted").hasClass("empty")) && !confirm("This will overwrite your current configuration, are you sure?")) {
@@ -131,7 +117,7 @@
                 /*jQ("#sorted").innerHTML ="";*/
                 jQ("#sorted").textContent ="";
                 jQ("#Csort").textContent ="";
-                
+
                 jQ.getJSON(this.files[0].name, function(conf){report(conf);});
             });
             jQ("#ExBtn").click(function(){
@@ -155,7 +141,7 @@
                 else if(document.getElementById("spyr_2").checked){setOBJ.pyr.appendorder = 2;}
                 else if(document.getElementById("spyr_3").checked){setOBJ.pyr.appendorder = 3;}
                 setOBJ.pyr.appendorderdir = document.getElementById("spyro_0").checked;
-                
+
                 for (j = 0; j < document.getElementById("Csort").childElementCount; j++){
                     setOBJ.chapters.push(jQ(".class,li").eq(j).data().body);
                 }
@@ -204,7 +190,7 @@
                 }else {
                     var ischek = "";
                     if(jQ(ele).data().body.perm){
-                       ischek = "checked"; 
+                        ischek = "checked"; 
                     }
                     jQ(ele).append("<form id='TEMPFORM_"+lee+"' autofocus><label for='TEMP_title"+lee+"'>Title&nbsp</label><input value='"+jQ(ele).data().body.title+"' id='TEMP_title"+lee+"' type='text' autofocus><br><label for='TEMP_hover"+lee+"'>Hover&nbsp</label><input value='"+jQ(ele).data().body.hover+"' id='TEMP_hover"+lee+"' type='text' title='Text on Mouse Over'><br><label for='TEMP_note"+lee+"'>Image Info&nbsp</label><input value='"+jQ(ele).data().body.note+"' id='TEMP_note"+lee+"' type='text'><br><label for='TEMP_alt"+lee+"'>Alt Text&nbsp</label><input value='"+jQ(ele).data().body.alt+"' id='TEMP_alt"+lee+"' type='text' title='If the image fails to load this text is loaded instead'><br><label for='TEMP_release"+lee+"'>Release Date&nbsp </label><input value='"+jQ(ele).data().body.release+"' id='TEMP_release"+lee+"' type='number' title='When should this slide be avaliable'><br><label for='TEMP_url"+lee+"'>URL&nbsp</label><input value='"+jQ(ele).data().body.url+"' id='TEMP_url"+lee+"' type='text' title='Filename of the image'><br><label for='TEMP_perm"+lee+"'>Permanent&nbsp</label><input "+ischek+" id='TEMP_perm"+lee+"' type='checkbox' title='Whether the image should always be loaded'><br></form>");
                     jQ(ele).focus();
@@ -222,7 +208,7 @@
                     jQ(ele).data().body.start = jQ("#TEMP_start"+lee).val();
                     jQ(ele).data().body.title = jQ("#TEMP_title"+lee).val();
                     jQ("#TEMPFORM_"+lee).remove();
-                    
+
                     jQ(ele).focus();
                     jQ(ele).data().open = false;
                     console.log(jQ(ele).data());
@@ -248,7 +234,7 @@
                 document.getElementById("spyr_3").checked = false;
                 document.getElementById("spyro_0").checked = false;
                 document.getElementById("spyro_1").checked = false;
-                
+
                 if(typeof conf.config.startpage === 'undefined'){
                     document.getElementById("strp_0").checked = true;
                 } else if (conf.config.startpage){
@@ -285,12 +271,12 @@
                     if(conf.pyr.appendorderdir){document.getElementById("spyro_0").checked = true;}
                     else{document.getElementById("spyro_1").checked = true;}
                 }
-                
+
                 for (i = 0; i < conf.pages.length; i++){
                     jQ("#sorted").append("<li id=s"+i+">"+conf.pages[i].url+" <button onClick=settingsP('#s"+i+"');>&#x2731</button><button onClick=jQ('#s"+i+"').remove()>X</button></li>").sortable({ scroll: true});
-                if(typeof conf.pages[i].perm === 'undefined'){
-                    conf.pages[i].perm = false;
-                }
+                    if(typeof conf.pages[i].perm === 'undefined'){
+                        conf.pages[i].perm = false;
+                    }
                     jQ("#s"+i).data({
                         open: false,
                         body: {
@@ -309,13 +295,12 @@
                     jQ("#c"+oper).data({
                         open: false,
                         body: {
-                        description: conf.chapters[i].description, 
-                        end: conf.chapters[i].end, 
-                        start: conf.chapters[i].start, 
-                        title: conf.chapters[i].title,}
+                            description: conf.chapters[i].description, 
+                            end: conf.chapters[i].end, 
+                            start: conf.chapters[i].start, 
+                            title: conf.chapters[i].title,}
                     }).addClass("chap");
                 }
             };
         </script>
     </body>
-</html>

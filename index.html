@@ -1,34 +1,14 @@
-<!DOCTYPE html>
-<html >
-    <head>
-        <title id="cng">comic-ng</title>
-        <script src="js/vers.js"></script>
-        <link rel="stylesheet" type="text/css" href="js/bootstrap.min.css"/>
-        <link rel="stylesheet" type="text/css" href="js/bootstrap-touch-carousel.css"/>
-        <script src="js/jquery-2.1.4.min.js"></script>
-        <script src="js/bootstrap.min.js"></script>
-        <script src="js/bootstrap-touch-carousel.js"></script>
-        <script src="js/angular.min.js"></script>
-        <script src="js/angular-route.min.js"></script>
-        <script src="js/angular-touch.min.js"></script>
-        <!--<script src="js/underscore-min.js"></script>
-        <script src="js/backbone-min.js"></script>
-        --><!--<link rel="stylesheet" type="text/css" href="https://bootswatch.com/simplex/bootstrap.min.css"/>
-        <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
-        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js" ></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular.min.js"></script>
-		<script src="https://code.angularjs.org/1.4.0/angular-route.min.js"></script>
-        <script src="https://code.angularjs.org/1.4.0/angular-touch.min.js"></script>
-        <script src="http://underscorejs.org/underscore-min.js"></script>
-        <script src="http://backbonejs.org/backbone-min.js"></script>
-    -->
-        <script src="js/app.js"></script>
-        <script src="js/caruso.js"></script>
-        <!--<base href="/">-->
-        <base href="/comic-ng/">
-    </head><body ng-app="comicNg">
-    <h1 style="margin:4px; padding:4px">comic-ng</h1>
-    <!--App Body-->
-    <stage></stage>
-    <div ng-view></div>
-</body></html>
+<!DOCTYPE html><title>comix-ngn</title><script src="bellerophon.cng.min.js"></script><script src="comixngn.js"></script><base href="/comic-ng/">
+<!--
+if script.json is in a directory other than root, you must specify that directory's path in the optional dir attribute of the script tag, preferably the first. Using different dir values will result in unpredictable behavior.
+the html templates must be in the directory specified by template, if they are not in root-->
+<div id class="venue" use script></div>
+<!--
+id-selector that will be prepended to all interior elements
+class"venue" - required class that identifies this tag as an entry point
+use - an additional attribute that specifies the plug in to use for this venue. 
+It only applies to plugins that modify the stage. By default, it is the last plug-in added.
+"default" uses factory stage, "plug-in name" applies a specific plug-in
+script - an additional attribute that specifies which script this venue shoud use, either a url or a string.
+By default it uses script.json.
+-->
