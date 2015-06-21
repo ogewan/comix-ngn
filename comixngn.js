@@ -87,9 +87,11 @@ function loadTextFileAjaxSync(filePath, mimeType){
 /*Repos are objects that assign a key to a plug-in's version of function*/
 /*Check repo existence*/
 if(void 0===cG.REPO) cG.REPO = {};
-for (p in ["agent","director","stage","scenography","producer","actor","decor","stage"]) {
-    if(void 0===cG.REPO[p]) cG.REPO[p] = {};
+/*var q = ["agent","director","stage","scenography","producer","actor","decor","stage"];
+for (p in q) {
+    if(void 0===cG.REPO[q[p]]) cG.REPO[q[p]] = {};
 }
+q = void 0;*/
 /*Set repo defaults - ASSUMES defaults aren't set, will overwrite them*/
 cG.REPO.agent = {default:/*pegasus.js*/function(t,e){return e=new XMLHttpRequest,e.open("GET",t),t=[],e.onreadystatechange=e.then=function(n,o,i){if(n&&n.call&&(t=[,n,o]),4==e.readyState&&(i=t[0|e.status/200]))try{i(JSON.parse(e.responseText),e)}catch(r){i(e.responseText,e)}},e.send(),e}};
 
@@ -364,8 +366,9 @@ function stageInjection(){
 domReady(function(){
     /*everything else occurs here*/
     if(!document.getElementById("$COMICNGWRITER$$$")){if(void 0===$GPC){$GPC=0;}/*prints version information*/ console.log("%c %c %c comix-ngn  v"+ cG.info.vers_ix.version() +" %c \u262F %c \u00A9 2015 Oluwaseun Ogedengbe %c Plugins: "+$GPC, "color:white; background:#2EB531", "background:purple","color:white; background:#32E237", 'color:red; background:black', "color:white; background:#2EB531", "color:white; background:purple");}
+    console.log(JSON.stringify(cG, null, 2) );
     jstagecreate();
-    stageInjection();
+    //stageInjection();
 });
 
 /*/////////////////////////////////////////////////
