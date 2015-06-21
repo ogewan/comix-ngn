@@ -23,19 +23,30 @@ NOTE: It is is preferable to simply enter in "cG.property = value"
     */
     var key_to_change = "";
     var value_to_change_to = "";
-    cG[key_to_change] = value_to_change_to;
+    var pluginname = "[[Name]]";
+    cG.REPO[key_to_change];/*object initialization*/
+    cG[key_to_change] = cG.REPO[key_to_change][pluginname] = value_to_change_to;
+    
+    var srcs = document.getElementsByTagName("src");
+    for (i = 0; i < srcs.length; i++) { 
+        cG.root=src[i].getAttribute("plugin");/*this overwrites any previous root setting*/
+        if(cG.root!="") break;
+    }
+    if(cG.root=="") cG.root = pluginname;/*if root gets reset, then simply set the plugin as the new root*/
     /*use domReady if you need anything that runs after the DOM has loaded*/
     if(0){/*if you are changing the stage, store the old one in the repo*/
         var mystyle = '[[Minified CSS Sheet/Rules]]';/*you will probably need to modify the CSS as well*/
-        var old = {};
-        old.scenography = cG.scenography;
-        old.stage = cG.stage;
-        old.stage_ctrls = cG.stage_ctrls;
-        old.templates = cG.templates;
-        cG.stageREPO[cG.stageID] = old;
-        cG.scenography.textContent = mystyle; /*overwrites previous stylesheet with mystyle*/
+        var mystage = {
+            id: pluginname,
+            function:'',/*stage handler*/
+            controls: '',/*carousel controls*/
+            scenography: document.createElement("style"),/*css rules*/
+            body: '',/*stage template*/
+        };
+        cG.stage[pluginname] = mystage;
+        cG.stage.scenography.textContent = mystyle; /*overwrites previous stylesheet with mystyle*/
         document.head.removeChild(document.getElementById("scenography"));/*remove old <style> from page*/
-        document.head.appendChild(cG.scenography);/*Add new <style> to the page*/
+        document.head.appendChild(cG.stage.scenography);/*Add new <style> to the page*/
     }
     domReady(function(){
         /*runs once the DOM is ready*/
@@ -43,4 +54,5 @@ NOTE: It is is preferable to simply enter in "cG.property = value"
 });
 }
 else console.error("CNG Plug-in: [[Name]] must be loaded after comixngn.js");
-/*If you can, minify the plug-in. Including this in to the HTML will have no effect.*/
+/*If you can, minify the plug-in. 
+/*Including this file (plugin.cng.js) in to the HTML will have no effect.*/

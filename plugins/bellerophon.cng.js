@@ -17,49 +17,61 @@ if(typeof cG === 'undefined'){
     }
     if(typeof $GPC === 'undefined') var $GPC = 1;
     else $GPC++;
-    var cG = {/*comic-ng*/
+    var cG = {/*comic-ng pre everything here will be overwritten*/
         agent: function(t,e){return e=new XMLHttpRequest,e.open("GET",t),t=[],e.onreadystatechange=e.then=function(n,o,i){if(n&&n.call&&(t=[,n,o]),4==e.readyState&&(i=t[0|e.status/200]))try{i(JSON.parse(e.responseText),e)}catch(r){i(e.responseText,e)}},e.send(),e},
-        templates: {}
+        REPO: {},
     };
     var getScript = cG.agent(dir+'script.json');
     var getStage = cG.agent(tir+'stage.html');
-    var getCostumes = cG.agent(tir+'costumes.html');
+    var getDecor = cG.agent(tir+'costumes.html');
     var getActor = cG.agent(tir+'actor.html');
     getScript.then(
     function(data, xhr) {
-        cG.script = data;
-        /*console.log(cG.script);*/
+        if(void 0===cG.REPO.script) cG.REPO.script = {default:data};
+        else cG.REPO.script.default = data;
+        cG.script = cG.REPO.script.default;
     },
     function(data, xhr) {
         console.error(data, xhr.status);
-        cG.script = 0;/*adds redundancy on failure; so fallback can be processed*/
+        if(void 0===cG.REPO.script) cG.REPO.script = {default:0};
+        else cG.REPO.script.default = data;
+        cG.script = cG.REPO.script.default;
     });
     getStage.then(
     function(data, xhr) {
-        cG.templates.stage = data;
-        /*console.log(cG.templates.stage);
-        console.log(cG.templates);*/
+        if(void 0===cG.REPO.stage) cG.REPO.stage = {default:{body:data}};
+        else cG.REPO.stage.default.body = data;
+        cG.stage = cG.REPO.stage.default;
     },
     function(data, xhr) {
         console.error(data, xhr.status);
-        cG.templates.stage = 0;
+        if(void 0===cG.REPO.stage) cG.REPO.stage = {default:{body:0}};
+        else cG.REPO.stage.default.body = 0;
+        cG.stage = cG.REPO.stage.default;
     });
-    getCostumes.then(
+    getDecor.then(
     function(data, xhr) {
-        cG.costumes = data;
+        if(void 0===cG.REPO.decor) cG.REPO.decor = {default:data};
+        else cG.REPO.decor.default = data;
+        cG.decor = cG.REPO.decor.default;
     },
     function(data, xhr) {
         console.error(data, xhr.status);
-        cG.costumes = 0;
+        if(void 0===cG.REPO.decor) cG.REPO.decor = {default:0};
+        else cG.REPO.decor.default = 0;
+        cG.decor = cG.REPO.decor.default;
     });
     getActor.then(
     function(data, xhr) {
-        cG.templates.actor = data;
-        /*console.log(cG.templates.actor);*/
+        if(void 0===cG.REPO.actor) cG.REPO.actor = {default:data};
+        else cG.REPO.actor.default = data;
+        cG.actor = cG.REPO.actor.default;
     },
     function(data, xhr) {
         console.error(data, xhr.status);
-        cG.templates.actor = 0;
+        if(void 0===cG.REPO.actor) cG.REPO.actor = {default:0};
+        else cG.REPO.actor.default = 0;
+        cG.actor = cG.REPO.actor.default;
     });
 }
 else window.console.debug("CNG Plug-in: Bellerophon must be loaded before comixngn.js");

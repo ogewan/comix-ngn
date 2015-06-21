@@ -12,13 +12,14 @@ comix-ngn is
 - **small**
   - Maximum JS size should be no more than 50 KB with comments.
   - Maximum Min JS size expected to be no more than 30 KB.
+  - Current Size Numbers: 27 KB raw, 20 KB min, 14 KB min + gzip
 - **redundant**
   - comixngn has multiple fall-backs so that as long as the main file and script json file is loaded, it will work.
 - **extensible**
   - Plug-ins add functionality and customization to the framework.
   - An example plug-in:
 
-```<script src="bellerophon.cng.min.js"></script>```
+```<script src="bellerophon.cng.min.js" dir template></script>```
 - **modular**
   - Each function is a part of the main script object.
 - **powerful**
