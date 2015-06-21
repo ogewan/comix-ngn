@@ -1,4 +1,4 @@
-/*! comix-ngn v1.7.5 | (c) 2015 Oluwaseun Ogedengbe| seun40.github.io/comic-ng/ |License: MIT|
+/*! comix-ngn v1.7.6 | (c) 2015 Oluwaseun Ogedengbe| seun40.github.io/comic-ng/ |License: MIT|
 embeds domReady: github.com/ded/domready (MIT) (c) 2013 Dustin Diaz, pegasus: typicode.github.io/pegasus (MIT) (c) 2014 typicode, pathjs (MIT) (c) 2011 Mike Trpcic, HTMLparser (MIT) (c) 2015 Oluwaseun Ogedengbe, swipe: swipejs.com (MIT) (c) 2013 Brad Birdsall*/
 if(void 0===cG) var cG = {};/*check if cG is already is instantiated*/
 /*comix-ngn default properties*/
@@ -6,51 +6,7 @@ if(void 0===cG) var cG = {};/*check if cG is already is instantiated*/
 /*version settings*/
 function N(){return 0};/*null function*/
 cG.root = '';
-cG.info = {
-    vers_ix: {/*comix-ngn version info*/
-        status: 1,//beta
-        major: 7,
-        minor: 5,
-        version: function() {return this.status.toString()+"."+this.major.toString()+"."+this.minor.toString();},
-        changelog: {
-            "0.5.0": "Initial Setup, Versioning",
-            "0.7.5": "Added Dependencies (JS): (jquery.min, angular-touch.min, angular.min[Update],bootstrap.min), Carousel for slides, real-time reactivity",
-            "0.7.7": "Retooled carousel buttons, added page count checker",
-            "0.7.8": "Minor Modifications, page is aligned to center, index.html is cleaned up",
-            "0.8.2": "caruso updated, controls are now hid automatically, date is now formated, appifying the stage",
-            "0.9.8": "stage.html template created, index html cleaned up, added isrc(imaginary source) attribute to preload images but not implemented yet",
-            "1.0.0": "routing and page updating works???Page loading works, navigate by url and back button work",
-            "1.1.0": "code refactor, all external dependencies removed, new micro lib dependencies are embedded",
-            "1.1.1": "iCanHaz replaced with HTMLparser",
-            "1.2.0": "created machinery for initing stageInjection, created new template: costumes.html, that creates multiple pages for the app, added dir and script specification, added redundancy checks so that the program isn't broken when data fails to load, or there is a conflict.",
-            "1.3.0": "Depreciating HTMLparser b/c it is to unreliable.",
-            "1.4.1": "Reorganize CG structure to allow plugins to simply append rather than replace. Reorganize directory",
-            "1.7.5": "Complete addition of REPO system",
-        },
-    },
-    vers_wr: {/*comix-ngn writer version info*/
-        status: 0,//alpha
-        major: 9,
-        minor: 6,
-        version: function() {return this.status.toString()+"."+this.major.toString()+"."+this.minor.toString();},
-        changelog: {
-            "0.5.0": "Initial Setup, Versioning",
-            "0.8.0": "Huge implementations, Object config by dynamic form injection for Page and Chapter, Setting config compartmentalized, design config added",
-            "0.9.0": "added pyoofreader configuration, added continue a config file, but its not implemented script wise yet, pyoofreader not fully implemented yet",
-            "0.9.6": "pyoofreader gets its own version, continue config fully implemented, cosmetic changes, now able to download a stage and a template index.html",
-            "1.0.0": "Ready for beta",
-        },
-    },
-    vers_pr: {/*comix-ngn pyoofreader version info*/
-        status: 0,//alpha
-        major: 1,
-        minor: 0,
-        version: function() {return this.status.toString()+"."+this.major.toString()+"."+this.minor.toString();},
-        changelog: {
-            "0.1.0": "Implemented version, counts page dif and warns of Mismatch",
-        },
-    },
-};
+cG.info = {vix: "1.7.6",vwr: "1.0.0",vpr: "0.1.0"};
 /*DEFAULT LIB FUNCTIONS*/
 var Path={version:"0.8.4",map:function(a){if(Path.routes.defined.hasOwnProperty(a)){return Path.routes.defined[a]}else{return new Path.core.route(a)}},root:function(a){Path.routes.root=a},rescue:function(a){Path.routes.rescue=a},history:{initial:{},pushState:function(a,b,c){if(Path.history.supported){if(Path.dispatch(c)){history.pushState(a,b,c)}}else{if(Path.history.fallback){window.location.hash="#"+c}}},popState:function(a){var b=!Path.history.initial.popped&&location.href==Path.history.initial.URL;Path.history.initial.popped=true;if(b)return;Path.dispatch(document.location.pathname)},listen:function(a){Path.history.supported=!!(window.history&&window.history.pushState);Path.history.fallback=a;if(Path.history.supported){Path.history.initial.popped="state"in window.history,Path.history.initial.URL=location.href;window.onpopstate=Path.history.popState}else{if(Path.history.fallback){for(route in Path.routes.defined){if(route.charAt(0)!="#"){Path.routes.defined["#"+route]=Path.routes.defined[route];Path.routes.defined["#"+route].path="#"+route}}Path.listen()}}}},match:function(a,b){var c={},d=null,e,f,g,h,i;for(d in Path.routes.defined){if(d!==null&&d!==undefined){d=Path.routes.defined[d];e=d.partition();for(h=0;h<e.length;h++){f=e[h];i=a;if(f.search(/:/)>0){for(g=0;g<f.split("/").length;g++){if(g<i.split("/").length&&f.split("/")[g].charAt(0)===":"){c[f.split("/")[g].replace(/:/,"")]=i.split("/")[g];i=i.replace(i.split("/")[g],f.split("/")[g])}}}if(f===i){if(b){d.params=c}return d}}}}return null},dispatch:function(a){var b,c;if(Path.routes.current!==a){Path.routes.previous=Path.routes.current;Path.routes.current=a;c=Path.match(a,true);if(Path.routes.previous){b=Path.match(Path.routes.previous);if(b!==null&&b.do_exit!==null){b.do_exit()}}if(c!==null){c.run();return true}else{if(Path.routes.rescue!==null){Path.routes.rescue()}}}},listen:function(){var a=function(){Path.dispatch(location.hash)};if(location.hash===""){if(Path.routes.root!==null){location.hash=Path.routes.root}}if("onhashchange"in window&&(!document.documentMode||document.documentMode>=8)){window.onhashchange=a}else{setInterval(a,50)}if(location.hash!==""){Path.dispatch(location.hash)}},core:{route:function(a){this.path=a;this.action=null;this.do_enter=[];this.do_exit=null;this.params={};Path.routes.defined[a]=this}},routes:{current:null,root:null,rescue:null,previous:null,defined:{}}};Path.core.route.prototype={to:function(a){this.action=a;return this},enter:function(a){if(a instanceof Array){this.do_enter=this.do_enter.concat(a)}else{this.do_enter.push(a)}return this},exit:function(a){this.do_exit=a;return this},partition:function(){var a=[],b=[],c=/\(([^}]+?)\)/g,d,e;while(d=c.exec(this.path)){a.push(d[1])}b.push(this.path.split("(")[0]);for(e=0;e<a.length;e++){b.push(b[b.length-1]+a[e])}return b},run:function(){var a=false,b,c,d;if(Path.routes.defined[this.path].hasOwnProperty("do_enter")){if(Path.routes.defined[this.path].do_enter.length>0){for(b=0;b<Path.routes.defined[this.path].do_enter.length;b++){c=Path.routes.defined[this.path].do_enter[b]();if(c===false){a=true;break}}}}if(!a){Path.routes.defined[this.path].action()}}};
 
@@ -282,6 +238,7 @@ function stageInjection(){
     var id_attr = "";
     var script_attr = "";
     var use_attr = "";
+    var config_attr = "";
     
     var result;
     var myScript;
@@ -296,6 +253,7 @@ function stageInjection(){
         id_attr = stages[i].getAttribute("id");
         script_attr = stages[i].getAttribute("script");
         use_attr = stages[i].getAttribute("use");
+        config_attr = stages[i].getAttribute("config");
         if(id_attr==""){/*if no ID, make one*/
             var name = "STG"+i;
             var j = 1;
@@ -332,6 +290,15 @@ function stageInjection(){
                 myStage.templates = cG.templates;
             } else myStage.stageID = use_attr;
         }
+        if(config_attr!=""){
+            try {
+                config_attr=JSON.parse(config_attr);
+            }
+            catch(err) {
+                console.debug("The following configuration settings are malformed: ",config_attr,"It has been ignored");
+                config_attr="";
+            }
+        }
         /*END initial set up*/
         /*index.html(venue)<-costumes.html(location)<-stage.html(target)<-actor.html*/
         clone = stages[i].cloneNode(false);
@@ -365,7 +332,7 @@ function stageInjection(){
 
 domReady(function(){
     /*everything else occurs here*/
-    if(!document.getElementById("$COMICNGWRITER$$$")){if(void 0===$GPC){$GPC=0;}/*prints version information*/ console.log("%c %c %c comix-ngn  v"+ cG.info.vers_ix.version() +" %c \u262F %c \u00A9 2015 Oluwaseun Ogedengbe %c Plugins: "+$GPC, "color:white; background:#2EB531", "background:purple","color:white; background:#32E237", 'color:red; background:black', "color:white; background:#2EB531", "color:white; background:purple");}
+    if(!document.getElementById("$COMICNGWRITER$$$")){if(void 0===$GPC){$GPC=0;}/*prints version information*/ console.log("%c %c %c comix-ngn v"+ cG.info.vix +" %c \u262F %c \u00A9 2015 Oluwaseun Ogedengbe %c Plugins: "+$GPC, "color:white; background:#2EB531", "background:purple","color:white; background:#32E237", 'color:red; background:black', "color:white; background:#2EB531", "color:white; background:purple");}
     console.log(JSON.stringify(cG, null, 2) );
     jstagecreate();
     //stageInjection();
