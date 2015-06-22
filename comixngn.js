@@ -1,4 +1,4 @@
-/*! comix-ngn v1.7.6 | (c) 2015 Oluwaseun Ogedengbe| seun40.github.io/comic-ng/ |License: MIT|
+/*! comix-ngn v1.7.7 | (c) 2015 Oluwaseun Ogedengbe| seun40.github.io/comic-ng/ |License: MIT|
 embeds domReady: github.com/ded/domready (MIT) (c) 2013 Dustin Diaz, pegasus: typicode.github.io/pegasus (MIT) (c) 2014 typicode, pathjs (MIT) (c) 2011 Mike Trpcic, HTMLparser (MIT) (c) 2015 Oluwaseun Ogedengbe, swipe: swipejs.com (MIT) (c) 2013 Brad Birdsall*/
 if(void 0===cG) var cG = {};/*check if cG is already is instantiated*/
 /*comix-ngn default properties*/
@@ -243,6 +243,7 @@ function stageInjection(){
     var result;
     var myScript;
     var subclone;
+    var dipclone;
     var clone;
     var links;
     var target = '';
@@ -296,9 +297,9 @@ function stageInjection(){
             }
             catch(err) {
                 console.debug("The following configuration settings are malformed: ",config_attr,"It has been ignored");
-                config_attr="";
+                config_attr={};
             }
-        }
+        } else config_attr={};
         /*END initial set up*/
         /*index.html(venue)<-costumes.html(location)<-stage.html(target)<-actor.html*/
         clone = stages[i].cloneNode(false);
@@ -315,17 +316,26 @@ function stageInjection(){
         renameEles(false,clone,id_attr);
         //console.log(clone);
         /*append the slides*/
-        console.log(cG.script);
+        //console.log(cG.script);
         target.innerHTML=idealStar;
-        subclone=target.children[0].cloneNode(true);
-        renameEles(true,subclone,id_attr,"0");
-        
+        subclone=target.children[0].cloneNode(true);/*original clone*/
+        target.innerHTML="";
         for (f = 0; f < cG.script.pages.length; f++) {
-            target.innerHTML+=idealStar;
-            //console.log(target);
-            console.log(cG.script.pages[f].url);
+            dipclone=subclone.cloneNode(true);
+            renameEles(true,dipclone,id_attr,f);
+            smartAttrib(dipclone,{
+                img: {
+                    isrc:cG.script.pages[f].url,
+                    src:"",
+                },
+            });
+            target.appendChild(dipclone);
+            //console.log(dipclone);
         }
-        
+        //console.log(target);
+        console.log(clone);
+        stages[i].parentNode.replaceChild(clone, stages[i]);
+        window[id_attr] = new cG.stage.function(target.parentNode, config_attr);
     } //console.log("TEST",idealStage,idealStar,idealCostumes,stages,clone,id_attr,script_attr,use_attr,result,myScript,myStage);
 };
 /*end STAGE creation*/
@@ -333,13 +343,28 @@ function stageInjection(){
 domReady(function(){
     /*everything else occurs here*/
     if(!document.getElementById("$COMICNGWRITER$$$")){if(void 0===$GPC){$GPC=0;}/*prints version information*/ console.log("%c %c %c comix-ngn v"+ cG.info.vix +" %c \u262F %c \u00A9 2015 Oluwaseun Ogedengbe %c Plugins: "+$GPC, "color:white; background:#2EB531", "background:purple","color:white; background:#32E237", 'color:red; background:black', "color:white; background:#2EB531", "color:white; background:purple");}
-    console.log(JSON.stringify(cG, null, 2) );
-    jstagecreate();
-    //stageInjection();
+    //console.log(JSON.stringify(cG, null, 2) );
+    //jstagecreate();
+    stageInjection();
 });
 
 /*/////////////////////////////////////////////////
 HELPER FUNCTIONS*/
+function smartAttrib(source,mapper){
+    var base;
+    var srch = mapper[source.nodeName.toLowerCase()];
+    if(void 0 !== srch){
+        if(srch.count === void 0 || srch.count != 0){/*as long as count != 0 we can set the attribute*/
+            base = Object.keys(srch);
+            for(y=0;y<base.length;y++){
+                if(base[y]=="count") continue;
+                source.setAttribute(base[y],srch[base[y]]);         
+            }
+            if(srch.count > 0) mapper[source.nodeType.toLowerCase()].count--;/*if count is above 0, decrement it (this limits the amount of sets)*/
+        }
+    }
+    for(var x=0;x<source.children.length;x++) smartAttrib(source.children[x],mapper);
+}
 function FEbyIdAI(source,ids,inner){
     var ret = [];
     var w;
@@ -363,7 +388,7 @@ function FEbyIdAI(source,ids,inner){
     //console.log(ret)
     //if(source.innerHTML=='') ret.push(source.innerHTML);
     //console.log("called",q,source.children.length);
-    for(a=0;a<source.children.length;a++){
+    for(var a=0;a<source.children.length;a++){
         ret = ret.concat(FEbyIdAI(source.children[a],ids,inner,name));
     }
     //console.log(q,ret,source);
