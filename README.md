@@ -86,6 +86,8 @@ attribute to preload images but not implemented yet
 
 **1.7.7**: added smartAttrib helper function, succesfully imports a wellformed app into page, but its not functioning curently
 
+**1.8.0**: wellformed fuctioning carousel on page, not appified yet, control injection performs correctly, source map added, tracking via rollbar added
+
 ### comix-ngn Writer version 1.0.0 (beta)
 **0.5.0**: "Initial Setup, Versioning
 

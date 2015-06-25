@@ -1,4 +1,5 @@
-/*! [[Name]]: Comix-Ngn plugin
+/*! @preserve
+[[Name]]: Comix-Ngn plugin
 [[description| Plug-in template]]
 [[License/dependency licenses]]
 Order: [[before comixngn.js, first or last after comixngn.js]]
@@ -24,7 +25,7 @@ NOTE: It is is preferable to simply enter in "cG.property = value"
     var key_to_change = "";
     var value_to_change_to = "";
     var pluginname = "[[Name]]";
-    cG.REPO[key_to_change];/*object initialization*/
+    cG.REPO[key_to_change] = {};/*object initialization*/
     cG[key_to_change] = cG.REPO[key_to_change][pluginname] = value_to_change_to;
     
     var srcs = document.getElementsByTagName("src");
@@ -50,8 +51,7 @@ NOTE: It is is preferable to simply enter in "cG.property = value"
     }
     domReady(function(){
         /*runs once the DOM is ready*/
-    }
-});
+    });
 }
 else console.error("CNG Plug-in: [[Name]] must be loaded after comixngn.js");
 /*If you can, minify the plug-in. 
