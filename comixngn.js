@@ -1,4 +1,4 @@
-/*@preserve comix-ngn v1.8.0 | (c) 2015 Oluwaseun Ogedengbe| seun40.github.io/comic-ng/ |License: MIT|
+/*@preserve comix-ngn v1.8.2 | (c) 2015 Oluwaseun Ogedengbe| seun40.github.io/comic-ng/ |License: MIT|
 embeds domReady: github.com/ded/domready (MIT) (c) 2013 Dustin Diaz, pegasus: typicode.github.io/pegasus (MIT) (c) 2014 typicode, pathjs (MIT) (c) 2011 Mike Trpcic, HTMLparser (MIT) (c) 2015 Oluwaseun Ogedengbe, swipe: swipejs.com (MIT) (c) 2013 Brad Birdsall*/
 
 if(void 0===cG) var cG = {};/*check if cG is already is instantiated*/
@@ -8,7 +8,7 @@ if(void 0===cG) var cG = {};/*check if cG is already is instantiated*/
 function N(){return 0};/*null function*/
 if(void 0===$GPC){var $GPC=0;}
 cG.root = '';
-cG.info = {vix: "1.8.0",vwr: "1.0.0",vpr: "0.1.0"};
+cG.info = {vix: "1.8.2",vwr: "1.0.0",vpr: "0.1.0"};
 /*rollbar*/
 if(_rollbarConfig===void 0){
     var _rollbarConfig = {
@@ -90,6 +90,11 @@ cG.REPO.stage.def.controls = function(holder,instruction,dur){
     if(void 0===holder) return console.error("holder - the stage to which the button will be attached, is required");
     if(void 0===dur) dur = 400;
     //console.log(window[holder],holder);
+    if(cG.script.config.pagestartnum){
+        if(isNaN(parseInt(instruction))) instruction++;
+        if(instruction.value===void 0) return console.log("malformed instruction, must be object with value property");
+        else instruction.value++;
+    }
     switch(instruction){
         case "a"://first
             holder.slide(0,dur);//window[holder].slide(0,dur);
