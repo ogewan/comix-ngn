@@ -16,6 +16,30 @@ The Modern Webcomic Framework
 
    ```<script src="bellerophon.cng.min.js"></script>```
 
+* For more fine-grain control, use the following additional attributes:
+  * __plugin__ - By default, the last installed plugin will be set as default. To use a specific plug-in as default, simply set the **plugin** attribute in the script tag to the plugin name. Setting it to "default" will use the original framework settings. Setting it as an array, will create plug-in priority. Note, an array must be submitted as a string: "[1,2,3]".
+
+  ```<script src="comixngn.js" plugin="default"></script>```
+
+  * __use__ - Stages will use the currently set defaults for creation and operation. Simply set the **use** attribute in the "venue" element that you want to use specified plug-ins for. Setting it to "default" will use the original framework settings. Setting it as an array, will create plugin priority. Note, an array must be submitted as a string: "[1,2,3]".
+
+  ```<div id class="venue" use="[Infinite, Parallel]"></div>```
+
+  * __script__ - Stages will use the main script.JSON to organize their pages. To use an alternative JSON, perhaps in order to show a completely different set of pages, set the **script** attribute in the "venue" element that you want to use the specified script.
+
+  ```<div id class="venue" script="EarlyDays.JSON"></div>```
+
+  * __config__ - This attribute adds an object that adds additional parameters such as slide duration or transition type, to the stage. The properties in config are specific to the plug-in being used so the same config might not work for different plug-ins, you must check the documentation. This must be submitted as a JSON string.
+
+  ``` html
+  <div id class="venue" config='{
+    "startSlide": 0,
+    "speed": 400,
+    "auto": 3000,
+    "continuous": true,
+  }" ></div>'
+  ```
+
 # Design Precepts 
 >(For Developers)
 
