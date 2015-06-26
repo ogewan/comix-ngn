@@ -1,4 +1,4 @@
-/*@preserve comix-ngn v1.8.2 | (c) 2015 Oluwaseun Ogedengbe| seun40.github.io/comic-ng/ |License: MIT|
+/** @preserve comix-ngn v1.8.2 | (c) 2015 Oluwaseun Ogedengbe| seun40.github.io/comic-ng/ |License: MIT|
 embeds domReady: github.com/ded/domready (MIT) (c) 2013 Dustin Diaz, pegasus: typicode.github.io/pegasus (MIT) (c) 2014 typicode, pathjs (MIT) (c) 2011 Mike Trpcic, HTMLparser (MIT) (c) 2015 Oluwaseun Ogedengbe, swipe: swipejs.com (MIT) (c) 2013 Brad Birdsall*/
 
 if(void 0===cG) var cG = {};/*check if cG is already is instantiated*/
@@ -127,6 +127,47 @@ cG.REPO.stage.def.scenography = document.createElement("style");
 /*cG.REPO.stage.def.scenography.setAttribute("media", "screen");*/
 cG.REPO.stage.def.scenography.setAttribute("id", "scenography");
 cG.REPO.stage.def.scenography.appendChild(document.createTextNode('article,aside,b,body,dd,del,dfn,div,dl,dt,em,fieldset,footer,form,h1,h2,h3,h4,h5,h6,header,html,i,iframe,img,ins,kbd,label,li,nav,object,ol,p,q,samp,section,small,span,strong,table,tbody,td,tfoot,th,thead,tr,ul{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:0 0}body{-webkit-text-size-adjust:none;font-family:sans-serif;min-height:416px}h1{font-size:33px;margin:50px 0 15px;text-align:center;color:#212121}h2{font-size:14px;font-weight:700;color:#3c3c3c;margin:20px 10px 10px}small{margin:0 10px 30px;display:block;font-size:12px}a{margin:0 0 0 10px;font-size:12px;color:#3c3c3c}body,html{background:#f3f3f3}#console{font-size:12px;font-family:Inconsolata,Monaco,Consolas,"Andale Mono","Bitstream Vera Sans Mono","Courier New",Courier,monospace;color:#999;line-height:18px;margin-top:20px;max-height:150px;overflow:auto}#mySwipe div b{display:block;font-weight:700;color:#14ADE5;font-size:20px;text-align:center;margin:10px;padding:100px 10px;box-shadow:0 1px #EBEBEB;background:#fff;border-radius:3px;border:1px solid;border-color:#E5E5E5 #D3D3D3 #B9C1C6}.swipe{overflow:hidden;visibility:hidden;position:relative}.swipe-wrap{overflow:hidden;position:relative}.swipe-wrap>div{float:left;width:100%;position:relative}'));
+
+cG.REPO.stage.def.manager = function(index,elem){
+    console.log(index,elem);
+    /*var id;
+    val = parseInt(val);
+    if(typeof val === "undefined" || isNaN(val)) {
+        id = jQuery(".active").attr("id");
+    } else {
+        id = val;
+    }
+    var iid;
+    jQuery('[btog=1]').attr("src", ""); /*turn off all active img*/
+    //jQuery('[btog=1]').attr("btog", 0); /*decrement*/
+    /*jQuery('[btog=2]').attr("btog", 1);
+    
+    if(!vvar2&&id==0||vvar2&&id==vvar1){
+        location.hash = '';
+    } else if(id<0){
+        id=id*-1;
+        location.hash = location.hash;
+    } else {
+        console.log("location hash :"+(parseInt(id)+1).toString());
+        location.hash = (parseInt(id)+1).toString();
+    }
+    for (i = 0; i < jQuery("#myCarousel").attr("pstload"); i++) {
+        iid = "#ig"+(parseInt(id)+i).toString();
+        console.log(iid);
+        if(jQuery(iid).attr("btog")==0){
+            jQuery(iid).attr("src", jQuery(iid).attr("isrc")); /*turns image on*/
+        /*}
+        jQuery(iid).attr("btog", 2);
+    }
+    for (i = -1; i > (jQuery("#myCarousel").attr("preload")*-1)-2; i--) {
+        iid = "#ig"+(parseInt(id)+i).toString();
+        console.log(iid);
+        if(jQuery(iid).attr("btog")==0){
+            jQuery(iid).attr("src", jQuery(iid).attr("isrc")); /*turns image on*/
+        /*}
+        jQuery(iid).attr("btog", 2);
+    }*/
+};
 
 if(void 0===cG.REPO.actor) cG.REPO.actor = {def: ""};
 if(void 0===cG.REPO.decor) cG.REPO.decor = {def: ""};
@@ -375,6 +416,7 @@ cG.stageInjection = function(SPECIFIC){
                 config_attr={};
             }
         } else config_attr={};
+        config_attr.transitionEnd = cG.stage.manager;//transitionEnd: overwrite
         /*END initial set up*/
         /*index.html(venue)<-costumes.html(location)<-stage.html(target)<-actor.html*/
         cset = [["<|","<","?","index",">",">|"],["cG.stage.controls("+id_attr+",'a')","cG.stage.controls("+id_attr+",'b')","cG.stage.controls("+id_attr+",'e')","cG.stage.controls("+id_attr+",this)","cG.stage.controls("+id_attr+",'c')","cG.stage.controls("+id_attr+",'d')"]];

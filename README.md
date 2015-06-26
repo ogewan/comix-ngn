@@ -88,7 +88,7 @@ attribute to preload images but not implemented yet
 
 **1.8.0**: wellformed fuctioning carousel on page, not appified yet, control injection performs correctly, source map added, tracking via rollbar added
 
-**1.8.2**: Routing added
+**1.8.2**: Routing added, starting preload and url changing, possibly html5pushstate
 
 ### comix-ngn Writer version 1.0.0 (beta)
 **0.5.0**: "Initial Setup, Versioning
