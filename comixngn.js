@@ -421,7 +421,7 @@ cG.stageInjection = function(SPECIFIC){
         /*index.html(venue)<-costumes.html(location)<-stage.html(target)<-actor.html*/
         cset = [["<|","<","?","index",">",">|"],["cG.stage.controls("+id_attr+",'a')","cG.stage.controls("+id_attr+",'b')","cG.stage.controls("+id_attr+",'e')","cG.stage.controls("+id_attr+",this)","cG.stage.controls("+id_attr+",'c')","cG.stage.controls("+id_attr+",'d')"]];
         clone = stages[i].cloneNode(false);
-        
+        //console.log(cG,cG.HELPERS.FEbyIdAI);
         links = cG.HELPERS.FEbyIdAI(clone,["venue","location","target","controls"],[idealCostumes,idealStage]);
         //console.log(links);
         for (t = 0; t < links.length; t++) {
@@ -480,25 +480,6 @@ Path.map("#/:page").to(function(){
     cG.stage.controls(window[document.getElementsByClassName("venue")[0].getAttribute("id")],{value:this.params['page']});
 });
 /*end routing*/
-domReady(function(){
-    /*everything else occurs here*/
-    if(!document.getElementById("$COMICNGWRITER$$$")){/*prints version information*/ console.log("%c %c %c comix-ngn v"+ cG.info.vix +" %c \u262F %c \u00A9 2015 Oluwaseun Ogedengbe %c Plugins: "+$GPC, "color:white; background:#2EB531", "background:purple","color:white; background:#32E237", 'color:red; background:black', "color:white; background:#2EB531", "color:white; background:purple");}
-    //console.log(JSON.stringify(cG, null, 2) );
-    var a = document.getElementsByTagName("SCRIPT");
-    var b;
-    for (i = 0; i < a.length; i++) {
-        if(void 0==a[i].getAttribute("src")) continue;
-        if(a[i].getAttribute("src").indexOf("comixngn")>=0){
-            b=a[i].getAttribute("auto");
-            break;
-        };
-    }
-    if(b||b==void 0||b==""){
-        //cG.HELPERS.jstagecreate();
-        cG.stageInjection();
-    }
-});
-
 /*/////////////////////////////////////////////////
 HELPER FUNCTIONS*/
 cG.HELPERS.smartAttrib = function(source,mapper){
@@ -554,4 +535,23 @@ cG.HELPERS.renameEles = function(bool,source,prepend,append){
         source.setAttribute("id",pre+source.getAttribute("id")+app);
     }
 }
-//# sourceMappingURL=https://raw.githubusercontent.com/seun40/comix-ngn/dev/comixngn.js.map
+/* setup complete
+/////////////////////////////////////////////////*/
+domReady(function(){
+    /*everything else occurs here*/
+    if(!document.getElementById("$COMICNGWRITER$$$")){/*prints version information*/ console.log("%c %c %c comix-ngn v"+ cG.info.vix +" %c \u262F %c \u00A9 2015 Oluwaseun Ogedengbe %c Plugins: "+$GPC, "color:white; background:#2EB531", "background:purple","color:white; background:#32E237", 'color:red; background:black', "color:white; background:#2EB531", "color:white; background:purple");}
+    //console.log(JSON.stringify(cG, null, 2) );
+    var a = document.getElementsByTagName("SCRIPT");
+    var b;
+    for (i = 0; i < a.length; i++) {
+        if(void 0==a[i].getAttribute("src")) continue;
+        if(a[i].getAttribute("src").indexOf("comixngn")>=0){
+            b=a[i].getAttribute("auto");
+            break;
+        };
+    }
+    if(b||b==void 0||b==""){
+        //cG.HELPERS.jstagecreate();
+        cG.stageInjection();
+    }
+});
