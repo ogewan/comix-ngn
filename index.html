@@ -90,7 +90,8 @@
         <div class="social-media">
             <div class="social-media-inner container text-center">
                 <ul class="list-inline">
-                    
+                    <li><a href="http://js.org" target="_blank" title="JS.ORG | JavaScript Community">
+                        <img src="http://logo.js.org/bright_horz.png" width="77" alt="JS.ORG Logo"/></a></li>
                     <li><a href="https://gitter.im/seun40/comic-ng?utm_source=badge&amp;utm_medium=badge&amp;utm_campaign=pr-badge&amp;utm_content=badge"><img src="https://badges.gitter.im/Join%20Chat.svg" alt="Join the chat at https://gitter.im/seun40/comic-ng"></a></li>
                     <!--// Generate github buttons: https://github.com/mdo/github-buttons -->
                     <li class="github-star"><iframe src="http://ghbtns.com/github-btn.html?user=seun40&repo=comix-ngn&type=watch&count=true" allowtransparency="true" frameborder="0" scrolling="0" width="110" height="20"></iframe></li>
@@ -144,6 +145,15 @@
                                 To add additional features, use a plug-in:
                                 <pre><code class="language-markup">&lt;script src=&quot;bellerophon.cng.min.js&quot;&gt;&lt;/script&gt;</code></pre>
                             </li>
+                            <li>
+                                <p><strong>[Recommended]</strong>: For fastest load time, copy and paste the  contents of <strong>bellerophon.cng.min.embed.html</strong> into your html. While this adds 1.8KB to your HTML file that won't be cached, it will virtually eliminate the app from increasing the load time of your site*.</p>
+                                <ul>
+                                    <li>
+                                        <p>If using Bellerophon Embed, do not add additional plugins via the script tag. Since they load immediately while comixngn.js may be deffered, the plugins will panic and refuse to load. Simply add the plugin path as a string to the <strong>loadcng</strong> array in Bellerophon Embed to include plugins.</p>
+                                    </li>
+                                </ul>
+                            </li>
+                            <p><em>*Time to render or DOM Content Loaded</em></p>
                         </div><!--//block-->
                     </ul>
                 </div><!--//docs-inner-->         
