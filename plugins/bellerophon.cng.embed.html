@@ -1,0 +1,71 @@
+<script>
+    //Minify before use
+    var defer = !0,
+        mainsrc = "comixngn.min.js",
+        plugins = [],/*to load*/
+        /*! Bellerophon: Comix-Ngn plugin|pegasus: typicode.github.io/pegasus (MIT) (c) 2014 typicode*/
+        dir = "",
+        tir = "",
+        $GPC = $GPC+1||1,
+        cG = {
+            agent: function(c, e) {
+                return e = new XMLHttpRequest, e.open("GET", c), c = [], e.onreadystatechange = e.then = function(t, r, o) {
+                    if (t && t.call && (c = [, t, r]), 4 == e.readyState && (o = c[0 | e.status / 200])) try {
+                        o(JSON.parse(e.responseText), e)
+                    } catch (d) {
+                        o(e.responseText, e)
+                    }
+                }, e.send(), e
+            },
+            REPO: {}
+        },
+        dfr = function() {
+            var c = document.createElement("script"),
+                getScript = cG.agent("./" + dir + "script.json"),
+                getStage = cG.agent("./" + tir + "stage.html"),
+                getDecor = cG.agent("./" + tir + "costumes.html"),
+                getActor = cG.agent("./" + tir + "actor.html");
+            getScript.then(function(c) {
+                void 0 === cG.REPO.script ? cG.REPO.script = {
+                    def: c
+                } : cG.REPO.script.def = c, cG.script = cG.REPO.script.def
+            }, function(c, e) {
+                console.error(c, e.status), void 0 === cG.REPO.script ? cG.REPO.script = {
+                    def: 0
+                } : cG.REPO.script.def = c, cG.script = cG.REPO.script.def
+            })
+            getStage.then(function(c) {
+                void 0 === cG.REPO.stage ? cG.REPO.stage = {
+                    def: {
+                        body: c
+                    }
+                } : cG.REPO.stage.def.body = c, cG.stage = cG.REPO.stage.def
+            }, function(c, e) {
+                console.error(c, e.status), void 0 === cG.REPO.stage ? cG.REPO.stage = {
+                    def: {
+                        body: 0
+                    }
+                } : cG.REPO.stage.def.body = 0, cG.stage = cG.REPO.stage.def
+            }), getDecor.then(function(c) {
+                void 0 === cG.REPO.decor ? cG.REPO.decor = {
+                    def: c
+                } : cG.REPO.decor.def = c, cG.decor = cG.REPO.decor.def
+            }, function(c, e) {
+                console.error(c, e.status), void 0 === cG.REPO.decor ? cG.REPO.decor = {
+                    def: 0
+                } : cG.REPO.decor.def = 0, cG.decor = cG.REPO.decor.def
+            }), getActor.then(function(c) {
+                void 0 === cG.REPO.actor ? cG.REPO.actor = {
+                    def: c
+                } : cG.REPO.actor.def = c, cG.actor = cG.REPO.actor.def
+            }, function(c, e) {
+                console.error(c, e.status), void 0 === cG.REPO.actor ? cG.REPO.actor = {
+                    def: 0
+                } : cG.REPO.actor.def = 0, cG.actor = cG.REPO.actor.def
+            });
+            c.src = mainsrc, document.body.appendChild(c)
+        };
+    ! function() {
+        return defer ? void(window.addEventListener ? window.addEventListener("load", dfr, !1) : window.attachEvent ? window.attachEvent("onload", dfr) : window.onload = dfr) : dfr()
+    }();
+</script>
