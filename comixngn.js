@@ -1,5 +1,5 @@
-/** @preserve comix-ngn v1.8.2 | (c) 2015 Oluwaseun Ogedengbe| seun40.github.io/comic-ng/ |License: MIT|
-embeds domReady: github.com/ded/domready (MIT) (c) 2013 Dustin Diaz, pegasus: typicode.github.io/pegasus (MIT) (c) 2014 typicode, pathjs (MIT) (c) 2011 Mike Trpcic, HTMLparser (MIT) (c) 2015 Oluwaseun Ogedengbe, swipe: swipejs.com (MIT) (c) 2013 Brad Birdsall*/
+/** @preserve comix-ngn v1.8.3 | (c) 2015 Oluwaseun Ogedengbe| seun40.github.io/comic-ng/ |License: MIT|
+embeds domReady: github.com/ded/domready (MIT) (c) 2013 Dustin Diaz, pegasus: typicode.github.io/pegasus (MIT) (c) 2014 typicode, pathjs (MIT) (c) 2011 Mike Trpcic, swipe: swipejs.com (MIT) (c) 2013 Brad Birdsall*/
 
 var cG = cG||{};/*if(void 0===cG) var cG = {};*//*check if cG is already is instantiated*/
 /*comix-ngn default properties*/
@@ -8,7 +8,7 @@ var cG = cG||{};/*if(void 0===cG) var cG = {};*//*check if cG is already is inst
 function N(){return 0};/*null function*/
 if(void 0===$GPC){var $GPC=0;}
 cG.root = '';
-cG.info = {vix: "1.8.2",vwr: "1.0.0",vpr: "0.1.0"};
+cG.info = {vix: "1.8.3",vwr: "1.0.0",vpr: "0.1.0"};
 /*rollbar*/
 var _rollbarConfig = _rollbarConfig||{
         accessToken: "3e8e8ecb63a04b5798e1d02adf2608cb",
