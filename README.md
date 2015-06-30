@@ -1,5 +1,5 @@
 # comix-ngn
-[![Join the chat at https://gitter.im/seun40/comic-ng](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/seun40/comic-ng?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![JS.ORG](https://img.shields.io/badge/js.org-dns-ffb400.svg?style=flat-square)](http://js.org) [![Join the chat at https://gitter.im/seun40/comic-ng](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/seun40/comic-ng?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 The Modern Webcomic Framework
 
 **simple**, **standalone**, **small**, **redundant**, **extensible**, **modular**, **powerful**
@@ -15,6 +15,13 @@ The Modern Webcomic Framework
 * To add additional features, use a plug-in.
 
    ```<script src="bellerophon.cng.min.js"></script>```
+
+* __[Recommended]__: For fastest load time, copy and paste the contents of **bellerophon.cng.min.embed.html** into your html. While this adds 1.8KB to your HTML file that won't be cached, it will virtually eliminate the app from increasing the load time of your site*.
+  * set **defer** = true or !0, to defer the loading of all of the apps scripts so that it is removed from the critical render path. Set it to false or 0, to load immediately __[Not Recommended]__.
+  * set **mainsrc** to the version of comix-ngn use want to use: comixngn.js or comixngn.min.js __[Recommended]__. You probably shouldn't change this unless you are debugging.
+  * If using Bellerophon Embed, do not add additional plugins via the script tag. Since they load immediately while comixngn.js may be deffered, the plugins will panic and refuse to load. Simply add the plugin path as a string to the **loadcng** array in Bellerophon Embed to include plugins.
+
+  * The **plugin** variable functions exactly like the **plugin attribute**.
 
 * For more fine-grain control, use the following additional attributes:
   * __plugin__ - By default, the last installed plugin will be set as default. To use a specific plug-in as default, simply set the **plugin** attribute in the script tag to the plugin name. Setting it to "default" will use the original framework settings. Setting it as an array, will create plug-in priority. Note, an array must be submitted as a string: "[1,2,3]".
@@ -39,7 +46,7 @@ The Modern Webcomic Framework
     "continuous": true,
   }" ></div>'
   ```
-
+_*Time to render or DOM Content Loaded_
 # Design Precepts 
 >(For Developers)
 
