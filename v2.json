@@ -1,0 +1,44 @@
+{
+    "parent": null,//if this is a child, parent will reference the path to JSON that this is a continuation(child) of
+    //else it will be null
+    "offset": 0,//if this is a child, its pages will begin at the offset rather than zero,
+    //this allows a parent to have multiple children. Furthermore, if a child with lower offset fails to load
+    //then subsequent children will not be affected. Granted the max size is 1000 pages, so a child loss is catostrophic,
+    //but this ensures redundancy. Note: If the parent, fails to load, the children will never be refrenced.
+    "pyr": {//settings that control pyoofreader, false if child(has a parent)
+        "appendmismatch": false,//If there are more images in the directory than in the configuration file, attempt to automatically add them
+        "appendorder": 0,//The order in which the images should be appended {Modified|Name|Size|Type}
+        "appendorderdir": false//The direction that the append order follows {Ascending|Descending}
+    },
+    "loading": {//loading spinner configuration
+        
+    },
+    "config": {//system settings, false if child(has a parent)
+        "dir": "assets/",//directory for page sources, all sources must be descendants of this directory
+        "pagestartnum": false,//#page start number, false for 0
+        "chapterstartnum": false,//#chapter start number, false for 0
+        "imgprebuffer": 5,//# of images to preload before current page
+        "imgpostbuffer": 5,//# of images to preload after current page
+        "startpage": 0//The page that the comic loads first, 0 loads first, >0 loads most recent
+    },
+    "pages": [//Array of pages, comic stages will follow this order
+        {
+            "alt": "",//If image fails, this text is displayed instead
+            "hover": "",//this text is displayed on mouse hover, (not implemented in touch yet)
+            "title": "",//this gives the page a title
+            "url": [""],/*this is the source of the page. If the image is layered, add multiple sources. Lowest number = Highest Layer Priority*/
+            "release": 0,//release date
+            "note": "",//additional note to append to the page
+            "perm": false,//is this page permanent? It will be preloaded first
+            "anim8": false//is this page animated? Only works with gif and video(not implemented)
+        }
+    ],
+    "chapters": [//Array of chapters, pages will be grouped into these chapters, false if child(has a parent)
+        {
+            "description": "",//chapter description
+            "start": 0,//index of starting page of chapter
+            "end": 0,//index of last page of chapter
+            "title": ""//chapter title
+        }
+    ]
+}
