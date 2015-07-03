@@ -65,6 +65,7 @@
                         <li class="nav-item"><a class="scrollto" href="#about">About</a></li>
                         <li class="nav-item"><a class="scrollto" href="#features">Features</a></li>
                         <li class="nav-item"><a class="scrollto" href="#docs">Docs</a></li>
+                        <li class="nav-item"><a class="scrollto" href="#demo">Demos</a></li>   
                         <li class="nav-item"><a class="scrollto" href="#license">License</a></li>                        
                         <li class="nav-item last"><a class="scrollto" href="#contact">Contact</a></li>
                     </ul><!--//nav-->
@@ -79,7 +80,7 @@
             <h2 class="title"><img src="assets/images/normal_glow.svg" class="logo"/>omix-ngn</h2>
             <p class="intro">The Modern Webcomic Framework</p>
             <div class="btns">
-                <a class="btn btn-cta-secondary scrollto" href="#about" target="_blank">Demo</a>
+                <a class="btn btn-cta-secondary scrollto" href="#demo" target="_blank">Demo</a>
                 <a class="btn btn-cta-primary" href="https://github.com/seun40/comix-ngn/tree/master" target="_blank">Download</a>
             </div>
             <ul class="meta list-inline">
@@ -108,8 +109,8 @@
     <!-- ******ABOUT****** --> 
     <section id="about" class="about section">
         <div class="container">
-            <h2 class="title text-center">What is comix-ngn?</h2>
-            <div id class="venue text-center">INDEV</div>          
+            <h2 class="title text-center">What it does</h2>
+            <div id class="venue text-center"><img src="assets/images/whatitdoes.png"></div>          
         </div><!--//container-->
     </section><!--//about-->
     
@@ -133,8 +134,8 @@
             <div class="docs-inner">
                 <h2 class="title text-center">Get Started</h2>            
                 <div class="block">
-                    <ul>
-                        <div class="code-block">
+                    <div class="code-block">
+                        <ul>
                             <li>Simply include the script:
                                 <pre><code class="language-markup">&lt;script src=&quot;comixngn.js&quot;&gt;&lt;/script&gt;</code></pre>
                             </li>
@@ -154,18 +155,42 @@
                                 </ul>
                             </li>
                             <p><em>*Time to render or DOM Content Loaded</em></p>
-                        </div><!--//block-->
-                    </ul>
-                </div><!--//docs-inner-->         
-            </div><!--//container-->
-        </div>
+                        </ul>
+                    </div>
+                </div><!--//block-->
+                <h2 class="title text-center">Setting the Stage</h2>            
+                <div class="block">
+                    <div class="code-block">
+                        <ul>
+                            <li>Now that you have created a stage, you will need a script.JSON (referred to as scripts). Scripts determine the behavior and settings of the app, which pages it should include and how to display them, and how everything is organized.
+                            </li>
+                            <li>Comix-ngn comes with a self-contained tool that creates scripts aptly dubbed Writer.html. Since its an html page, you can simply run it in any browser and download the script it produces. <em>Do not upload Writer.HTML to your file host, it serves no purpose for the end user and is quite large.**</em>
+                            </li>
+                            <p><em>**Compared to comix-ngn ;)</em></p>
+                        </ul>
+                    </div>
+                </div><!--//block-->        
+            </div><!--//docs-inner--> 
+        </div><!--//container-->
     </section><!--//Docs-->
     
+    <!-- ******DEMO****** --> 
+    <section id="demo" class="docs section">
+        <div class="container">
+            <div class="docs-inner">
+                <h2 class="title text-center">Demo Sites</h2>            
+                <div class="block text-center"><p>All copyrights belong to their respective owners.</p><p>Images and text owned by other copyright holders are used here under the guidelines of the Fair Use provisions of United States Copyright Law. The following sites are meant to mirror their counterparts as closely as possible using the framework, showing its flexibility. If you are a copyright owner, and you feel that your work is being improperly used please notify me immediately at <a href="mailto: seun40@gmail.com">seun40@gmail.com</a>.</p>         
+                </div><!--//block-->      
+            </div><!--//docs-inner--> 
+        </div><!--//container-->
+    </section><!--//Demo-->
+
+
     <!-- ******LICENSE****** --> 
     <section id="license" class="license section">
         <div class="container">
             <div class="license-inner">
-            <h2 class="title text-center">License</h2>
+                <h2 class="title text-center">License</h2>
                 <div class="info text-center">
                     <p><strong><a href="https://github.com/seun40/comix-ngn/blob/master/LICENSE.md" target="_blank">MIT</a></strong>
                 </div><!--//info-->
