@@ -1,4 +1,5 @@
 {
+    "READONLY":true,
     "parent": null,//if this is a child, parent will reference the path to JSON that this is a continuation(child) of
     //else it will be null
     "offset": 0,//if this is a child, its pages will begin at the offset rather than zero,
