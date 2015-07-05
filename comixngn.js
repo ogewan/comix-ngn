@@ -76,9 +76,16 @@ cG.REPO.director = {"def":Path};
 
 cG.REPO.producer = {"def":N};
 
+/////
 cG.REPO.stage = cG.REPO.stage||{def:{body:""}};
 cG.REPO.stage.def.id = "def";
-cG.REPO.stage.def.fnt= /*swipe.js*/function(t,e){"use strict";function o(){P=m.children,v=P.length,P.length<2&&(e.continuous=!1),f.transitions&&e.continuous&&P.length<3&&(m.appendChild(P[0].cloneNode(!0)),m.appendChild(m.children[1].cloneNode(!0)),P=m.children),y=Array(P.length),w=t.getBoundingClientRect().width||t.offsetWidth,m.style.width=P.length*w+"px";for(var o=P.length;o--;){var i=P[o];i.style.width=w+"px",i.setAttribute("data-index",o),f.transitions&&(i.style.left=o*-w+"px",a(o,_>o?-w:o>_?w:0,0))}e.continuous&&f.transitions&&(a(r(_-1),-w,0),a(r(_+1),w,0)),f.transitions||(m.style.left=_*-w+"px"),t.style.visibility="visible"}function i(){e.continuous?h(_-1):_&&h(_-1)}function n(){e.continuous?h(_+1):_<P.length-1&&h(_+1)}function r(t){return(P.length+t%P.length)%P.length}function h(t,o){if(_!=t){if(f.transitions){var i=Math.abs(_-t)/(_-t);if(e.continuous){var n=i;i=-y[r(t)]/w,i!==n&&(t=-i*P.length+t)}for(var h=Math.abs(_-t)-1;h--;)a(r((t>_?t:_)-h-1),w*i,0);t=r(t),a(_,w*i,o||g),a(t,0,o||g),e.continuous&&a(r(t-i),-(w*i),0)}else t=r(t),u(_*-w,t*-w,o||g);_=t,p(e.callback&&e.callback(_,P[_]))}}function a(t,e,o){s(t,e,o),y[t]=e}function s(t,e,o){var i=P[t],n=i&&i.style;n&&(n.webkitTransitionDuration=n.MozTransitionDuration=n.msTransitionDuration=n.OTransitionDuration=n.transitionDuration=o+"ms",n.webkitTransform="translate("+e+"px,0)translateZ(0)",n.msTransform=n.MozTransform=n.OTransform="translateX("+e+"px)")}function u(t,o,i){if(!i)return void(m.style.left=o+"px");var n=+new Date,r=setInterval(function(){var h=+new Date-n;return h>i?(m.style.left=o+"px",b&&l(),e.transitionEnd&&e.transitionEnd.call(event,_,P[_]),void clearInterval(r)):void(m.style.left=(o-t)*(Math.floor(h/i*100)/100)+t+"px")},4)}function l(){x=setTimeout(n,b)}function d(){b=0,clearTimeout(x)}var c=function(){},p=function(t){setTimeout(t||c,0)},f={addEventListener:!!window.addEventListener,touch:"ontouchstart"in window||window.DocumentTouch&&document instanceof DocumentTouch,transitions:function(t){var e=["transitionProperty","WebkitTransition","MozTransition","OTransition","msTransition"];for(var o in e)if(void 0!==t.style[e[o]])return!0;return!1}(document.createElement("swipe"))};if(t){var P,y,w,v,m=t.children[0];e=e||{};var _=parseInt(e.startSlide,10)||0,g=e.speed||300;e.continuous=void 0!==e.continuous?e.continuous:!0;var x,S,b=e.auto||0,k={},A={},L={handleEvent:function(t){switch(t.type){case"touchstart":this.start(t);break;case"touchmove":this.move(t);break;case"touchend":p(this.end(t));break;case"webkitTransitionEnd":case"msTransitionEnd":case"oTransitionEnd":case"otransitionend":case"transitionend":p(this.transitionEnd(t));break;case"resize":p(o)}e.stopPropagation&&t.stopPropagation()},start:function(t){var e=t.touches[0];k={x:e.pageX,y:e.pageY,time:+new Date},S=void 0,A={},m.addEventListener("touchmove",this,!1),m.addEventListener("touchend",this,!1)},move:function(t){if(!(t.touches.length>1||t.scale&&1!==t.scale)){e.disableScroll&&t.preventDefault();var o=t.touches[0];A={x:o.pageX-k.x,y:o.pageY-k.y},void 0===S&&(S=!(!S&&Math.abs(A.x)>=Math.abs(A.y))),S||(t.preventDefault(),d(),e.continuous?(s(r(_-1),A.x+y[r(_-1)],0),s(_,A.x+y[_],0),s(r(_+1),A.x+y[r(_+1)],0)):(A.x=A.x/(!_&&A.x>0||_==P.length-1&&A.x<0?Math.abs(A.x)/w+1:1),s(_-1,A.x+y[_-1],0),s(_,A.x+y[_],0),s(_+1,A.x+y[_+1],0)))}},end:function(){var t=+new Date-k.time,o=250>+t&&Math.abs(A.x)>20||Math.abs(A.x)>w/2,i=!_&&A.x>0||_==P.length-1&&A.x<0;e.continuous&&(i=!1);var n=A.x<0;S||(o&&!i?(n?(e.continuous?(a(r(_-1),-w,0),a(r(_+2),w,0)):a(_-1,-w,0),a(_,y[_]-w,g),a(r(_+1),y[r(_+1)]-w,g),_=r(_+1)):(e.continuous?(a(r(_+1),w,0),a(r(_-2),-w,0)):a(_+1,w,0),a(_,y[_]+w,g),a(r(_-1),y[r(_-1)]+w,g),_=r(_-1)),e.callback&&e.callback(_,P[_])):e.continuous?(a(r(_-1),-w,g),a(_,0,g),a(r(_+1),w,g)):(a(_-1,-w,g),a(_,0,g),a(_+1,w,g))),m.removeEventListener("touchmove",L,!1),m.removeEventListener("touchend",L,!1)},transitionEnd:function(t){parseInt(t.target.getAttribute("data-index"),10)==_&&(b&&l(),e.transitionEnd&&e.transitionEnd.call(t,_,P[_]))}};return o(),b&&l(),f.addEventListener?(f.touch&&m.addEventListener("touchstart",L,!1),f.transitions&&(m.addEventListener("webkitTransitionEnd",L,!1),m.addEventListener("msTransitionEnd",L,!1),m.addEventListener("oTransitionEnd",L,!1),m.addEventListener("otransitionend",L,!1),m.addEventListener("transitionend",L,!1)),window.addEventListener("resize",L,!1)):window.onresize=function(){o()},{setup:function(){o()},slide:function(t,e){d(),h(t,e)},prev:function(){d(),i()},next:function(){d(),n()},stop:function(){d()},getPos:function(){return _},getNumSlides:function(){return v},kill:function(){d(),m.style.width="",m.style.left="";for(var t=P.length;t--;){var e=P[t];e.style.width="",e.style.left="",f.transitions&&s(t,0,0)}f.addEventListener?(m.removeEventListener("touchstart",L,!1),m.removeEventListener("webkitTransitionEnd",L,!1),m.removeEventListener("msTransitionEnd",L,!1),m.removeEventListener("oTransitionEnd",L,!1),m.removeEventListener("otransitionend",L,!1),m.removeEventListener("transitionend",L,!1),window.removeEventListener("resize",L,!1)):window.onresize=null}}}};
+cG.REPO.stage.def.argz = {};
+cG.REPO.stage.def.construct = function(a){
+    var swipe =/*swipe.js*/function(t,e){"use strict";function o(){P=m.children,v=P.length,P.length<2&&(e.continuous=!1),f.transitions&&e.continuous&&P.length<3&&(m.appendChild(P[0].cloneNode(!0)),m.appendChild(m.children[1].cloneNode(!0)),P=m.children),y=Array(P.length),w=t.getBoundingClientRect().width||t.offsetWidth,m.style.width=P.length*w+"px";for(var o=P.length;o--;){var i=P[o];i.style.width=w+"px",i.setAttribute("data-index",o),f.transitions&&(i.style.left=o*-w+"px",a(o,_>o?-w:o>_?w:0,0))}e.continuous&&f.transitions&&(a(r(_-1),-w,0),a(r(_+1),w,0)),f.transitions||(m.style.left=_*-w+"px"),t.style.visibility="visible"}function i(){e.continuous?h(_-1):_&&h(_-1)}function n(){e.continuous?h(_+1):_<P.length-1&&h(_+1)}function r(t){return(P.length+t%P.length)%P.length}function h(t,o){if(_!=t){if(f.transitions){var i=Math.abs(_-t)/(_-t);if(e.continuous){var n=i;i=-y[r(t)]/w,i!==n&&(t=-i*P.length+t)}for(var h=Math.abs(_-t)-1;h--;)a(r((t>_?t:_)-h-1),w*i,0);t=r(t),a(_,w*i,o||g),a(t,0,o||g),e.continuous&&a(r(t-i),-(w*i),0)}else t=r(t),u(_*-w,t*-w,o||g);_=t,p(e.callback&&e.callback(_,P[_]))}}function a(t,e,o){s(t,e,o),y[t]=e}function s(t,e,o){var i=P[t],n=i&&i.style;n&&(n.webkitTransitionDuration=n.MozTransitionDuration=n.msTransitionDuration=n.OTransitionDuration=n.transitionDuration=o+"ms",n.webkitTransform="translate("+e+"px,0)translateZ(0)",n.msTransform=n.MozTransform=n.OTransform="translateX("+e+"px)")}function u(t,o,i){if(!i)return void(m.style.left=o+"px");var n=+new Date,r=setInterval(function(){var h=+new Date-n;return h>i?(m.style.left=o+"px",b&&l(),e.transitionEnd&&e.transitionEnd.call(event,_,P[_]),void clearInterval(r)):void(m.style.left=(o-t)*(Math.floor(h/i*100)/100)+t+"px")},4)}function l(){x=setTimeout(n,b)}function d(){b=0,clearTimeout(x)}var c=function(){},p=function(t){setTimeout(t||c,0)},f={addEventListener:!!window.addEventListener,touch:"ontouchstart"in window||window.DocumentTouch&&document instanceof DocumentTouch,transitions:function(t){var e=["transitionProperty","WebkitTransition","MozTransition","OTransition","msTransition"];for(var o in e)if(void 0!==t.style[e[o]])return!0;return!1}(document.createElement("swipe"))};if(t){var P,y,w,v,m=t.children[0];e=e||{};var _=parseInt(e.startSlide,10)||0,g=e.speed||300;e.continuous=void 0!==e.continuous?e.continuous:!0;var x,S,b=e.auto||0,k={},A={},L={handleEvent:function(t){switch(t.type){case"touchstart":this.start(t);break;case"touchmove":this.move(t);break;case"touchend":p(this.end(t));break;case"webkitTransitionEnd":case"msTransitionEnd":case"oTransitionEnd":case"otransitionend":case"transitionend":p(this.transitionEnd(t));break;case"resize":p(o)}e.stopPropagation&&t.stopPropagation()},start:function(t){var e=t.touches[0];k={x:e.pageX,y:e.pageY,time:+new Date},S=void 0,A={},m.addEventListener("touchmove",this,!1),m.addEventListener("touchend",this,!1)},move:function(t){if(!(t.touches.length>1||t.scale&&1!==t.scale)){e.disableScroll&&t.preventDefault();var o=t.touches[0];A={x:o.pageX-k.x,y:o.pageY-k.y},void 0===S&&(S=!(!S&&Math.abs(A.x)>=Math.abs(A.y))),S||(t.preventDefault(),d(),e.continuous?(s(r(_-1),A.x+y[r(_-1)],0),s(_,A.x+y[_],0),s(r(_+1),A.x+y[r(_+1)],0)):(A.x=A.x/(!_&&A.x>0||_==P.length-1&&A.x<0?Math.abs(A.x)/w+1:1),s(_-1,A.x+y[_-1],0),s(_,A.x+y[_],0),s(_+1,A.x+y[_+1],0)))}},end:function(){var t=+new Date-k.time,o=250>+t&&Math.abs(A.x)>20||Math.abs(A.x)>w/2,i=!_&&A.x>0||_==P.length-1&&A.x<0;e.continuous&&(i=!1);var n=A.x<0;S||(o&&!i?(n?(e.continuous?(a(r(_-1),-w,0),a(r(_+2),w,0)):a(_-1,-w,0),a(_,y[_]-w,g),a(r(_+1),y[r(_+1)]-w,g),_=r(_+1)):(e.continuous?(a(r(_+1),w,0),a(r(_-2),-w,0)):a(_+1,w,0),a(_,y[_]+w,g),a(r(_-1),y[r(_-1)]+w,g),_=r(_-1)),e.callback&&e.callback(_,P[_])):e.continuous?(a(r(_-1),-w,g),a(_,0,g),a(r(_+1),w,g)):(a(_-1,-w,g),a(_,0,g),a(_+1,w,g))),m.removeEventListener("touchmove",L,!1),m.removeEventListener("touchend",L,!1)},transitionEnd:function(t){parseInt(t.target.getAttribute("data-index"),10)==_&&(b&&l(),e.transitionEnd&&e.transitionEnd.call(t,_,P[_]))}};return o(),b&&l(),f.addEventListener?(f.touch&&m.addEventListener("touchstart",L,!1),f.transitions&&(m.addEventListener("webkitTransitionEnd",L,!1),m.addEventListener("msTransitionEnd",L,!1),m.addEventListener("oTransitionEnd",L,!1),m.addEventListener("otransitionend",L,!1),m.addEventListener("transitionend",L,!1)),window.addEventListener("resize",L,!1)):window.onresize=function(){o()},{setup:function(){o()},slide:function(t,e){d(),h(t,e)},prev:function(){d(),i()},next:function(){d(),n()},stop:function(){d()},getPos:function(){return _},getNumSlides:function(){return v},kill:function(){d(),m.style.width="",m.style.left="";for(var t=P.length;t--;){var e=P[t];e.style.width="",e.style.left="",f.transitions&&s(t,0,0)}f.addEventListener?(m.removeEventListener("touchstart",L,!1),m.removeEventListener("webkitTransitionEnd",L,!1),m.removeEventListener("msTransitionEnd",L,!1),m.removeEventListener("oTransitionEnd",L,!1),m.removeEventListener("otransitionend",L,!1),m.removeEventListener("transitionend",L,!1),window.removeEventListener("resize",L,!1)):window.onresize=null}}}};
+    this.main = new swipe();
+    this.controls;
+    
+}
 cG.REPO.stage.def.controls = function(holder,instruction,dur){
      /*if(cG.script === '') {
         setTimeout(cG.REPO.stage.def.controls, 300,holder,instruction,dur); 
@@ -166,6 +173,7 @@ cG.REPO.stage.def.manager = function(index,elem){
         jQuery(iid).attr("btog", 2);
     }*/
 };
+///////
 
 cG.REPO.actor = cG.REPO.actor||{def: ""};
 cG.REPO.decor = cG.REPO.decor||{def: ""};
@@ -240,111 +248,157 @@ if(void 0===getDecor){
 if(void 0===getActor){
     var getActor = cG.agent(tir+'actor.html');
     getActor.then(
-    function(data, xhr) {
-        cG.actor = cG.REPO.actor.def = data;
-    },
-    function(data, xhr) {
-        console.error(data, xhr.status);
-        cG.actor = cG.REPO.actor.def = 0;
-    });
+        function(data, xhr) {
+            cG.actor = cG.REPO.actor.def = data;
+        },
+        function(data, xhr) {
+            console.error(data, xhr.status);
+            cG.actor = cG.REPO.actor.def = 0;
+        });
 }
 /*END AJAX calls*/
-/*STAGE creation*/
-cG.HELPERS.jstagecreate = function(){
-    if(cG.script == '' || cG.actor == '' || cG.stage.body == '') { //if are stuff isn't yet we are going to wait for it
-        setTimeout(cG.HELPERS.jstagecreate, 300); 
-        return;
-    }
-    /*pure JS-testing purposes*/
-    var stg = document.createElement("div");
-    stg.setAttribute("id", "stage");
-    stg.setAttribute("class", "swipe");
-    /*stg.setAttribute("style", 'max-width:500px;margin:0 auto');*/
-    var sce = document.createElement("div");
-    sce.setAttribute("class", "swipe-wrap");
-    for (i = 0; i < cG.script.pages.length; i++) { 
-        var act = document.createElement("div");
-        var sld = document.createElement("img");
-        /*<img id isrc src title alt btog>*/
-        sld.setAttribute("src", "assets/"+cG.script.pages[i].url);
-        act.appendChild(sld);
-        sce.appendChild(act);
-    }
-    stg.appendChild(sce);
-    var ctrls = document.createElement("p");
-    ctrls.setAttribute("class", "controls");
-    var butfirs = document.createElement("button");
-    var butprev = document.createElement("button");
-    var butrand = document.createElement("button");
-    var butindx = document.createElement("input");
-    var butnext = document.createElement("button");
-    var butlast = document.createElement("button");
-    butfirs.setAttribute("class", "frs");
-    butprev.setAttribute("class", "frs");
-    butnext.setAttribute("class", "las");
-    butlast.setAttribute("class", "las");
-    butfirs.setAttribute("onclick", "window.mySwipe.slide(0, 400);");
-    butfirs.appendChild(document.createTextNode("FIRST"));
-    butprev.setAttribute("onclick", "window.mySwipe.prev();");
-    butprev.appendChild(document.createTextNode("PREV"));
-    butnext.setAttribute("onclick", "window.mySwipe.next();");
-    butnext.appendChild(document.createTextNode("NEXT"));
-    butrand.setAttribute("onclick", "window.mySwipe.slide(Math.floor(Math.random() * 39),400);");
-    butrand.appendChild(document.createTextNode("?"));
-    butlast.setAttribute("onclick", "window.mySwipe.slide(window.mySwipe.getNumSlides()-1,400);");
-    butlast.appendChild(document.createTextNode("LAST"));
-    ctrls.appendChild(butfirs);
-    ctrls.appendChild(butprev);
-    ctrls.appendChild(butnext);
-    ctrls.appendChild(butlast);
-    ctrls.appendChild(butrand);
-    document.body.appendChild(ctrls);
-    document.body.appendChild(stg);
-    /*<p><button class="frs" id="bfrs" onclick="caruso.frst()">|<</button>
-        <button class="frs" id="bpre" onclick="caruso.left()">< Prev</button>
-        <button id="bran" onclick="caruso.rand()">?</button>
-        <input id="snum" type="number" class="tiny" onkeydown="caruso.indx(this)"/>
-        <button class="las" id="bnex" onclick="caruso.rght()">Next ></button>
-        <button class="las" id="blas" onclick="caruso.last()">>|</button></p>
-*/
-    document.body.appendChild(stg);
-    window.mySwipe = new cG.stage.fnt(document.getElementById('stage'), {
-        startSlide: 0,
-        speed: 400,
-        auto: 3000,
-        continuous: true,
-        disableScroll: false,
-        stopPropagation: false,
-        callback: function(index, elem) {},
-        transitionEnd: function(index, elem) {}
-    });
-    //cG.stage.controls(window.mySwipe);
-};
-
+/*STAGE creation-REDACTED*/
+cG.HELPERS.jstagecreate = N;
 cG.stageInjection = function(SPECIFIC){
-    if(cG.script === '' || cG.actor === '' || cG.stage.body === '' || cG.decor === '') {
+    if(cG.script === '' || cG.decor === '') {//although we don't need decor, if there is a template, we prioritize it
         /*if are stuff isn't ready yet we are going to wait for it*/
-        setTimeout(cG.stageInjection, 300); 
+        setTimeout(cG.stageInjection, 300,SPECIFIC); 
         return;
     }
-    if(!cG.script) return console.error("No script.JSON found. script.JSON is REQUIRED to create stage. Please create a script.JSON or move it to the directory specified in the script tag for comix-ngn or bellerophon if it is added.");
-
-    var stages = [];
-    var errr = "stageInjection can only operate on elements or arrays of elements";
+    if(!cG.script) return console.error("No script.JSON found. script.JSON is REQUIRED to create any stage. Please create a script.JSON or move it to the directory specified in the script tag for comix-ngn or bellerophon if it is added.");
+    var stages = [],
+        errr = "stageInjection can only operate on elements or arrays of elements";
     if(void 0 === SPECIFIC) stages = document.getElementsByClassName("venue");/*get all entry points*/
     else if(Array.isArray(SPECIFIC)){
         if(SPECIFIC.length>0) if(void 0 ===SPECIFIC[0].nodeName) return console.error(errr);
-        else return console.error(errr);
+            else return console.error(errr);
         stages = stages.concat(SPECIFIC);
-    }
-    else{
+    } else{
         if(void 0 === SPECIFIC.nodeName) return console.error(errr);
         stages.push(SPECIFIC);/*if not array and not undefined, assume it is a Element*/
     }
+    var decor = (cG.decor)?cG.decor:'<div id="location"></div><div id="archive">Archive</div><div id="me">About Me</div>',
+        id_attr = "",
+        script_attr = "",
+        use_attr = "",
+        config_attr = "",
+        myScript;
+    for (var i = 0; i < stages.length; i++) {
+        request();
+    }
+        var request = function(iD,srcScript,srcScriptReq){            
+            /*initial setup*/
+            /*////get attributes */
+            /*////////async request the script if it is specified, else use default*/
+            script_attr = stages[iD].getAttribute("script");
+            //if(srcScript==""){/*if no script, use the default*/
+            /*    myScript = srcScript;
+            } else {
+                tempScript = srcScript
+                tempScriptReq = srcScriptReq
+                tempScriptReq = cG.agent(script_attr);
+                tempScriptReq.then(
+                    function(data, xhr) {
+                        tempScript.script = data;
+                        request();
+                    },
+                    function(data, xhr) {
+                        console.error(data, xhr.status);
+                        tempScript.script = 0;
+                        request();
+                    });
+                return 0;//stop execution
+            }*/
+            /*////////get the rest of the attributes*/
+            id_attr = stages[i].getAttribute("id");
+            use_attr = stages[i].getAttribute("use");
+            config_attr = stages[i].getAttribute("config");
+            /*////attribute processing */
+            if(id_attr==""){/*if no ID, make one*/
+                var name = "STG"+i;
+                var j = 1;
+                while(document.getElementById(name)) name = "STG"+(i+j++);
+                id_attr = name.toString();
+                stages[i].setAttribute("id", id_attr);
+            }
+            if(use_attr==""){/*if no use specified, use current*/
+            } else {}
+            if(config_attr!=""){
+                try {
+                    config_attr=JSON.parse(config_attr);
+                }
+                catch(err) {
+                    console.debug("The following configuration settings are malformed for plugin["+use_attr+"]: ",config_attr,"\nIt has been ignored");
+                    config_attr={};
+                }
+            } else config_attr={};
+            /*END initial set up*/
+            
+        };
+    if(0){
+        
+            config_attr.transitionEnd = cG.stage.manager;//transitionEnd: overwrite
+            /*index.html(venue)<-costumes.html(location)<-stage.html(target)<-actor.html*/
+            cset = [["<|","<","?","index",">",">|"],["cG.stage.controls("+id_attr+",'a')","cG.stage.controls("+id_attr+",'b')","cG.stage.controls("+id_attr+",'e')","cG.stage.controls("+id_attr+",this)","cG.stage.controls("+id_attr+",'c')","cG.stage.controls("+id_attr+",'d')"]];
+            clone = stages[i].cloneNode(false);
+            //console.log(cG,cG.HELPERS.FEbyIdAI);
+            links = cG.HELPERS.FEbyIdAI(clone,["venue","location","target","controls"],[idealCostumes,idealStage]);
+            //console.log(links);
+            for (t = 0; t < links.length; t++) {
+                if(links[t].getAttribute("id")=="target"){
+                    target = links[t];
+                    continue;
+                }
+                if(links[t].getAttribute("id")=="ctrl"){
+                    control = links[t];
+                    continue;
+                }
+                if(control!="" && target!="") break;
+            }
+            if(!target) console.error("target fallback not implemented");
+            cG.HELPERS.renameEles(false,clone,id_attr);
+            //console.log(clone);
+            /*append the slides*/
+            //console.log(cG.script);
+            target.innerHTML=idealStar;
+            subclone=target.children[0].cloneNode(true);/*original clone*/
+            target.innerHTML="";
+            for (f = 0; f < cG.script.pages.length; f++) {
+                dipclone=subclone.cloneNode(true);
+                cG.HELPERS.renameEles(true,dipclone,id_attr,f);
+                cG.HELPERS.smartAttrib(dipclone,{
+                    img: {
+                        isrc:cG.script.pages[f].url,
+                        src:cG.script.config.dir+cG.script.pages[f].url
+                    },
+                    h1: {
+                        innerHTML: cG.script.pages[f].title
+                    }
+                });
+                target.appendChild(dipclone);
+                //console.log(dipclone);
+            }
+            //console.log(target);
+            cG.HELPERS.smartAttrib(control,{
+                p: {
+                    innerHTML: '<button class="'+id_attr+'_frs" id="'+id_attr+'_bfrs" onclick="'+cset[1][0]+'">'+cset[0][0]+'</button><button class="'+id_attr+'_frs" id="'+id_attr+'_bpre" onclick="'+cset[1][1]+'">'+cset[0][1]+'</button><button id="'+id_attr+'_bran" onclick="'+cset[1][2]+'">'+cset[0][2]+'</button><input id="'+id_attr+'_snum" type="number" class="tiny" onkeydown="'+cset[1][3]+'"/><button class="'+id_attr+'_las" id="'+id_attr+'_bnex" onclick="'+cset[1][4]+'">'+cset[0][4]+'</button><button class="'+id_attr+'_las" id="'+id_attr+'_blas" onclick="'+cset[1][5]+'">'+cset[0][5]+'</button>'
+                }
+            });
+            //console.log(clone);
+            stages[i].parentNode.replaceChild(clone, stages[i]);
+            window[id_attr] = new cG.stage.fnt(target.parentNode, config_attr);
+
+            Path.root("#");
+            Path.listen();
+
+            //console.log(window[id_attr],id_attr);
+        }}
+
+
     var idealStage = (cG.stage.body)?cG.stage.body:'<p class="controls"></p><div id="stage" class="swipe"><div id="target" class="swipe-wrap"></div></div>';
     var idealStar = (cG.actor)?cG.actor:'<div><h1></h1><p><img id="ig" isrc src title alt btog></p></div>';
     var idealCostumes = (cG.decor)?cG.decor:'<div id="location"></div><div id="archive">Archive</div><div id="me">About Me</div>';
-    
+
     var id_attr = "";
     var script_attr = "";
     var use_attr = "";

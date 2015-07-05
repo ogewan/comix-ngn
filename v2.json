@@ -11,7 +11,12 @@
         "appendorderdir": false//The direction that the append order follows {Ascending|Descending}
     },
     "loading": {//loading spinner configuration
-        
+        "lines":16,//lines in spinner
+        "rate":1000 / 30,//spin rate
+        "width":250,//width of spinner
+        "height":250,//height of spinner
+        "xpos":1/2,//x position of spinner relative to canvas size
+        "ypos":1/2 //y position of spinner relative to canvas size
     },
     "config": {//system settings, false if child(has a parent)
         "dir": "assets/",//directory for page sources, all sources must be descendants of this directory
