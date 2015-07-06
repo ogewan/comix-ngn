@@ -125,6 +125,8 @@ attribute to preload images but not implemented yet
 
 **1.8.5**: Mark stage for deletion and turn it into a constructor
 
+**1.9.0**: Main file size reduced from 37.051 kB -> 25.56 kB, swipe replaced with direction, stage has been refactored into a constructor, script spec upgraded to v2, load speed appears slower but is still under 200 ms, new plug in added: swip.cng.js, code clean up and organization, direction handles preloading, but router needs to be re-enabled, stageinjection now simply wraps the constructor, need to add app page functionality however.
+
 ### comix-ngn Writer version 1.0.0 (beta)
 **0.5.0**: "Initial Setup, Versioning
 

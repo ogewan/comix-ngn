@@ -21,25 +21,24 @@ Order: after comixngn.js
                 this.name = name;
                 this.type = "swipe";
                 this.main = new swipe(body,options);
-                this.controls = {};
-                this.controls.go = function(to){
+                this.main.go = function(to){
                     var sre = (to===null||void 0===to)?0:(void 0===to.value)?0:parseInt(to.value,10);
                     sre = (isNaN(sre))?0:sre;
                     self.main.slide(Math.floor(Math.max(0,Math.min(scriptt.pages.length-1,sre))),400);
                 }
-                this.controls.prev = function(){
+                this.main.prev = function(){
                     self.main.prev();
                 }
-                this.controls.next = function(){
+                this.main.next = function(){
                     self.main.next();
                 }
-                this.controls.frst = function(){
+                this.main.frst = function(){
                     self.main.slide(0,400);
                 }
-                this.controls.last = function(){
+                this.main.last = function(){
                     self.main.slide(scriptt.pages.length-1,400);
                 }
-                this.controls.rand = function(){
+                this.main.rand = function(){
                     self.main.slide(Math.floor(Math.random() * scriptt.pages.length-1),400);
                 }
                 this.count = function(){return self.main.getNumSlides();}

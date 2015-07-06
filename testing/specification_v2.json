@@ -1,5 +1,4 @@
 {
-    "READONLY":true,
     "parent": null,//if this is a child, parent will reference the path to JSON that this is a continuation(child) of
     //else it will be null
     "offset": 0,//if this is a child, its pages will begin at the offset rather than zero,
@@ -17,7 +16,9 @@
         "width":250,//width of spinner
         "height":250,//height of spinner
         "xpos":1/2,//x position of spinner relative to canvas size
-        "ypos":1/2 //y position of spinner relative to canvas size
+        "ypos":1/2, //y position of spinner relative to canvas size
+        "back":"#FFF",//background color of spinner
+        "color":"#373737"//color of spinner
     },
     "config": {//system settings, false if child(has a parent)
         "dir": "assets/",//directory for page sources, all sources must be descendants of this directory
@@ -25,7 +26,8 @@
         "chapterstartnum": false,//#chapter start number, false for 0
         "imgprebuffer": 5,//# of images to preload before current page
         "imgpostbuffer": 5,//# of images to preload after current page
-        "startpage": 0//The page that the comic loads first, 0 loads first, >0 loads most recent
+        "startpage": 0,//The page that the comic loads first, 0 loads first, >0 loads most recent
+        "back":"#FFF"//background color of pages
     },
     "pages": [//Array of pages, comic stages will follow this order
         {
