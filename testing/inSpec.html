@@ -5,20 +5,18 @@
     var spec;
     $.ajax({
         type: 'GET',
-        url: url,
+        url: "https://rawgit.com/seun40/comix-ngn/dev/testing/spec_COMIXNGN.json",
         async: false,
         jsonpCallback: 'specifications',
         contentType: "application/json",
         dataType: 'jsonp',
         success: function(json) {
-            spec = json.2;
+            spec = json[2];
         },
         error: function(e) {
             console.log(e.message);
         }
     });
-
-    })();
 </script>
 <!--
 1. import jquery
