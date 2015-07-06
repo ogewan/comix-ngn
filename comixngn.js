@@ -1,5 +1,5 @@
-/** @preserve comix-ngn v1.8.3 | (c) 2015 Oluwaseun Ogedengbe| seun40.github.io/comic-ng/ |License: MIT|
-embeds domReady: github.com/ded/domready (MIT) (c) 2013 Dustin Diaz, pegasus: typicode.github.io/pegasus (MIT) (c) 2014 typicode, pathjs (MIT) (c) 2011 Mike Trpcic, swipe: swipejs.com (MIT) (c) 2013 Brad Birdsall*/
+/** @preserve comix-ngn v1.9.0 | (c) 2015 Oluwaseun Ogedengbe| seun40.github.io/comic-ng/ |License: MIT|
+embeds domReady: github.com/ded/domready (MIT) (c) 2013 Dustin Diaz, pegasus: typicode.github.io/pegasus (MIT) (c) 2014 typicode, pathjs (MIT) (c) 2011 Mike Trpcic, direction.js*/
 
 var cG = cG||{};/*if(void 0===cG) var cG = {};*//*check if cG is already is instantiated*/
 /*comix-ngn default properties*/
@@ -8,7 +8,8 @@ var cG = cG||{};/*if(void 0===cG) var cG = {};*//*check if cG is already is inst
 function N(){return 0};/*null function*/
 if(void 0===$GPC){var $GPC=0;}
 cG.root = '';
-cG.info = {vix: "1.8.3",vwr: "1.0.0",vpr: "0.1.0"};
+cG.cPanel = cG.panel||{};
+cG.info = {vix: "1.9.0",vwr: "1.0.0",vpr: "0.1.0"};
 /*rollbar*/
 var _rollbarConfig = _rollbarConfig||{
         accessToken: "3e8e8ecb63a04b5798e1d02adf2608cb",
@@ -76,96 +77,45 @@ cG.REPO.director = {"def":Path};
 
 cG.REPO.producer = {"def":N};
 
-cG.REPO.stage = cG.REPO.stage||{def:{body:""}};
-cG.REPO.stage.def.id = "def";
-cG.REPO.stage.def.fnt= /*swipe.js*/function(t,e){"use strict";function o(){P=m.children,v=P.length,P.length<2&&(e.continuous=!1),f.transitions&&e.continuous&&P.length<3&&(m.appendChild(P[0].cloneNode(!0)),m.appendChild(m.children[1].cloneNode(!0)),P=m.children),y=Array(P.length),w=t.getBoundingClientRect().width||t.offsetWidth,m.style.width=P.length*w+"px";for(var o=P.length;o--;){var i=P[o];i.style.width=w+"px",i.setAttribute("data-index",o),f.transitions&&(i.style.left=o*-w+"px",a(o,_>o?-w:o>_?w:0,0))}e.continuous&&f.transitions&&(a(r(_-1),-w,0),a(r(_+1),w,0)),f.transitions||(m.style.left=_*-w+"px"),t.style.visibility="visible"}function i(){e.continuous?h(_-1):_&&h(_-1)}function n(){e.continuous?h(_+1):_<P.length-1&&h(_+1)}function r(t){return(P.length+t%P.length)%P.length}function h(t,o){if(_!=t){if(f.transitions){var i=Math.abs(_-t)/(_-t);if(e.continuous){var n=i;i=-y[r(t)]/w,i!==n&&(t=-i*P.length+t)}for(var h=Math.abs(_-t)-1;h--;)a(r((t>_?t:_)-h-1),w*i,0);t=r(t),a(_,w*i,o||g),a(t,0,o||g),e.continuous&&a(r(t-i),-(w*i),0)}else t=r(t),u(_*-w,t*-w,o||g);_=t,p(e.callback&&e.callback(_,P[_]))}}function a(t,e,o){s(t,e,o),y[t]=e}function s(t,e,o){var i=P[t],n=i&&i.style;n&&(n.webkitTransitionDuration=n.MozTransitionDuration=n.msTransitionDuration=n.OTransitionDuration=n.transitionDuration=o+"ms",n.webkitTransform="translate("+e+"px,0)translateZ(0)",n.msTransform=n.MozTransform=n.OTransform="translateX("+e+"px)")}function u(t,o,i){if(!i)return void(m.style.left=o+"px");var n=+new Date,r=setInterval(function(){var h=+new Date-n;return h>i?(m.style.left=o+"px",b&&l(),e.transitionEnd&&e.transitionEnd.call(event,_,P[_]),void clearInterval(r)):void(m.style.left=(o-t)*(Math.floor(h/i*100)/100)+t+"px")},4)}function l(){x=setTimeout(n,b)}function d(){b=0,clearTimeout(x)}var c=function(){},p=function(t){setTimeout(t||c,0)},f={addEventListener:!!window.addEventListener,touch:"ontouchstart"in window||window.DocumentTouch&&document instanceof DocumentTouch,transitions:function(t){var e=["transitionProperty","WebkitTransition","MozTransition","OTransition","msTransition"];for(var o in e)if(void 0!==t.style[e[o]])return!0;return!1}(document.createElement("swipe"))};if(t){var P,y,w,v,m=t.children[0];e=e||{};var _=parseInt(e.startSlide,10)||0,g=e.speed||300;e.continuous=void 0!==e.continuous?e.continuous:!0;var x,S,b=e.auto||0,k={},A={},L={handleEvent:function(t){switch(t.type){case"touchstart":this.start(t);break;case"touchmove":this.move(t);break;case"touchend":p(this.end(t));break;case"webkitTransitionEnd":case"msTransitionEnd":case"oTransitionEnd":case"otransitionend":case"transitionend":p(this.transitionEnd(t));break;case"resize":p(o)}e.stopPropagation&&t.stopPropagation()},start:function(t){var e=t.touches[0];k={x:e.pageX,y:e.pageY,time:+new Date},S=void 0,A={},m.addEventListener("touchmove",this,!1),m.addEventListener("touchend",this,!1)},move:function(t){if(!(t.touches.length>1||t.scale&&1!==t.scale)){e.disableScroll&&t.preventDefault();var o=t.touches[0];A={x:o.pageX-k.x,y:o.pageY-k.y},void 0===S&&(S=!(!S&&Math.abs(A.x)>=Math.abs(A.y))),S||(t.preventDefault(),d(),e.continuous?(s(r(_-1),A.x+y[r(_-1)],0),s(_,A.x+y[_],0),s(r(_+1),A.x+y[r(_+1)],0)):(A.x=A.x/(!_&&A.x>0||_==P.length-1&&A.x<0?Math.abs(A.x)/w+1:1),s(_-1,A.x+y[_-1],0),s(_,A.x+y[_],0),s(_+1,A.x+y[_+1],0)))}},end:function(){var t=+new Date-k.time,o=250>+t&&Math.abs(A.x)>20||Math.abs(A.x)>w/2,i=!_&&A.x>0||_==P.length-1&&A.x<0;e.continuous&&(i=!1);var n=A.x<0;S||(o&&!i?(n?(e.continuous?(a(r(_-1),-w,0),a(r(_+2),w,0)):a(_-1,-w,0),a(_,y[_]-w,g),a(r(_+1),y[r(_+1)]-w,g),_=r(_+1)):(e.continuous?(a(r(_+1),w,0),a(r(_-2),-w,0)):a(_+1,w,0),a(_,y[_]+w,g),a(r(_-1),y[r(_-1)]+w,g),_=r(_-1)),e.callback&&e.callback(_,P[_])):e.continuous?(a(r(_-1),-w,g),a(_,0,g),a(r(_+1),w,g)):(a(_-1,-w,g),a(_,0,g),a(_+1,w,g))),m.removeEventListener("touchmove",L,!1),m.removeEventListener("touchend",L,!1)},transitionEnd:function(t){parseInt(t.target.getAttribute("data-index"),10)==_&&(b&&l(),e.transitionEnd&&e.transitionEnd.call(t,_,P[_]))}};return o(),b&&l(),f.addEventListener?(f.touch&&m.addEventListener("touchstart",L,!1),f.transitions&&(m.addEventListener("webkitTransitionEnd",L,!1),m.addEventListener("msTransitionEnd",L,!1),m.addEventListener("oTransitionEnd",L,!1),m.addEventListener("otransitionend",L,!1),m.addEventListener("transitionend",L,!1)),window.addEventListener("resize",L,!1)):window.onresize=function(){o()},{setup:function(){o()},slide:function(t,e){d(),h(t,e)},prev:function(){d(),i()},next:function(){d(),n()},stop:function(){d()},getPos:function(){return _},getNumSlides:function(){return v},kill:function(){d(),m.style.width="",m.style.left="";for(var t=P.length;t--;){var e=P[t];e.style.width="",e.style.left="",f.transitions&&s(t,0,0)}f.addEventListener?(m.removeEventListener("touchstart",L,!1),m.removeEventListener("webkitTransitionEnd",L,!1),m.removeEventListener("msTransitionEnd",L,!1),m.removeEventListener("oTransitionEnd",L,!1),m.removeEventListener("otransitionend",L,!1),m.removeEventListener("transitionend",L,!1),window.removeEventListener("resize",L,!1)):window.onresize=null}}}};
-cG.REPO.stage.def.controls = function(holder,instruction,dur){
-     /*if(cG.script === '') {
-        setTimeout(cG.REPO.stage.def.controls, 300,holder,instruction,dur); 
-        return;
-    }
-    if(!cG.script) return console.error("No script.JSON found. script.JSON is REQUIRED for Routing support");*/
-    if(void 0===holder) return console.error("holder - the stage to which the button will be attached, is required");
-    if(void 0===dur) dur = 400;
-    //console.log(window[holder],holder);
-    if(cG.script.config.pagestartnum){
-        if(isNaN(parseInt(instruction))) instruction++;
-        if(instruction.value===void 0) return console.log("malformed instruction, must be object with value property");
-        else instruction.value++;
-    }
-    switch(instruction){
-        case "a"://first
-            holder.slide(0,dur);//window[holder].slide(0,dur);
-            break;
-        case "b"://left
-            holder.prev();//window[holder].prev();
-            break;
-        case "c"://rght
-            holder.next();//window[holder].next();
-            break;
-        case "d"://last
-            holder.slide(cG.script.pages.length-1,dur);//window[holder].slide(cG.script.pages.length-1,dur);
-            break;
-        case "e"://rand
-            holder.slide(Math.floor(Math.random() * cG.script.pages.length-1),dur);//window[holder].slide(Math.floor(Math.random() * cG.script.pages.length-1),dur);
-            break;
-        case "z":
-            break;
-        default:
-            //if(event.keyCode == 13) {
-            instruction = parseInt(instruction.value);
-            //console.log(instruction)
-            if(isNaN(instruction)) instruction = 0
-            holder.slide(Math.floor(Math.max(0,Math.min(cG.script.pages.length-1,instruction))),dur);//window[holder].slide(Math.floor(Math.max(0,Math.min(cG.script.pages.length-1,instruction))),dur);
-            //}
-            break;
-    }
-};
-cG.REPO.stage.def.scenography = document.createElement("style");
-/*cG.REPO.stage.def.scenography.setAttribute("media", "screen");*/
-cG.REPO.stage.def.scenography.setAttribute("id", "scenography");
-cG.REPO.stage.def.scenography.appendChild(document.createTextNode('article,aside,b,body,dd,del,dfn,div,dl,dt,em,fieldset,footer,form,h1,h2,h3,h4,h5,h6,header,html,i,iframe,img,ins,kbd,label,li,nav,object,ol,p,q,samp,section,small,span,strong,table,tbody,td,tfoot,th,thead,tr,ul{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:0 0}body{-webkit-text-size-adjust:none;font-family:sans-serif;min-height:416px}h1{font-size:33px;margin:50px 0 15px;text-align:center;color:#212121}h2{font-size:14px;font-weight:700;color:#3c3c3c;margin:20px 10px 10px}small{margin:0 10px 30px;display:block;font-size:12px}a{margin:0 0 0 10px;font-size:12px;color:#3c3c3c}body,html{background:#f3f3f3}#console{font-size:12px;font-family:Inconsolata,Monaco,Consolas,"Andale Mono","Bitstream Vera Sans Mono","Courier New",Courier,monospace;color:#999;line-height:18px;margin-top:20px;max-height:150px;overflow:auto}#mySwipe div b{display:block;font-weight:700;color:#14ADE5;font-size:20px;text-align:center;margin:10px;padding:100px 10px;box-shadow:0 1px #EBEBEB;background:#fff;border-radius:3px;border:1px solid;border-color:#E5E5E5 #D3D3D3 #B9C1C6}.swipe{overflow:hidden;visibility:hidden;position:relative}.swipe-wrap{overflow:hidden;position:relative}.swipe-wrap>div{float:left;width:100%;position:relative}'));
-
-cG.REPO.stage.def.manager = function(index,elem){
-    console.log(index,elem);
-    /*var id;
-    val = parseInt(val);
-    if(typeof val === "undefined" || isNaN(val)) {
-        id = jQuery(".active").attr("id");
-    } else {
-        id = val;
-    }
-    var iid;
-    jQuery('[btog=1]').attr("src", ""); /*turn off all active img*/
-    //jQuery('[btog=1]').attr("btog", 0); /*decrement*/
-    /*jQuery('[btog=2]').attr("btog", 1);
-    
-    if(!vvar2&&id==0||vvar2&&id==vvar1){
-        location.hash = '';
-    } else if(id<0){
-        id=id*-1;
-        location.hash = location.hash;
-    } else {
-        console.log("location hash :"+(parseInt(id)+1).toString());
-        location.hash = (parseInt(id)+1).toString();
-    }
-    for (i = 0; i < jQuery("#myCarousel").attr("pstload"); i++) {
-        iid = "#ig"+(parseInt(id)+i).toString();
-        console.log(iid);
-        if(jQuery(iid).attr("btog")==0){
-            jQuery(iid).attr("src", jQuery(iid).attr("isrc")); /*turns image on*/
-        /*}
-        jQuery(iid).attr("btog", 2);
-    }
-    for (i = -1; i > (jQuery("#myCarousel").attr("preload")*-1)-2; i--) {
-        iid = "#ig"+(parseInt(id)+i).toString();
-        console.log(iid);
-        if(jQuery(iid).attr("btog")==0){
-            jQuery(iid).attr("src", jQuery(iid).attr("isrc")); /*turns image on*/
-        /*}
-        jQuery(iid).attr("btog", 2);
-    }*/
-};
+///////
+cG.REPO.stage = {"def":{id:"def",construct:function(name,scriptt,anchor,options){
+    //workaround for v1->v2
+/*    var spec={chapters:[{description:"",end:0,start:0,title:""}],config:{chapterstartnum:!1,dir:"assets/",imgpostbuffer:5,imgprebuffer:5,pagestartnum:!1,startpage:0},loading:{height:250,lines:16,rate:33.333333333333336,width:250,xpos:.5,ypos:.5,back:"#FFF",color:"#373737"},offset:0,pages:[{alt:"",anim8:!1,hover:"",note:"",perm:!1,release:0,title:"",url:[""]}],parent:null,pyr:{appendmismatch:!1,appendorder:0,appendorderdir:!1}},
+        glue = function(model,fix){
+            var keys = Object.keys(model);
+            for(var u in keys){
+                //console.log(fix[keys[u]]);
+                if((fix[keys[u]]===void 0)||(typeof fix[keys[u]] !== typeof model[keys[u]])&&keys[u]!="url") fix[keys[u]] = model[keys[u]];
+                else if(typeof fix[keys[u]] === 'object'){
+                    if(model[keys[u]] != null){
+                        if(fix[keys[u]].length<=0) continue;
+                        else if(Array.isArray(fix[keys[u]])&&fix[keys[u]].length>0){
+                            glue(model[keys[u]],fix[keys[u]])
+                        }
+                        else glue(model[keys[u]],fix[keys[u]]);
+                    }
+                }
+            }
+            return fix;
+        }*/
+    //
+    var direction=function(d,l){if(void 0===d)return-1;if("string"===typeof d)d={parent:null,offset:0,loading:{lines:16,rate:1E3/30,width:250,height:250,xpos:.5,ypos:.5,back:"#FFF",color:"#373737"},config:{dir:"assets/",pagestartnum:!1,chapterstartnum:!1,imgprebuffer:5,imgpostbuffer:5,startpage:0,back:"#FFF"},pages:[{alt:"",hover:"",title:"",url:[d],release:0,note:"",perm:!1,anim8:!1}],chapters:[]};else if(Array.isArray(d)){for(var m={parent:null,offset:0,loading:{lines:16,rate:1E3/30,width:250,height:250,
+xpos:.5,ypos:.5,back:"#FFF",color:"#373737"},config:{dir:"assets/",pagestartnum:!1,chapterstartnum:!1,imgprebuffer:5,imgpostbuffer:5,startpage:0,back:"#FFF"},pages:[],chapters:[]},b=0;b<d.length;b++)if(m.pages.push({alt:"",hover:"",title:"",url:[],release:0,note:"",perm:!1,anim8:!1}),Array.isArray(d[b]))for(var x=0;x<d[b].length;x++)m.pages[b].url.push(d[b][x]);else m.pages[b].url.push(d[b]);d=m}else if(void 0===d.pages[0].url)return-1;if(void 0===l||null==l)l=0;var e=d.pages,n=d.pages.length,y=!0,
+r=-1,k=d.loading,p=d.config,t=[],u=[],h=new Image,z=!0,A={acW:300,acH:300},c=[document.createElement("canvas"),document.createElement("canvas")],B=c[1].getContext("2d"),D=b=function(){return 0},v=b,E=b,w={context:c[0].getContext("2d"),color:k.color,start:Date.now(),lines:k.lines,cW:k.width,cH:k.height,acW:c[1].width,acH:c[1].height,rate:k.rate},F=function(a){var b=Math.floor((Date.now()-a.start)/1E3*a.lines)/a.lines,g=a.color.substr(1);a.context.save();a.context.clearRect(0,0,a.acW,a.acH);a.context.translate(a.acW/
+2,a.acH/2);a.context.rotate(2*Math.PI*b);3==g.length&&(g=g[0]+C[0]+g[1]+g[1]+g[2]+g[2]);for(var b=parseInt(g.substr(0,2),16).toString(),c=parseInt(g.substr(2,2),16).toString(),g=parseInt(g.substr(4,2),16).toString(),d=0;d<a.lines;d++)a.context.beginPath(),a.context.rotate(2*Math.PI/a.lines),a.context.moveTo(a.cW/10,0),a.context.lineTo(a.cW/4,0),a.context.lineWidth=a.cW/30,a.context.strokeStyle="rgba("+b+","+c+","+g+","+d/a.lines+")",a.context.stroke();a.context.restore();y&&window.setTimeout(F,a.rate,
+w)},G=function(a,b){if(null===a||void 0===a)a={x:0,y:0};else if(isNaN(a)){if(null===a.y||void 0===a.y)a.y=0;if(null===a.x||void 0===a.x)a.x=0}else a={x:0,y:a};if(null===b||void 0===b)b=400;0>a.y&&(a.y=window.innerHeight||document.documentElement.clientHeight||document.body.clientHeight);0>a.x&&(a.x=window.innerWidth||document.documentElement.clientWidth||document.body.clientWidth);var c={x:void 0!==window.pageXOffset?a.x-window.pageXOffset:a.x-document.documentElement.scrollLeft,y:void 0!==window.pageYOffset?
+a.y-window.pageYOffset:a.y-document.documentElement.scrollTop};if(c=={x:0,y:0})return c;var d=function(a,b,c){window.scrollBy(Math.floor(a.x)/b,Math.floor(a.y)/b);c+1<5*b&&window.setTimeout(d,5,a,b,c+1)};window.setTimeout(d,5,c,Math.floor(b/5),0);return c},m=function(){e[this.imaginaryID].loaded=!0},q=function(a,b){y=!0;window.setTimeout(F,k.rate,w);D();e[b].loaded||B.clearRect(0,0,c[1].width,c[1].height);a.imaginaryID=b;a.src=p.dir+e[b].url[0];for(var d=0,f=b-1;f>b-p.imgprebuffer-1&&0<=f;f--)e[f].loaded||
+(u[d].imaginaryID=f,u[d].src=p.dir+e[f].url,d++);d=0;for(f=b+1;f<p.imgpostbuffer+b+1&&f<n;f++)e[f].loaded||(t[d].imaginaryID=f,t[d].src=p.dir+e[f].url,d++)};this.count=function(){return n};this.current=function(){return r};this.callback=function(a,b){if(null===a||void 0===a)return v;if(null===b||void 0===b)return a?0<a?D:E:v;a?0<a?D=b:E=b:v=b;return 1};this.go=function(a){a=null===a||void 0===a?0:parseInt(a,10);a=isNaN(a)?0:a;q(h,Math.floor(Math.max(0,Math.min(n-1,a))));return a};this.prev=function(){var a=
+r-1;0<=a&&q(h,a);return a};this.next=function(){var a=r+1;a<n&&q(h,a);return a};this.frst=function(){0<=r&&q(h,0);return 0};this.last=function(){q(h,n-1);return n-1};this.rand=function(){var a=Math.floor(Math.random()*(n-1));q(h,a);return a};this.scroll=function(a){return null===a||void 0===a?z:z=a};this.scrollTo=function(a,b){return G(a,b)};c[0].height=480;c.width=640;c[0].style.background=k.back;c[0].style.zIndex=0;c[0].style.position="absolute";A=w;l?l.appendChild(c[0]):document.body.appendChild(c[0]);
+window.setTimeout(F,k.rate,w);h=new Image;h.imaginaryID=-1;h.addEventListener("load",function(){e[this.imaginaryID].loaded?B.clearRect(0,0,this.width,this.height):e[this.imaginaryID].loaded=!0;v();c[1].width=c[0].width=A.acW=this.width;c[1].height=c[0].height=A.acH=this.height;B.drawImage(this,0,0);r=this.imaginaryID;y=0;z&&G();E()},!1);for(b=0;b<e.length;b++)e[b].desig=b?b==e.length-1?1:0:-1,e[b].loaded=!1;for(b=0;b<d.config.imgprebuffer;b++)u.push(new Image),u[b].imaginaryID=-1,u[b].addEventListener("load",
+m,!1);for(b=0;b<d.config.imgpostbuffer;b++)t.push(new Image),t[b].imaginaryID=-1,t[b].addEventListener("load",m,!1);c[1].height=480;c[1].width=640;c[1].background=p.back;c[1].style.zIndex=1;c[1].style.position="absolute";l?l.appendChild(c[1]):document.body.appendChild(c[1])};
+    /*var sd = glue(spec,scriptt);
+    console.log(sd);*/
+    this.main = new direction(scriptt,anchor);
+    this.name = name;
+    this.type = "def";
+}}};
+///////
 
 cG.REPO.actor = cG.REPO.actor||{def: ""};
 cG.REPO.decor = cG.REPO.decor||{def: ""};
@@ -178,7 +128,6 @@ cG.actor = cG.REPO.actor.def;
 cG.decor = cG.REPO.decor.def;
 cG.script = cG.REPO.script.def;
 cG.stage = cG.REPO.stage.def;
-document.head.appendChild(cG.stage.scenography);/*Add the <style> element to the page
 /*HELPERS*/
 cG.HELPERS = {};
 /*END comix-ngn properties*/
@@ -215,19 +164,8 @@ if(void 0===getScript){/*create script.json promise if not already created*/
         cG.script = cG.REPO.script.def = 0;
     });
 }
-if(void 0===getStage){
-    var getStage = cG.agent(tir+'stage.html');
-    getStage.then(
-    function(data, xhr) {
-        cG.stage.body = cG.REPO.stage.def.body = data;
-    },
-    function(data, xhr) {
-        console.error(data, xhr.status);
-        cG.stage.body = cG.REPO.stage.def.body = 0;
-    });
-}
 if(void 0===getDecor){
-    var getDecor = cG.agent(tir+'costumes.html');
+    var getDecor = cG.agent(tir+'decor.html');
     getDecor.then(
     function(data, xhr) {
         cG.decor = cG.REPO.decor.def = data;
@@ -237,240 +175,79 @@ if(void 0===getDecor){
         cG.decor = cG.REPO.decor.def = 0;
     });
 }
-if(void 0===getActor){
-    var getActor = cG.agent(tir+'actor.html');
-    getActor.then(
-    function(data, xhr) {
-        cG.actor = cG.REPO.actor.def = data;
-    },
-    function(data, xhr) {
-        console.error(data, xhr.status);
-        cG.actor = cG.REPO.actor.def = 0;
-    });
-}
 /*END AJAX calls*/
-/*STAGE creation*/
-cG.HELPERS.jstagecreate = function(){
-    if(cG.script == '' || cG.actor == '' || cG.stage.body == '') { //if are stuff isn't yet we are going to wait for it
-        setTimeout(cG.HELPERS.jstagecreate, 300); 
-        return;
-    }
-    /*pure JS-testing purposes*/
-    var stg = document.createElement("div");
-    stg.setAttribute("id", "stage");
-    stg.setAttribute("class", "swipe");
-    /*stg.setAttribute("style", 'max-width:500px;margin:0 auto');*/
-    var sce = document.createElement("div");
-    sce.setAttribute("class", "swipe-wrap");
-    for (i = 0; i < cG.script.pages.length; i++) { 
-        var act = document.createElement("div");
-        var sld = document.createElement("img");
-        /*<img id isrc src title alt btog>*/
-        sld.setAttribute("src", "assets/"+cG.script.pages[i].url);
-        act.appendChild(sld);
-        sce.appendChild(act);
-    }
-    stg.appendChild(sce);
-    var ctrls = document.createElement("p");
-    ctrls.setAttribute("class", "controls");
-    var butfirs = document.createElement("button");
-    var butprev = document.createElement("button");
-    var butrand = document.createElement("button");
-    var butindx = document.createElement("input");
-    var butnext = document.createElement("button");
-    var butlast = document.createElement("button");
-    butfirs.setAttribute("class", "frs");
-    butprev.setAttribute("class", "frs");
-    butnext.setAttribute("class", "las");
-    butlast.setAttribute("class", "las");
-    butfirs.setAttribute("onclick", "window.mySwipe.slide(0, 400);");
-    butfirs.appendChild(document.createTextNode("FIRST"));
-    butprev.setAttribute("onclick", "window.mySwipe.prev();");
-    butprev.appendChild(document.createTextNode("PREV"));
-    butnext.setAttribute("onclick", "window.mySwipe.next();");
-    butnext.appendChild(document.createTextNode("NEXT"));
-    butrand.setAttribute("onclick", "window.mySwipe.slide(Math.floor(Math.random() * 39),400);");
-    butrand.appendChild(document.createTextNode("?"));
-    butlast.setAttribute("onclick", "window.mySwipe.slide(window.mySwipe.getNumSlides()-1,400);");
-    butlast.appendChild(document.createTextNode("LAST"));
-    ctrls.appendChild(butfirs);
-    ctrls.appendChild(butprev);
-    ctrls.appendChild(butnext);
-    ctrls.appendChild(butlast);
-    ctrls.appendChild(butrand);
-    document.body.appendChild(ctrls);
-    document.body.appendChild(stg);
-    /*<p><button class="frs" id="bfrs" onclick="caruso.frst()">|<</button>
-        <button class="frs" id="bpre" onclick="caruso.left()">< Prev</button>
-        <button id="bran" onclick="caruso.rand()">?</button>
-        <input id="snum" type="number" class="tiny" onkeydown="caruso.indx(this)"/>
-        <button class="las" id="bnex" onclick="caruso.rght()">Next ></button>
-        <button class="las" id="blas" onclick="caruso.last()">>|</button></p>
-*/
-    document.body.appendChild(stg);
-    window.mySwipe = new cG.stage.fnt(document.getElementById('stage'), {
-        startSlide: 0,
-        speed: 400,
-        auto: 3000,
-        continuous: true,
-        disableScroll: false,
-        stopPropagation: false,
-        callback: function(index, elem) {},
-        transitionEnd: function(index, elem) {}
-    });
-    //cG.stage.controls(window.mySwipe);
-};
-
+/*STAGE creation-REDACTED*/
+cG.HELPERS.jstagecreate = N;
 cG.stageInjection = function(SPECIFIC){
-    if(cG.script === '' || cG.actor === '' || cG.stage.body === '' || cG.decor === '') {
+    if(cG.script === '' || cG.decor === '') {//although we don't need decor, if there is a template, we prioritize it
         /*if are stuff isn't ready yet we are going to wait for it*/
-        setTimeout(cG.stageInjection, 300); 
+        setTimeout(cG.stageInjection, 300,SPECIFIC); 
         return;
     }
-    if(!cG.script) return console.error("No script.JSON found. script.JSON is REQUIRED to create stage. Please create a script.JSON or move it to the directory specified in the script tag for comix-ngn or bellerophon if it is added.");
-
-    var stages = [];
-    var errr = "stageInjection can only operate on elements or arrays of elements";
+    if(!cG.script) return console.error("No script.JSON found. script.JSON is REQUIRED to create any stage. Please create a script.JSON or move it to the directory specified in the script tag for comix-ngn or bellerophon if it is added.");
+    var stages = [],
+        errr = "stageInjection can only operate on elements or arrays of elements";
     if(void 0 === SPECIFIC) stages = document.getElementsByClassName("venue");/*get all entry points*/
     else if(Array.isArray(SPECIFIC)){
         if(SPECIFIC.length>0) if(void 0 ===SPECIFIC[0].nodeName) return console.error(errr);
-        else return console.error(errr);
+            else return console.error(errr);
         stages = stages.concat(SPECIFIC);
-    }
-    else{
+    } else{
         if(void 0 === SPECIFIC.nodeName) return console.error(errr);
         stages.push(SPECIFIC);/*if not array and not undefined, assume it is a Element*/
     }
-    var idealStage = (cG.stage.body)?cG.stage.body:'<p class="controls"></p><div id="stage" class="swipe"><div id="target" class="swipe-wrap"></div></div>';
-    var idealStar = (cG.actor)?cG.actor:'<div><h1></h1><p><img id="ig" isrc src title alt btog></p></div>';
-    var idealCostumes = (cG.decor)?cG.decor:'<div id="location"></div><div id="archive">Archive</div><div id="me">About Me</div>';
-    
-    var id_attr = "";
-    var script_attr = "";
-    var use_attr = "";
-    var config_attr = "";
-    
-    var result;
-    var myScript;
-    var subclone;
-    var dipclone;
-    var clone;
-    var links;
-    var target = '';
-    var control = '';
-    var cset = [[],[]];
-    var myStage = {};
-    for (i = 0; i < stages.length; i++) {
-        /*initial setup*/
-        /*get attributes */
-        id_attr = stages[i].getAttribute("id");
-        script_attr = stages[i].getAttribute("script");
-        use_attr = stages[i].getAttribute("use");
-        config_attr = stages[i].getAttribute("config");
-        if(id_attr==""){/*if no ID, make one*/
-            var name = "STG"+i;
-            var j = 1;
-            while(document.getElementById(name)) name = "STG"+(i+j++);
-            id_attr = name.toString();
-            stages[i].setAttribute("id", id_attr);
-        }
-        if(script_attr==""){/*if no script, use the default*/
-            myScript = cG.script;
-        } else {
-            myScript = syncJSON(script_attr);/*if given, assume it is a src*/
-            if(!myScript){/*if you get a 404, assume its an ID*/
-                if(0){//not implemeneted yet
-                myScript = cG.script.extras[parseInt(script_attr,10)];/*search for that ID in the script*/
-                if(void 0===myScript) myScript = cG.script;/*if not found use default*/
-                else if(void 0!==myScript.link){/*if the found script is a reference, load it*/
-                    myScript = syncJSON(myScript.link);
-                    if(!myScript) myScript = cG.script;/*if not found use default*/
+    var final_res = cG.cPanel,
+        decor = (cG.decor)?cG.decor:'<div id="location"></div><div id="archive">Archive</div><div id="me">About Me</div>',
+        reqQueue = [],
+        request = function(iD,source){//,srcScript,srcScriptReq){            
+            /*initial setup*/
+            /*////get attributes */
+            /*////////async request the script if it is specified, else use default*/
+            var myScript;
+            if(source===null||source===void 0){
+                var script_attr = stages[iD].getAttribute("script");
+                if(script_attr==""||script_attr=="script.json"){/*if no script, use the default*/
+                    myScript = cG.script;
+                } else {
+                    reqQueue.push(cG.agent(script_attr).then(
+                        function(data, xhr) {
+                            request(iD,data);
+                        },
+                        function(data, xhr) {
+                            console.error(data, xhr.status);
+                            request(iD,"");
+                        }));
+                    return 0;//stop execution
                 }
-                } else myScript = cG.script;
+            } else if(source=="") myScript=cG.script;
+            else myScript=source;
+            /*////////get the rest of the attributes*/
+            var id_attr = stages[iD].getAttribute("id"),
+                use_attr = stages[iD].getAttribute("use"),
+                config_attr = stages[iD].getAttribute("config");
+            /*////attribute processing */
+            if(id_attr==""){/*if no ID, make one*/
+                var name = "STG"+iD;
+                var j = 1;
+                while(document.getElementById(name)) name = "STG"+(iD+j++);
+                id_attr = name.toString();
+                stages[i].setAttribute("id", id_attr);
             }
-        }
-        if(use_attr==""){/*if no use specified, use current*/
-            myStage.stage = cG.stage;
-            myStage.stageID = cG.stageID;
-            myStage.scenography = cG.scenography;
-            myStage.stage_ctrls = cG.stage_ctrls;
-            myStage.templates = cG.templates;
-        } else {
-            myStage = cG.stageREPO[use_attr];/*use the id of the plug in to set stage*/
-            if(void 0===myStage){/*if not found specified, use current*/
-                myStage.stage = cG.stage;
-                myStage.stageID = cG.stageID;
-                myStage.scenography = cG.scenography;
-                myStage.stage_ctrls = cG.stage_ctrls;
-                myStage.templates = cG.templates;
-            } else myStage.stageID = use_attr;
-        }
-        if(config_attr!=""){
-            try {
-                config_attr=JSON.parse(config_attr);
-            }
-            catch(err) {
-                console.debug("The following configuration settings are malformed: ",config_attr,"It has been ignored");
-                config_attr={};
-            }
-        } else config_attr={};
-        config_attr.transitionEnd = cG.stage.manager;//transitionEnd: overwrite
-        /*END initial set up*/
-        /*index.html(venue)<-costumes.html(location)<-stage.html(target)<-actor.html*/
-        cset = [["<|","<","?","index",">",">|"],["cG.stage.controls("+id_attr+",'a')","cG.stage.controls("+id_attr+",'b')","cG.stage.controls("+id_attr+",'e')","cG.stage.controls("+id_attr+",this)","cG.stage.controls("+id_attr+",'c')","cG.stage.controls("+id_attr+",'d')"]];
-        clone = stages[i].cloneNode(false);
-        //console.log(cG,cG.HELPERS.FEbyIdAI);
-        links = cG.HELPERS.FEbyIdAI(clone,["venue","location","target","controls"],[idealCostumes,idealStage]);
-        //console.log(links);
-        for (t = 0; t < links.length; t++) {
-            if(links[t].getAttribute("id")=="target"){
-                target = links[t];
-                continue;
-            }
-            if(links[t].getAttribute("id")=="ctrl"){
-                control = links[t];
-                continue;
-            }
-            if(control!="" && target!="") break;
-        }
-        if(!target) console.error("target fallback not implemented");
-        cG.HELPERS.renameEles(false,clone,id_attr);
-        //console.log(clone);
-        /*append the slides*/
-        //console.log(cG.script);
-        target.innerHTML=idealStar;
-        subclone=target.children[0].cloneNode(true);/*original clone*/
-        target.innerHTML="";
-        for (f = 0; f < cG.script.pages.length; f++) {
-            dipclone=subclone.cloneNode(true);
-            cG.HELPERS.renameEles(true,dipclone,id_attr,f);
-            cG.HELPERS.smartAttrib(dipclone,{
-                img: {
-                    isrc:cG.script.pages[f].url,
-                    src:cG.script.config.dir+cG.script.pages[f].url
-                },
-                h1: {
-                    innerHTML: cG.script.pages[f].title
+            if(use_attr=="") use_attr="def";/*if no use specified, use current*/
+            if(config_attr!=""){
+                try {
+                    config_attr=JSON.parse(config_attr);
                 }
-            });
-            target.appendChild(dipclone);
-            //console.log(dipclone);
-        }
-        //console.log(target);
-        cG.HELPERS.smartAttrib(control,{
-                p: {
-                    innerHTML: '<button class="'+id_attr+'_frs" id="'+id_attr+'_bfrs" onclick="'+cset[1][0]+'">'+cset[0][0]+'</button><button class="'+id_attr+'_frs" id="'+id_attr+'_bpre" onclick="'+cset[1][1]+'">'+cset[0][1]+'</button><button id="'+id_attr+'_bran" onclick="'+cset[1][2]+'">'+cset[0][2]+'</button><input id="'+id_attr+'_snum" type="number" class="tiny" onkeydown="'+cset[1][3]+'"/><button class="'+id_attr+'_las" id="'+id_attr+'_bnex" onclick="'+cset[1][4]+'">'+cset[0][4]+'</button><button class="'+id_attr+'_las" id="'+id_attr+'_blas" onclick="'+cset[1][5]+'">'+cset[0][5]+'</button>'
+                catch(err) {
+                    console.debug("The following configuration settings are malformed for plugin["+use_attr+"]: ",config_attr,"\nIt has been ignored");
+                    config_attr={};
                 }
-            });
-        //console.log(clone);
-        stages[i].parentNode.replaceChild(clone, stages[i]);
-        window[id_attr] = new cG.stage.fnt(target.parentNode, config_attr);
-        
-    Path.root("#");
-    Path.listen();
-    
-        //console.log(window[id_attr],id_attr);
-    } //console.log("TEST",idealStage,idealStar,idealCostumes,stages,clone,id_attr,script_attr,use_attr,result,myScript,myStage);
+            } else config_attr={};
+            /*END initial set up*/
+            final_res[use_attr+"_"+iD] = new cG.stage.construct(id_attr,myScript,stages[iD],config_attr);
+        };
+    for (var i = 0; i < stages.length; i++) request(i);
+    return final_res;
 };
 /*end STAGE creation*/
 /*ROUTING*/
@@ -551,6 +328,7 @@ domReady(function(){
     }
     if(b||b==void 0||b==""){
         //cG.HELPERS.jstagecreate();
-        cG.stageInjection();
+        cG.cPanel=cG.stageInjection();
+        console.log(cG.cPanel);
     }
 });
