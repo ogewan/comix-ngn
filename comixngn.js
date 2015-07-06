@@ -1,4 +1,4 @@
-/** @preserve comix-ngn v1.9.0 | (c) 2015 Oluwaseun Ogedengbe| seun40.github.io/comic-ng/ |License: MIT|
+/** @preserve comix-ngn v1.9.1 | (c) 2015 Oluwaseun Ogedengbe| seun40.github.io/comic-ng/ |License: MIT|
 embeds domReady: github.com/ded/domready (MIT) (c) 2013 Dustin Diaz, pegasus: typicode.github.io/pegasus (MIT) (c) 2014 typicode, pathjs (MIT) (c) 2011 Mike Trpcic, direction.js*/
 
 var cG = cG||{};/*if(void 0===cG) var cG = {};*//*check if cG is already is instantiated*/
@@ -9,7 +9,7 @@ function N(){return 0};/*null function*/
 if(void 0===$GPC){var $GPC=0;}
 cG.root = '';
 cG.cPanel = cG.panel||{};
-cG.info = {vix: "1.9.0",vwr: "1.0.0",vpr: "0.1.0"};
+cG.info = {vix: "1.9.1",vwr: "1.0.0",vpr: "0.1.0"};
 /*rollbar*/
 var _rollbarConfig = _rollbarConfig||{
         accessToken: "3e8e8ecb63a04b5798e1d02adf2608cb",
