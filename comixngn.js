@@ -79,26 +79,6 @@ cG.REPO.producer = {"def":N};
 
 ///////
 cG.REPO.stage = {"def":{id:"def",construct:function(name,scriptt,anchor,options){
-    //workaround for v1->v2
-/*    var spec={chapters:[{description:"",end:0,start:0,title:""}],config:{chapterstartnum:!1,dir:"assets/",imgpostbuffer:5,imgprebuffer:5,pagestartnum:!1,startpage:0},loading:{height:250,lines:16,rate:33.333333333333336,width:250,xpos:.5,ypos:.5,back:"#FFF",color:"#373737"},offset:0,pages:[{alt:"",anim8:!1,hover:"",note:"",perm:!1,release:0,title:"",url:[""]}],parent:null,pyr:{appendmismatch:!1,appendorder:0,appendorderdir:!1}},
-        glue = function(model,fix){
-            var keys = Object.keys(model);
-            for(var u in keys){
-                //console.log(fix[keys[u]]);
-                if((fix[keys[u]]===void 0)||(typeof fix[keys[u]] !== typeof model[keys[u]])&&keys[u]!="url") fix[keys[u]] = model[keys[u]];
-                else if(typeof fix[keys[u]] === 'object'){
-                    if(model[keys[u]] != null){
-                        if(fix[keys[u]].length<=0) continue;
-                        else if(Array.isArray(fix[keys[u]])&&fix[keys[u]].length>0){
-                            glue(model[keys[u]],fix[keys[u]])
-                        }
-                        else glue(model[keys[u]],fix[keys[u]]);
-                    }
-                }
-            }
-            return fix;
-        }*/
-    //
     var direction=function(d,l){if(void 0===d)return-1;if("string"===typeof d)d={parent:null,offset:0,loading:{lines:16,rate:1E3/30,width:250,height:250,xpos:.5,ypos:.5,back:"#FFF",color:"#373737"},config:{dir:"assets/",pagestartnum:!1,chapterstartnum:!1,imgprebuffer:5,imgpostbuffer:5,startpage:0,back:"#FFF"},pages:[{alt:"",hover:"",title:"",url:[d],release:0,note:"",perm:!1,anim8:!1}],chapters:[]};else if(Array.isArray(d)){for(var m={parent:null,offset:0,loading:{lines:16,rate:1E3/30,width:250,height:250,
 xpos:.5,ypos:.5,back:"#FFF",color:"#373737"},config:{dir:"assets/",pagestartnum:!1,chapterstartnum:!1,imgprebuffer:5,imgpostbuffer:5,startpage:0,back:"#FFF"},pages:[],chapters:[]},b=0;b<d.length;b++)if(m.pages.push({alt:"",hover:"",title:"",url:[],release:0,note:"",perm:!1,anim8:!1}),Array.isArray(d[b]))for(var x=0;x<d[b].length;x++)m.pages[b].url.push(d[b][x]);else m.pages[b].url.push(d[b]);d=m}else if(void 0===d.pages[0].url)return-1;if(void 0===l||null==l)l=0;var e=d.pages,n=d.pages.length,y=!0,
 r=-1,k=d.loading,p=d.config,t=[],u=[],h=new Image,z=!0,A={acW:300,acH:300},c=[document.createElement("canvas"),document.createElement("canvas")],B=c[1].getContext("2d"),D=b=function(){return 0},v=b,E=b,w={context:c[0].getContext("2d"),color:k.color,start:Date.now(),lines:k.lines,cW:k.width,cH:k.height,acW:c[1].width,acH:c[1].height,rate:k.rate},F=function(a){var b=Math.floor((Date.now()-a.start)/1E3*a.lines)/a.lines,g=a.color.substr(1);a.context.save();a.context.clearRect(0,0,a.acW,a.acH);a.context.translate(a.acW/
@@ -244,7 +224,21 @@ cG.stageInjection = function(SPECIFIC){
                 }
             } else config_attr={};
             /*END initial set up*/
-            final_res[use_attr+"_"+iD] = new cG.stage.construct(id_attr,myScript,stages[iD],config_attr);
+            stages[iD].innerHTML = decor;
+            cG.HELPERS.renameEles(false,stages[iD],id_attr);
+            var anchorto = document.getElementById(id_attr+"_location");
+            if(anchorto===void 0||anchorto===null) anchorto = stages[iD];
+            else {//we only use the helpers if anchorto is actually correctly set
+                cG.HELPERS.smartAttrib(stages[iD],{
+                    div: {
+                        style:"display: none;"
+                    }
+                },1);
+            }
+            anchorto.style.display = "block";
+            //console.log(anchorto,anchorto.style)
+            final_res[use_attr+"_"+iD] = new cG.stage.construct(id_attr,myScript,
+                                                                anchorto,config_attr);
         };
     for (var i = 0; i < stages.length; i++) request(i);
     return final_res;
@@ -257,10 +251,12 @@ Path.map("#/:page").to(function(){
 /*end routing*/
 /*/////////////////////////////////////////////////
 HELPER FUNCTIONS*/
-cG.HELPERS.smartAttrib = function(source,mapper){
+cG.HELPERS.smartAttrib = function(source,mapper,ignore){
     var base;
+    var ig = parseInt(ignore);
+    ig = (isNaN(ig))?0:ig;
     var srch = mapper[source.nodeName.toLowerCase()];
-    if(void 0 !== srch){
+    if(void 0 !== srch&&ig<=0){
         if(srch.count === void 0 || srch.count != 0){/*as long as count != 0 we can set the attribute*/
             base = Object.keys(srch);
             for(y=0;y<base.length;y++){
@@ -273,8 +269,8 @@ cG.HELPERS.smartAttrib = function(source,mapper){
             }
             if(srch.count > 0) mapper[source.nodeType.toLowerCase()].count--;/*if count is above 0, decrement it (this limits the amount of sets)*/
         }
-    }
-    for(var x=0;x<source.children.length;x++) cG.HELPERS.smartAttrib(source.children[x],mapper);
+    } else ig--;
+    for(var x=0;x<source.children.length;x++) cG.HELPERS.smartAttrib(source.children[x],mapper,ig);
 }
 cG.HELPERS.FEbyIdAI = function(source,ids,inner){
     var ret = [];
