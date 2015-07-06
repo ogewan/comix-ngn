@@ -1,42 +1,47 @@
-{
-    "READONLY":true,
-    "chapters": [{
-        "description": "",
-        "end": 0,
-        "start": 0,
-        "title": ""
-    }],
-    "config": {
-        "chapterstartnum": false,
-        "dir": "assets/",
-        "imgpostbuffer": 5,
-        "imgprebuffer": 5,
-        "pagestartnum": false,
-        "startpage": 0
-    },
-    "loading": {
-        "height": 250,
-        "lines": 16,
-        "rate": 33.333333333333336,
-        "width": 250,
-        "xpos": 0.5,
-        "ypos": 0.5
-    },
-    "offset": 0,
-    "pages": [{
-        "alt": "",
-        "anim8": false,
-        "hover": "",
-        "note": "",
-        "perm": false,
-        "release": 0,
-        "title": "",
-        "url": [""]
-    }],
-    "parent": null,
-    "pyr": {
-        "appendmismatch": false,
-        "appendorder": 0,
-        "appendorderdir": false
+specifications(
+    {
+        "2":
+        {
+            "READONLY":true,
+            "chapters": [{
+                "description": "",
+                "end": 0,
+                "start": 0,
+                "title": ""
+            }],
+            "config": {
+                "chapterstartnum": false,
+                "dir": "assets/",
+                "imgpostbuffer": 5,
+                "imgprebuffer": 5,
+                "pagestartnum": false,
+                "startpage": 0
+            },
+            "loading": {
+                "height": 250,
+                "lines": 16,
+                "rate": 33.333333333333336,
+                "width": 250,
+                "xpos": 0.5,
+                "ypos": 0.5
+            },
+            "offset": 0,
+            "pages": [{
+                "alt": "",
+                "anim8": false,
+                "hover": "",
+                "note": "",
+                "perm": false,
+                "release": 0,
+                "title": "",
+                "url": [""]
+            }],
+            "parent": null,
+            "pyr": {
+                "appendmismatch": false,
+                "appendorder": 0,
+                "appendorderdir": false
+            }
+        }
     }
-}
+);

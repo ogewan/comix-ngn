@@ -1,7 +1,24 @@
 <!--upgrades json to spec-->
-<!DOCTYPE html><title>inSpec: </title><script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+<!DOCTYPE html><title>inSpec: </title><script src="http://code.jquery.com/jquery-2.1.4.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/humane-js/3.0.6/humane.min.js"></script>
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/humane-js/3.0.6/themes/jackedup.css">
 <script>
-    $.getJSON( "/callback=?", function( data ) {});
+    var spec;
+    $.ajax({
+        type: 'GET',
+        url: url,
+        async: false,
+        jsonpCallback: 'specifications',
+        contentType: "application/json",
+        dataType: 'jsonp',
+        success: function(json) {
+            spec = json.2;
+        },
+        error: function(e) {
+            console.log(e.message);
+        }
+    });
+
+    })();
 </script>
 <!--
 1. import jquery

@@ -1,5 +1,5 @@
-/** @preserve comix-ngn v1.8.3 | (c) 2015 Oluwaseun Ogedengbe| seun40.github.io/comic-ng/ |License: MIT|
-embeds domReady: github.com/ded/domready (MIT) (c) 2013 Dustin Diaz, pegasus: typicode.github.io/pegasus (MIT) (c) 2014 typicode, pathjs (MIT) (c) 2011 Mike Trpcic*/
+/** @preserve comix-ngn v1.8.5 | (c) 2015 Oluwaseun Ogedengbe| seun40.github.io/comic-ng/ |License: MIT|
+embeds domReady: github.com/ded/domready (MIT) (c) 2013 Dustin Diaz, pegasus: typicode.github.io/pegasus (MIT) (c) 2014 typicode, pathjs (MIT) (c) 2011 Mike Trpcic, direction.js*/
 
 var cG = cG||{};/*if(void 0===cG) var cG = {};*//*check if cG is already is instantiated*/
 /*comix-ngn default properties*/
@@ -8,7 +8,7 @@ var cG = cG||{};/*if(void 0===cG) var cG = {};*//*check if cG is already is inst
 function N(){return 0};/*null function*/
 if(void 0===$GPC){var $GPC=0;}
 cG.root = '';
-cG.info = {vix: "1.8.3",vwr: "1.0.0",vpr: "0.1.0"};
+cG.info = {vix: "1.8.5",vwr: "1.0.0",vpr: "0.1.0"};
 /*rollbar*/
 var _rollbarConfig = _rollbarConfig||{
         accessToken: "3e8e8ecb63a04b5798e1d02adf2608cb",
@@ -77,7 +77,12 @@ cG.REPO.director = {"def":Path};
 cG.REPO.producer = {"def":N};
 
 ///////
-cG.REPO.stage = {"def":{id:"def",construct:N}};
+cG.REPO.stage = {"def":{id:"def",construct:function(name,scriptt,anchor,options){
+    var direction=function(t,e){if(void 0===t)return-1;if("string"==typeof t)t={parent:null,offset:0,loading:{lines:16,rate:1e3/30,width:250,height:250,xpos:.5,ypos:.5,back:"#FFF",color:"#373737"},config:{dir:"assets/",pagestartnum:!1,chapterstartnum:!1,imgprebuffer:5,imgpostbuffer:5,startpage:0,back:"#FFF"},pages:[{alt:"",hover:"",title:"",url:[t],release:0,note:"",perm:!1,anim8:!1}],chapters:[]};else if(Array.isArray(t)){for(var n={parent:null,offset:0,loading:{lines:16,rate:1e3/30,width:250,height:250,xpos:.5,ypos:.5,back:"#FFF",color:"#373737"},config:{dir:"assets/",pagestartnum:!1,chapterstartnum:!1,imgprebuffer:5,imgpostbuffer:5,startpage:0,back:"#FFF"},pages:[],chapters:[]},i=0;i<t.length;i++)n.pages.push({alt:"",hover:"",title:"",url:t[i],release:0,note:"",perm:!1,anim8:!1});t=n}else if(void 0===t.pages[0].url)return-1;(void 0===e||null==e)&&(e=0);var o=t.pages,r=t.pages.length,a=!0,s=-1,l=t.loading,c=t.config,d=[],u=[],h=new Image,f=!0,g={acW:300,acH:300},m=[document.createElement("canvas"),document.createElement("canvas")],p=m[1].getContext("2d"),w=i=function(){return 0},y=i,v=i,x={context:m[0].getContext("2d"),color:l.color,start:Date.now(),lines:l.lines,cW:l.width,cH:l.height,acW:m[1].width,acH:m[1].height,rate:l.rate},b=function(t){var e=Math.floor((Date.now()-t.start)/1e3*t.lines)/t.lines,n=t.color.substr(1);t.context.save(),t.context.clearRect(0,0,t.acW,t.acH),t.context.translate(t.acW/2,t.acH/2),t.context.rotate(2*Math.PI*e),3==n.length&&(n=n[0]+C[0]+n[1]+n[1]+n[2]+n[2]);for(var e=""+parseInt(n.substr(0,2),16),i=""+parseInt(n.substr(2,2),16),n=""+parseInt(n.substr(4,2),16),o=0;o<t.lines;o++)t.context.beginPath(),t.context.rotate(2*Math.PI/t.lines),t.context.moveTo(t.cW/10,0),t.context.lineTo(t.cW/4,0),t.context.lineWidth=t.cW/30,t.context.strokeStyle="rgba("+e+","+i+","+n+","+o/t.lines+")",t.context.stroke();t.context.restore(),a&&window.setTimeout(b,t.rate,x)},I=function(t,e){null===t||void 0===t?t={x:0,y:0}:isNaN(t)?((null===t.y||void 0===t.y)&&(t.y=0),(null===t.x||void 0===t.x)&&(t.x=0)):t={x:0,y:t},(null===e||void 0===e)&&(e=400),0>t.y&&(t.y=window.innerHeight||document.documentElement.clientHeight||document.body.clientHeight),0>t.x&&(t.x=window.innerWidth||document.documentElement.clientWidth||document.body.clientWidth);var n={x:void 0!==window.pageXOffset?t.x-window.pageXOffset:t.x-document.documentElement.scrollLeft,y:void 0!==window.pageYOffset?t.y-window.pageYOffset:t.y-document.documentElement.scrollTop};if(n=={x:0,y:0})return n;var i=function(t,e,n){window.scrollBy(Math.floor(t.x)/e,Math.floor(t.y)/e),5*e>n+1&&window.setTimeout(i,5,t,e,n+1)};return window.setTimeout(i,5,n,Math.floor(e/5),0),n},n=function(){o[this.imaginaryID].loaded=!0},W=function(t,e){a=!0,window.setTimeout(b,l.rate,x),w(),o[e].loaded||p.clearRect(0,0,m[1].width,m[1].height),t.imaginaryID=e,t.src=o[e].url;for(var n=0,i=e-1;i>e-c.imgprebuffer-1&&i>=0;i--)o[i].loaded||(u[n].imaginaryID=i,u[n].src=o[i].url,n++);for(n=0,i=e+1;i<c.imgpostbuffer+e+1&&r>i;i++)o[i].loaded||(d[n].imaginaryID=i,d[n].src=o[i].url,n++)};for(this.count=function(){return r},this.current=function(){return s},this.callback=function(t,e){return null===t||void 0===t?y:null===e||void 0===e?t?t>0?w:v:y:(t?t>0?w=e:v=e:y=e,1)},this.go=function(t){return t=null===t||void 0===t?0:parseInt(t,10),t=isNaN(t)?0:t,W(h,Math.floor(Math.max(0,Math.min(r-1,t)))),t},this.prev=function(){var t=s-1;return t>=0&&W(h,t),t},this.next=function(){var t=s+1;return r>t&&W(h,t),t},this.frst=function(){return s>=0&&W(h,0),0},this.last=function(){return W(h,r-1),r-1},this.rand=function(){var t=Math.floor(Math.random()*(r-1));return W(h,t),t},this.scroll=function(t){return null===t||void 0===t?f:f=t},this.scrollTo=function(t,e){return I(t,e)},m[0].height=480,m.width=640,m[0].style.background=l.back,m[0].style.zIndex=0,m[0].style.position="absolute",g=x,e?e.appendChild(m[0]):document.body.appendChild(m[0]),window.setTimeout(b,l.rate,x),h=new Image,h.imaginaryID=-1,h.addEventListener("load",function(){o[this.imaginaryID].loaded?p.clearRect(0,0,this.width,this.height):o[this.imaginaryID].loaded=!0,y(),m[1].width=m[0].width=g.acW=this.width,m[1].height=m[0].height=g.acH=this.height,p.drawImage(this,0,0),s=this.imaginaryID,a=0,f&&I(),v()},!1),i=0;i<o.length;i++)o[i].desig=i?i==o.length-1?1:0:-1,o[i].loaded=!1;for(i=0;i<t.config.imgprebuffer;i++)u.push(new Image),u[i].imaginaryID=-1,u[i].addEventListener("load",n,!1);for(i=0;i<t.config.imgpostbuffer;i++)d.push(new Image),d[i].imaginaryID=-1,d[i].addEventListener("load",n,!1);m[1].height=480,m[1].width=640,m[1].background=c.back,m[1].style.zIndex=1,m[1].style.position="absolute",e?e.appendChild(m[1]):document.body.appendChild(m[1])};
+    this.main = new direction(scriptt,anchor);
+    this.name = name;
+    this.type = "def";
+}}};
 ///////
 
 cG.REPO.actor = cG.REPO.actor||{def: ""};
@@ -159,7 +164,7 @@ cG.stageInjection = function(SPECIFIC){
         if(void 0 === SPECIFIC.nodeName) return console.error(errr);
         stages.push(SPECIFIC);/*if not array and not undefined, assume it is a Element*/
     }
-    var final_res = [],
+    var final_res = {},
         decor = (cG.decor)?cG.decor:'<div id="location"></div><div id="archive">Archive</div><div id="me">About Me</div>',
         reqQueue = [],
         request = function(iD,source){//,srcScript,srcScriptReq){            
@@ -196,8 +201,7 @@ cG.stageInjection = function(SPECIFIC){
                 id_attr = name.toString();
                 stages[i].setAttribute("id", id_attr);
             }
-            if(use_attr==""){/*if no use specified, use current*/
-            } else {}
+            if(use_attr=="") use_attr="def";/*if no use specified, use current*/
             if(config_attr!=""){
                 try {
                     config_attr=JSON.parse(config_attr);
