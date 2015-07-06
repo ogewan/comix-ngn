@@ -116,7 +116,7 @@ m,!1);for(b=0;b<d.config.imgpostbuffer;b++)t.push(new Image),t[b].imaginaryID=-1
     this.type = "def";
 }}};
 ///////
-
+cG.REPO.scReq = cG.REPO.scReq||{};
 cG.REPO.actor = cG.REPO.actor||{def: ""};
 cG.REPO.decor = cG.REPO.decor||{def: ""};
 cG.REPO.script = cG.REPO.script||{def: ""};
@@ -153,9 +153,9 @@ if (1||void 0==dir) dir="";
 //if (dir[dir.length-1]!="/") dir +="/";
 if (1||void 0==tir) tir="";
 if(cG.root=="") cG.root="def";
-if(void 0===getScript){/*create script.json promise if not already created*/
-    var getScript = cG.agent(dir+'script.json');
-    getScript.then(
+if(void 0===cG.REPO.scReq.getScript){/*create script.json promise if not already created*/
+    cG.REPO.scReq.getScript = cG.agent(dir+'script.json');
+    cG.REPO.scReq.getScript.then(
         function(data, xhr) {
             cG.script = cG.REPO.script.def = data;
         },
@@ -164,9 +164,9 @@ if(void 0===getScript){/*create script.json promise if not already created*/
         cG.script = cG.REPO.script.def = 0;
     });
 }
-if(void 0===getDecor){
-    var getDecor = cG.agent(tir+'decor.html');
-    getDecor.then(
+if(void 0===cG.REPO.scReq.getDecor){
+    cG.REPO.scReq.getDecor = cG.agent(tir+'decor.html');
+    cG.REPO.scReq.getDecor.then(
     function(data, xhr) {
         cG.decor = cG.REPO.decor.def = data;
     },

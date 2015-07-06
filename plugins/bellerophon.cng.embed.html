@@ -18,13 +18,13 @@
                     }
                 }, e.send(), e
             },
-            REPO: {}
+            REPO: {scReq:{}}
         },
         dfr = function() {
-            var c = document.createElement("script"),
-                getScript = cG.agent("./" + dir + "script.json"),
-                getDecor = cG.agent("./" + tir + "decor.html");
-            getScript.then(function(c) {
+            var c = document.createElement("script");
+            cG.REPO.scReq.getScript = cG.agent("./" + dir + "script.json"),
+            cG.REPO.scReq.getDecor = cG.agent("./" + tir + "decor.html");
+            cG.REPO.scReq.getScript.then(function(c) {
                 void 0 === cG.REPO.script ? cG.REPO.script = {
                     def: c
                 } : cG.REPO.script.def = c, cG.script = cG.REPO.script.def
@@ -32,7 +32,7 @@
                 console.error(c, e.status), void 0 === cG.REPO.script ? cG.REPO.script = {
                     def: 0
                 } : cG.REPO.script.def = c, cG.script = cG.REPO.script.def
-            }), getDecor.then(function(c) {
+            }), cG.REPO.scReq.getDecor.then(function(c) {
                 void 0 === cG.REPO.decor ? cG.REPO.decor = {
                     def: c
                 } : cG.REPO.decor.def = c, cG.decor = cG.REPO.decor.def

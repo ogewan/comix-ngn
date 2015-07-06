@@ -25,11 +25,11 @@ Order: before comixNgn.js
         else $GPC++;
         var cG = {/*comic-ng pre everything here will be overwritten*/
             agent: function(t,e){return e=new XMLHttpRequest,e.open("GET",t),t=[],e.onreadystatechange=e.then=function(n,o,i){if(n&&n.call&&(t=[,n,o]),4==e.readyState&&(i=t[0|e.status/200]))try{i(JSON.parse(e.responseText),e)}catch(r){i(e.responseText,e)}},e.send(),e},
-            REPO: {}
+            REPO: {scReq:{}}
         };
-        var getScript = cG.agent(dir+'script.json'),
-            getDecor = cG.agent(tir+'decor.html');
-        getScript.then(
+        cG.REPO.scReq.getScript = cG.agent(dir+'script.json'),
+        cG.REPO.scReq.getDecor = cG.agent(tir+'decor.html');
+        cG.REPO.scReq.getScript.then(
             function(data, xhr) {
                 if(void 0===cG.REPO.script) cG.REPO.script = {def:data};
                 else cG.REPO.script.def = data;
@@ -41,7 +41,7 @@ Order: before comixNgn.js
                 else cG.REPO.script.def = data;
                 cG.script = cG.REPO.script.def;
             });
-        getDecor.then(
+        cG.REPO.scReq.getDecor.then(
             function(data, xhr) {
                 if(void 0===cG.REPO.decor) cG.REPO.decor = {def:data};
                 else cG.REPO.decor.def = data;
