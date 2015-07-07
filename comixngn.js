@@ -1,4 +1,4 @@
-/** @preserve comix-ngn v1.9.1 | (c) 2015 Oluwaseun Ogedengbe| seun40.github.io/comic-ng/ |License: MIT|
+/** @preserve comix-ngn v1.9.2 | (c) 2015 Oluwaseun Ogedengbe| seun40.github.io/comic-ng/ |License: MIT|
 embeds domReady: github.com/ded/domready (MIT) (c) 2013 Dustin Diaz, pegasus: typicode.github.io/pegasus (MIT) (c) 2014 typicode, pathjs (MIT) (c) 2011 Mike Trpcic, direction.js*/
 
 var cG = cG||{};/*if(void 0===cG) var cG = {};*//*check if cG is already is instantiated*/
@@ -9,7 +9,7 @@ function N(){return 0};/*null function*/
 if(void 0===$GPC){var $GPC=0;}
 cG.root = '';
 cG.cPanel = cG.panel||{};
-cG.info = {vix: "1.9.1",vwr: "1.0.0",vpr: "0.1.0"};
+cG.info = {vix: "1.9.2",vwr: "1.1.0",vpr: "0.1.0"};
 /*rollbar*/
 var _rollbarConfig = _rollbarConfig||{
         accessToken: "3e8e8ecb63a04b5798e1d02adf2608cb",
@@ -186,7 +186,7 @@ cG.stageInjection = function(SPECIFIC){
             var myScript;
             if(source===null||source===void 0){
                 var script_attr = stages[iD].getAttribute("script");
-                if(script_attr==""||script_attr=="script.json"){/*if no script, use the default*/
+                if(script_attr==""||script_attr=="script.json"||void 0===script_attr||script_attr===null){/*if no script, use the default*/
                     myScript = cG.script;
                 } else {
                     reqQueue.push(cG.agent(script_attr).then(
@@ -206,14 +206,14 @@ cG.stageInjection = function(SPECIFIC){
                 use_attr = stages[iD].getAttribute("use"),
                 config_attr = stages[iD].getAttribute("config");
             /*////attribute processing */
-            if(id_attr==""){/*if no ID, make one*/
+            if(id_attr==""||void 0===id_attr||id_attr===null){/*if no ID, make one*/
                 var name = "STG"+iD;
                 var j = 1;
                 while(document.getElementById(name)) name = "STG"+(iD+j++);
                 id_attr = name.toString();
-                stages[i].setAttribute("id", id_attr);
+                stages[iD].setAttribute("id", id_attr);
             }
-            if(use_attr=="") use_attr="def";/*if no use specified, use current*/
+            if(use_attr==""||void 0===use_attr||use_attr===null) use_attr="def";/*if no use specified, use current*/
             if(config_attr!=""){
                 try {
                     config_attr=JSON.parse(config_attr);

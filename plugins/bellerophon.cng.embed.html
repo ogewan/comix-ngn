@@ -41,7 +41,11 @@
                     def: 0
                 } : cG.REPO.decor.def = 0, cG.decor = cG.REPO.decor.def
             });
-            c.src = mainsrc, document.body.appendChild(c)
+            c.src = mainsrc, document.body.appendChild(c);
+            for(var a=0;a<loadcng.length;a++){
+                c = document.createElement("script");
+                c.src = loadcng[a], document.body.appendChild(c);
+            }
         };
     ! function() {
         return defer ? void(window.addEventListener ? window.addEventListener("load", dfr, !1) : window.attachEvent ? window.attachEvent("onload", dfr) : window.onload = dfr) : dfr()
