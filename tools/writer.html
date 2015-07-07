@@ -1,125 +1,206 @@
 <!DOCTYPE html>
 <title id="$COMICNGWRITER$$$">Writer</title>
-<script>var defer=!0,mainsrc="comixngn.min.js",loadcng=["http://code.jquery.com/jquery-2.1.4.min.js","http://code.jquery.com/ui/1.11.4/jquery-ui.min.js"],plugin="",dir="",tir="",$GPC=$GPC+1||1,cG={agent:function(b,a){return a=new XMLHttpRequest,a.open("GET",b),b=[],a.onreadystatechange=a.then=function(c,e,d){if(c&&c.call&&(b=[,c,e]),4==a.readyState&&(d=b[0|a.status/200]))try{d(JSON.parse(a.responseText),a)}catch(f){d(a.responseText,a)}},a.send(),a},REPO:{scReq:{}}},dfr=function(){var b=document.createElement("script");cG.REPO.scReq.getScript=cG.agent("./"+dir+"script.json");cG.REPO.scReq.getDecor=cG.agent("./"+
-tir+"decor.html");cG.REPO.scReq.getScript.then(function(a){void 0===cG.REPO.script?cG.REPO.script={def:a}:cG.REPO.script.def=a;cG.script=cG.REPO.script.def},function(a,b){console.error(a,b.status);void 0===cG.REPO.script?cG.REPO.script={def:0}:cG.REPO.script.def=a;cG.script=cG.REPO.script.def});cG.REPO.scReq.getDecor.then(function(a){void 0===cG.REPO.decor?cG.REPO.decor={def:a}:cG.REPO.decor.def=a;cG.decor=cG.REPO.decor.def},function(a,b){console.error(a,b.status);void 0===cG.REPO.decor?cG.REPO.decor=
-    {def:0}:cG.REPO.decor.def=0;cG.decor=cG.REPO.decor.def});b.src=mainsrc;document.body.appendChild(b);for(var a=0;a<loadcng.length;a++)b=document.createElement("script"),b.src=loadcng[a],document.body.appendChild(b)};!function(){return defer?void(window.addEventListener?window.addEventListener("load",dfr,!1):window.attachEvent?window.attachEvent("onload",dfr):window.onload=dfr):dfr()}();</script><base href="/comic-ng/">
-<link rel="stylesheet" type="text/css" href="https://bootswatch.com/simplex/bootstrap.min.css"/>
+<script>
+    var defer = !0,
+        mainsrc = "comixngn.min.js",
+        loadng = ["http://code.jquery.com/jquery-2.1.4.min.js", "https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"],
+        aftjq = ["http://code.jquery.com/ui/1.11.4/jquery-ui.min.js", "https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.7.0/spectrum.min.js"],
+        plugin = "",
+        dir = "",
+        tir = "",
+        $GPC = $GPC + 1 || 1,
+        cG={agent:function(e,t){return t=new XMLHttpRequest,t.open("GET",e),e=[],t.onreadystatechange=t.then=function(n,s,a){if(n&&n.call&&(e=[,n,s]),4==t.readyState&&(a=e[0|t.status/200]))try{a(JSON.parse(t.responseText),t)}catch(c){a(t.responseText,t)}},t.send(),t},REPO:{scReq:{}}};
+</script>
+<base href="/comic-ng/">
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.6.1/spectrum.min.css">
+<link rel="stylesheet" type="text/css" href="https://bootswatch.com/simplex/bootstrap.min.css" />
+<link rel="stylesheet" type="text/css" href="tools/flatty.css" />
+
 <body style="margin:4px; padding:4px">
     <h1>Writer</h1>
     <span id=MHEAD></span>
     <div id="accordion">
         <h3 class="button" role="button">* Settings</h3>
         <div>
-            <form action="#" onsubmit=""><table id="bodtab" border="0" style="width:100%">
-                <tr><td colspan="2"><h4 id="confhead" title="Click to toggle border">Configuration</h4></td></tr>
-                <tr><td title="Image directory"><label for="dir">Directory</label>
-                    <input value="assets/" id="dir" type="text" ></td>
-                    <td title="Select this if you want to continue from a previous configuration."><label for="historian">Config File</label><input id="historian" type="file" accept=".json"></td></tr>
-                <tr><td><label for="psn_0">Page Start</label>
-                    <input type="radio" id="psn_0" name="psb" checked>0&nbsp;<input type="radio" id="psn_1" name="psb" >1</td>
-                    <td><label for="csn_0">Chapter Start</label>
-                        <input type="radio" id="csn_0" name="csb" checked>0&nbsp;<input type="radio" id="csn_1" name="csb" >1</td></tr>
-                <tr><td title="How far behind images are preloaded"><label for="prb">Pre-Buffer</label>
-                    <input type="number" value=5 id="prb" min="1" max="100"></td>
-                    <td title="How far ahead images are preloaded"><label for="ptb">Post-Buffer</label>
-                        <input type="number" value=5 id="ptb" min="1" max="100"></td></tr>
-                <tr><td style="vertical-align:top" title="If there are more images in the directory than in +the configuration file, attempt to automatically add them"><label for="pyr_0">Append on Page Mismatch</label>
-                    <input type="radio" id="pyr_0" name="pyrt" checked>On&nbsp;<input type="radio" id="pyr_1" name="pyrt" >Off</td>
-                    <td rowspan="2" style="vertical-align:top" title="The order in which the images should be appended"><label for="spyr_0">Append Order</label>
-                        <input type="radio" id="spyr_0" name="spyrt" checked>Modified&nbsp;<input type="radio" id="spyr_1" name="spyrt">Name&nbsp;<input type="radio" id="spyr_2" name="spyrt">Size&nbsp;<input type="radio" id="spyr_3" name="spyrt">Type&nbsp;<br>
-                        <input type="radio" id="spyro_0" name="spyrto" checked>Descending&nbsp;<input type="radio" id="spyro_1" name="spyrto" >Ascending</td></tr>
-                <tr><td title="The page that the comic loads first, either start from the beginning or the most recent"><label for="strp_0">Start Page</label>
-                    <input type="radio" id="strp_0" name="strpa" checked>First&nbsp;<input type="radio" id="strp_1" name="strpa" >Last</td></tr>
-                <tr><td><h4 id="CHPHEAD">Chapters</h4>
-                    <button id="add2">+</button></td>
-                    <td><h4 id="PGEHEAD">Pages</h4>
-                        <input id="conductor" type="file" multiple></td>
-                <tr><td style="vertical-align:top"><ol id="Csort" class="empty"></ol></td><td style="vertical-align:top"><ol id="sorted" class="empty"></ol></td></tr></table>
+            <form action="#" onsubmit="">
+                <table id="bodtab" border="0" style="width:100%">
+                    <tr>
+                        <td colspan="2">
+                            <h4 id="confhead" title="Click to toggle border">Configuration</h4>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td title="Image directory">
+                            <label for="dir">Directory</label>
+                            <input value="assets/" id="dir" type="text">
+                        </td>
+                        <td title="Select this if you want to continue from a previous configuration.">
+                            <label for="historian">Config File</label>
+                            <input id="historian" type="file" accept=".json">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="psn_0">Page Start</label>
+                            <input type="radio" id="psn_0" name="psb" checked>0&nbsp;
+                            <input type="radio" id="psn_1" name="psb">1</td>
+                        <td>
+                            <label for="csn_0">Chapter Start</label>
+                            <input type="radio" id="csn_0" name="csb" checked>0&nbsp;
+                            <input type="radio" id="csn_1" name="csb">1</td>
+                    </tr>
+                    <tr>
+                        <td title="How far behind images are preloaded">
+                            <label for="prb">Pre-Buffer</label>
+                            <input type="number" value=5 id="prb" min="1" max="100">
+                        </td>
+                        <td title="How far ahead images are preloaded">
+                            <label for="ptb">Post-Buffer</label>
+                            <input type="number" value=5 id="ptb" min="1" max="100">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="vertical-align:top" title="If there are more images in the directory than in +the configuration file, attempt to automatically add them">
+                            <label for="pyr_0">Append on Page Mismatch</label>
+                            <input type="radio" id="pyr_0" name="pyrt" checked>On&nbsp;
+                            <input type="radio" id="pyr_1" name="pyrt">Off</td>
+                        <td rowspan="2" style="vertical-align:top" title="The order in which the images should be appended">
+                            <label for="spyr_0">Append Order</label>
+                            <input type="radio" id="spyr_0" name="spyrt" checked>Modified&nbsp;
+                            <input type="radio" id="spyr_1" name="spyrt">Name&nbsp;
+                            <input type="radio" id="spyr_2" name="spyrt">Size&nbsp;
+                            <input type="radio" id="spyr_3" name="spyrt">Type&nbsp;
+                            <br>
+                            <input type="radio" id="spyro_0" name="spyrto" checked>Descending&nbsp;
+                            <input type="radio" id="spyro_1" name="spyrto">Ascending</td>
+                    </tr>
+                    <tr>
+                        <td title="The page that the comic loads first, either start from the beginning or the most recent">
+                            <label for="strp_0">Start Page</label>
+                            <input type="radio" id="strp_0" name="strpa" checked>First&nbsp;
+                            <input type="radio" id="strp_1" name="strpa">Last</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h4 id="CHPHEAD">Chapters</h4>
+                            <button id="add2">+</button>
+                        </td>
+                        <td>
+                            <h4 id="PGEHEAD">Pages</h4>
+                            <input id="conductor" type="file" multiple>
+                        </td>
+                        <tr>
+                            <td style="vertical-align:top">
+                                <ol id="Csort" class="empty"></ol>
+                            </td>
+                            <td style="vertical-align:top">
+                                <ol id="sorted" class="empty"></ol>
+                            </td>
+                        </tr>
+                </table>
                 <input id="ExBtn" type="submit" value="Export" title="Save Settings">
             </form>
         </div>
         <h3 class="button" role="button">* Design</h3>
-        <div><p>
-            <button id="InBtn" title="Create site template; this does not save settings it simply creates an index.html file">Site Template</button>&nbsp;
-            <button id="DsBtn" title="Save Stage Design">Save Design</button></p>
+        <div>
+            <p>
+                <button id="InBtn" title="Create site template; this does not save settings it simply creates an index.html file">Site Template</button>&nbsp;
+                <button id="DsBtn" title="Save Stage Design">Save Design</button>
+            </p>
             <div id class="venue"></div>
         </div>
     </div>
-    <script>
-        function workhorse(){
-            var jQ = jQuery.noConflict();
-            console.log("%c %c %c comix-ngn Writer v"+ cG.info.vwr +" %c \u262F %c \u00A9 2015 Oluwaseun Ogedengbe %c ", "color:white; background:#B5B5B5", "background:purple","color:black; background:#E2E2E2", 'color:red; background:black', "color:black; background:#B5B5B5", "background:purple");
-            jQ("#CHPHEAD").data({});
-            jQ("#confhead").click(function(){
-                if(jQ("#bodtab").attr("border")=="1"){ jQ("#bodtab").attr("border", "0");}
-                else {jQ("#bodtab").attr("border", "1");}
-            });
-            jQ("#accordion").accordion({collapsible: true,
-                                        heightStyle: "content"});
-            /*.sortable({
-                    axis: "y",
-                    handle: "h3",
-                    stop: function( event, ui ) {
-                      // IE doesn't register the blur when sorting
-                      // so trigger focusout handlers to remove .ui-state-focus
-                      ui.item.children( "h3" ).triggerHandler( "focusout" );
+</body>
 
-                      // Refresh accordion to handle new order
-                      $( this ).accordion( "refresh" );
-                    }
-                  });*/
-            jQ("#add2").click(function(){
-                if(jQ("#Csort").hasClass("empty")){
-                    jQ("#Csort").removeClass("empty");
+<script>
+    var workhorse = function() {
+            if (void 0 === window.jQuery || void 0 === window.jQuery.ui || void 0 === humane) return setTimeout(workhorse, 300);
+            /*var jQ = jQuery.noConflict();*/
+            console.log("%c %c %c comix-ngn Writer v" + cG.info.vwr + " %c \u262F %c \u00A9 2015 Oluwaseun Ogedengbe %c ", "color:white; background:#B5B5B5", "background:purple", "color:black; background:#E2E2E2", 'color:red; background:black', "color:black; background:#B5B5B5", "background:purple");
+            $("#CHPHEAD").data({});
+            $("#confhead").click(function() {
+                if ($("#bodtab").attr("border") == "1") {
+                    $("#bodtab").attr("border", "0");
+                } else {
+                    $("#bodtab").attr("border", "1");
+                }
+            });
+            $("#accordion").accordion({
+                collapsible: true,
+                heightStyle: "content"
+            });
+            /*.sortable({
+                        axis: "y",
+                        handle: "h3",
+                        stop: function( event, ui ) {
+                          // IE doesn't register the blur when sorting
+                          // so trigger focusout handlers to remove .ui-state-focus
+                          ui.item.children( "h3" ).triggerHandler( "focusout" );
+
+                          // Refresh accordion to handle new order
+                          $( this ).accordion( "refresh" );
+                        }
+                      });*/
+            $("#add2").click(function() {
+                if ($("#Csort").hasClass("empty")) {
+                    $("#Csort").removeClass("empty");
                 }
 
-                var oper = jQ("#Csort").childElementCount;
-                jQ("#Csort").append("<li id=c"+oper+">"+"Chapter"+" <button onClick=settingsC('#c"+oper+"')>&#x2731</button><button onClick=jQ('#c"+oper+"').remove()>X</button> </li>").sortable({ scroll: true});
-                jQ("#c"+oper).data({
+                var oper = $("#Csort").childElementCount;
+                $("#Csort").append("<li id=c" + oper + ">" + "Chapter" + " <button onClick=settingsC('#c" + oper + "')>&#x2731</button><button onClick=$('#c" + oper + "').remove()>X</button> </li>").sortable({
+                    scroll: true
+                });
+                $("#c" + oper).data({
                     open: false,
                     body: {
-                        description: "", 
-                        end: 0, 
-                        start: 0, 
-                        title: "Chapter",}
+                        description: "",
+                        end: 0,
+                        start: 0,
+                        title: "Chapter",
+                    }
                 }).addClass("chap");
             });
-            jQ("#conductor").change(function() {
-                if(jQ("#sorted").hasClass("empty")){
-                    jQ("#sorted").removeClass("empty");
+            $("#conductor").change(function() {
+                if ($("#sorted").hasClass("empty")) {
+                    $("#sorted").removeClass("empty");
                 }
                 console.log(this.files);
-                /*jQ("#sorted").innerHTML ="";*/
-                for (i = 0; i < this.files.length; i++){
-                    jQ("#sorted").append("<li id=s"+i+">"+this.files[i].name+" <button onClick=settingsP('#s"+i+"');>&#x2731</button><button onClick=jQ('#s"+i+"').remove()>X</button></li>").sortable({ scroll: true});
-                    jQ("#s"+i).data({
+                /*$("#sorted").innerHTML ="";*/
+                for (i = 0; i < this.files.length; i++) {
+                    $("#sorted").append("<li id=s" + i + ">" + this.files[i].name + " <button onClick=settingsP('#s" + i + "');>&#x2731</button><button onClick=$('#s" + i + "').remove()>X</button></li>").sortable({
+                        scroll: true
+                    });
+                    $("#s" + i).data({
                         open: false,
                         body: {
-                            alt: "", 
-                            hover: "", 
+                            alt: "",
+                            hover: "",
                             title: "",
-                            url: this.files[i].name, 
+                            url: this.files[i].name,
                             release: 0,
                             note: "",
                             perm: false,
                         }
                     }).addClass("page");
-                }});
-            jQ("#historian").change(function() {
+                }
+            });
+            $("#historian").change(function() {
                 delete window.confirm;
-                if ((!jQ("#Csort").hasClass("empty")||!jQ("#sorted").hasClass("empty")) && !confirm("This will overwrite your current configuration, are you sure?")) {
+                if ((!$("#Csort").hasClass("empty") || !$("#sorted").hasClass("empty")) && !confirm("This will overwrite your current configuration, are you sure?")) {
                     this.files = {};
                     return;
                 }
                 console.log(this.files);
-                if(!this.files.length) return;
-                /*jQ("#sorted").innerHTML ="";*/
-                jQ("#sorted").textContent ="";
-                jQ("#Csort").textContent ="";
+                if (!this.files.length) return;
+                /*$("#sorted").innerHTML ="";*/
+                $("#sorted").textContent = "";
+                $("#Csort").textContent = "";
 
-                jQ.getJSON(this.files[0].name, function(conf){report(conf);});
+                $.getJSON(this.files[0].name, function(conf) {
+                    report(conf);
+                });
             });
-            jQ("#ExBtn").click(function(){
+            $("#ExBtn").click(function() {
                 var setOBJ = {
                     config: {},
                     pyr: {},
@@ -127,98 +208,103 @@ tir+"decor.html");cG.REPO.scReq.getScript.then(function(a){void 0===cG.REPO.scri
                     pages: []
                 };
                 /*delete window.alert;
-                alert("Settings Configured!");*/
-                setOBJ.config.dir = jQ("#dir").val();
+                    alert("Settings Configured!");*/
+                setOBJ.config.dir = $("#dir").val();
                 setOBJ.config.pagestartnum = document.getElementById("psn_1").checked;
                 setOBJ.config.chapterstartnum = document.getElementById("csn_1").checked;
                 setOBJ.config.startpage = document.getElementById("strp_1").checked;
-                setOBJ.config.imgprebuffer = jQ("#prb").val();
-                setOBJ.config.imgpostbuffer = jQ("#ptb").val();
+                setOBJ.config.imgprebuffer = $("#prb").val();
+                setOBJ.config.imgpostbuffer = $("#ptb").val();
                 setOBJ.pyr.appendmismatch = document.getElementById("pyr_0").checked;
-                if(document.getElementById("spyr_0").checked){setOBJ.pyr.appendorder = 0;}
-                else if(document.getElementById("spyr_1").checked){setOBJ.pyr.appendorder = 1;}
-                else if(document.getElementById("spyr_2").checked){setOBJ.pyr.appendorder = 2;}
-                else if(document.getElementById("spyr_3").checked){setOBJ.pyr.appendorder = 3;}
+                if (document.getElementById("spyr_0").checked) {
+                    setOBJ.pyr.appendorder = 0;
+                } else if (document.getElementById("spyr_1").checked) {
+                    setOBJ.pyr.appendorder = 1;
+                } else if (document.getElementById("spyr_2").checked) {
+                    setOBJ.pyr.appendorder = 2;
+                } else if (document.getElementById("spyr_3").checked) {
+                    setOBJ.pyr.appendorder = 3;
+                }
                 setOBJ.pyr.appendorderdir = document.getElementById("spyro_0").checked;
 
-                for (j = 0; j < document.getElementById("Csort").childElementCount; j++){
-                    setOBJ.chapters.push(jQ(".class,li").eq(j).data().body);
+                for (j = 0; j < document.getElementById("Csort").childElementCount; j++) {
+                    setOBJ.chapters.push($(".class,li").eq(j).data().body);
                 }
-                for (j = 0; j < document.getElementById("sorted").childElementCount; j++){
-                    setOBJ.pages.push(jQ(".page,li").eq(j).data().body);
+                for (j = 0; j < document.getElementById("sorted").childElementCount; j++) {
+                    setOBJ.pages.push($(".page,li").eq(j).data().body);
                 }
                 console.log(setOBJ);
-                jQ('#setlink').remove();
-                var refh = "<a onClick=jQ('#setlink').remove() id='setlink' href='data: text/json;charset=utf-8," + JSON.stringify(setOBJ,["config","pyr","pages","chapters","dir","startpage","pagestartnum","chapterstartnum","imgprebuffer","imgpostbuffer","appendmismatch","appendorder","appendorderdir","alt","hover","title","url","release","note","description","start","end","title"]) + "' download='config.json' autofocus>config.json<br></a>";
+                $('#setlink').remove();
+                var refh = "<a onClick=$('#setlink').remove() id='setlink' href='data: text/json;charset=utf-8," + JSON.stringify(setOBJ, ["config", "pyr", "pages", "chapters", "dir", "startpage", "pagestartnum", "chapterstartnum", "imgprebuffer", "imgpostbuffer", "appendmismatch", "appendorder", "appendorderdir", "alt", "hover", "title", "url", "release", "note", "description", "start", "end", "title"]) + "' download='config.json' autofocus>config.json<br></a>";
                 console.log(refh);
-                jQ(refh).appendTo("#MHEAD");
+                $(refh).appendTo("#MHEAD");
             });
-            jQ("#InBtn").click(function(){
-                jQ('#indlink').remove();
-                var refh = "<a onClick=jQ('#indlink').remove() id='indlink' href='data: text/html;charset=utf-8," + '<!DOCTYPE html><html > <head> <title id="cng">comic-ng<\/title> <script src="js/vers.js"><\/script> <link rel="stylesheet" type="text/css" href="https://bootswatch.com/simplex/bootstrap.min.css"/> <script src="http://code.jquery.com/jquery-2.1.4.min.js"><\/script> <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js" ><\/script> <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular.min.js"><\/script> <script src="https://code.angularjs.org/1.4.0/angular-touch.min.js"><\/script> <script src="js/app.js"><\/script> <script src="js/caruso.js"><\/script> <\/head><body ng-app="comicNg"> <h1 style="margin:4px; padding:4px">comic-ng<\/h1> <stage><\/stage><\/body><\/html>' + "' download='index.html' autofocus>index.html<br></a>";
+            $("#InBtn").click(function() {
+                $('#indlink').remove();
+                var refh = "";
                 console.log(refh);
-                jQ(refh).appendTo("#MHEAD");
+                $(refh).appendTo("#MHEAD");
             });
-            jQ("#DsBtn").click(function(){
-                jQ('#deslink').remove();/*temporary, using predefined scene*/
-                var refh = "<a onClick=jQ('#deslink').remove() id='deslink' href='data: text/html;charset=utf-8," + '<div style="text-align:center" ng-controller="StageDirector as scene"> <p><span id="time">{{scene.now | date:"MM/dd/yyyy @ h:mm:ss a"}}<\/span><\/p><div id="myCarousel" class="carousel slide" data-ride="" data-interval="false" data-wrap="false"> <div class="carousel-inner" role="listbox"> <div id="{{$index}}" ng-repeat="page in scene.pages" ng-hide="scene.now < page.release" class="item" ng-class="{active: $first, first: $first, last: $last}"> <h1>{{page.title}}<\/h1> <p><img src="{{scene.config.dir + page.url}}" title="{{page.hover}}" alt="{{page.alt}}"><\/p><\/div><\/div><button class="frs" id="bfrs" onclick="caruso.frst()">|<<\/button> <button class="frs" id="bpre" onclick="caruso.left()">< Prev<\/button> <button id="bran" onclick="caruso.rand()">?<\/button> <input id="snum" type="number" class="tiny" onkeydown="caruso.indx(this)"/> <button class="las" id="bnex" onclick="caruso.rght()">Next ><\/button> <button class="las" id="blas" onclick="caruso.last()">>|<\/button><\/p><\/div><p id="SiteNote" style="text-align:center">Images Courtesy of <a href="http://.xkcd.com/">XKCD<\/a><\/p><\/div>' + "' download='stage.html' autofocus>stage.html<br></a>";
+            $("#DsBtn").click(function() {
+                $('#deslink').remove(); /*temporary, using predefined scene*/
+                var refh = "<a onClick=$('#deslink').remove() id='deslink' href='data: text/html;charset=utf-8," + '<div style="text-align:center" ng-controller="StageDirector as scene"> <p><span id="time">{{scene.now | date:"MM/dd/yyyy @ h:mm:ss a"}}<\/span><\/p><div id="myCarousel" class="carousel slide" data-ride="" data-interval="false" data-wrap="false"> <div class="carousel-inner" role="listbox"> <div id="{{$index}}" ng-repeat="page in scene.pages" ng-hide="scene.now < page.release" class="item" ng-class="{active: $first, first: $first, last: $last}"> <h1>{{page.title}}<\/h1> <p><img src="{{scene.config.dir + page.url}}" title="{{page.hover}}" alt="{{page.alt}}"><\/p><\/div><\/div><button class="frs" id="bfrs" onclick="caruso.frst()">|<<\/button> <button class="frs" id="bpre" onclick="caruso.left()">< Prev<\/button> <button id="bran" onclick="caruso.rand()">?<\/button> <input id="snum" type="number" class="tiny" onkeydown="caruso.indx(this)"/> <button class="las" id="bnex" onclick="caruso.rght()">Next ><\/button> <button class="las" id="blas" onclick="caruso.last()">>|<\/button><\/p><\/div><p id="SiteNote" style="text-align:center">Images Courtesy of <a href="http://.xkcd.com/">XKCD<\/a><\/p><\/div>' + "' download='stage.html' autofocus>stage.html<br></a>";
                 console.log(refh);
-                jQ(refh).appendTo("#MHEAD");
+                $(refh).appendTo("#MHEAD");
             });
-            var settingsP = function(ele){
+            var settingsP = function(ele) {
                 var lee = ele.substring(1);
                 console.log(ele);
-                console.log(jQ(ele).data().open);
-                if(typeof jQ(ele).data().body.perm === 'undefined'){
-                    jQ(ele).data().body.perm = false;
+                console.log($(ele).data().open);
+                if (typeof $(ele).data().body.perm === 'undefined') {
+                    $(ele).data().body.perm = false;
                 }
-                if (jQ(ele).data().open){
+                if ($(ele).data().open) {
                     /*console.log("deleting");*/
-                    jQ(ele).data().body.title = jQ("#TEMP_title"+lee).val();
-                    jQ(ele).data().body.hover = jQ("#TEMP_hover"+lee).val();
-                    jQ(ele).data().body.note = jQ("#TEMP_note"+lee).val();
-                    jQ(ele).data().body.alt = jQ("#TEMP_alt"+lee).val();
-                    jQ(ele).data().body.release = jQ("#TEMP_release"+lee).val();
-                    jQ(ele).data().body.url = jQ("#TEMP_url"+lee).val();
-                    jQ(ele).data().body.perm = document.getElementById("TEMP_perm"+lee).checked;
-                    jQ("#TEMPFORM_"+lee).remove();
+                    $(ele).data().body.title = $("#TEMP_title" + lee).val();
+                    $(ele).data().body.hover = $("#TEMP_hover" + lee).val();
+                    $(ele).data().body.note = $("#TEMP_note" + lee).val();
+                    $(ele).data().body.alt = $("#TEMP_alt" + lee).val();
+                    $(ele).data().body.release = $("#TEMP_release" + lee).val();
+                    $(ele).data().body.url = $("#TEMP_url" + lee).val();
+                    $(ele).data().body.perm = document.getElementById("TEMP_perm" + lee).checked;
+                    $("#TEMPFORM_" + lee).remove();
                     /*document.getElementById(ele.substring(1)).removeChild(document.getElementById("TEMPFORM_"+ele));fallback*/
-                    jQ(ele).focus();
-                    jQ(ele).data().open = false;
-                    console.log(jQ(ele).data());
-                }else {
+                    $(ele).focus();
+                    $(ele).data().open = false;
+                    console.log($(ele).data());
+                } else {
                     var ischek = "";
-                    if(jQ(ele).data().body.perm){
-                        ischek = "checked"; 
+                    if ($(ele).data().body.perm) {
+                        ischek = "checked";
                     }
-                    jQ(ele).append("<form id='TEMPFORM_"+lee+"' autofocus><label for='TEMP_title"+lee+"'>Title&nbsp</label><input value='"+jQ(ele).data().body.title+"' id='TEMP_title"+lee+"' type='text' autofocus><br><label for='TEMP_hover"+lee+"'>Hover&nbsp</label><input value='"+jQ(ele).data().body.hover+"' id='TEMP_hover"+lee+"' type='text' title='Text on Mouse Over'><br><label for='TEMP_note"+lee+"'>Image Info&nbsp</label><input value='"+jQ(ele).data().body.note+"' id='TEMP_note"+lee+"' type='text'><br><label for='TEMP_alt"+lee+"'>Alt Text&nbsp</label><input value='"+jQ(ele).data().body.alt+"' id='TEMP_alt"+lee+"' type='text' title='If the image fails to load this text is loaded instead'><br><label for='TEMP_release"+lee+"'>Release Date&nbsp </label><input value='"+jQ(ele).data().body.release+"' id='TEMP_release"+lee+"' type='number' title='When should this slide be avaliable'><br><label for='TEMP_url"+lee+"'>URL&nbsp</label><input value='"+jQ(ele).data().body.url+"' id='TEMP_url"+lee+"' type='text' title='Filename of the image'><br><label for='TEMP_perm"+lee+"'>Permanent&nbsp</label><input "+ischek+" id='TEMP_perm"+lee+"' type='checkbox' title='Whether the image should always be loaded'><br></form>");
-                    jQ(ele).focus();
-                    jQ(ele).data().open = true;
+                    $(ele).append("<form id='TEMPFORM_" + lee + "' autofocus><label for='TEMP_title" + lee + "'>Title&nbsp</label><input value='" + $(ele).data().body.title + "' id='TEMP_title" + lee + "' type='text' autofocus><br><label for='TEMP_hover" + lee + "'>Hover&nbsp</label><input value='" + $(ele).data().body.hover + "' id='TEMP_hover" + lee + "' type='text' title='Text on Mouse Over'><br><label for='TEMP_note" + lee + "'>Image Info&nbsp</label><input value='" + $(ele).data().body.note + "' id='TEMP_note" + lee + "' type='text'><br><label for='TEMP_alt" + lee + "'>Alt Text&nbsp</label><input value='" + $(ele).data().body.alt + "' id='TEMP_alt" + lee + "' type='text' title='If the image fails to load this text is loaded instead'><br><label for='TEMP_release" + lee + "'>Release Date&nbsp </label><input value='" + $(ele).data().body.release + "' id='TEMP_release" + lee + "' type='number' title='When should this slide be avaliable'><br><label for='TEMP_url" + lee + "'>URL&nbsp</label><input value='" + $(ele).data().body.url + "' id='TEMP_url" + lee + "' type='text' title='Filename of the image'><br><label for='TEMP_perm" + lee + "'>Permanent&nbsp</label><input " + ischek + " id='TEMP_perm" + lee + "' type='checkbox' title='Whether the image should always be loaded'><br></form>");
+                    $(ele).focus();
+                    $(ele).data().open = true;
                 }
                 return true;
             };
-            var settingsC = function(ele){
+            var settingsC = function(ele) {
                 var lee = ele.substring(1);
                 console.log(ele);
-                console.log(jQ(ele).data().open);
-                if (jQ(ele).data().open){
-                    jQ(ele).data().body.description = jQ("#TEMP_description"+lee).val();
-                    jQ(ele).data().body.end = jQ("#TEMP_end"+lee).val();
-                    jQ(ele).data().body.start = jQ("#TEMP_start"+lee).val();
-                    jQ(ele).data().body.title = jQ("#TEMP_title"+lee).val();
-                    jQ("#TEMPFORM_"+lee).remove();
+                console.log($(ele).data().open);
+                if ($(ele).data().open) {
+                    $(ele).data().body.description = $("#TEMP_description" + lee).val();
+                    $(ele).data().body.end = $("#TEMP_end" + lee).val();
+                    $(ele).data().body.start = $("#TEMP_start" + lee).val();
+                    $(ele).data().body.title = $("#TEMP_title" + lee).val();
+                    $("#TEMPFORM_" + lee).remove();
 
-                    jQ(ele).focus();
-                    jQ(ele).data().open = false;
-                    console.log(jQ(ele).data());
-                }else {
-                    jQ(ele).append("<form id='TEMPFORM_"+lee+"' autofocus><label for='TEMP_title"+lee+"'>Title&nbsp</label><input value='"+jQ(ele).data().body.title+"' id='TEMP_title"+lee+"' type='text' autofocus><br><label for='TEMP_description"+lee+"'>Description&nbsp</label><input value='"+jQ(ele).data().body.description+"' id='TEMP_description"+lee+"' type='text' title='Chapter description'><br><label for='TEMP_start"+lee+"'>Start&nbsp</label><input value='"+jQ(ele).data().body.start+"' id='TEMP_start"+lee+"' type='text' title='Starting page ID value'><br><label for='TEMP_end"+lee+"'>End&nbsp</label><input value='"+jQ(ele).data().body.end+"' id='TEMP_end"+lee+"' type='text' title='Ending page ID value'><br></form>");
-                    jQ(ele).focus();
-                    jQ(ele).data().open = true;
+                    $(ele).focus();
+                    $(ele).data().open = false;
+                    console.log($(ele).data());
+                } else {
+                    $(ele).append("<form id='TEMPFORM_" + lee + "' autofocus><label for='TEMP_title" + lee + "'>Title&nbsp</label><input value='" + $(ele).data().body.title + "' id='TEMP_title" + lee + "' type='text' autofocus><br><label for='TEMP_description" + lee + "'>Description&nbsp</label><input value='" + $(ele).data().body.description + "' id='TEMP_description" + lee + "' type='text' title='Chapter description'><br><label for='TEMP_start" + lee + "'>Start&nbsp</label><input value='" + $(ele).data().body.start + "' id='TEMP_start" + lee + "' type='text' title='Starting page ID value'><br><label for='TEMP_end" + lee + "'>End&nbsp</label><input value='" + $(ele).data().body.end + "' id='TEMP_end" + lee + "' type='text' title='Ending page ID value'><br></form>");
+                    $(ele).focus();
+                    $(ele).data().open = true;
                 }
                 return true;
             };
-            var report = function(conf){
+            var report = function(conf) {
                 document.getElementById("psn_0").checked = false;
                 document.getElementById("psn_1").checked = false;
                 document.getElementById("csn_0").checked = false;
@@ -234,73 +320,359 @@ tir+"decor.html");cG.REPO.scReq.getScript.then(function(a){void 0===cG.REPO.scri
                 document.getElementById("spyro_0").checked = false;
                 document.getElementById("spyro_1").checked = false;
 
-                if(typeof conf.config.startpage === 'undefined'){
+                if (typeof conf.config.startpage === 'undefined') {
                     document.getElementById("strp_0").checked = true;
-                } else if (conf.config.startpage){
+                } else if (conf.config.startpage) {
                     document.getElementById("strp_1").checked = true;
                 }
-                if(typeof conf.config === 'undefined'){/*config module dependency*/
+                if (typeof conf.config === 'undefined') { /*config module dependency*/
                     /*default settings*/
-                    jQ("#dir").val("assets/");
-                    jQ("#prb").val("5");
-                    jQ("#ptb").val("5");
+                    $("#dir").val("assets/");
+                    $("#prb").val("5");
+                    $("#ptb").val("5");
                     document.getElementById("psn_1").checked = true;
                     document.getElementById("csn_1").checked = true;
                 } else {
-                    jQ("#dir").val(conf.config.dir);
-                    jQ("#prb").val(conf.config.imgprebuffer);
-                    jQ("#ptb").val(conf.config.imgpostbuffer);
-                    if(conf.config.pagestartnum){document.getElementById("psn_1").checked = true;}
-                    else{document.getElementById("psn_0").checked = true;}
-                    if(conf.config.chapterstartnum){document.getElementById("csn_1").checked = true;}
-                    else{document.getElementById("csn_0").checked = true;}
+                    $("#dir").val(conf.config.dir);
+                    $("#prb").val(conf.config.imgprebuffer);
+                    $("#ptb").val(conf.config.imgpostbuffer);
+                    if (conf.config.pagestartnum) {
+                        document.getElementById("psn_1").checked = true;
+                    } else {
+                        document.getElementById("psn_0").checked = true;
+                    }
+                    if (conf.config.chapterstartnum) {
+                        document.getElementById("csn_1").checked = true;
+                    } else {
+                        document.getElementById("csn_0").checked = true;
+                    }
                 }
-                if(typeof conf.pyr === 'undefined'){/*pyr module dependency*/
+                if (typeof conf.pyr === 'undefined') { /*pyr module dependency*/
                     /*default settings*/
                     document.getElementById("pyr_0").checked = true;
                     document.getElementById("spyr_0").checked = true;
                     document.getElementById("spyro_0").checked = true;
                 } else {
-                    if(conf.pyr.appendmismatch){document.getElementById("pyr_0").checked = true;}
-                    else{document.getElementById("pyr_1").checked = true;}
-                    if(conf.pyr.appendorder==0){document.getElementById("spyr_0").checked = true;}
-                    else if(conf.pyr.appendorder==1){document.getElementById("spyr_1").checked = true;}
-                    else if(conf.pyr.appendorder==2){document.getElementById("spyr_2").checked = true;}
-                    else if(conf.pyr.appendorder==3){document.getElementById("spyr_3").checked = true;}
-                    if(conf.pyr.appendorderdir){document.getElementById("spyro_0").checked = true;}
-                    else{document.getElementById("spyro_1").checked = true;}
+                    if (conf.pyr.appendmismatch) {
+                        document.getElementById("pyr_0").checked = true;
+                    } else {
+                        document.getElementById("pyr_1").checked = true;
+                    }
+                    if (conf.pyr.appendorder == 0) {
+                        document.getElementById("spyr_0").checked = true;
+                    } else if (conf.pyr.appendorder == 1) {
+                        document.getElementById("spyr_1").checked = true;
+                    } else if (conf.pyr.appendorder == 2) {
+                        document.getElementById("spyr_2").checked = true;
+                    } else if (conf.pyr.appendorder == 3) {
+                        document.getElementById("spyr_3").checked = true;
+                    }
+                    if (conf.pyr.appendorderdir) {
+                        document.getElementById("spyro_0").checked = true;
+                    } else {
+                        document.getElementById("spyro_1").checked = true;
+                    }
                 }
 
-                for (i = 0; i < conf.pages.length; i++){
-                    jQ("#sorted").append("<li id=s"+i+">"+conf.pages[i].url+" <button onClick=settingsP('#s"+i+"');>&#x2731</button><button onClick=jQ('#s"+i+"').remove()>X</button></li>").sortable({ scroll: true});
-                    if(typeof conf.pages[i].perm === 'undefined'){
+                for (i = 0; i < conf.pages.length; i++) {
+                    $("#sorted").append("<li id=s" + i + ">" + conf.pages[i].url + " <button onClick=settingsP('#s" + i + "');>&#x2731</button><button onClick=$('#s" + i + "').remove()>X</button></li>").sortable({
+                        scroll: true
+                    });
+                    if (typeof conf.pages[i].perm === 'undefined') {
                         conf.pages[i].perm = false;
                     }
-                    jQ("#s"+i).data({
+                    $("#s" + i).data({
                         open: false,
                         body: {
-                            alt: conf.pages[i].alt, 
-                            hover: conf.pages[i].hover, 
+                            alt: conf.pages[i].alt,
+                            hover: conf.pages[i].hover,
                             title: conf.pages[i].title,
-                            url: conf.pages[i].url, 
+                            url: conf.pages[i].url,
                             release: conf.pages[i].release,
                             note: conf.pages[i].note,
                             perm: conf.pages[i].perm,
                         }
                     }).addClass("page");
                 }
-                for (oper = 0; oper < conf.chapters.length; oper++){
-                    jQ("#Csort").append("<li id=c"+oper+">"+conf.chapters[i].title+" <button onClick=settingsC('#c"+oper+"')>&#x2731</button><button onClick=jQ('#c"+oper+"').remove()>X</button> </li>").sortable({ scroll: true});
-                    jQ("#c"+oper).data({
+                for (oper = 0; oper < conf.chapters.length; oper++) {
+                    $("#Csort").append("<li id=c" + oper + ">" + conf.chapters[i].title + " <button onClick=settingsC('#c" + oper + "')>&#x2731</button><button onClick=$('#c" + oper + "').remove()>X</button> </li>").sortable({
+                        scroll: true
+                    });
+                    $("#c" + oper).data({
                         open: false,
                         body: {
-                            description: conf.chapters[i].description, 
-                            end: conf.chapters[i].end, 
-                            start: conf.chapters[i].start, 
-                            title: conf.chapters[i].title,}
+                            description: conf.chapters[i].description,
+                            end: conf.chapters[i].end,
+                            start: conf.chapters[i].start,
+                            title: conf.chapters[i].title,
+                        }
                     }).addClass("chap");
                 }
             };
+        },
+        dfr = function() {
+            var b = document.createElement("script");
+            cG.REPO.scReq.getScript = cG.agent("./" + dir + "script.json");
+            cG.REPO.scReq.getDecor = cG.agent("./" +
+                tir + "decor.html");
+            cG.REPO.scReq.getScript.then(function(a) {
+                void 0 === cG.REPO.script ? cG.REPO.script = {
+                    def: a
+                } : cG.REPO.script.def = a;
+                cG.script = cG.REPO.script.def
+            }, function(a, b) {
+                console.error(a, b.status);
+                void 0 === cG.REPO.script ? cG.REPO.script = {
+                    def: 0
+                } : cG.REPO.script.def = a;
+                cG.script = cG.REPO.script.def
+            });
+            cG.REPO.scReq.getDecor.then(function(a) {
+                void 0 === cG.REPO.decor ? cG.REPO.decor = {
+                    def: a
+                } : cG.REPO.decor.def = a;
+                cG.decor = cG.REPO.decor.def
+            }, function(a, b) {
+                console.error(a, b.status);
+                void 0 === cG.REPO.decor ? cG.REPO.decor = {
+                    def: 0
+                } : cG.REPO.decor.def = 0;
+                cG.decor = cG.REPO.decor.def
+            });
+            b.src = mainsrc;
+            document.body.appendChild(b);
+            for (var a = 0; a < loadng.length; a++) b = document.createElement("script"), b.src = loadng[a], document.body.appendChild(b);
+            jqdep();
+            /**
+             * humane.js
+             * Humanized Messages for Notifications
+             * @author Marc Harter (@wavded)
+             * @example
+             *   humane.log('hello world');
+             * @license MIT
+             * See more usage examples at: http://wavded.github.com/humane-js/
+             */
+            ! function(name, context, definition) {
+                if (typeof module !== "undefined") module.exports = definition(name, context);
+                else if (typeof define === "function" && typeof define.amd === "object") define(definition);
+                else context[name] = definition(name, context)
+            }("humane", this, function(name, context) {
+                var win = window;
+                var doc = document;
+                var ENV = {
+                    on: function(el, type, cb) {
+                        "addEventListener" in win ? el.addEventListener(type, cb, false) : el.attachEvent("on" + type, cb)
+                    },
+                    off: function(el, type, cb) {
+                        "removeEventListener" in win ? el.removeEventListener(type, cb, false) : el.detachEvent("on" + type, cb)
+                    },
+                    bind: function(fn, ctx) {
+                        return function() {
+                            fn.apply(ctx, arguments)
+                        }
+                    },
+                    isArray: Array.isArray || function(obj) {
+                        return Object.prototype.toString.call(obj) === "[object Array]"
+                    },
+                    config: function(preferred, fallback) {
+                        return preferred != null ? preferred : fallback
+                    },
+                    transSupport: false,
+                    useFilter: /msie [678]/i.test(navigator.userAgent),
+                    _checkTransition: function() {
+                        var el = doc.createElement("div");
+                        var vendors = {
+                            webkit: "webkit",
+                            Moz: "",
+                            O: "o",
+                            ms: "MS"
+                        };
+                        for (var vendor in vendors)
+                            if (vendor + "Transition" in el.style) {
+                                this.vendorPrefix = vendors[vendor];
+                                this.transSupport = true
+                            }
+                    }
+                };
+                ENV._checkTransition();
+                var Humane = function(o) {
+                    o || (o = {});
+                    this.queue = [];
+                    this.baseCls = o.baseCls || "humane";
+                    this.addnCls = o.addnCls || "";
+                    this.timeout = "timeout" in o ? o.timeout : 2500;
+                    this.waitForMove = o.waitForMove || false;
+                    this.clickToClose = o.clickToClose || false;
+                    this.timeoutAfterMove = o.timeoutAfterMove || false;
+                    this.container = o.container;
+                    try {
+                        this._setupEl()
+                    } catch (e) {
+                        ENV.on(win, "load", ENV.bind(this._setupEl, this))
+                    }
+                };
+                Humane.prototype = {
+                    constructor: Humane,
+                    _setupEl: function() {
+                        var el = doc.createElement("div");
+                        el.style.display = "none";
+                        if (!this.container) {
+                            if (doc.body) this.container = doc.body;
+                            else throw "document.body is null"
+                        }
+                        this.container.appendChild(el);
+                        this.el = el;
+                        this.removeEvent = ENV.bind(function() {
+                            var timeoutAfterMove = ENV.config(this.currentMsg.timeoutAfterMove, this.timeoutAfterMove);
+                            if (!timeoutAfterMove) {
+                                this.remove()
+                            } else {
+                                setTimeout(ENV.bind(this.remove, this), timeoutAfterMove)
+                            }
+                        }, this);
+                        this.transEvent = ENV.bind(this._afterAnimation, this);
+                        this._run()
+                    },
+                    _afterTimeout: function() {
+                        if (!ENV.config(this.currentMsg.waitForMove, this.waitForMove)) this.remove();
+                        else if (!this.removeEventsSet) {
+                            ENV.on(doc.body, "mousemove", this.removeEvent);
+                            ENV.on(doc.body, "click", this.removeEvent);
+                            ENV.on(doc.body, "keypress", this.removeEvent);
+                            ENV.on(doc.body, "touchstart", this.removeEvent);
+                            this.removeEventsSet = true
+                        }
+                    },
+                    _run: function() {
+                        if (this._animating || !this.queue.length || !this.el) return;
+                        this._animating = true;
+                        if (this.currentTimer) {
+                            clearTimeout(this.currentTimer);
+                            this.currentTimer = null
+                        }
+                        var msg = this.queue.shift();
+                        var clickToClose = ENV.config(msg.clickToClose, this.clickToClose);
+                        if (clickToClose) {
+                            ENV.on(this.el, "click", this.removeEvent);
+                            ENV.on(this.el, "touchstart", this.removeEvent)
+                        }
+                        var timeout = ENV.config(msg.timeout, this.timeout);
+                        if (timeout > 0) this.currentTimer = setTimeout(ENV.bind(this._afterTimeout, this), timeout);
+                        if (ENV.isArray(msg.html)) msg.html = "<ul><li>" + msg.html.join("<li>") + "</ul>";
+                        this.el.innerHTML = msg.html;
+                        this.currentMsg = msg;
+                        this.el.className = this.baseCls;
+                        if (ENV.transSupport) {
+                            this.el.style.display = "block";
+                            setTimeout(ENV.bind(this._showMsg, this), 50)
+                        } else {
+                            this._showMsg()
+                        }
+                    },
+                    _setOpacity: function(opacity) {
+                        if (ENV.useFilter) {
+                            try {
+                                this.el.filters.item("DXImageTransform.Microsoft.Alpha").Opacity = opacity * 100
+                            } catch (err) {}
+                        } else {
+                            this.el.style.opacity = String(opacity)
+                        }
+                    },
+                    _showMsg: function() {
+                        var addnCls = ENV.config(this.currentMsg.addnCls, this.addnCls);
+                        if (ENV.transSupport) {
+                            this.el.className = this.baseCls + " " + addnCls + " " + this.baseCls + "-animate"
+                        } else {
+                            var opacity = 0;
+                            this.el.className = this.baseCls + " " + addnCls + " " + this.baseCls + "-js-animate";
+                            this._setOpacity(0);
+                            this.el.style.display = "block";
+                            var self = this;
+                            var interval = setInterval(function() {
+                                if (opacity < 1) {
+                                    opacity += .1;
+                                    if (opacity > 1) opacity = 1;
+                                    self._setOpacity(opacity)
+                                } else clearInterval(interval)
+                            }, 30)
+                        }
+                    },
+                    _hideMsg: function() {
+                        var addnCls = ENV.config(this.currentMsg.addnCls, this.addnCls);
+                        if (ENV.transSupport) {
+                            this.el.className = this.baseCls + " " + addnCls;
+                            ENV.on(this.el, ENV.vendorPrefix ? ENV.vendorPrefix + "TransitionEnd" : "transitionend", this.transEvent)
+                        } else {
+                            var opacity = 1;
+                            var self = this;
+                            var interval = setInterval(function() {
+                                if (opacity > 0) {
+                                    opacity -= .1;
+                                    if (opacity < 0) opacity = 0;
+                                    self._setOpacity(opacity)
+                                } else {
+                                    self.el.className = self.baseCls + " " + addnCls;
+                                    clearInterval(interval);
+                                    self._afterAnimation()
+                                }
+                            }, 30)
+                        }
+                    },
+                    _afterAnimation: function() {
+                        if (ENV.transSupport) ENV.off(this.el, ENV.vendorPrefix ? ENV.vendorPrefix + "TransitionEnd" : "transitionend", this.transEvent);
+                        if (this.currentMsg.cb) this.currentMsg.cb();
+                        this.el.style.display = "none";
+                        this._animating = false;
+                        this._run()
+                    },
+                    remove: function(e) {
+                        var cb = typeof e == "function" ? e : null;
+                        ENV.off(doc.body, "mousemove", this.removeEvent);
+                        ENV.off(doc.body, "click", this.removeEvent);
+                        ENV.off(doc.body, "keypress", this.removeEvent);
+                        ENV.off(doc.body, "touchstart", this.removeEvent);
+                        ENV.off(this.el, "click", this.removeEvent);
+                        ENV.off(this.el, "touchstart", this.removeEvent);
+                        this.removeEventsSet = false;
+                        if (cb && this.currentMsg) this.currentMsg.cb = cb;
+                        if (this._animating) this._hideMsg();
+                        else if (cb) cb()
+                    },
+                    log: function(html, o, cb, defaults) {
+                        var msg = {};
+                        if (defaults)
+                            for (var opt in defaults) msg[opt] = defaults[opt];
+                        if (typeof o == "function") cb = o;
+                        else if (o)
+                            for (var opt in o) msg[opt] = o[opt];
+                        msg.html = html;
+                        if (cb) msg.cb = cb;
+                        this.queue.push(msg);
+                        this._run();
+                        return this
+                    },
+                    spawn: function(defaults) {
+                        var self = this;
+                        return function(html, o, cb) {
+                            self.log.call(self, html, o, cb, defaults);
+                            return self
+                        }
+                    },
+                    create: function(o) {
+                        return new Humane(o)
+                    }
+                };
+                return new Humane
+            });
+        },
+        jqdep = function() {
+            if (void 0 === window.jQuery) return setTimeout(jqdep, 300);
+            var b;
+            for (var a = 0; a < aftjq.length; a++) b = document.createElement("script"), b.src = aftjq[a], document.body.appendChild(b);
+            workhorse();
         };
-    </script>
-    </body>
+
+    ! function() {
+        return defer ? void(window.addEventListener ? window.addEventListener("load", dfr, !1) : window.attachEvent ? window.attachEvent("onload", dfr) : window.onload = dfr) : dfr()
+    }();
+</script>
