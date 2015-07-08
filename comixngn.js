@@ -9,7 +9,7 @@ function N(){return 0};/*null function*/
 if(void 0===$GPC){var $GPC=0;}
 cG.root = '';
 cG.cPanel = cG.panel||{};
-cG.info = {vix: "1.9.2",vwr: "1.1.5",vpr: "0.1.0"};
+cG.info = {vix: "1.9.2",vwr: "1.2.0",vpr: "0.1.0"};
 /*rollbar*/
 var _rollbarConfig = _rollbarConfig||{
         accessToken: "3e8e8ecb63a04b5798e1d02adf2608cb",

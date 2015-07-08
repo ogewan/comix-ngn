@@ -131,7 +131,7 @@ attribute to preload images but not implemented yet
 
 **1.9.2** Major bugfixes, including null and undefined property checking
 
-### comix-ngn Writer version 1.1.5 (beta)
+### comix-ngn Writer version 1.2.0 (beta)
 **0.5.0**: "Initial Setup, Versioning
 
 **0.8.0**: Huge implementations, Object config by dynamic form injection for Page and Chapter, Setting config compartmentalized, design config added
@@ -145,6 +145,8 @@ attribute to preload images but not implemented yet
 **1.1.0**: Setup for refactoring, all JS re-specified and deferred, js enclosed in closure
 
 **1.1.5**: Refactoring begun, all dependicies included and deferred, writer has been beautified for legibility, but there is now writer.min.html which is the compressed version
+
+**1.2.0**: Added spiner config, spinner needs to be refactor
 
 ### comix-ngn Pyoofreader Version 0.1.0 (beta)
 **0.1.0**: Implemented version, counts page dif and warns of Mismatch
