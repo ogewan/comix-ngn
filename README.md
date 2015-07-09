@@ -84,7 +84,7 @@ comix-ngn is
 **venue** - This class marks an element as a place for a stage to be imported. These are preferably divs. If the element does not have an id, it is given one automatically.
 
 ## Changelog
-### comix-ngn version 1.8.5 (beta)
+### comix-ngn version 1.9.2 (beta)
 **0.5.0**: Initial Setup, Version tracking
 
 **0.7.58**: Added Dependencies (JS): (jquery.min, angular-touch.min, angular.min[Update],bootstrap.min), Carousel for slides, real-time reactivity
@@ -127,7 +127,12 @@ attribute to preload images but not implemented yet
 
 **1.9.0**: Main file size reduced from 37.051 kB -> 25.56 kB, swipe replaced with direction, stage has been refactored into a constructor, script spec upgraded to v2, load speed appears slower but is still under 200 ms, new plug in added: swip.cng.js, code clean up and organization, direction handles preloading, but router needs to be re-enabled, stageinjection now simply wraps the constructor, need to add app page functionality however.
 
-### comix-ngn Writer version 1.0.0 (beta)
+**1.9.1** App pages added
+
+**1.9.2** Major bugfixes, including null and undefined property checking
+* addendum: bugfixes on direction js, properties are now more clear
+
+### comix-ngn Writer version 1.1.0 (beta)
 **0.5.0**: "Initial Setup, Versioning
 
 **0.8.0**: Huge implementations, Object config by dynamic form injection for Page and Chapter, Setting config compartmentalized, design config added
@@ -136,7 +141,9 @@ attribute to preload images but not implemented yet
 
 **0.9.6**: pyoofreader gets its own version, continue config fully implemented, cosmetic changes, now able to download a stage and a template index.html
 
-**1.0.0**: Ready for beta,
+**1.0.0**: Ready for beta
+
+**1.1.0**: Setup for refactoring, all JS re-specified and deferred, js enclosed in closure
 
 ### comix-ngn Pyoofreader Version 0.1.0 (beta)
 **0.1.0**: Implemented version, counts page dif and warns of Mismatch
