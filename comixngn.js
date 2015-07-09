@@ -8,7 +8,7 @@ var cG = cG||{};/*if(void 0===cG) var cG = {};*//*check if cG is already is inst
 function N(){return 0};/*null function*/
 if(void 0===$GPC){var $GPC=0;}
 cG.root = '';
-cG.cPanel = cG.panel||{};
+cG.cPanel = cG.cPanel||{};
 cG.info = {vix: "1.9.2",vwr: "1.2.0",vpr: "0.1.0"};
 /*rollbar*/
 var _rollbarConfig = _rollbarConfig||{
@@ -161,7 +161,7 @@ cG.stageInjection = function(SPECIFIC){
     if(cG.script === '' || cG.decor === '') {//although we don't need decor, if there is a template, we prioritize it
         /*if are stuff isn't ready yet we are going to wait for it*/
         setTimeout(cG.stageInjection, 300,SPECIFIC); 
-        return;
+        return cG.cPanel;
     }
     if(!cG.script) return console.error("No script.JSON found. script.JSON is REQUIRED to create any stage. Please create a script.JSON or move it to the directory specified in the script tag for comix-ngn or bellerophon if it is added.");
     var stages = [],
