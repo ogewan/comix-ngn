@@ -15,10 +15,9 @@
         "back":"#FFF",
     },
     "loading": {
-        "height": 250,
+        "diameter": 250,
         "lines": 16,
         "rate": 33.333333333333336,
-        "width": 250,
         "xpos": 0.5,
         "ypos": 0.5,
         "back":"#FFF",

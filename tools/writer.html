@@ -91,8 +91,7 @@
                                 <table>
                                     <tr>
                                         <td>
-                                            <label for="wid">Width</label> <input style="width:50px;" type="number" value=250 id="hgt" min="1">
-                                            <label for="hgt">Height</label> <input style="width:50px;" type="number" value=250 id="hgt" min="1"></td>
+                                            <label for="dia">Diameter</label> <input style="width:100px;" type="number" value=250 id="dia" min="1"></td>
                                         <td rowspan="8"><canvas id="custom_spin" class="center"></canvas></td>
                                     </tr>
                                     <tr>
@@ -155,38 +154,38 @@
         if (void 0 === window.jQuery || void 0 === window.jQuery.ui || void 0 === humane) return setTimeout(workhorse, 300);
         /*var jQ = jQuery.noConflict();*/
         console.log("%c %c %c comix-ngn Writer v" + cG.info.vwr + " %c \u262F %c \u00A9 2015 Oluwaseun Ogedengbe %c ", "color:white; background:#B5B5B5", "background:purple", "color:black; background:#E2E2E2", 'color:red; background:black', "color:black; background:#B5B5B5", "background:purple");
-        var spin = {start: Date.now(),
-                    lines:16,
-                    acH: 150,
-                    lines: 16,
-                    rate: 33.333333333333336,
-                    cW: 250,
-                    acW: 250,
-                    xpos: 0.5,
-                    ypos: 0.5,
-                    back:"#fff",
-                    color:"#373737",
-                    context: 
-                    document.getElementById("custom_spin").getContext("2d")},
-            fspin = function(){
+        var spin = {
+            start: Date.now(),
+            lines: 16,
+            rate: 33.333333333333336,
+            cwidth: 300,
+            cheight: 150,
+            diameter: 250,
+            xpos: 0.5,
+            ypos: 0.5,
+            back: "#000",
+            color: "#ff3737",
+            context: document.getElementById("custom_spin").getContext("2d")
+        },
+            fspin = function() {
                 $("#custom_spin").css("background",spin.back);
-                var rotation = Math.floor(((Date.now() - spin.start) / 1000) * spin.lines)/spin.lines,
+                var rotation = Math.floor(((Date.now() - spin.start) / 1000) * spin.lines) / spin.lines,
                     c = spin.color.substr(1);
                 spin.context.save();
-                spin.context.clearRect(0, 0, spin.acW, spin.acH);
-                spin.context.translate(spin.acW /2, spin.acH /2);
+                spin.context.clearRect(0, 0, spin.cwidth, spin.cheight);
+                spin.context.translate(spin.cwidth / 2, spin.cheight / 2);
                 spin.context.rotate(Math.PI * 2 * rotation);
-                if(c.length==3) c = c[0]+C[0]+c[1]+c[1]+c[2]+c[2];
-                var red = parseInt(c.substr(0,2),16).toString(),
-                    green = parseInt(c.substr(2,2),16).toString(),
-                    blue = parseInt(c.substr(4,2),16).toString();
+                if (c.length == 3) c = c[0] + C[0] + c[1] + c[1] + c[2] + c[2];
+                var red = parseInt(c.substr(0, 2), 16).toString(),
+                    green = parseInt(c.substr(2, 2), 16).toString(),
+                    blue = parseInt(c.substr(4, 2), 16).toString();
                 for (var i = 0; i < spin.lines; i++) {
                     spin.context.beginPath();
                     spin.context.rotate(Math.PI * 2 / spin.lines);
-                    spin.context.moveTo(spin.cW / 10, 0);
-                    spin.context.lineTo(spin.cW / 4, 0);    
-                    spin.context.lineWidth = spin.cW / 30;
-                    spin.context.strokeStyle = "rgba("+red+","+green+","+blue+"," + i / spin.lines + ")";
+                    spin.context.moveTo(spin.diameter / 10, 0);
+                    spin.context.lineTo(spin.diameter / 4, 0);
+                    spin.context.lineWidth = spin.diameter / 30;
+                    spin.context.strokeStyle = "rgba(" + red + "," + green + "," + blue + "," + i / spin.lines + ")";
                     spin.context.stroke();
                 }
                 spin.context.restore();
@@ -236,16 +235,14 @@
         window.setTimeout(fspin, spin.rate);
         var spinsetchange = function(){
             spin.lines = $("#lin").val();
-            spin.rate = $("#rat").val();/*
-            //spin.cW = $("#back_load").val();
-            //spin.acW = $("#back_load").val();*/
+            spin.rate = $("#rat").val();
+            spin.diameter = $("#dia").val();
             spin.xpos = $("#xpose").val();
             spin.ypos = $("#ypose").val();
         }
         $("#lin").change(spinsetchange);
-        $("#rat").change(spinsetchange);/*
-        //spin.cW = $("#back_load").val();
-        //spin.acW = $("#back_load").val();*/
+        $("#rat").change(spinsetchange);
+        $("#dia").change(spinsetchange);
         $("#xpose").change(spinsetchange);
         $("#ypose").change(spinsetchange);
         $("#back_load").change(spinsetchange);
