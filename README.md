@@ -84,7 +84,7 @@ comix-ngn is
 **venue** - This class marks an element as a place for a stage to be imported. These are preferably divs. If the element does not have an id, it is given one automatically.
 
 ## Changelog
-### comix-ngn version 1.9.2 (beta)
+### comix-ngn version 1.9.3 (beta)
 **0.5.0**: Initial Setup, Version tracking
 
 **0.7.58**: Added Dependencies (JS): (jquery.min, angular-touch.min, angular.min[Update],bootstrap.min), Carousel for slides, real-time reactivity
@@ -131,6 +131,8 @@ attribute to preload images but not implemented yet
 
 **1.9.2** Major bugfixes, including null and undefined property checking
 * addendum: bugfixes on direction js, properties are now more clear
+
+**1.9.3** New version of direction, bugfixes on direction
 
 ### comix-ngn Writer version 1.1.0 (beta)
 **0.5.0**: "Initial Setup, Versioning
