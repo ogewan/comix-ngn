@@ -1,4 +1,9 @@
 <!DOCTYPE html>
+<!--Changelog
+commented out: google analytics, jquery, json2, image tag
+added: comixngn, bellerophon preloader, deferred script to add onclick events to buttons after comix-ngn is loaded
+changed: title tag, added class"venue" to tag comic, added classes to buttons in comicNav, tag ctitle
+-->
 <html>
 <head>
 <link rel="stylesheet" type="text/css" href="http://xkcd.com/s/b0dcca.css" title="Default"/>
@@ -9,7 +14,7 @@
 <link rel="alternate" type="application/atom+xml" title="Atom 1.0" href="http://xkcd.com/atom.xml"/>
 <link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="http://xkcd.com/rss.xml"/>
 <script>/*DEFERRED COMIX-NGN*/
-var defer=!0,mainsrc="../comixngn.min.js",loadcng=[],plugin="",dir="",tir="",$GPC=$GPC+1||1,cG={agent:function(b,a){return a=new XMLHttpRequest,a.open("GET",b),b=[],a.onreadystatechange=a.then=function(c,e,d){if(c&&c.call&&(b=[,c,e]),4==a.readyState&&(d=b[0|a.status/200]))try{d(JSON.parse(a.responseText),a)}catch(f){d(a.responseText,a)}},a.send(),a},REPO:{scReq:{}}},dfr=function(){var b=document.createElement("script");cG.REPO.scReq.getScript=cG.agent("./"+dir+"script.json");cG.REPO.scReq.getDecor=cG.agent("./"+
+var defer=!0,mainsrc="../comixngn.min.js",loadcng=[],plugin="",dir="",tir="",$GPC=$GPC+1||1,cG={agent:function(b,a){return a=new XMLHttpRequest,a.open("GET",b),b=[],a.onreadystatechange=a.then=function(c,e,d){if(c&&c.call&&(b=[,c,e]),4==a.readyState&&(d=b[0|a.status/200]))try{d(JSON.parse(a.responseText),a)}catch(f){d(a.responseText,a)}},a.send(),a},REPO:{scReq:{}}},dfr=function(){imagedeffer();var b=document.createElement("script");cG.REPO.scReq.getScript=cG.agent("./"+dir+"script.json");cG.REPO.scReq.getDecor=cG.agent("./"+
 tir+"decor.html");cG.REPO.scReq.getScript.then(function(a){void 0===cG.REPO.script?cG.REPO.script={def:a}:cG.REPO.script.def=a;cG.script=cG.REPO.script.def},function(a,b){console.error(a,b.status);void 0===cG.REPO.script?cG.REPO.script={def:0}:cG.REPO.script.def=a;cG.script=cG.REPO.script.def});cG.REPO.scReq.getDecor.then(function(a){void 0===cG.REPO.decor?cG.REPO.decor={def:a}:cG.REPO.decor.def=a;cG.decor=cG.REPO.decor.def},function(a,b){console.error(a,b.status);void 0===cG.REPO.decor?cG.REPO.decor=
 {def:0}:cG.REPO.decor.def=0;cG.decor=cG.REPO.decor.def});b.src=mainsrc;document.body.appendChild(b)};!function(){return defer?void(window.addEventListener?window.addEventListener("load",dfr,!1):window.attachEvent?window.attachEvent("onload",dfr):window.onload=dfr):dfr()}();
 /**/
@@ -21,7 +26,31 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 ga('create', 'UA-25700708-7', 'auto');
 ga('send', 'pageview');*/
 </script>
-<!--<script type="text/javascript" src="//xkcd.com/1350/jquery.min.js"></script>
+<script>
+    var disposeme = function() {
+        //console.log("running");
+        if(cG===void 0) return setTimeout(disposeme, 400);
+        else if(cG.cPanel===void 0) return setTimeout(disposeme, 400);
+        else if(cG.cPanel.def_0===void 0) return setTimeout(disposeme, 400);
+        var q=document.getElementsByClassName("frst"),
+            w=document.getElementsByClassName("prev"),
+            e=document.getElementsByClassName("rand"),
+            r=document.getElementsByClassName("next"),
+            t=document.getElementsByClassName("last");
+        //console.log(q,w,e,r,t,cG.cPanel.def_0.main);
+        for(var y=0;y<q.length;y++) q[y].addEventListener("click", cG.cPanel.def_0.main.frst);
+        for(var y=0;y<w.length;y++) w[y].addEventListener("click", cG.cPanel.def_0.main.prev);
+        for(var y=0;y<e.length;y++) e[y].addEventListener("click", cG.cPanel.def_0.main.rand);
+        for(var y=0;y<r.length;y++) r[y].addEventListener("click", cG.cPanel.def_0.main.next);
+        for(var y=0;y<t.length;y++) t[y].addEventListener("click", cG.cPanel.def_0.main.last);
+        //console.log("complete");
+    }
+    var imagedeffer = function() {
+        document.getElementById("te-news").src="http://imgs.xkcd.com/store/te-news.png";
+    }
+    disposeme();
+</script>
+    <!--<script type="text/javascript" src="//xkcd.com/1350/jquery.min.js"></script>
 <script type="text/javascript" src="//xkcd.com/static/json2.js"></script>-->
 
 </head>
@@ -42,7 +71,7 @@ ga('send', 'pageview');*/
 <span id="slogan">A webcomic of romance,<br/> sarcasm, math, and language.</span>
 </div>
 <div id="news">
-<a href="http://blog.xkcd.com/?p=805"><img border=0 src="http://imgs.xkcd.com/store/te-news.png"></a><br />
+<a href="http://blog.xkcd.com/?p=805"><img id="te-news" border=0 src=""></a><br />
 Preorder: <a title="Thing Explainer Amazon purchase link" href="http://amzn.to/1GCXMJ5">Amazon</a>, <a title="Thing Explainer Barnes and Noble purchase link" href="http://www.barnesandnoble.com/w/thing-explainer-randall-munroe/1121864432?ean=9780544668256">Barnes &amp; Noble</a>, <a title="Thing Explainer Indie Bound purchase link"  href="http://www.indiebound.org/book/9780544668256">Indie Bound</a>, <a title="Thing Explainer Hudson purchase link" href="http://www.hudsonbooksellers.com/thingexplainer">Hudson</a><br />
 In other news, <a href="https://www.youtube.com/watch?v=ygrdAvmr-MA">Space Weird Thing</a> is delightful, and I feel surprisingly invested in <a href="https://twitter.com/xkcdbracket">@xkcdbracket</a>'s results.
 
@@ -55,21 +84,21 @@ In other news, <a href="https://www.youtube.com/watch?v=ygrdAvmr-MA">Space Weird
 
 <div id="ctitle">TITLENAME</div>
 <ul class="comicNav">
-<li><a href="#">|&lt;</a></li>
-<li><a rel="prev" href="#" accesskey="p">&lt; Prev</a></li>
-<li><a href="#">Random</a></li>
-<li><a rel="next" href="#" accesskey="n">Next &gt;</a></li>
-<li><a href="#">&gt;|</a></li>
+<li><a class="frst" href="#">|&lt;</a></li>
+<li><a class="prev" rel="prev" href="#" accesskey="p">&lt; Prev</a></li>
+<li><a class="rand" href="#">Random</a></li>
+<li><a class="next" rel="next" href="#" accesskey="n">Next &gt;</a></li>
+<li><a class="last" href="#">&gt;|</a></li>
 </ul>
 <div id="comic" class="venue">
 <!--<img src="//imgs.xkcd.com/comics/barrel_cropped_(1).jpg" title="Don&#39;t we all." alt="Barrel - Part 1" />-->
 </div>
 <ul class="comicNav">
-<li><a href="#">|&lt;</a></li>
-<li><a rel="prev" href="#" accesskey="p">&lt; Prev</a></li>
-<li><a href="#">Random</a></li>
-<li><a rel="next" href="#" accesskey="n">Next &gt;</a></li>
-<li><a href="#">&gt;|</a></li>
+<li><a class="frst" href="#">|&lt;</a></li>
+<li><a class="prev" rel="prev" href="#" accesskey="p">&lt; Prev</a></li>
+<li><a class="rand" href="#">Random</a></li>
+<li><a class="next" rel="next" href="#" accesskey="n">Next &gt;</a></li>
+<li><a class="last" href="#">&gt;|</a></li>
 </ul>
 <br />
 Permanent link to this comic: http://xkcd.com/1/<br />
