@@ -2,14 +2,15 @@
 <title id="$COMICNGWRITER$$$">Writer</title>
 <script>
     var defer = !0,
-        mainsrc = "comixngn.min.js",
+        mainsrc = "comixngn.js",
         loadng = ["http://code.jquery.com/jquery-2.1.4.min.js", "https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"],
         aftjq = ["http://code.jquery.com/ui/1.11.4/jquery-ui.min.js", "https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.7.0/spectrum.min.js"],
         plugin = "",
+        disable = ["rollbar"],
         dir = "",
         tir = "",
         $GPC = $GPC + 1 || 1,
-        cG={agent:function(e,t){return t=new XMLHttpRequest,t.open("GET",e),e=[],t.onreadystatechange=t.then=function(n,s,a){if(n&&n.call&&(e=[,n,s]),4==t.readyState&&(a=e[0|t.status/200]))try{a(JSON.parse(t.responseText),t)}catch(c){a(t.responseText,t)}},t.send(),t},REPO:{scReq:{}}};
+        cG={agent:function(e,t){return t=new XMLHttpRequest,t.open("GET",e),e=[],t.onreadystatechange=t.then=function(n,s,a){if(n&&n.call&&(e=[,n,s]),4==t.readyState&&(a=e[0|t.status/200]))try{a(JSON.parse(t.responseText),t)}catch(c){a(t.responseText,t)}},t.send(),t},REPO:{scReq:{}},dis:{}};
 </script>
 <base href="/comic-ng/">
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.6.1/spectrum.min.css">
@@ -22,7 +23,7 @@
     <div id="accordion">
         <h3 class="button" role="button">* Settings</h3>
         <div>
-            <form action="#" onsubmit="">
+            <form onsubmit="return false;">
                 <table id="bodtab" border="0" style="width:100%">
                     <tr>
                         <td colspan="2">
@@ -76,8 +77,8 @@
                     </tr>
                     <tr>
                         <td title="The page that the comic loads first, either start from the beginning or the most recent">
-                            <label for="strp_0">Start Page</label>
-                            <input type="number" id="strp_0" name="strpa" min="0"></td>
+                            <label for="strp">Start Page</label>
+                            <input type="number" id="strp" name="strp" min="0" value=0></td>
                     </tr>
                     <tr>
                         <td title="Background color of webcomic">
@@ -96,14 +97,14 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            <label for="wid">Lines: </label> <input style="width:50px;" type="number" value=16 id="lin" min="1">
-                                            <label for="rat">Rate(ms): </label> <input style="width:50px;" type="number" value=33.333333333333336 id="rat" min="1">
+                                            <label for="wid">Lines: </label> <input style="width:35px;" type="number" value=16 id="lin" min="1">
+                                            <label for="rat">Rate(ms): </label> <input style="width:65px;" step="any" value=33.333333333333336 id="rat" min="1">
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>
-                                            <label for="xpose">X-pos</label> <input style="width:50px;" type="number" value=0.5 id="xpose" min="0" max="1">
-                                            <label for="ypose">Y-pos</label> <input style="width:50px;" type="number" value=0.5 id="ypose" min="0" max="1">
+                                            <label for="xpose">X-pos</label> <input style="width:50px;" type="number" step="0.01" value=0.5 id="xpose" min="0" max="1">
+                                            <label for="ypose">Y-pos</label> <input style="width:50px;" type="number" step="0.01" value=0.5 id="ypose" min="0" max="1">
                                         </td>
                                     </tr>
                                     <tr>
@@ -150,7 +151,10 @@
 </body>
 
 <script>
-    var workhorse = function() {
+    var settingsC,
+        settingsP,
+        report,
+        workhorse = function() {
         if (void 0 === window.jQuery || void 0 === window.jQuery.ui || void 0 === humane) return setTimeout(workhorse, 300);
         /*var jQ = jQuery.noConflict();*/
         console.log("%c %c %c comix-ngn Writer v" + cG.info.vwr + " %c \u262F %c \u00A9 2015 Oluwaseun Ogedengbe %c ", "color:white; background:#B5B5B5", "background:purple", "color:black; background:#E2E2E2", 'color:red; background:black', "color:black; background:#B5B5B5", "background:purple");
@@ -163,8 +167,8 @@
             diameter: 250,
             xpos: 0.5,
             ypos: 0.5,
-            back: "#000",
-            color: "#ff3737",
+            back: "#fff",
+            color: "#373737",
             context: document.getElementById("custom_spin").getContext("2d")
         },
             fspin = function() {
@@ -189,6 +193,7 @@
                     spin.context.stroke();
                 }
                 spin.context.restore();
+                //console.log(spin.rate)
                 window.setTimeout(fspin, spin.rate);
             }
         $("#CHPHEAD").data({});
@@ -215,9 +220,12 @@
                           $( this ).accordion( "refresh" );
                         }
                       });*/
+        $.data($("#back_color"),"color","#fff");
         $("#back_color").spectrum({
             color: "#fff",
-            change: function(color) {}
+            change: function(color) {
+                $.data($("#back_color"),"color",color.toHexString());
+            }
         }).css("visibility", "visible" );
         $("#color_load").spectrum({
             color: "#373737",
@@ -235,7 +243,8 @@
         window.setTimeout(fspin, spin.rate);
         var spinsetchange = function(){
             spin.lines = $("#lin").val();
-            spin.rate = $("#rat").val();
+            spin.rate = jaz.resolveRPN(jaz.shuntingYard($("#rat").val()));
+            $("#rat").val(spin.rate);
             spin.diameter = $("#dia").val();
             spin.xpos = $("#xpose").val();
             spin.ypos = $("#ypose").val();
@@ -254,7 +263,6 @@
             if ($("#Csort").hasClass("empty")) {
                 $("#Csort").removeClass("empty");
             }
-
             var oper = $("#Csort").childElementCount;
             $("#Csort").append("<li id=c" + oper + ">" + "Chapter" + " <button onClick=settingsC('#c" + oper + "')>&#x2731</button><button onClick=$('#c" + oper + "').remove()>X</button> </li>").sortable({
                 scroll: true
@@ -290,6 +298,7 @@
                         note: "",
                         perm: false,
                         anim8: false,
+                        special: "",
                     }
                 }).addClass("page");
             }
@@ -312,8 +321,11 @@
         });
         $("#ExBtn").click(function() {
             var setOBJ = {
+                parent: null,
+                offset: 0,
                 config: {},
                 pyr: {},
+                loading: {},
                 chapters: [],
                 pages: []
             };
@@ -322,9 +334,10 @@
             setOBJ.config.dir = $("#dir").val();
             setOBJ.config.pagestartnum = document.getElementById("psn_1").checked;
             setOBJ.config.chapterstartnum = document.getElementById("csn_1").checked;
-            setOBJ.config.startpage = document.getElementById("strp_1").checked;
-            setOBJ.config.imgprebuffer = $("#prb").val();
-            setOBJ.config.imgpostbuffer = $("#ptb").val();
+            setOBJ.config.startpage = parseInt($("#strp").val(),10);//document.getElementById("strp_1").checked;
+            setOBJ.config.imgprebuffer = parseInt($("#prb").val(),10);
+            setOBJ.config.imgpostbuffer = parseInt($("#ptb").val(),10);
+            setOBJ.config.back = $.data($("#ptb"),"color");
             setOBJ.pyr.appendmismatch = document.getElementById("pyr_0").checked;
             if (document.getElementById("spyr_0").checked) {
                 setOBJ.pyr.appendorder = 0;
@@ -336,7 +349,13 @@
                 setOBJ.pyr.appendorder = 3;
             }
             setOBJ.pyr.appendorderdir = document.getElementById("spyro_0").checked;
-
+            setOBJ.loading.diameter = spin.diameter;
+            setOBJ.loading.lines = spin.lines;
+            setOBJ.loading.rate = spin.rate;
+            setOBJ.loading.xpos = spin.xpos;
+            setOBJ.loading.ypos = spin.ypos;
+            setOBJ.loading.back = spin.back;
+            setOBJ.loading.color = spin.color;
             for (j = 0; j < document.getElementById("Csort").childElementCount; j++) {
                 setOBJ.chapters.push($(".class,li").eq(j).data().body);
             }
@@ -345,8 +364,9 @@
             }
             console.log(setOBJ);
             $('#setlink').remove();
-            var refh = "<a onClick=$('#setlink').remove() id='setlink' href='data: text/json;charset=utf-8," + JSON.stringify(setOBJ, ["config", "pyr", "pages", "chapters", "dir", "startpage", "pagestartnum", "chapterstartnum", "imgprebuffer", "imgpostbuffer", "appendmismatch", "appendorder", "appendorderdir", "alt", "hover", "title", "url", "release", "note", "description", "start", "end", "title"]) + "' download='config.json' autofocus>config.json<br></a>";
-            console.log(refh);
+            var refh = "<a onClick=$('#setlink').remove() id='setlink' href='data: text/json;charset=utf-8," + JSON.stringify(setOBJ, ["parent","offset","config", "pyr", "loading", "pages", "chapters", "dir", "startpage", "pagestartnum", "chapterstartnum", "imgprebuffer", "imgpostbuffer", "back", "appendmismatch", "appendorder", "appendorderdir", "alt", "hover", "title","perm","anim8","special", "url", "release", "note", "description", "start", "end", "title", "diameter","lines","rate","xpos","ypos","back","color"]) + "' download='config.json' autofocus>config.json<br></a>",
+                formref = "<a onClick=$('#setlink').remove() id='setlink' href='data: text/json;charset=utf-8," + JSON.stringify(setOBJ, ["parent","offset","config", "pyr", "loading", "pages", "chapters", "dir", "startpage", "pagestartnum", "chapterstartnum", "imgprebuffer", "imgpostbuffer", "back", "appendmismatch", "appendorder", "appendorderdir", "alt", "hover", "title","perm","anim8","special", "url", "release", "note", "description", "start", "end", "title", "diameter","lines","rate","xpos","ypos","back","color"],4) + "' download='config.json' autofocus>config.json<br></a>";
+            console.log(formref);
             $(refh).appendTo("#MHEAD");
         });
         $("#InBtn").click(function() {
@@ -357,11 +377,11 @@
         });
         $("#DsBtn").click(function() {
             $('#deslink').remove(); /*temporary, using predefined scene*/
-            var refh = "<a onClick=$('#deslink').remove() id='deslink' href='data: text/html;charset=utf-8," + '<div style="text-align:center" ng-controller="StageDirector as scene"> <p><span id="time">{{scene.now | date:"MM/dd/yyyy @ h:mm:ss a"}}<\/span><\/p><div id="myCarousel" class="carousel slide" data-ride="" data-interval="false" data-wrap="false"> <div class="carousel-inner" role="listbox"> <div id="{{$index}}" ng-repeat="page in scene.pages" ng-hide="scene.now < page.release" class="item" ng-class="{active: $first, first: $first, last: $last}"> <h1>{{page.title}}<\/h1> <p><img src="{{scene.config.dir + page.url}}" title="{{page.hover}}" alt="{{page.alt}}"><\/p><\/div><\/div><button class="frs" id="bfrs" onclick="caruso.frst()">|<<\/button> <button class="frs" id="bpre" onclick="caruso.left()">< Prev<\/button> <button id="bran" onclick="caruso.rand()">?<\/button> <input id="snum" type="number" class="tiny" onkeydown="caruso.indx(this)"/> <button class="las" id="bnex" onclick="caruso.rght()">Next ><\/button> <button class="las" id="blas" onclick="caruso.last()">>|<\/button><\/p><\/div><p id="SiteNote" style="text-align:center">Images Courtesy of <a href="http://.xkcd.com/">XKCD<\/a><\/p><\/div>' + "' download='stage.html' autofocus>stage.html<br></a>";
+            var refh = "OUTDATED";
             console.log(refh);
             $(refh).appendTo("#MHEAD");
         });
-        var settingsP = function(ele) {
+        settingsP = function(ele) {
             var lee = ele.substring(1);
             console.log(ele);
             console.log($(ele).data().open);
@@ -377,23 +397,25 @@
                 $(ele).data().body.release = $("#TEMP_release" + lee).val();
                 $(ele).data().body.url = $("#TEMP_url" + lee).val();
                 $(ele).data().body.perm = document.getElementById("TEMP_perm" + lee).checked;
+                $(ele).data().body.anim8 = document.getElementById("TEMP_anim8" + lee).checked;
+                $(ele).data().body.special = $("#TEMP_special" + lee).val();
                 $("#TEMPFORM_" + lee).remove();
                 /*document.getElementById(ele.substring(1)).removeChild(document.getElementById("TEMPFORM_"+ele));fallback*/
                 $(ele).focus();
                 $(ele).data().open = false;
                 console.log($(ele).data());
             } else {
-                var ischek = "";
-                if ($(ele).data().body.perm) {
-                    ischek = "checked";
-                }
-                $(ele).append("<form id='TEMPFORM_" + lee + "' autofocus><label for='TEMP_title" + lee + "'>Title&nbsp</label><input value='" + $(ele).data().body.title + "' id='TEMP_title" + lee + "' type='text' autofocus><br><label for='TEMP_hover" + lee + "'>Hover&nbsp</label><input value='" + $(ele).data().body.hover + "' id='TEMP_hover" + lee + "' type='text' title='Text on Mouse Over'><br><label for='TEMP_note" + lee + "'>Image Info&nbsp</label><input value='" + $(ele).data().body.note + "' id='TEMP_note" + lee + "' type='text'><br><label for='TEMP_alt" + lee + "'>Alt Text&nbsp</label><input value='" + $(ele).data().body.alt + "' id='TEMP_alt" + lee + "' type='text' title='If the image fails to load this text is loaded instead'><br><label for='TEMP_release" + lee + "'>Release Date&nbsp </label><input value='" + $(ele).data().body.release + "' id='TEMP_release" + lee + "' type='number' title='When should this slide be avaliable'><br><label for='TEMP_url" + lee + "'>URL&nbsp</label><input value='" + $(ele).data().body.url + "' id='TEMP_url" + lee + "' type='text' title='Filename of the image'><br><label for='TEMP_perm" + lee + "'>Permanent&nbsp</label><input " + ischek + " id='TEMP_perm" + lee + "' type='checkbox' title='Whether the image should always be loaded'><br></form>");
+                var ischek = "",
+                    ischex = "";
+                if ($(ele).data().body.perm) ischek = "checked";
+                if ($(ele).data().body.anim8) ischex = "checked";
+                $(ele).append("<form id='TEMPFORM_" + lee + "' autofocus><label for='TEMP_title" + lee + "'>Title&nbsp</label><input value='" + $(ele).data().body.title + "' id='TEMP_title" + lee + "' type='text' autofocus><br><label for='TEMP_hover" + lee + "'>Hover&nbsp</label><input value='" + $(ele).data().body.hover + "' id='TEMP_hover" + lee + "' type='text' title='Text on Mouse Over'><br><label for='TEMP_note" + lee + "'>Image Info&nbsp</label><input value='" + $(ele).data().body.note + "' id='TEMP_note" + lee + "' type='text'><br><label for='TEMP_alt" + lee + "'>Alt Text&nbsp</label><input value='" + $(ele).data().body.alt + "' id='TEMP_alt" + lee + "' type='text' title='If the image fails to load this text is loaded instead'><br><label for='TEMP_release" + lee + "'>Release Date&nbsp </label><input value='" + $(ele).data().body.release + "' id='TEMP_release" + lee + "' type='number' title='When should this slide be avaliable'><br><label for='TEMP_url" + lee + "'>URL&nbsp</label><input value='" + $(ele).data().body.url + "' id='TEMP_url" + lee + "' type='text' title='Filename of the image'><br><label for='TEMP_perm" + lee + "'>Permanent&nbsp</label><input " + ischek + " id='TEMP_perm" + lee + "' type='checkbox' title='Whether the image should always be loaded'><br></form><br><label for='TEMP_anim8" + lee + "'>Animate&nbsp</label><input " + ischex + " id='TEMP_anim8" + lee + "' type='checkbox' title='Whether the image/slide is animated'><br></form><br><label for='TEMP_special" + lee + "'>Special Code:&nbsp</label><textarea rows='4' cols='50' id='TEMP_perm" + lee + "'title='If the slide is not a static image, video/object/embed, put the code to render it here'></textarea><br></form>");
                 $(ele).focus();
                 $(ele).data().open = true;
             }
             return true;
         };
-        var settingsC = function(ele) {
+        settingsC = function(ele) {
             var lee = ele.substring(1);
             console.log(ele);
             console.log($(ele).data().open);
@@ -414,13 +436,13 @@
             }
             return true;
         };
-        var report = function(conf) {
+        report = function(conf) {
             document.getElementById("psn_0").checked = false;
             document.getElementById("psn_1").checked = false;
             document.getElementById("csn_0").checked = false;
             document.getElementById("csn_1").checked = false;
-            document.getElementById("strp_0").checked = false;
-            document.getElementById("strp_1").checked = false;
+            //document.getElementById("strp_0").checked = false;
+            //document.getElementById("strp_1").checked = false;
             document.getElementById("pyr_0").checked = false;
             document.getElementById("pyr_1").checked = false;
             document.getElementById("spyr_0").checked = false;
@@ -429,33 +451,34 @@
             document.getElementById("spyr_3").checked = false;
             document.getElementById("spyro_0").checked = false;
             document.getElementById("spyro_1").checked = false;
-
-            if (typeof conf.config.startpage === 'undefined') {
-                document.getElementById("strp_0").checked = true;
-            } else if (conf.config.startpage) {
-                document.getElementById("strp_1").checked = true;
-            }
+            
             if (typeof conf.config === 'undefined') { /*config module dependency*/
                 /*default settings*/
                 $("#dir").val("assets/");
                 $("#prb").val("5");
-                $("#ptb").val("5");
+                $("#strp").val("0");
+                $.data($("#back_color"),"color","#fff"); 
                 document.getElementById("psn_1").checked = true;
                 document.getElementById("csn_1").checked = true;
             } else {
                 $("#dir").val(conf.config.dir);
                 $("#prb").val(conf.config.imgprebuffer);
                 $("#ptb").val(conf.config.imgpostbuffer);
-                if (conf.config.pagestartnum) {
-                    document.getElementById("psn_1").checked = true;
-                } else {
-                    document.getElementById("psn_0").checked = true;
+                if (typeof conf.config.startpage === 'undefined') {
+                    $("#strp").val("0");
+                } else if (conf.config.startpage) {
+                    $("#strp").val(conf.config.startpage);
                 }
-                if (conf.config.chapterstartnum) {
-                    document.getElementById("csn_1").checked = true;
-                } else {
-                    document.getElementById("csn_0").checked = true;
+                if (typeof conf.config.back === 'undefined') {
+                    $.data($("#back_color"),"color","#fff"); 
+                } else if (conf.config.back) {
+                    $.data($("#back_color"),"color","#fff");
+                    $("#back_color").spectrum.color = conf.config.back;//I DONT EVEN KNOW IF THIS WILL WORK, BUT FCK IT
                 }
+                if (conf.config.pagestartnum) document.getElementById("psn_1").checked = true;
+                else document.getElementById("psn_0").checked = true;
+                if (conf.config.chapterstartnum) document.getElementById("csn_1").checked = true;
+                else document.getElementById("csn_0").checked = true;
             }
             if (typeof conf.pyr === 'undefined') { /*pyr module dependency*/
                 /*default settings*/
@@ -468,7 +491,7 @@
                 } else {
                     document.getElementById("pyr_1").checked = true;
                 }
-                if (conf.pyr.appendorder == 0) {
+                if (!conf.pyr.appendorder) {
                     document.getElementById("spyr_0").checked = true;
                 } else if (conf.pyr.appendorder == 1) {
                     document.getElementById("spyr_1").checked = true;
@@ -482,6 +505,24 @@
                 } else {
                     document.getElementById("spyro_1").checked = true;
                 }
+            }
+            if (typeof conf.loading === 'undefined') { /*loading module dependency*/
+                /*default settings*/
+                $("#lin").val(16);
+                $("#rat").val(33.333333333333336);
+                $("#dia").val(250);
+                $("#xpose").val(0.5);
+                $("#ypose").val(0.5);
+                $("#back_load").spectrum.color="#fff";
+                $("#color_load").spectrum.color="#373737";
+            } else {
+                $("#lin").val(conf.loading.lines);
+                $("#rat").val(conf.loading.rate);
+                $("#dia").val(conf.loading.diameter);
+                $("#xpose").val(conf.loading.xpos);
+                $("#ypose").val(conf.loading.ypos);
+                $("#back_load").spectrum.color=conf.loading.back;
+                $("#color_load").spectrum.color=conf.loading.color;
             }
 
             for (i = 0; i < conf.pages.length; i++) {
@@ -497,10 +538,12 @@
                         alt: conf.pages[i].alt,
                         hover: conf.pages[i].hover,
                         title: conf.pages[i].title,
-                        url: conf.pages[i].url,
+                        url: (Array.isArray(conf.pages[i].url))?conf.pages[i].url:[conf.pages[i].url],
                         release: conf.pages[i].release,
                         note: conf.pages[i].note,
                         perm: conf.pages[i].perm,
+                        anim8: (conf.pages[i].anim8===void 0)?false:conf.pages[i].anim8,
+                        special: (conf.pages[i].special===void 0)?"":conf.pages[i].special
                     }
                 }).addClass("page");
             }
@@ -520,7 +563,28 @@
             }
         };
     },
-        dfr=function(){var t=document.createElement("script");cG.REPO.scReq.getScript=cG.agent("./"+dir+"script.json"),cG.REPO.scReq.getDecor=cG.agent("./"+tir+"decor.html"),cG.REPO.scReq.getScript.then(function(t){void 0===cG.REPO.script?cG.REPO.script={def:t}:cG.REPO.script.def=t,cG.script=cG.REPO.script.def},function(t,e){console.error(t,e.status),void 0===cG.REPO.script?cG.REPO.script={def:0}:cG.REPO.script.def=t,cG.script=cG.REPO.script.def}),cG.REPO.scReq.getDecor.then(function(t){void 0===cG.REPO.decor?cG.REPO.decor={def:t}:cG.REPO.decor.def=t,cG.decor=cG.REPO.decor.def},function(t,e){console.error(t,e.status),void 0===cG.REPO.decor?cG.REPO.decor={def:0}:cG.REPO.decor.def=0,cG.decor=cG.REPO.decor.def}),t.src=mainsrc,document.body.appendChild(t);for(var e=0;e<loadng.length;e++)t=document.createElement("script"),t.src=loadng[e],document.body.appendChild(t);jqdep(),/*! humane.js: wavded.github.com/humane-js/ (MIT) (c) Marc Harter (@wavded)*/!function(t,e,i){"undefined"!=typeof module?module.exports=i(t,e):"function"==typeof define&&"object"==typeof define.amd?define(i):e[t]=i(t,e)}("humane",this,function(){var t=window,e=document,i={on:function(e,i,s){"addEventListener"in t?e.addEventListener(i,s,!1):e.attachEvent("on"+i,s)},off:function(e,i,s){"removeEventListener"in t?e.removeEventListener(i,s,!1):e.detachEvent("on"+i,s)},bind:function(t,e){return function(){t.apply(e,arguments)}},isArray:Array.isArray||function(t){return"[object Array]"===Object.prototype.toString.call(t)},config:function(t,e){return null!=t?t:e},transSupport:!1,useFilter:/msie [678]/i.test(navigator.userAgent),_checkTransition:function(){var t=e.createElement("div"),i={webkit:"webkit",Moz:"",O:"o",ms:"MS"};for(var s in i)s+"Transition"in t.style&&(this.vendorPrefix=i[s],this.transSupport=!0)}};i._checkTransition();var s=function(e){e||(e={}),this.queue=[],this.baseCls=e.baseCls||"humane",this.addnCls=e.addnCls||"",this.timeout="timeout"in e?e.timeout:2500,this.waitForMove=e.waitForMove||!1,this.clickToClose=e.clickToClose||!1,this.timeoutAfterMove=e.timeoutAfterMove||!1,this.container=e.container;try{this._setupEl()}catch(s){i.on(t,"load",i.bind(this._setupEl,this))}};return s.prototype={constructor:s,_setupEl:function(){var t=e.createElement("div");if(t.style.display="none",!this.container){if(!e.body)throw"document.body is null";this.container=e.body}this.container.appendChild(t),this.el=t,this.removeEvent=i.bind(function(){var t=i.config(this.currentMsg.timeoutAfterMove,this.timeoutAfterMove);t?setTimeout(i.bind(this.remove,this),t):this.remove()},this),this.transEvent=i.bind(this._afterAnimation,this),this._run()},_afterTimeout:function(){i.config(this.currentMsg.waitForMove,this.waitForMove)?this.removeEventsSet||(i.on(e.body,"mousemove",this.removeEvent),i.on(e.body,"click",this.removeEvent),i.on(e.body,"keypress",this.removeEvent),i.on(e.body,"touchstart",this.removeEvent),this.removeEventsSet=!0):this.remove()},_run:function(){if(!this._animating&&this.queue.length&&this.el){this._animating=!0,this.currentTimer&&(clearTimeout(this.currentTimer),this.currentTimer=null);var t=this.queue.shift(),e=i.config(t.clickToClose,this.clickToClose);e&&(i.on(this.el,"click",this.removeEvent),i.on(this.el,"touchstart",this.removeEvent));var s=i.config(t.timeout,this.timeout);s>0&&(this.currentTimer=setTimeout(i.bind(this._afterTimeout,this),s)),i.isArray(t.html)&&(t.html="<ul><li>"+t.html.join("<li>")+"</ul>"),this.el.innerHTML=t.html,this.currentMsg=t,this.el.className=this.baseCls,i.transSupport?(this.el.style.display="block",setTimeout(i.bind(this._showMsg,this),50)):this._showMsg()}},_setOpacity:function(t){if(i.useFilter)try{this.el.filters.item("DXImageTransform.Microsoft.Alpha").Opacity=100*t}catch(e){}else this.el.style.opacity=t+""},_showMsg:function(){var t=i.config(this.currentMsg.addnCls,this.addnCls);if(i.transSupport)this.el.className=this.baseCls+" "+t+" "+this.baseCls+"-animate";else{var e=0;this.el.className=this.baseCls+" "+t+" "+this.baseCls+"-js-animate",this._setOpacity(0),this.el.style.display="block";var s=this,n=setInterval(function(){1>e?(e+=.1,e>1&&(e=1),s._setOpacity(e)):clearInterval(n)},30)}},_hideMsg:function(){var t=i.config(this.currentMsg.addnCls,this.addnCls);if(i.transSupport)this.el.className=this.baseCls+" "+t,i.on(this.el,i.vendorPrefix?i.vendorPrefix+"TransitionEnd":"transitionend",this.transEvent);else var e=1,s=this,n=setInterval(function(){e>0?(e-=.1,0>e&&(e=0),s._setOpacity(e)):(s.el.className=s.baseCls+" "+t,clearInterval(n),s._afterAnimation())},30)},_afterAnimation:function(){i.transSupport&&i.off(this.el,i.vendorPrefix?i.vendorPrefix+"TransitionEnd":"transitionend",this.transEvent),this.currentMsg.cb&&this.currentMsg.cb(),this.el.style.display="none",this._animating=!1,this._run()},remove:function(t){var s="function"==typeof t?t:null;i.off(e.body,"mousemove",this.removeEvent),i.off(e.body,"click",this.removeEvent),i.off(e.body,"keypress",this.removeEvent),i.off(e.body,"touchstart",this.removeEvent),i.off(this.el,"click",this.removeEvent),i.off(this.el,"touchstart",this.removeEvent),this.removeEventsSet=!1,s&&this.currentMsg&&(this.currentMsg.cb=s),this._animating?this._hideMsg():s&&s()},log:function(t,e,i,s){var n={};if(s)for(var r in s)n[r]=s[r];if("function"==typeof e)i=e;else if(e)for(var r in e)n[r]=e[r];return n.html=t,i&&(n.cb=i),this.queue.push(n),this._run(),this},spawn:function(t){var e=this;return function(i,s,n){return e.log.call(e,i,s,n,t),e}},create:function(t){return new s(t)}},new s})},jqdep=function(){if(void 0===window.jQuery)return setTimeout(jqdep,300);var t;/*! jquery-spoiler v1.3.0: (MIT) (c)2014 Triangle717 (http://le717.github.io) and Jarred Ballard (http://jarred.io/)*/!function(t){"use strict";"function"==typeof define&&define.amd?define(["jquery"],t):"object"==typeof exports?module.exports=t:t(jQuery)}(function(t){"use strict";t.fn.spoiler=function(e){var i=t.extend({contentClass:"spoiler-content",paddingValue:6,triggerEvents:!1,includePadding:!0,buttonActiveClass:"spoiler-active",spoilerVisibleClass:"spoiler-content-visible"},e),s="."+i.contentClass,n={};return t(s).each(function(){var e=t(this);e.css("overflow","hidden");var s=e.prop("scrollHeight");s=i.includePadding?s+parseInt(i.paddingValue,10):s;var r=e.attr("data-spoiler-link");n[r]=s+"px",e.css("height","0")}),t(this).on("click",function(){var e=t(this),r=e.attr("data-spoiler-link"),o=t(s+"[data-spoiler-link="+r+"]"),c={height:n[r]},a={height:"0"},l=o.hasClass(i.spoilerVisibleClass);o.css(l?a:c),i.triggerEvents&&e.trigger(l?"jq-spoiler-hidden":"jq-spoiler-visible"),o.toggleClass(i.spoilerVisibleClass),e.toggleClass(i.buttonActiveClass)}),this}});for(var e=0;e<aftjq.length;e++)t=document.createElement("script"),t.src=aftjq[e],document.body.appendChild(t);workhorse()};
+        dfr=function(){/*!
+ * Implementation of the Shunting yard algorithm
+ * look it up: http://en.wikipedia.org/wiki/Shunting-yard_algorithm
+ *
+ * Copyright 2013, Georg Tavonius
+ * Licensed under the MIT license.
+ *
+ * @version 1.0.1
+ *
+ * @author Georg Tavonius a.k.a. Calamari (http://github.com/Calamari)
+ * @homepage http://github.com/Calamari/shunting-yard.js
+ */
+!function(n){"use strict";function e(n,e,r,t,u){return r=r||"left",{name:n,precedence:e,params:t,method:u,greaterThen:function(n){return e>n.precedence},greaterThenEqual:function(n){return e>=n.precedence},equalThen:function(n){return e===n.precedence},lessThen:function(n){return e<n.precedence},lessThenEqual:function(n){return e<=n.precedence},leftAssoc:function(){return"left"===r},rightAssoc:function(){return"right"===r}}}function r(n,e,r){return{name:n,params:e,method:r}}var t=window.jaz||{};t.shuntingYard=function(e){function r(n){return"("===n}function u(n){return")"===n}function o(n){return t.Operators[n]}function c(n){return t.Functions[n]}var f,i,s,l,p,h,a,d=[],g=[];for(s=0,l=e.length;l>s;++s)if(p=e[s]," "!==p){if(i&&(p=i+=p,i=null),r(p))g.push(p);else if(c(p))g.push(p);else if(u(p)){for(;(h=g.pop())&&!r(h);)c(h)||d.push(h);if(h===n)return null}else if(o(p)){if(!f||"("===f){i=p;continue}for(;g.length&&(a=t.Operators[p],h=t.Operators[g[g.length-1]],h&&a)&&(a.leftAssoc()&&a.lessThenEqual(h)||a.lessThen(h));)d.push(g.pop());g.push(p)}else!f||r(f)||o(f)?d.push(p):d[d.length-1]+=p;f=p}for(;g.length;){if(p=g.pop(),r(p))return null;d.push(p)}return d},t.Operator=e,t.Operators={"+":new e("+",2,"left",2,function(n,e){return n+e}),"-":new e("-",2,"left",2,function(n,e){return n-e}),"*":new e("*",3,"left",2,function(n,e){return n*e}),"/":new e("/",3,"left",2,function(n,e){return n/e}),"^":new e("^",4,"right",2,function(n,e){return Math.pow(n,e)})},t.Function=r,t.Functions={},window.jaz=t}();/*!
+ * Resolves a RPN
+ *
+ * Copyright 2013, Georg Tavonius
+ * Licensed under the MIT license.
+ *
+ * @author Georg Tavonius a.k.a. Calamari (http://github.com/Calamari)
+ * @homepage http://github.com/Calamari/shunting-yard.js
+ */
+!function(){"use strict";var n=window.jaz||{};n.resolveRPN=function(e){function r(e){return n.Operators[e]||n.Functions[e]}var t,u,o,i=[];for(t=0,u=e.length;u>t;++t)o=r(e[t]),i.push(o?o.method.apply(this,i.splice(-o.params)):parseFloat(e[t]));return i[0]},window.jaz=n}();    var t=document.createElement("script");cG.REPO.scReq.getScript=cG.agent("./"+dir+"script.json"),cG.REPO.scReq.getDecor=cG.agent("./"+tir+"decor.html"),cG.REPO.scReq.getScript.then(function(t){void 0===cG.REPO.script?cG.REPO.script={def:t}:cG.REPO.script.def=t,cG.script=cG.REPO.script.def},function(t,e){console.error(t,e.status),void 0===cG.REPO.script?cG.REPO.script={def:0}:cG.REPO.script.def=t,cG.script=cG.REPO.script.def}),cG.REPO.scReq.getDecor.then(function(t){void 0===cG.REPO.decor?cG.REPO.decor={def:t}:cG.REPO.decor.def=t,cG.decor=cG.REPO.decor.def},function(t,e){console.error(t,e.status),void 0===cG.REPO.decor?cG.REPO.decor={def:0}:cG.REPO.decor.def=0,cG.decor=cG.REPO.decor.def});for(var c=0;c<disable.length;c++)cG.dis[disable[c]]=!0;t.src=mainsrc,document.body.appendChild(t);for(var e=0;e<loadng.length;e++)t=document.createElement("script"),t.src=loadng[e],document.body.appendChild(t);jqdep(),/*! humane.js: wavded.github.com/humane-js/ (MIT) (c) Marc Harter (@wavded)*/!function(t,e,i){"undefined"!=typeof module?module.exports=i(t,e):"function"==typeof define&&"object"==typeof define.amd?define(i):e[t]=i(t,e)}("humane",this,function(){var t=window,e=document,i={on:function(e,i,s){"addEventListener"in t?e.addEventListener(i,s,!1):e.attachEvent("on"+i,s)},off:function(e,i,s){"removeEventListener"in t?e.removeEventListener(i,s,!1):e.detachEvent("on"+i,s)},bind:function(t,e){return function(){t.apply(e,arguments)}},isArray:Array.isArray||function(t){return"[object Array]"===Object.prototype.toString.call(t)},config:function(t,e){return null!=t?t:e},transSupport:!1,useFilter:/msie [678]/i.test(navigator.userAgent),_checkTransition:function(){var t=e.createElement("div"),i={webkit:"webkit",Moz:"",O:"o",ms:"MS"};for(var s in i)s+"Transition"in t.style&&(this.vendorPrefix=i[s],this.transSupport=!0)}};i._checkTransition();var s=function(e){e||(e={}),this.queue=[],this.baseCls=e.baseCls||"humane",this.addnCls=e.addnCls||"",this.timeout="timeout"in e?e.timeout:2500,this.waitForMove=e.waitForMove||!1,this.clickToClose=e.clickToClose||!1,this.timeoutAfterMove=e.timeoutAfterMove||!1,this.container=e.container;try{this._setupEl()}catch(s){i.on(t,"load",i.bind(this._setupEl,this))}};return s.prototype={constructor:s,_setupEl:function(){var t=e.createElement("div");if(t.style.display="none",!this.container){if(!e.body)throw"document.body is null";this.container=e.body}this.container.appendChild(t),this.el=t,this.removeEvent=i.bind(function(){var t=i.config(this.currentMsg.timeoutAfterMove,this.timeoutAfterMove);t?setTimeout(i.bind(this.remove,this),t):this.remove()},this),this.transEvent=i.bind(this._afterAnimation,this),this._run()},_afterTimeout:function(){i.config(this.currentMsg.waitForMove,this.waitForMove)?this.removeEventsSet||(i.on(e.body,"mousemove",this.removeEvent),i.on(e.body,"click",this.removeEvent),i.on(e.body,"keypress",this.removeEvent),i.on(e.body,"touchstart",this.removeEvent),this.removeEventsSet=!0):this.remove()},_run:function(){if(!this._animating&&this.queue.length&&this.el){this._animating=!0,this.currentTimer&&(clearTimeout(this.currentTimer),this.currentTimer=null);var t=this.queue.shift(),e=i.config(t.clickToClose,this.clickToClose);e&&(i.on(this.el,"click",this.removeEvent),i.on(this.el,"touchstart",this.removeEvent));var s=i.config(t.timeout,this.timeout);s>0&&(this.currentTimer=setTimeout(i.bind(this._afterTimeout,this),s)),i.isArray(t.html)&&(t.html="<ul><li>"+t.html.join("<li>")+"</ul>"),this.el.innerHTML=t.html,this.currentMsg=t,this.el.className=this.baseCls,i.transSupport?(this.el.style.display="block",setTimeout(i.bind(this._showMsg,this),50)):this._showMsg()}},_setOpacity:function(t){if(i.useFilter)try{this.el.filters.item("DXImageTransform.Microsoft.Alpha").Opacity=100*t}catch(e){}else this.el.style.opacity=t+""},_showMsg:function(){var t=i.config(this.currentMsg.addnCls,this.addnCls);if(i.transSupport)this.el.className=this.baseCls+" "+t+" "+this.baseCls+"-animate";else{var e=0;this.el.className=this.baseCls+" "+t+" "+this.baseCls+"-js-animate",this._setOpacity(0),this.el.style.display="block";var s=this,n=setInterval(function(){1>e?(e+=.1,e>1&&(e=1),s._setOpacity(e)):clearInterval(n)},30)}},_hideMsg:function(){var t=i.config(this.currentMsg.addnCls,this.addnCls);if(i.transSupport)this.el.className=this.baseCls+" "+t,i.on(this.el,i.vendorPrefix?i.vendorPrefix+"TransitionEnd":"transitionend",this.transEvent);else var e=1,s=this,n=setInterval(function(){e>0?(e-=.1,0>e&&(e=0),s._setOpacity(e)):(s.el.className=s.baseCls+" "+t,clearInterval(n),s._afterAnimation())},30)},_afterAnimation:function(){i.transSupport&&i.off(this.el,i.vendorPrefix?i.vendorPrefix+"TransitionEnd":"transitionend",this.transEvent),this.currentMsg.cb&&this.currentMsg.cb(),this.el.style.display="none",this._animating=!1,this._run()},remove:function(t){var s="function"==typeof t?t:null;i.off(e.body,"mousemove",this.removeEvent),i.off(e.body,"click",this.removeEvent),i.off(e.body,"keypress",this.removeEvent),i.off(e.body,"touchstart",this.removeEvent),i.off(this.el,"click",this.removeEvent),i.off(this.el,"touchstart",this.removeEvent),this.removeEventsSet=!1,s&&this.currentMsg&&(this.currentMsg.cb=s),this._animating?this._hideMsg():s&&s()},log:function(t,e,i,s){var n={};if(s)for(var r in s)n[r]=s[r];if("function"==typeof e)i=e;else if(e)for(var r in e)n[r]=e[r];return n.html=t,i&&(n.cb=i),this.queue.push(n),this._run(),this},spawn:function(t){var e=this;return function(i,s,n){return e.log.call(e,i,s,n,t),e}},create:function(t){return new s(t)}},new s})},jqdep=function(){if(void 0===window.jQuery)return setTimeout(jqdep,300);var t;/*! jquery-spoiler v1.3.0: (MIT) (c)2014 Triangle717 (http://le717.github.io) and Jarred Ballard (http://jarred.io/)*/!function(t){"use strict";"function"==typeof define&&define.amd?define(["jquery"],t):"object"==typeof exports?module.exports=t:t(jQuery)}(function(t){"use strict";t.fn.spoiler=function(e){var i=t.extend({contentClass:"spoiler-content",paddingValue:6,triggerEvents:!1,includePadding:!0,buttonActiveClass:"spoiler-active",spoilerVisibleClass:"spoiler-content-visible"},e),s="."+i.contentClass,n={};return t(s).each(function(){var e=t(this);e.css("overflow","hidden");var s=e.prop("scrollHeight");s=i.includePadding?s+parseInt(i.paddingValue,10):s;var r=e.attr("data-spoiler-link");n[r]=s+"px",e.css("height","0")}),t(this).on("click",function(){var e=t(this),r=e.attr("data-spoiler-link"),o=t(s+"[data-spoiler-link="+r+"]"),c={height:n[r]},a={height:"0"},l=o.hasClass(i.spoilerVisibleClass);o.css(l?a:c),i.triggerEvents&&e.trigger(l?"jq-spoiler-hidden":"jq-spoiler-visible"),o.toggleClass(i.spoilerVisibleClass),e.toggleClass(i.buttonActiveClass)}),this}});for(var e=0;e<aftjq.length;e++)t=document.createElement("script"),t.src=aftjq[e],document.body.appendChild(t);workhorse()};
 
     !function() {
         return defer ? void(window.addEventListener ? window.addEventListener("load", dfr, !1) : window.attachEvent ? window.attachEvent("onload", dfr) : window.onload = dfr) : dfr()
