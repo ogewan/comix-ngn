@@ -32,7 +32,8 @@
         "perm": false,
         "release": 0,
         "title": "",
-        "url": [""]
+        "url": [""],
+        "special": ""
     }],
     "parent": null,
     "pyr": {

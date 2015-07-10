@@ -2,6 +2,10 @@
 [![JS.ORG](https://img.shields.io/badge/js.org-dns-ffb400.svg?style=flat-square)](http://js.org) [![Join the chat at https://gitter.im/seun40/comic-ng](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/seun40/comic-ng?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 The Modern Webcomic Framework
 
+*Note1: I'm working on a better tagline, please bear with me. Suggestions encouraged.*
+
+*Note2: This readme is looking pretty long, Wiki will come with first release.*
+
 **simple**, **standalone**, **small**, **redundant**, **extensible**, **modular**, **powerful**
 ## Usage
 * Simply include the script:
@@ -84,7 +88,7 @@ comix-ngn is
 **venue** - This class marks an element as a place for a stage to be imported. These are preferably divs. If the element does not have an id, it is given one automatically.
 
 ## Changelog
-### comix-ngn version 1.9.2 (beta)
+### comix-ngn version 1.9.3 (beta)
 **0.5.0**: Initial Setup, Version tracking
 
 **0.7.58**: Added Dependencies (JS): (jquery.min, angular-touch.min, angular.min[Update],bootstrap.min), Carousel for slides, real-time reactivity
@@ -132,7 +136,12 @@ attribute to preload images but not implemented yet
 **1.9.2** Major bugfixes, including null and undefined property checking
 * addendum: bugfixes on direction js, properties are now more clear
 
-### comix-ngn Writer version 1.1.0 (beta)
+**1.9.3** New version of direction, bugfixes on direction
+
+**1.9.4** EVEN MORE direction bugfixes, loader broke but now it seems to work and adjusts to height, correctly mapped callbacks, comix-ngn now uses localstorage to store recent comic page
+* addendum: error reporting disabling added
+
+### comix-ngn Writer version 1.5.0 (beta)
 **0.5.0**: "Initial Setup, Versioning
 
 **0.8.0**: Huge implementations, Object config by dynamic form injection for Page and Chapter, Setting config compartmentalized, design config added
@@ -145,5 +154,64 @@ attribute to preload images but not implemented yet
 
 **1.1.0**: Setup for refactoring, all JS re-specified and deferred, js enclosed in closure
 
+**1.5.0**: writer now supports v2 and v3 JSON, adds support for spinner
+
 ### comix-ngn Pyoofreader Version 0.1.0 (beta)
 **0.1.0**: Implemented version, counts page dif and warns of Mismatch
+
+## Anatomy of a Script
+*Version: 3*
+``` js
+{
+    "parent": null,//if this is a child, parent will reference the path to JSON that this is a continuation(child) of
+    //else it will be null
+    "offset": 0,//if this is a child, its pages will begin at the offset rather than zero,
+    //this allows a parent to have multiple children. Furthermore, if a child with lower offset fails to load
+    //then subsequent children will not be affected. Granted the max size is >2000 pages, so a child loss is catastrophic,
+    //but this ensures redundancy. Note: If the parent, fails to load, the children will never be referenced.
+    "pyr": {//settings that control pyoofreader, false if child(has a parent)
+        "appendmismatch": false,//If there are more images in the directory than in the configuration file, attempt to automatically add them
+        "appendorder": 0,//The order in which the images should be appended {Modified|Name|Size|Type}
+        "appendorderdir": false//The direction that the append order follows {Ascending|Descending}
+    },
+    "loading": {//loading spinner configuration
+        "lines":16,//lines in spinner
+        "rate":1000 / 30,//spin rate
+        "diameter": 250,//spinner diameter
+        "xpos":1/2,//x position of spinner relative to canvas size
+        "ypos":1/2, //y position of spinner relative to canvas size
+        "back":"#FFF",//background color of spinner
+        "color":"#373737"//color of spinner
+    },
+    "config": {//system settings, false if child(has a parent)
+        "dir": "assets/",//directory for page sources, all sources must be descendants of this directory
+        "pagestartnum": false,//#page start number, false for 0
+        "chapterstartnum": false,//#chapter start number, false for 0
+        "imgprebuffer": 5,//# of images to preload before current page
+        "imgpostbuffer": 5,//# of images to preload after current page
+        "startpage": 0,//The page that the comic loads first, 0 loads first, >0 loads most recent
+        "back":"#FFF"//background color of pages
+    },
+    "pages": [//Array of pages, comic stages will follow this order
+        {
+            "alt": "",//If image fails, this text is displayed instead
+            "hover": "",//this text is displayed on mouse hover, (not implemented in touch yet)
+            "title": "",//this gives the page a title
+            "url": [""],/*this is the source of the page. If the image is layered, add multiple sources. Lowest number = Highest Layer Priority*/
+            "release": 0,//release date
+            "note": "",//additional note to append to the page
+            "perm": false,//is this page permanent? It will be preloaded first
+            "anim8": false//is this page animated? Only works with gif and video(not implemented)
+            "special": ""//code that is evaluated if the slide is not an {static} image (not implemented)
+        }
+    ],
+    "chapters": [//Array of chapters, pages will be grouped into these chapters, false if child(has a parent)
+        {
+            "description": "",//chapter description
+            "start": 0,//index of starting page of chapter
+            "end": 0,//index of last page of chapter
+            "title": ""//chapter title
+        }
+    ]
+}
+```

@@ -4,6 +4,7 @@
         mainsrc = "comixngn.min.js",
         loadcng = [],/*to load*/
         plugin = "",
+        disable = [],
         /*! Bellerophon: Comix-Ngn plugin|pegasus: typicode.github.io/pegasus (MIT) (c) 2014 typicode*/
         dir = "",
         tir = "",
@@ -18,7 +19,8 @@
                     }
                 }, e.send(), e
             },
-            REPO: {scReq:{}}
+            REPO: {scReq:{}},
+            dis: {}
         },
         dfr = function() {
             var c = document.createElement("script");
@@ -41,6 +43,9 @@
                     def: 0
                 } : cG.REPO.decor.def = 0, cG.decor = cG.REPO.decor.def
             });
+            for(var b=0;b<disable.length;b++){
+                cG.dis[disable[b]]=true;
+            }
             c.src = mainsrc, document.body.appendChild(c);
             for(var a=0;a<loadcng.length;a++){
                 c = document.createElement("script");
