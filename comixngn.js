@@ -1,4 +1,4 @@
-/** @preserve comix-ngn v1.9.4 | (c) 2015 Oluwaseun Ogedengbe| seun40.github.io/comic-ng/ |License: MIT|
+/** @preserve comix-ngn v1.9.5 | (c) 2015 Oluwaseun Ogedengbe| seun40.github.io/comic-ng/ |License: MIT|
 embeds domReady: github.com/ded/domready (MIT) (c) 2013 Dustin Diaz, pegasus: typicode.github.io/pegasus (MIT) (c) 2014 typicode, pathjs (MIT) (c) 2011 Mike Trpcic, direction.js*/
 
 var cG = cG||{};/*if(void 0===cG) var cG = {};*//*check if cG is already is instantiated*/
@@ -9,19 +9,30 @@ function N(){return 0};/*null function*/
 if(void 0===$GPC){var $GPC=0;}
 cG.root = '';
 cG.cPanel = cG.cPanel||{};
-cG.info = {vix: "1.9.4",vwr: "1.5.0",vpr: "0.1.0"};
+cG.info = {vix: "1.9.5",vwr: "1.5.0",vpr: "0.1.0"};
 cG.dis = cG.dis||{};
+cG.comicId = cG.comicId||window.location.host;
 !function(){
     var selfScript = document.getElementsByTagName("SCRIPT");
     if(void 0!==selfScript){
         for(var q = 0;q<selfScript.length;q++){
-            if(selfScript[q].id.indexOf("comixngn")>=0){
+            if(selfScript[q].src.indexOf("comixngn")>=0){
                 selfScript = selfScript[q];
                 break;
             }
         }
-        if(selfScript.getAttribute("disabled") !== void 0){
-            var disables = selfScript.getAttribute("disabled").replace(/\s+/g, '').split(',');
+        cG.comicId = (selfScript.getAttribute("comicID") !== void 0)?selfScript.getAttribute("comicID"):cG.comicId;
+        if(selfScript.getAttribute("plugin") !== void 0){
+            var plugin = selfScript.getAttribute("plugin").replace(/\s+/g, '').split(',');
+            cG.root = plugin;
+            /*mutliplugin priority not implemented*/
+            /*for(var w = 0;w<disables.length;w++){
+                if(disables[w]==""||disables[w]===void 0||disables[w]==" ") continue;
+                cG.dis[disables[w]]=true;
+            }*/
+        }
+        if(selfScript.getAttribute("disable") !== void 0){
+            var disables = selfScript.getAttribute("disable").replace(/\s+/g, '').split(',');
             for(var w = 0;w<disables.length;w++){
                 if(disables[w]==""||disables[w]===void 0||disables[w]==" ") continue;
                 cG.dis[disables[w]]=true;
@@ -112,19 +123,20 @@ A.clearRect(0,0,this.width,this.height):e[this.imaginaryID].loaded=!0;w();c[1].w
 v||isNaN(v)?q.startpage:v);c[1].height=480;c[1].width=640;c[1].background=q.back;c[1].style.zIndex=1;c[1].style.position="relative";m?m.appendChild(c[1]):document.body.appendChild(c[1])};
 /**/
     if(typeof(Storage) !== "undefined") {
-        var get = parseInt(localStorage.getItem("curPage"),10);
-        console.log(get);
+        var get = parseInt(localStorage.getItem(cG.comicId+"|"+name+"|curPage"),10);
+        console.log(cG.comicId+"|"+name+"|curPage",":",get);
     }
-    this.main = new direction(scriptt,anchor,get);
-    this.name = name;
-    this.type = "def";
+    var main = new direction(scriptt,anchor,get);
+    main.name = name;
+    main.type = "def";
     var lscurrent = function(){
         if(typeof(Storage) !== "undefined") {
-            localStorage.setItem("curPage",cG.cPanel.def_0.main.current().toString());
+            localStorage.setItem(cG.comicId+"|"+name+"|curPage",cG.cPanel.def_0.current().toString());
             /*we need a mechanism to store the currpage uniquely, that is, each webpage has a unique identifier that contains its current page so there is no overlap. i.e page 5 on xkcd and page 3 on gunnerkrigg*/
         }
     }
-    this.main.callback(1,lscurrent);
+    main.callback(1,lscurrent);
+    return main;
 }}};
 ///////
 cG.REPO.scReq = cG.REPO.scReq||{};
@@ -156,10 +168,10 @@ for (i = 0; i < src.length; i++) {
     tir=src[i].getAttribute("template");
     if(tir!="") break;
 }
-for (i = 0; i < src.length; i++) { 
+/*for (i = 0; i < src.length; i++) { 
     cG.root=src[i].getAttribute("plugin");
     if(cG.root!="") break;
-}
+}*/
 if (1||void 0==dir) dir="";
 //if (dir[dir.length-1]!="/") dir +="/";
 if (1||void 0==tir) tir="";
@@ -268,8 +280,7 @@ cG.stageInjection = function(SPECIFIC){
             }
             anchorto.style.display = "block";
             //console.log(anchorto,anchorto.style)
-            final_res[use_attr+"_"+iD] = new cG.stage.construct(id_attr,myScript,
-                                                                anchorto,config_attr);
+            final_res[use_attr+"_"+iD] = cG.stage.construct(id_attr,myScript,anchorto,config_attr);
         };
     for (var i = 0; i < stages.length; i++) request(i);
     return final_res;
