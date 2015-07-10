@@ -32,6 +32,7 @@ ga('send', 'pageview');*/
         if(cG===void 0) return setTimeout(disposeme, 400);
         else if(cG.cPanel===void 0) return setTimeout(disposeme, 400);
         else if(cG.cPanel.def_0===void 0) return setTimeout(disposeme, 400);
+        else if(cG.cPanel.def_0.main===void 0) return setTimeout(disposeme, 400);//possible race condition bug, when url has hash in it
         document.getElementById("comic_location").title=cG.cPanel.def_0.main.data().hover;
         document.getElementById("btitle").innerHTML=cG.cPanel.def_0.main.data().title;
         document.getElementById("ctitle").innerHTML=cG.cPanel.def_0.main.data().title;
