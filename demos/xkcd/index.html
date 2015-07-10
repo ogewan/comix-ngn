@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <!--Changelog
 commented out: google analytics, jquery, json2, image tag
-added: comixngn, bellerophon preloader, deferred script to add onclick events to buttons after comix-ngn is loaded
-changed: title tag, added class"venue" to tag comic, added classes to buttons in comicNav, tag ctitle
+added: comixngn, bellerophon preloader, deferred script to add onclick events to buttons after comix-ngn is loaded, btitle id to title
+changed: title tag, added class"venue" to tag comic, added classes to buttons in comicNav, tag ctitle, 
 -->
 <html>
 <head>
 <link rel="stylesheet" type="text/css" href="http://xkcd.com/s/b0dcca.css" title="Default"/>
-<title>xkcd: TITLENAME</title>
+<title id="btitle">xkcd: TITLENAME</title>
 <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
 <link rel="shortcut icon" href="http://xkcd.com/s/919f27.ico" type="image/x-icon"/>
 <link rel="icon" href="http://xkcd.com/s/919f27.ico" type="image/x-icon"/>
@@ -32,17 +32,40 @@ ga('send', 'pageview');*/
         if(cG===void 0) return setTimeout(disposeme, 400);
         else if(cG.cPanel===void 0) return setTimeout(disposeme, 400);
         else if(cG.cPanel.def_0===void 0) return setTimeout(disposeme, 400);
+        document.getElementById("comic_location").title=cG.cPanel.def_0.main.data().hover;
+        document.getElementById("btitle").innerHTML=cG.cPanel.def_0.main.data().title;
+        document.getElementById("ctitle").innerHTML=cG.cPanel.def_0.main.data().title;
         var q=document.getElementsByClassName("frst"),
             w=document.getElementsByClassName("prev"),
             e=document.getElementsByClassName("rand"),
             r=document.getElementsByClassName("next"),
             t=document.getElementsByClassName("last");
         //console.log(q,w,e,r,t,cG.cPanel.def_0.main);
-        for(var y=0;y<q.length;y++) q[y].addEventListener("click", cG.cPanel.def_0.main.frst);
-        for(var y=0;y<w.length;y++) w[y].addEventListener("click", cG.cPanel.def_0.main.prev);
-        for(var y=0;y<e.length;y++) e[y].addEventListener("click", cG.cPanel.def_0.main.rand);
-        for(var y=0;y<r.length;y++) r[y].addEventListener("click", cG.cPanel.def_0.main.next);
-        for(var y=0;y<t.length;y++) t[y].addEventListener("click", cG.cPanel.def_0.main.last);
+        for (var y = 0; y < q.length; y++) q[y].addEventListener("click", function() {
+            box = cG.cPanel.def_0.main.data(cG.cPanel.def_0.main.frst());
+            document.getElementById("comic_location").title = box.hover;
+            document.getElementById("btitle").innerHTML = document.getElementById("ctitle").innerHTML = box.title;
+        });
+        for (var y = 0; y < w.length; y++) w[y].addEventListener("click", function() {
+            box = cG.cPanel.def_0.main.data(cG.cPanel.def_0.main.prev());
+            document.getElementById("comic_location").title = box.hover;
+            document.getElementById("btitle").innerHTML = document.getElementById("ctitle").innerHTML = box.title;
+        });
+        for (var y = 0; y < e.length; y++) e[y].addEventListener("click", function() {
+            box = cG.cPanel.def_0.main.data(cG.cPanel.def_0.main.rand());
+            document.getElementById("comic_location").title = box.hover;
+            document.getElementById("btitle").innerHTML = document.getElementById("ctitle").innerHTML = box.title;
+        });
+        for (var y = 0; y < r.length; y++) r[y].addEventListener("click", function() {
+            box = cG.cPanel.def_0.main.data(cG.cPanel.def_0.main.next());
+            document.getElementById("comic_location").title = box.hover;
+            document.getElementById("btitle").innerHTML = document.getElementById("ctitle").innerHTML = box.title;
+        });
+        for (var y = 0; y < t.length; y++) t[y].addEventListener("click", function() {
+            box = cG.cPanel.def_0.main.data(cG.cPanel.def_0.main.last());
+            document.getElementById("comic_location").title = box.hover;
+            document.getElementById("btitle").innerHTML = document.getElementById("ctitle").innerHTML = box.title;
+        });
         //console.log("complete");
     }
     var imagedeffer = function() {
