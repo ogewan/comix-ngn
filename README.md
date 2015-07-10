@@ -134,6 +134,8 @@ attribute to preload images but not implemented yet
 
 **1.9.3** New version of direction, bugfixes on direction
 
+**1.9.4** EVEN MORE direction bugfixes, loader broke but now it seems to work and adjusts to height, correctly mapped callbacks, comix-ngn now uses localstorage to store recent comic page
+
 ### comix-ngn Writer version 1.1.0 (beta)
 **0.5.0**: "Initial Setup, Versioning
 
