@@ -1,4 +1,4 @@
-/** @preserve comix-ngn v1.9.5 | (c) 2015 Oluwaseun Ogedengbe| seun40.github.io/comic-ng/ |License: MIT|
+/** @preserve comix-ngn v1.9.6 | (c) 2015 Oluwaseun Ogedengbe| seun40.github.io/comic-ng/ |License: MIT|
 embeds domReady: github.com/ded/domready (MIT) (c) 2013 Dustin Diaz, pegasus: typicode.github.io/pegasus (MIT) (c) 2014 typicode, pathjs (MIT) (c) 2011 Mike Trpcic, direction.js*/
 
 var cG = cG||{};/*if(void 0===cG) var cG = {};*//*check if cG is already is instantiated*/
@@ -9,20 +9,21 @@ function N(){return 0};/*null function*/
 if(void 0===$GPC){var $GPC=0;}
 cG.root = '';
 cG.cPanel = cG.cPanel||{};
-cG.info = {vix: "1.9.5",vwr: "1.5.0",vpr: "0.1.0"};
+cG.info = {vix: "1.9.6",vwr: "1.5.0",vpr: "0.1.0"};
 cG.dis = cG.dis||{};
 cG.comicId = cG.comicId||window.location.host;
 !function(){
     var selfScript = document.getElementsByTagName("SCRIPT");
-    if(void 0!==selfScript){
+    //console.log(selfScript);
+    if(void 0!==selfScript||selfScript===null){
         for(var q = 0;q<selfScript.length;q++){
             if(selfScript[q].src.indexOf("comixngn")>=0){
                 selfScript = selfScript[q];
                 break;
             }
         }
-        cG.comicId = (selfScript.getAttribute("comicID") !== void 0)?selfScript.getAttribute("comicID"):cG.comicId;
-        if(selfScript.getAttribute("plugin") !== void 0){
+        cG.comicId = (selfScript.getAttribute("comicID") !== void 0&&selfScript.getAttribute("disable") !== null)?selfScript.getAttribute("comicID"):cG.comicId;
+        if(selfScript.getAttribute("plugin") !== void 0&&selfScript.getAttribute("plugin")!==null){
             var plugin = selfScript.getAttribute("plugin").replace(/\s+/g, '').split(',');
             cG.root = plugin;
             /*mutliplugin priority not implemented*/
@@ -31,7 +32,7 @@ cG.comicId = cG.comicId||window.location.host;
                 cG.dis[disables[w]]=true;
             }*/
         }
-        if(selfScript.getAttribute("disable") !== void 0){
+        if(selfScript.getAttribute("disable") !== void 0&&selfScript.getAttribute("disable")!==null){
             var disables = selfScript.getAttribute("disable").replace(/\s+/g, '').split(',');
             for(var w = 0;w<disables.length;w++){
                 if(disables[w]==""||disables[w]===void 0||disables[w]==" ") continue;
@@ -39,7 +40,7 @@ cG.comicId = cG.comicId||window.location.host;
             }
         }
     }
-}
+}()
 if(cG.dis.rollbar!=true){
     /*rollbar*/
     var _rollbarConfig = _rollbarConfig||{
@@ -131,8 +132,7 @@ t[b].imaginaryID=-1,t[b].addEventListener("load",k,!1);r(h,void 0===v||null===v|
     main.type = "def";
     var lscurrent = function(){
         if(typeof(Storage) !== "undefined") {
-            localStorage.setItem(cG.comicId+"|"+name+"|curPage",cG.cPanel.def_0.current().toString());
-            /*we need a mechanism to store the currpage uniquely, that is, each webpage has a unique identifier that contains its current page so there is no overlap. i.e page 5 on xkcd and page 3 on gunnerkrigg*/
+            localStorage.setItem(cG.comicId+"|"+name+"|curPage",cG.cPanel["def_"+name].current().toString());
         }
     }
     main.callback(1,lscurrent);
@@ -140,14 +140,14 @@ t[b].imaginaryID=-1,t[b].addEventListener("load",k,!1);r(h,void 0===v||null===v|
 }}};
 ///////
 cG.REPO.scReq = cG.REPO.scReq||{};
-cG.REPO.actor = cG.REPO.actor||{def: ""};
+cG.REPO.ctrls = cG.REPO.ctrls||{def: ""};
 cG.REPO.decor = cG.REPO.decor||{def: ""};
 cG.REPO.script = cG.REPO.script||{def: ""};
 /*SHORTCUTS*/
 cG.agent = cG.REPO.agent.def;
 cG.director = cG.REPO.director.def;
 cG.producer = cG.REPO.producer.def;
-cG.actor = cG.REPO.actor.def;
+cG.ctrls = cG.REPO.ctrls.def;
 cG.decor = cG.REPO.decor.def;
 cG.script = cG.REPO.script.def;
 cG.stage = cG.REPO.stage.def;
@@ -198,11 +198,22 @@ if(void 0===cG.REPO.scReq.getDecor){
         cG.decor = cG.REPO.decor.def = 0;
     });
 }
+if(void 0===cG.REPO.scReq.getCtrls){
+    cG.REPO.scReq.getCtrls = cG.agent(tir+'ctrls.html');
+    cG.REPO.scReq.getCtrls.then(
+    function(data, xhr) {
+        cG.ctrls = cG.REPO.ctrls.def = data;
+    },
+    function(data, xhr) {
+        console.error(data, xhr.status);
+        cG.ctrls = cG.REPO.ctrls.def = 0;
+    });
+}
 /*END AJAX calls*/
 /*STAGE creation-REDACTED*/
 cG.HELPERS.jstagecreate = N;
 cG.stageInjection = function(SPECIFIC){
-    if(cG.script === '' || cG.decor === '') {//although we don't need decor, if there is a template, we prioritize it
+    if(cG.script === '' || cG.decor === ''|| cG.ctrls === '') {//although we don't need decor, if there is a template, we prioritize it
         /*if are stuff isn't ready yet we are going to wait for it*/
         setTimeout(cG.stageInjection, 300,SPECIFIC); 
         return cG.cPanel;
@@ -221,6 +232,7 @@ cG.stageInjection = function(SPECIFIC){
     }
     var final_res = cG.cPanel,
         decor = (cG.decor)?cG.decor:'<div id="location"></div><div id="archive">Archive</div><div id="me">About Me</div>',
+        ctrls = (cG.ctrls)?cG.ctrls:'<div>NOT IMPLEMENTED YET</div>',
         reqQueue = [],
         request = function(iD,source){//,srcScript,srcScriptReq){            
             /*initial setup*/
@@ -280,9 +292,10 @@ cG.stageInjection = function(SPECIFIC){
             }
             anchorto.style.display = "block";
             //console.log(anchorto,anchorto.style)
-            final_res[use_attr+"_"+iD] = cG.stage.construct(id_attr,myScript,anchorto,config_attr);
+            final_res[use_attr+"_"+id_attr] = cG.stage.construct(id_attr,myScript,anchorto,config_attr);
         };
     for (var i = 0; i < stages.length; i++) request(i);
+    cG.cPanel=final_res;
     return final_res;
 };
 /*end STAGE creation*/
@@ -366,7 +379,8 @@ domReady(function(){
     }
     if(b||b==void 0||b==""){
         //cG.HELPERS.jstagecreate();
-        cG.cPanel=cG.stageInjection();
-        console.log(cG.cPanel);
+        //cG.cPanel=cG.stageInjection();
+        cG.stageInjection();
+        //console.log(cG.cPanel);
     }
 });

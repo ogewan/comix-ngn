@@ -96,7 +96,7 @@ comix-ngn is
 **venue** - This class marks an element as a place for a stage to be imported. These are preferably divs. If the element does not have an id, it is given one automatically.
 
 ## Changelog
-### comix-ngn version 1.9.5 (beta)
+### comix-ngn version 1.9.6 (beta)
 **0.5.0**: Initial Setup, Version tracking
 
 **0.7.58**: Added Dependencies (JS): (jquery.min, angular-touch.min, angular.min[Update],bootstrap.min), Carousel for slides, real-time reactivity
@@ -149,7 +149,10 @@ attribute to preload images but not implemented yet
 **1.9.4** EVEN MORE direction bugfixes, loader broke but now it seems to work and adjusts to height, correctly mapped callbacks, comix-ngn now uses localstorage to store recent comic page
 * addendum: error reporting disabling added
 
-**1.9.5** comicid field added, store most recent page and goes to it automatically upon reload, constructor now simply returns a direction object, thus to use its commands ".main" prefix can be ommitted
+**1.9.5** comicid field added, store most recent page and goes to it automatically upon reload, constructor now simply returns a direction object, thus to use its commands ".main" prefix can be omitted
+* 1.9.5.9 added ctrls.html ajax request
+
+**1.9.6** comixngn.jq.js jquery plugin added, registers the stage injection function so that can be used via jquery selectors; This version doesn't take arguments. Framework now binds the direction object and stores recent page according to a stage's id attribute rather than iD, which is a terrible identifier for multiple reasons.
 
 ### comix-ngn Writer version 1.5.0 (beta)
 **0.5.0**: "Initial Setup, Versioning

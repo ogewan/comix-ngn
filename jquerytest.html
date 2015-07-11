@@ -1,0 +1,17 @@
+<!DOCTYPE html><title>comix-ngn jQuery</title>
+<!--<script src="plugins/bellerophon.cng.min.js" dir template></script><script src="comixngn.js" plugin></script><base href="/comic-ng/">-->
+<script src="comixngn.jq.js"></script>
+<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script src="comixngn.js" disable="rollbar"></script>
+<div class="test" id="test"></div>
+<div class="test"></div>
+<div id="super"></div>
+<script>
+var frame = function(){
+    if(jQuery.fn.stageInjection===void 0) return window.setTimeout(frame,400)
+    console.log($(".test"))
+    $(".test").stageInjection();
+    $("#super").stageInjection();
+}
+void(window.addEventListener ? window.addEventListener("load", frame, !1) : window.attachEvent ? window.attachEvent("onload", frame) : window.onload = frame)
+</script>

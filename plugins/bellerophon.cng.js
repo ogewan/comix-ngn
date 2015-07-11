@@ -27,8 +27,9 @@ Order: before comixNgn.js
             agent: function(t,e){return e=new XMLHttpRequest,e.open("GET",t),t=[],e.onreadystatechange=e.then=function(n,o,i){if(n&&n.call&&(t=[,n,o]),4==e.readyState&&(i=t[0|e.status/200]))try{i(JSON.parse(e.responseText),e)}catch(r){i(e.responseText,e)}},e.send(),e},
             REPO: {scReq:{}}
         };
-        cG.REPO.scReq.getScript = cG.agent(dir+'script.json'),
+        cG.REPO.scReq.getScript = cG.agent(dir+'script.json');
         cG.REPO.scReq.getDecor = cG.agent(tir+'decor.html');
+        cG.REPO.scReq.getCtrls = cG.agent(tir+'ctrls.html');
         cG.REPO.scReq.getScript.then(
             function(data, xhr) {
                 if(void 0===cG.REPO.script) cG.REPO.script = {def:data};
@@ -52,6 +53,18 @@ Order: before comixNgn.js
                 if(void 0===cG.REPO.decor) cG.REPO.decor = {def:0};
                 else cG.REPO.decor.def = 0;
                 cG.decor = cG.REPO.decor.def;
+            });
+        cG.REPO.scReq.getCtrls.then(
+            function(data, xhr) {
+                if(void 0===cG.REPO.decor) cG.REPO.ctrls = {def:data};
+                else cG.REPO.decor.ctrls = data;
+                cG.ctrls = cG.REPO.ctrls.def;
+            },
+            function(data, xhr) {
+                console.error(data, xhr.status);
+                if(void 0===cG.REPO.decor) cG.REPO.ctrls = {def:0};
+                else cG.REPO.ctrls.def = 0;
+                cG.ctrls = cG.REPO.ctrls.def;
             });
     }
     else window.console.debug("CNG Plug-in: Bellerophon must be loaded before comixngn.js");

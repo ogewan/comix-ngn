@@ -25,8 +25,9 @@
         },
         dfr = function() {
             var c = document.createElement("script");
-            cG.REPO.scReq.getScript = cG.agent("./" + dir + "script.json"),
+            cG.REPO.scReq.getScript = cG.agent("./" + dir + "script.json");
             cG.REPO.scReq.getDecor = cG.agent("./" + tir + "decor.html");
+            cG.REPO.scReq.getCtrls = cG.agent(tir+'ctrls.html');
             cG.REPO.scReq.getScript.then(function(c) {
                 void 0 === cG.REPO.script ? cG.REPO.script = {
                     def: c
@@ -43,6 +44,14 @@
                 console.error(c, e.status), void 0 === cG.REPO.decor ? cG.REPO.decor = {
                     def: 0
                 } : cG.REPO.decor.def = 0, cG.decor = cG.REPO.decor.def
+            }), cG.REPO.scReq.getCtrls.then(function(c) {
+                void 0 === cG.REPO.ctrls ? cG.REPO.ctrls = {
+                    def: c
+                } : cG.REPO.ctrls.def = c, cG.ctrls = cG.REPO.ctrls.def
+            }, function(c, e) {
+                console.error(c, e.status), void 0 === cG.REPO.ctrls ? cG.REPO.ctrls = {
+                    def: 0
+                } : cG.REPO.ctrls.def = 0, cG.ctrls = cG.REPO.ctrls.def
             });
             cG.comicId = comicID;
             for(var b=0;b<disable.length;b++){
