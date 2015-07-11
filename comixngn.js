@@ -14,15 +14,16 @@ cG.dis = cG.dis||{};
 cG.comicId = cG.comicId||window.location.host;
 !function(){
     var selfScript = document.getElementsByTagName("SCRIPT");
-    if(void 0!==selfScript){
+    //console.log(selfScript);
+    if(void 0!==selfScript||selfScript===null){
         for(var q = 0;q<selfScript.length;q++){
             if(selfScript[q].src.indexOf("comixngn")>=0){
                 selfScript = selfScript[q];
                 break;
             }
         }
-        cG.comicId = (selfScript.getAttribute("comicID") !== void 0)?selfScript.getAttribute("comicID"):cG.comicId;
-        if(selfScript.getAttribute("plugin") !== void 0){
+        cG.comicId = (selfScript.getAttribute("comicID") !== void 0&&selfScript.getAttribute("disable") !== null)?selfScript.getAttribute("comicID"):cG.comicId;
+        if(selfScript.getAttribute("plugin") !== void 0&&selfScript.getAttribute("plugin")!==null){
             var plugin = selfScript.getAttribute("plugin").replace(/\s+/g, '').split(',');
             cG.root = plugin;
             /*mutliplugin priority not implemented*/
@@ -31,7 +32,7 @@ cG.comicId = cG.comicId||window.location.host;
                 cG.dis[disables[w]]=true;
             }*/
         }
-        if(selfScript.getAttribute("disable") !== void 0){
+        if(selfScript.getAttribute("disable") !== void 0&&selfScript.getAttribute("disable")!==null){
             var disables = selfScript.getAttribute("disable").replace(/\s+/g, '').split(',');
             for(var w = 0;w<disables.length;w++){
                 if(disables[w]==""||disables[w]===void 0||disables[w]==" ") continue;
@@ -39,7 +40,7 @@ cG.comicId = cG.comicId||window.location.host;
             }
         }
     }
-}
+}()
 if(cG.dis.rollbar!=true){
     /*rollbar*/
     var _rollbarConfig = _rollbarConfig||{
