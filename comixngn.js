@@ -1,4 +1,4 @@
-/** @preserve comix-ngn v1.9.5 | (c) 2015 Oluwaseun Ogedengbe| seun40.github.io/comic-ng/ |License: MIT|
+/** @preserve comix-ngn v1.9.6 | (c) 2015 Oluwaseun Ogedengbe| seun40.github.io/comic-ng/ |License: MIT|
 embeds domReady: github.com/ded/domready (MIT) (c) 2013 Dustin Diaz, pegasus: typicode.github.io/pegasus (MIT) (c) 2014 typicode, pathjs (MIT) (c) 2011 Mike Trpcic, direction.js*/
 
 var cG = cG||{};/*if(void 0===cG) var cG = {};*//*check if cG is already is instantiated*/
@@ -9,7 +9,7 @@ function N(){return 0};/*null function*/
 if(void 0===$GPC){var $GPC=0;}
 cG.root = '';
 cG.cPanel = cG.cPanel||{};
-cG.info = {vix: "1.9.5.9",vwr: "1.5.0",vpr: "0.1.0"};
+cG.info = {vix: "1.9.6",vwr: "1.5.0",vpr: "0.1.0"};
 cG.dis = cG.dis||{};
 cG.comicId = cG.comicId||window.location.host;
 !function(){
@@ -131,7 +131,7 @@ t[b].imaginaryID=-1,t[b].addEventListener("load",k,!1);r(h,void 0===v||null===v|
     main.type = "def";
     var lscurrent = function(){
         if(typeof(Storage) !== "undefined") {
-            localStorage.setItem(cG.comicId+"|"+name+"|curPage",cG.cPanel.def_0.current().toString());
+            localStorage.setItem(cG.comicId+"|"+name+"|curPage",cG.cPanel["def_"+name].current().toString());
             /*we need a mechanism to store the currpage uniquely, that is, each webpage has a unique identifier that contains its current page so there is no overlap. i.e page 5 on xkcd and page 3 on gunnerkrigg*/
         }
     }
@@ -292,7 +292,7 @@ cG.stageInjection = function(SPECIFIC){
             }
             anchorto.style.display = "block";
             //console.log(anchorto,anchorto.style)
-            final_res[use_attr+"_"+iD] = cG.stage.construct(id_attr,myScript,anchorto,config_attr);
+            final_res[use_attr+"_"+id_attr] = cG.stage.construct(id_attr,myScript,anchorto,config_attr);
         };
     for (var i = 0; i < stages.length; i++) request(i);
     return final_res;
