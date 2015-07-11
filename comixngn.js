@@ -9,7 +9,7 @@ function N(){return 0};/*null function*/
 if(void 0===$GPC){var $GPC=0;}
 cG.root = '';
 cG.cPanel = cG.cPanel||{};
-cG.info = {vix: "1.9.5",vwr: "1.5.0",vpr: "0.1.0"};
+cG.info = {vix: "1.9.5.9",vwr: "1.5.0",vpr: "0.1.0"};
 cG.dis = cG.dis||{};
 cG.comicId = cG.comicId||window.location.host;
 !function(){
@@ -140,14 +140,14 @@ t[b].imaginaryID=-1,t[b].addEventListener("load",k,!1);r(h,void 0===v||null===v|
 }}};
 ///////
 cG.REPO.scReq = cG.REPO.scReq||{};
-cG.REPO.actor = cG.REPO.actor||{def: ""};
+cG.REPO.ctrls = cG.REPO.ctrls||{def: ""};
 cG.REPO.decor = cG.REPO.decor||{def: ""};
 cG.REPO.script = cG.REPO.script||{def: ""};
 /*SHORTCUTS*/
 cG.agent = cG.REPO.agent.def;
 cG.director = cG.REPO.director.def;
 cG.producer = cG.REPO.producer.def;
-cG.actor = cG.REPO.actor.def;
+cG.ctrls = cG.REPO.ctrls.def;
 cG.decor = cG.REPO.decor.def;
 cG.script = cG.REPO.script.def;
 cG.stage = cG.REPO.stage.def;
@@ -198,11 +198,22 @@ if(void 0===cG.REPO.scReq.getDecor){
         cG.decor = cG.REPO.decor.def = 0;
     });
 }
+if(void 0===cG.REPO.scReq.getCtrls){
+    cG.REPO.scReq.getCtrls = cG.agent(tir+'ctrls.html');
+    cG.REPO.scReq.getCtrls.then(
+    function(data, xhr) {
+        cG.ctrls = cG.REPO.ctrls.def = data;
+    },
+    function(data, xhr) {
+        console.error(data, xhr.status);
+        cG.ctrls = cG.REPO.ctrls.def = 0;
+    });
+}
 /*END AJAX calls*/
 /*STAGE creation-REDACTED*/
 cG.HELPERS.jstagecreate = N;
 cG.stageInjection = function(SPECIFIC){
-    if(cG.script === '' || cG.decor === '') {//although we don't need decor, if there is a template, we prioritize it
+    if(cG.script === '' || cG.decor === ''|| cG.ctrls === '') {//although we don't need decor, if there is a template, we prioritize it
         /*if are stuff isn't ready yet we are going to wait for it*/
         setTimeout(cG.stageInjection, 300,SPECIFIC); 
         return cG.cPanel;
@@ -221,6 +232,7 @@ cG.stageInjection = function(SPECIFIC){
     }
     var final_res = cG.cPanel,
         decor = (cG.decor)?cG.decor:'<div id="location"></div><div id="archive">Archive</div><div id="me">About Me</div>',
+        ctrls = (cG.ctrls)?cG.ctrls:'<div>NOT IMPLEMENTED YET</div>',
         reqQueue = [],
         request = function(iD,source){//,srcScript,srcScriptReq){            
             /*initial setup*/

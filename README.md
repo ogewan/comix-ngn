@@ -149,7 +149,8 @@ attribute to preload images but not implemented yet
 **1.9.4** EVEN MORE direction bugfixes, loader broke but now it seems to work and adjusts to height, correctly mapped callbacks, comix-ngn now uses localstorage to store recent comic page
 * addendum: error reporting disabling added
 
-**1.9.5** comicid field added, store most recent page and goes to it automatically upon reload, constructor now simply returns a direction object, thus to use its commands ".main" prefix can be ommitted
+**1.9.5** comicid field added, store most recent page and goes to it automatically upon reload, constructor now simply returns a direction object, thus to use its commands ".main" prefix can be omitted
+* 1.9.5.9 added ctrls.html ajax request
 
 ### comix-ngn Writer version 1.5.0 (beta)
 **0.5.0**: "Initial Setup, Versioning
