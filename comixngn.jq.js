@@ -13,7 +13,7 @@
         jQuery.fn.stageInjection = function() {
             return this.each( function() {
                 //console.log($(this).context)
-                cG.cPanel=cG.stageInjection($(this).context);
+                cG.stageInjection($(this).context);
             });
         }
     }

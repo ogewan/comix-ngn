@@ -5,11 +5,13 @@
 <script src="comixngn.js" disable="rollbar"></script>
 <div class="test" id="test"></div>
 <div class="test"></div>
+<div id="super"></div>
 <script>
 var frame = function(){
     if(jQuery.fn.stageInjection===void 0) return window.setTimeout(frame,400)
     console.log($(".test"))
     $(".test").stageInjection();
+    $("#super").stageInjection();
 }
 void(window.addEventListener ? window.addEventListener("load", frame, !1) : window.attachEvent ? window.attachEvent("onload", frame) : window.onload = frame)
 </script>

@@ -133,7 +133,6 @@ t[b].imaginaryID=-1,t[b].addEventListener("load",k,!1);r(h,void 0===v||null===v|
     var lscurrent = function(){
         if(typeof(Storage) !== "undefined") {
             localStorage.setItem(cG.comicId+"|"+name+"|curPage",cG.cPanel["def_"+name].current().toString());
-            /*we need a mechanism to store the currpage uniquely, that is, each webpage has a unique identifier that contains its current page so there is no overlap. i.e page 5 on xkcd and page 3 on gunnerkrigg*/
         }
     }
     main.callback(1,lscurrent);
@@ -296,6 +295,7 @@ cG.stageInjection = function(SPECIFIC){
             final_res[use_attr+"_"+id_attr] = cG.stage.construct(id_attr,myScript,anchorto,config_attr);
         };
     for (var i = 0; i < stages.length; i++) request(i);
+    cG.cPanel=final_res;
     return final_res;
 };
 /*end STAGE creation*/
@@ -379,7 +379,8 @@ domReady(function(){
     }
     if(b||b==void 0||b==""){
         //cG.HELPERS.jstagecreate();
-        cG.cPanel=cG.stageInjection();
-        console.log(cG.cPanel);
+        //cG.cPanel=cG.stageInjection();
+        cG.stageInjection();
+        //console.log(cG.cPanel);
     }
 });
