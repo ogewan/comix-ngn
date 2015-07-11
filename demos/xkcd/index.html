@@ -14,9 +14,7 @@ changed: title tag, added class"venue" to tag comic, added classes to buttons in
 <link rel="alternate" type="application/atom+xml" title="Atom 1.0" href="http://xkcd.com/atom.xml"/>
 <link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="http://xkcd.com/rss.xml"/>
 <script>/*DEFERRED COMIX-NGN*/
-var defer=!0,mainsrc="../comixngn.min.js",loadcng=[],plugin="",dir="",tir="",$GPC=$GPC+1||1,cG={agent:function(b,a){return a=new XMLHttpRequest,a.open("GET",b),b=[],a.onreadystatechange=a.then=function(c,e,d){if(c&&c.call&&(b=[,c,e]),4==a.readyState&&(d=b[0|a.status/200]))try{d(JSON.parse(a.responseText),a)}catch(f){d(a.responseText,a)}},a.send(),a},REPO:{scReq:{}}},dfr=function(){imagedeffer();var b=document.createElement("script");cG.REPO.scReq.getScript=cG.agent("./"+dir+"script.json");cG.REPO.scReq.getDecor=cG.agent("./"+
-tir+"decor.html");cG.REPO.scReq.getScript.then(function(a){void 0===cG.REPO.script?cG.REPO.script={def:a}:cG.REPO.script.def=a;cG.script=cG.REPO.script.def},function(a,b){console.error(a,b.status);void 0===cG.REPO.script?cG.REPO.script={def:0}:cG.REPO.script.def=a;cG.script=cG.REPO.script.def});cG.REPO.scReq.getDecor.then(function(a){void 0===cG.REPO.decor?cG.REPO.decor={def:a}:cG.REPO.decor.def=a;cG.decor=cG.REPO.decor.def},function(a,b){console.error(a,b.status);void 0===cG.REPO.decor?cG.REPO.decor=
-{def:0}:cG.REPO.decor.def=0;cG.decor=cG.REPO.decor.def});b.src=mainsrc;document.body.appendChild(b)};!function(){return defer?void(window.addEventListener?window.addEventListener("load",dfr,!1):window.attachEvent?window.attachEvent("onload",dfr):window.onload=dfr):dfr()}();
+var defer=!0,mainsrc="../comixngn.min.js",loadcng=[],plugin="",comicID="xkcd_CNG",disable=["rollbar"],/*! Bellerophon: Comix-Ngn plugin|pegasus: typicode.github.io/pegasus (MIT) (c) 2014 typicode*/dir="",tir="",$GPC=$GPC+1||1,cG={agent:function(e,c){return c=new XMLHttpRequest,c.open("GET",e),e=[],c.onreadystatechange=c.then=function(t,r,o){if(t&&t.call&&(e=[,t,r]),4==c.readyState&&(o=e[0|c.status/200]))try{o(JSON.parse(c.responseText),c)}catch(d){o(c.responseText,c)}},c.send(),c},REPO:{scReq:{}},dis:{}},dfr=function(){var e=document.createElement("script");cG.REPO.scReq.getScript=cG.agent("./"+dir+"script.json"),cG.REPO.scReq.getDecor=cG.agent("./"+tir+"decor.html"),cG.REPO.scReq.getCtrls=cG.agent(tir+"ctrls.html"),cG.REPO.scReq.getScript.then(function(e){void 0===cG.REPO.script?cG.REPO.script={def:e}:cG.REPO.script.def=e,cG.script=cG.REPO.script.def},function(e,c){console.error(e,c.status),void 0===cG.REPO.script?cG.REPO.script={def:0}:cG.REPO.script.def=e,cG.script=cG.REPO.script.def}),cG.REPO.scReq.getDecor.then(function(e){void 0===cG.REPO.decor?cG.REPO.decor={def:e}:cG.REPO.decor.def=e,cG.decor=cG.REPO.decor.def},function(e,c){console.error(e,c.status),void 0===cG.REPO.decor?cG.REPO.decor={def:0}:cG.REPO.decor.def=0,cG.decor=cG.REPO.decor.def}),cG.REPO.scReq.getCtrls.then(function(e){void 0===cG.REPO.ctrls?cG.REPO.ctrls={def:e}:cG.REPO.ctrls.def=e,cG.ctrls=cG.REPO.ctrls.def},function(e,c){console.error(e,c.status),void 0===cG.REPO.ctrls?cG.REPO.ctrls={def:0}:cG.REPO.ctrls.def=0,cG.ctrls=cG.REPO.ctrls.def}),cG.comicId=comicID;for(var c=0;c<disable.length;c++)cG.dis[disable[c]]=!0;e.src=mainsrc,document.body.appendChild(e);for(var t=0;t<loadcng.length;t++)e=document.createElement("script"),e.src=loadcng[t],document.body.appendChild(e)};!function(){return defer?void(window.addEventListener?window.addEventListener("load",dfr,!1):window.attachEvent?window.attachEvent("onload",dfr):window.onload=dfr):dfr()}();
 /**/
 /*(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -29,42 +27,43 @@ ga('send', 'pageview');*/
 <script>
     var disposeme = function() {
         //console.log("running");
+        var name = "comic";//document.getElementById("comic").getAttribute("id");
         if(cG===void 0) return setTimeout(disposeme, 400);
         else if(cG.cPanel===void 0) return setTimeout(disposeme, 400);
-        else if(cG.cPanel.def_0===void 0) return setTimeout(disposeme, 400);
-        else if(cG.cPanel.def_0===void 0) return setTimeout(disposeme, 400);//possible race condition bug, when url has hash in it
-        else if(cG.cPanel.def_0.data()===void 0) return setTimeout(disposeme, 400);//possible race condition bug, when url has hash in it
-        document.getElementById("comic_location").title=cG.cPanel.def_0.data().hover;
-        document.getElementById("btitle").innerHTML=cG.cPanel.def_0.data().title;
-        document.getElementById("ctitle").innerHTML=cG.cPanel.def_0.data().title;
+        else if(cG.cPanel["def_"+name]===void 0) return setTimeout(disposeme, 400);
+        else if(cG.cPanel["def_"+name]===void 0) return setTimeout(disposeme, 400);//possible race condition bug, when url has hash in it
+        else if(cG.cPanel["def_"+name].data()===void 0) return setTimeout(disposeme, 400);//possible race condition bug, when url has hash in it
+        document.getElementById("comic_location").title=cG.cPanel["def_"+name].data().hover;
+        document.getElementById("btitle").innerHTML=cG.cPanel["def_"+name].data().title;
+        document.getElementById("ctitle").innerHTML=cG.cPanel["def_"+name].data().title;
         var q=document.getElementsByClassName("frst"),
             w=document.getElementsByClassName("prev"),
             e=document.getElementsByClassName("rand"),
             r=document.getElementsByClassName("next"),
             t=document.getElementsByClassName("last");
-        //console.log(q,w,e,r,t,cG.cPanel.def_0);
+        //console.log(q,w,e,r,t,cG.cPanel["def_"+name]);
         for (var y = 0; y < q.length; y++) q[y].addEventListener("click", function() {
-            box = cG.cPanel.def_0.data(cG.cPanel.def_0.frst());
+            box = cG.cPanel["def_"+name].data(cG.cPanel["def_"+name].frst());
             document.getElementById("comic_location").title = box.hover;
             document.getElementById("btitle").innerHTML = document.getElementById("ctitle").innerHTML = box.title;
         });
         for (var y = 0; y < w.length; y++) w[y].addEventListener("click", function() {
-            box = cG.cPanel.def_0.data(cG.cPanel.def_0.prev());
+            box = cG.cPanel["def_"+name].data(cG.cPanel["def_"+name].prev());
             document.getElementById("comic_location").title = box.hover;
             document.getElementById("btitle").innerHTML = document.getElementById("ctitle").innerHTML = box.title;
         });
         for (var y = 0; y < e.length; y++) e[y].addEventListener("click", function() {
-            box = cG.cPanel.def_0.data(cG.cPanel.def_0.rand());
+            box = cG.cPanel["def_"+name].data(cG.cPanel["def_"+name].rand());
             document.getElementById("comic_location").title = box.hover;
             document.getElementById("btitle").innerHTML = document.getElementById("ctitle").innerHTML = box.title;
         });
         for (var y = 0; y < r.length; y++) r[y].addEventListener("click", function() {
-            box = cG.cPanel.def_0.data(cG.cPanel.def_0.next());
+            box = cG.cPanel["def_"+name].data(cG.cPanel["def_"+name].next());
             document.getElementById("comic_location").title = box.hover;
             document.getElementById("btitle").innerHTML = document.getElementById("ctitle").innerHTML = box.title;
         });
         for (var y = 0; y < t.length; y++) t[y].addEventListener("click", function() {
-            box = cG.cPanel.def_0.data(cG.cPanel.def_0.last());
+            box = cG.cPanel["def_"+name].data(cG.cPanel["def_"+name].last());
             document.getElementById("comic_location").title = box.hover;
             document.getElementById("btitle").innerHTML = document.getElementById("ctitle").innerHTML = box.title;
         });
