@@ -25,12 +25,20 @@ The Modern Webcomic Framework
   * set **mainsrc** to the version of comix-ngn use want to use: comixngn.js or comixngn.min.js __[Recommended]__. You probably shouldn't change this unless you are debugging.
   * If using Bellerophon Embed, do not add additional plugins via the script tag. Since they load immediately while comixngn.js may be deffered, the plugins will panic and refuse to load. Simply add the plugin path as a string to the **loadcng** array in Bellerophon Embed to include plugins.
 
-  * The **plugin** variable functions exactly like the **plugin attribute**.
+  * The **plugin** and **comicID** variable functions exactly like the **plugin attribute** and **comicID**attributes respectively. The **disable** array functions similarly to the **disable attribute**.
 
 * For more fine-grain control, use the following additional attributes:
-  * __plugin__ - By default, the last installed plugin will be set as default. To use a specific plug-in as default, simply set the **plugin** attribute in the script tag to the plugin name. Setting it to "default" will use the original framework settings. Setting it as an array, will create plug-in priority. Note, an array must be submitted as a string: "[1,2,3]".
+  * __comicID__ - This sets the Id of the comic which is allows the framework to save site specific settings to user's browsers, such as most recently viewed page. It will default to the website's host name if not given.
+
+  ```<script src="comixngn.js" comixID="comixngn"></script>```
+
+  * __plugin__ - By default, the last installed plugin will be set as default. To use a specific plug-in as default, simply set the **plugin** attribute in the script tag to the plugin name. Setting it to "default" will use the original framework settings. Setting it as an array, will create plug-in priority. ~~Note, an array must be submitted as a string: "1,2,3"~~. Priority queue is currently unsupported.
 
   ```<script src="comixngn.js" plugin="default"></script>```
+
+  * __disable__ - This disables comix-ngn's error reporting and tracking functions. An array can be provided, to disable multiple error reporters, but it must be submitted as a string: "1,2,3". Currently, comix-ngn uses RollBar.
+
+  ```<script src="comixngn.js" disable="rollbar"></script>```
 
   * __use__ - Stages will use the currently set defaults for creation and operation. Simply set the **use** attribute in the "venue" element that you want to use specified plug-ins for. Setting it to "default" will use the original framework settings. Setting it as an array, will create plugin priority. Note, an array must be submitted as a string: "[1,2,3]".
 
