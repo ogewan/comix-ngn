@@ -1,4 +1,4 @@
-/** @preserve comix-ngn v1.9.6 | (c) 2015 Oluwaseun Ogedengbe| seun40.github.io/comic-ng/ |License: MIT|
+/** @preserve comix-ngn v1.0.0 | (c) 2015 Oluwaseun Ogedengbe| seun40.github.io/comic-ng/ |License: MIT|
 embeds domReady: github.com/ded/domready (MIT) (c) 2013 Dustin Diaz, pegasus: typicode.github.io/pegasus (MIT) (c) 2014 typicode, pathjs (MIT) (c) 2011 Mike Trpcic, direction.js*/
 
 var cG = cG||{};/*if(void 0===cG) var cG = {};*//*check if cG is already is instantiated*/
@@ -9,7 +9,7 @@ function N(){return 0};/*null function*/
 if(void 0===$GPC){var $GPC=0;}
 cG.root = '';
 cG.cPanel = cG.cPanel||{};
-cG.info = {vix: "1.9.6",vwr: "1.5.0",vpr: "0.1.0"};
+cG.info = {vix: "1.0.0",vwr: "0.5.0",vpr: "0.1.0"};
 cG.dis = cG.dis||{};
 cG.comicID = cG.comicID||window.location.host;
 cG.prePage = cG.prePage||-1;
@@ -65,6 +65,7 @@ if(cG.dis.rollbar!=true){
 else window.console.debug("status: rollbar disabled")
 /*DEFAULT LIB FUNCTIONS*/
 var Path={version:"0.8.4",map:function(a){if(Path.routes.defined.hasOwnProperty(a)){return Path.routes.defined[a]}else{return new Path.core.route(a)}},root:function(a){Path.routes.root=a},rescue:function(a){Path.routes.rescue=a},history:{initial:{},pushState:function(a,b,c){if(Path.history.supported){if(Path.dispatch(c)){history.pushState(a,b,c)}}else{if(Path.history.fallback){window.location.hash="#"+c}}},popState:function(a){var b=!Path.history.initial.popped&&location.href==Path.history.initial.URL;Path.history.initial.popped=true;if(b)return;Path.dispatch(document.location.pathname)},listen:function(a){Path.history.supported=!!(window.history&&window.history.pushState);Path.history.fallback=a;if(Path.history.supported){Path.history.initial.popped="state"in window.history,Path.history.initial.URL=location.href;window.onpopstate=Path.history.popState}else{if(Path.history.fallback){for(route in Path.routes.defined){if(route.charAt(0)!="#"){Path.routes.defined["#"+route]=Path.routes.defined[route];Path.routes.defined["#"+route].path="#"+route}}Path.listen()}}}},match:function(a,b){var c={},d=null,e,f,g,h,i;for(d in Path.routes.defined){if(d!==null&&d!==undefined){d=Path.routes.defined[d];e=d.partition();for(h=0;h<e.length;h++){f=e[h];i=a;if(f.search(/:/)>0){for(g=0;g<f.split("/").length;g++){if(g<i.split("/").length&&f.split("/")[g].charAt(0)===":"){c[f.split("/")[g].replace(/:/,"")]=i.split("/")[g];i=i.replace(i.split("/")[g],f.split("/")[g])}}}if(f===i){if(b){d.params=c}return d}}}}return null},dispatch:function(a){var b,c;if(Path.routes.current!==a){Path.routes.previous=Path.routes.current;Path.routes.current=a;c=Path.match(a,true);if(Path.routes.previous){b=Path.match(Path.routes.previous);if(b!==null&&b.do_exit!==null){b.do_exit()}}if(c!==null){c.run();return true}else{if(Path.routes.rescue!==null){Path.routes.rescue()}}}},listen:function(){var a=function(){Path.dispatch(location.hash)};if(location.hash===""){if(Path.routes.root!==null){location.hash=Path.routes.root}}if("onhashchange"in window&&(!document.documentMode||document.documentMode>=8)){window.onhashchange=a}else{setInterval(a,50)}if(location.hash!==""){Path.dispatch(location.hash)}},core:{route:function(a){this.path=a;this.action=null;this.do_enter=[];this.do_exit=null;this.params={};Path.routes.defined[a]=this}},routes:{current:null,root:null,rescue:null,previous:null,defined:{}}};Path.core.route.prototype={to:function(a){this.action=a;return this},enter:function(a){if(a instanceof Array){this.do_enter=this.do_enter.concat(a)}else{this.do_enter.push(a)}return this},exit:function(a){this.do_exit=a;return this},partition:function(){var a=[],b=[],c=/\(([^}]+?)\)/g,d,e;while(d=c.exec(this.path)){a.push(d[1])}b.push(this.path.split("(")[0]);for(e=0;e<a.length;e++){b.push(b[b.length-1]+a[e])}return b},run:function(){var a=false,b,c,d;if(Path.routes.defined[this.path].hasOwnProperty("do_enter")){if(Path.routes.defined[this.path].do_enter.length>0){for(b=0;b<Path.routes.defined[this.path].do_enter.length;b++){c=Path.routes.defined[this.path].do_enter[b]();if(c===false){a=true;break}}}}if(!a){Path.routes.defined[this.path].action()}}};
+(function(){"use strict";var router=function(){var _routes={},_namedParam=/:\w+/g,_splatParam=/\*\w+/g,_prepareRoute,_stripTrailingSlash,module;_stripTrailingSlash=function(str){if(str.substr(-1)=="/"){return str.substr(0,str.length-1)}return str};_prepareRoute=function(route){if(!route){return null}return _stripTrailingSlash(route).replace(_namedParam,"([^/]+)").replace(_splatParam,"(.*?)")};module=function(base,routes){base||(base="/");this.base=_prepareRoute(base);if(typeof routes==="object"){_routes=routes;this.dispatch()}};module.prototype={on:function(route,callback){if(!route){throw new Error("A route needs to be defined")}callback||(callback=function(){});route=this.base+_prepareRoute(route);_routes["^"+route+"$"]=callback;return route},dispatch:function(event){var regex,regexText,callback,path;for(regexText in _routes){if(_routes.hasOwnProperty(regexText)){callback=_routes[regexText];regex=new RegExp(regexText);path=_prepareRoute(window.location.pathname);if(regex.test(path)){callback.call(false,regexText,path,event)}}}}};return module}();if(typeof module!=="undefined"&&module.exports){module.exports=router}else if(typeof this!=="undefined"){this.router=router}}).call(this);//location init
 
 /*domReady.js*/!function(e,t){typeof module!="undefined"?module.exports=t():typeof define=="function"&&typeof define.amd=="object"?define(t):this[e]=t()}("domReady",function(e){function p(e){h=1;while(e=t.shift())e()}var t=[],n,r=!1,i=document,s=i.documentElement,o=s.doScroll,u="DOMContentLoaded",a="addEventListener",f="onreadystatechange",l="readyState",c=o?/^loaded|^c/:/^loaded|c/,h=c.test(i[l]);return i[a]&&i[a](u,n=function(){i.removeEventListener(u,n,r),p()},r),o&&i.attachEvent(f,n=function(){/^c/.test(i[l])&&(i.detachEvent(f,n),p())}),e=o?function(n){self!=top?h?n():t.push(n):function(){try{s.doScroll("left")}catch(t){return setTimeout(function(){e(n)},50)}n()}()}:function(e){h?e():t.push(e)}});
 /*domready cannot be embedded into the cG object, which means it is not replacable via plugin*/
@@ -137,9 +138,16 @@ r[b].imaginaryID=-1,r[b].addEventListener("load",h,!1);q(g,void 0===u||null===u|
         if(typeof(Storage) !== void 0) {
             localStorage.setItem(cG.comicID+"|"+name+"|curPage",cG.cPanel["def_"+name].current().toString());
         }
+        if(cG.comix===cG.cPanel["def_"+name]){//if comic is the comix, then push its state
+            var modify = (cG.script.config.startpage)?1:0;
+            console.log(name,"Pushing state:",(cG.cPanel["def_"+name].current()+modify));
+            history.pushState({}, null, "#/"+(cG.cPanel["def_"+name].current()+modify));
+        }
         var strct = cG.cPanel["def_"+name].data(cG.cPanel["def_"+name].current()).special;
         //console.log(strct);
         //strct="pie";
+        var zombie = document.getElementById(name+"_tempScript");//fetch zombie child
+        if(zombie!==void 0&&zombie!==null) anchor.removeChild(zombie);//kill the zombie
         if(strct!==null&&strct!==void 0&&strct!=""){
             //anchor.innerHTML += anchor.innerHTML+strct;//this breaks the cavases
             var spanr = document.createElement("SPAN");
@@ -171,24 +179,18 @@ cG.HELPERS = {};
 
 /*AJAX Calls*/
 /*debugging: ensures cG is correctly instaniated*//*console.log(cG);*/
-var dir = "";
-var tir = "";
-var src = document.getElementsByTagName("SCRIPT");
-for (i = 0; i < src.length; i++) { 
-    dir=src[i].getAttribute("dir");
-    if(dir!="") break;
+var dir,
+    tir,
+    src = document.getElementsByTagName("SCRIPT");
+for (var i = 0; i < src.length; i++) {
+    if(src[i].src.indexOf("comixngn")>=0||src[i].src.indexOf(".cng.")>=0){
+        dir=src[i].getAttribute("dir");
+        tir=src[i].getAttribute("template");
+        break;
+    }
 }
-for (i = 0; i < src.length; i++) { 
-    tir=src[i].getAttribute("template");
-    if(tir!="") break;
-}
-/*for (i = 0; i < src.length; i++) { 
-    cG.root=src[i].getAttribute("plugin");
-    if(cG.root!="") break;
-}*/
-if (1||void 0==dir) dir="";
-//if (dir[dir.length-1]!="/") dir +="/";
-if (1||void 0==tir) tir="";
+dir=dir||"";
+tir=tir||"";
 if(cG.root=="") cG.root="def";
 if(void 0===cG.REPO.scReq.getScript){/*create script.json promise if not already created*/
     cG.REPO.scReq.getScript = cG.agent(dir+'script.json');
@@ -315,7 +317,10 @@ cG.stageInjection = function(SPECIFIC){
 /*end STAGE creation*/
 /*ROUTING*/
 var route2page = function(){
-    cG.prePage = this.params['page'];
+    var modify = (cG.script.config.startpage)?1:0;
+    cG.prePage = parseInt(this.params['page'],10)-modify;
+    //search for page mismatch
+    if(cG.comix!==void 0&&cG.prePage!=cG.comix.current()) cG.comix.go(cG.prePage);
     console.log("AutoPage: "+cG.prePage)
 }
 Path.map("#/:page").to(route2page);
@@ -381,6 +386,8 @@ cG.HELPERS.renameEles = function(bool,source,prepend,append){
 /* setup complete
 /////////////////////////////////////////////////*/
 domReady(function(){
+    Path.listen();
+    //Path.history.listen(true);
     /*everything else occurs here*/
     if(!document.getElementById("$COMICNGWRITER$$$")){/*prints version information*/ console.log("%c %c %c comix-ngn v"+ cG.info.vix +" %c \u262F %c \u00A9 2015 Oluwaseun Ogedengbe %c Plugins: "+$GPC, "color:white; background:#2EB531", "background:purple","color:white; background:#32E237", 'color:red; background:black', "color:white; background:#2EB531", "color:white; background:purple");}
     //console.log(JSON.stringify(cG, null, 2) );
