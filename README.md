@@ -20,7 +20,7 @@
   * set **mainsrc** to the version of comix-ngn use want to use: comixngn.js or comixngn.min.js __[Recommended]__. You probably shouldn't change this unless you are debugging.
   * If using Bellerophon Embed, do not add additional plugins via the script tag. Since they load immediately while comixngn.js may be deffered, the plugins will panic and refuse to load. Simply add the plugin path as a string to the **loadcng** array in Bellerophon Embed to include plugins.
 
-  * The **plugin**, **comicID**, **dir**, and **tir** variable functions exactly like the **plugin attribute**, **comicID**, **dir**, and **template** attributes respectively. The **disable** array functions similarly to the **disable attribute**.
+  * The **plugin**, **comicID**, **dir**, and **tir** variable functions exactly like the **plugin**, **comicID**, **dir**, and **template** attributes respectively. The **disable** array functions similarly to the **disable attribute**.
 
 * For more fine-grain control, use the following additional attributes:
   * __comicID__ - This sets the Id of the comic which is allows the framework to save site specific settings to user's browsers, such as most recently viewed page. It will default to the website's host name if not given.
