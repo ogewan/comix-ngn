@@ -139,7 +139,7 @@ r[b].imaginaryID=-1,r[b].addEventListener("load",h,!1);q(g,void 0===u||null===u|
             localStorage.setItem(cG.comicID+"|"+name+"|curPage",cG.cPanel["def_"+name].current().toString());
         }
         if(cG.comix===cG.cPanel["def_"+name]){//if comic is the comix, then push its state
-            var modify = (cG.script.config.startpage)?1:0;
+            var modify = (cG.script.config.pagestartnum)?1:0;
             console.log(name,"Pushing state:",(cG.cPanel["def_"+name].current()+modify));
             history.pushState({}, null, "#/"+(cG.cPanel["def_"+name].current()+modify));
         }
@@ -317,7 +317,7 @@ cG.stageInjection = function(SPECIFIC){
 /*end STAGE creation*/
 /*ROUTING*/
 var route2page = function(){
-    var modify = (cG.script.config.startpage)?1:0;
+    var modify = (cG.script.config.pagestartnum)?1:0;
     cG.prePage = parseInt(this.params['page'],10)-modify;
     //search for page mismatch
     if(cG.comix!==void 0&&cG.prePage!=cG.comix.current()) cG.comix.go(cG.prePage);
