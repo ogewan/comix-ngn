@@ -1,4 +1,4 @@
-/** @preserve comix-ngn v1.0.0 | (c) 2015 Oluwaseun Ogedengbe| seun40.github.io/comic-ng/ |License: MIT|
+/** @preserve comix-ngn v1.0.2 | (c) 2015 Oluwaseun Ogedengbe| seun40.github.io/comic-ng/ |License: MIT|
 embeds domReady: github.com/ded/domready (MIT) (c) 2013 Dustin Diaz, pegasus: typicode.github.io/pegasus (MIT) (c) 2014 typicode, pathjs (MIT) (c) 2011 Mike Trpcic, direction.js*/
 
 var cG = cG||{};/*if(void 0===cG) var cG = {};*//*check if cG is already is instantiated*/
@@ -9,7 +9,7 @@ function N(){return 0};/*null function*/
 if(void 0===$GPC){var $GPC=0;}
 cG.root = '';
 cG.cPanel = cG.cPanel||{};
-cG.info = {vix: "1.0.0",vwr: "0.5.0",vpr: "0.1.0"};
+cG.info = {vix: "1.0.2",vwr: "0.5.0",vpr: "0.1.0"};
 cG.dis = cG.dis||{};
 cG.comicID = cG.comicID||window.location.host;
 cG.prePage = cG.prePage||-1;
@@ -317,6 +317,8 @@ cG.stageInjection = function(SPECIFIC){
 /*end STAGE creation*/
 /*ROUTING*/
 var route2page = function(){
+    if(cG.script === '') return setTimeout(route2page,300);
+    if(!cG.script) return -1;
     var modify = (cG.script.config.pagestartnum)?1:0;
     cG.prePage = parseInt(this.params['page'],10)-modify;
     //search for page mismatch
