@@ -13,17 +13,6 @@ cG.info = {vix: "1.0.4",vwr: "0.5.0",vpr: "0.1.0"};
 cG.dis = cG.dis||{};
 cG.comicID = cG.comicID||window.location.host;
 cG.prePage = cG.prePage||-1;
-var avx = cG.info.vix.split(".");
-if(avx[0]>0&&avx[1]>0){
-    cG.info.vrb = 1;
-    cG.verbose = function(a){
-        var submit = [];
-        for(var k=1;k < arguments.length;k++){
-            submit.push(arguments[k]);
-        }
-        if(cG.info.vrb>=a) console.log(submit);
-    }
-}
 !function(){
     var selfScript = document.getElementsByTagName("SCRIPT");
     //console.log(selfScript);
@@ -51,8 +40,24 @@ if(avx[0]>0&&avx[1]>0){
                 cG.dis[disables[w]]=true;
             }
         }
+        if(selfScript.getAttribute("VERSION") !== void 0&&selfScript.getAttribute("VERSION")!==null){
+            cG.info.vix=selfScript.getAttribute("VERSION");//version override
+        }
     }
 }()
+
+var avx = cG.info.vix.split(".");
+if(avx[0]>0&&avx[1]>0){
+    cG.info.vrb = 1;
+    cG.verbose = function(a){
+        var submit = [];
+        for(var k=1;k < arguments.length;k++){
+            submit.push(arguments[k]);
+        }
+        //e = new Error();
+        if(cG.info.vrb>=a) console.log([].concat(submit).join(" "));//,e.linenumber,e.stack);
+    }
+}
 if(cG.dis.rollbar!=true){
     /*rollbar*/
     var _rollbarConfig = _rollbarConfig||{
@@ -146,7 +151,10 @@ k,!1);for(b=0;b<d.config.imgpostbuffer;b++)t.push(new Image),t[b].imaginaryID=-1
     var main = new direction(scriptt,anchor,get);
     main.name = name;
     main.type = "def";
-    if(avx[0]>0&&avx[1]>0) main.pg = [anchor]
+    if(avx[0]>0&&avx[1]>0){
+        main.pg = [anchor]
+        main.at = 0;
+    }
     var lscurrent = function(){
         if(typeof(Storage) !== void 0) {
             localStorage.setItem(cG.comicID+"|"+name+"|curPage",cG.cPanel["def_"+name].current().toString());
@@ -159,13 +167,13 @@ k,!1);for(b=0;b<d.config.imgpostbuffer;b++)t.push(new Image),t[b].imaginaryID=-1
         }
         var strct = cG.cPanel["def_"+name].data(cG.cPanel["def_"+name].current()).special;
         var zombie = document.getElementById(name+"_tempScript");//fetch zombie child
-        var preload = cG.cPanel["def_"+name].canvi[0];
-        var display = cG.cPanel["def_"+name].canvi[1];
+        var preload = cG.HELPERS.stick(cG.cPanel["def_"+name].canvi[0]);
+        var display = cG.HELPERS.stick(cG.cPanel["def_"+name].canvi[1]);
         if(zombie!==void 0&&zombie!==null){
             anchor.removeChild(zombie);//kill the zombie
             if(avx[0]>0&&avx[1]>0){
-                preload.show();
-                display.show();
+                preload._show();
+                display._show();
             }
             else {
             preload.setAttribute("style",preload.getAttribute("style")+"display: block;");
@@ -179,8 +187,8 @@ k,!1);for(b=0;b<d.config.imgpostbuffer;b++)t.push(new Image),t[b].imaginaryID=-1
             spanr.innerHTML=strct;
             anchor.appendChild(spanr);
             if(avx[0]>0&&avx[1]>0){
-                preload.hide();
-                display.hide();
+                preload._hide();
+                display._hide();
             }
             else {
             preload.setAttribute("style",preload.getAttribute("style")+"display: none;");
@@ -350,17 +358,6 @@ cG.stageInjection = function(SPECIFIC){
             var srch = use_attr+"_"+id_attr;
             final_res[srch] = cG.stage.construct(id_attr,myScript,anchorto,config_attr);
             if(avx[0]>0&&avx[1]>0){
-                var ftns = [
-                    function(a){},
-                    function(a){},
-                    function(){},
-                    function(){},
-                    function(){},
-                    function(){},
-                    function(){},
-                    function(a){},
-                    function(a){}
-                ]
                 var chl = stages[iD].children;
                 for(var t = 1;t<chl.length;t++){
                     if(chl[t]==anchorto) continue;
@@ -371,16 +368,7 @@ cG.stageInjection = function(SPECIFIC){
                     final_res[srch].pg.push(nestcom[s]);
                 }
                 for(var r = 0;r<final_res[srch].pg.length;r++){
-                    var frspr = final_res[srch].pg[r];
-                    frspr._order = ftns[0];
-                    frspr._switch = ftns[1];
-                    frspr._nav = ftns[2];
-                    frspr._show = ftns[3];
-                    frspr._hide = ftns[4];
-                    frspr._cloak = ftns[5];
-                    frspr._uncloak = ftns[6];
-                    frspr._link = ftns[7];
-                    frspr._unlink = ftns[8];
+                    var frspr = cG.HELPERS.stick(final_res[srch].pg[r]);
                 }
             }
         };
@@ -425,6 +413,35 @@ cG.HELPERS.smartAttrib = function(source,mapper,ignore){
         }
     } else ig--;
     for(var x=0;x<source.children.length;x++) cG.HELPERS.smartAttrib(source.children[x],mapper,ig);
+}
+cG.HELPERS.stick = function(obj){
+    if(avx[0]>0&&avx[1]>0){
+        var ftns = [
+            function(a){},
+            function(a){},
+            function(){},
+            function(){},
+            function(){},
+            function(){},
+            function(){},
+            function(a){},
+            function(a){},
+            function(a){},
+            function(a){}
+        ]
+        obj._order = ftns[0];
+        obj._switch = ftns[1];
+        obj._nav = ftns[2];
+        obj._show = ftns[3];
+        obj._hide = ftns[4];
+        obj._cloak = ftns[5];
+        obj._uncloak = ftns[6];
+        obj._link = ftns[7];
+        obj._unlink = ftns[8];
+        obj._bind = ftns[7];
+        obj._unbind = ftns[8];
+    }
+    return obj;
 }
 cG.HELPERS.FEbyIdAI = function(source,ids,inner){
     var ret = [];
