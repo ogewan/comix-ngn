@@ -1,4 +1,4 @@
-/** @preserve comix-ngn v1.0.5 | (c) 2015 Oluwaseun Ogedengbe| seun40.github.io/comic-ng/ |License: MIT|
+/** @preserve comix-ngn v1.0.5 | (c) 2015 Oluwaseun Ogedengbe| ogewan.github.io/comix-ngn/ |License: MIT|
 embeds domReady: github.com/ded/domready (MIT) (c) 2013 Dustin Diaz, pegasus: typicode.github.io/pegasus (MIT) (c) 2014 typicode, pathjs (MIT) (c) 2011 Mike Trpcic, direction.js*/
 
 var cG = cG||{};/*if(void 0===cG) var cG = {};*//*check if cG is already is instantiated*/
@@ -148,7 +148,8 @@ b,c){window.scrollBy(Math.floor(a.x)/b,Math.floor(a.y)/b);c+1<5*b&&window.setTim
 b+1&&f<l;f++)e[f].loaded||(t[d].imaginaryID=f,t[d].src=q.dir+e[f].url,d++)};this.count=function(){return l};this.current=function(){return n};this.callback=function(a,b){if(null===a||void 0===a)return w;if(null===b||void 0===b)return a?0<a?D:B:w;a?0<a?D=b:B=b:w=b;return 1};this.go=function(a){a=null===a||void 0===a?0:parseInt(a,10);a=isNaN(a)?0:a;r(h,Math.floor(Math.max(0,Math.min(l-1,a))));return a};this.prev=function(){var a=n-1;0<=a&&r(h,a);return a};this.next=function(){var a=n+1;a<l&&r(h,a);
 return a};this.frst=function(){0<=n&&r(h,0);return 0};this.last=function(){r(h,l-1);return l-1};this.rand=function(){var a=Math.floor(Math.random()*(l-1));r(h,a);return a};this.data=function(a){a=null===a||void 0===a?n:parseInt(a,10);return isNaN(a)?e[n]:e[a]};this.scroll=function(a){return null===a||void 0===a?z:z=a};this.scrollTo=function(a,b){return G(a,b)};c[0].height=480;c[0].style.background=p.back;c[0].style.paddingLeft="170px";c[0].style.zIndex=0;c[0].style.position="absolute";m?m.appendChild(c[0]):
 document.body.appendChild(c[0]);window.setTimeout(F,p.rate,E);h=new Image;h.imaginaryID=-1;h.addEventListener("load",function(){e[this.imaginaryID].loaded?A.clearRect(0,0,this.width,this.height):e[this.imaginaryID].loaded=!0;w();c[1].width=this.width;c[1].height=c[0].height=this.height;A.drawImage(this,0,0);y=0;z&&G();D()},!1);for(b=0;b<e.length;b++)e[b].desig=b?b==e.length-1?1:0:-1,e[b].loaded=!1;for(b=0;b<d.config.imgprebuffer;b++)u.push(new Image),u[b].imaginaryID=-1,u[b].addEventListener("load",
-k,!1);for(b=0;b<d.config.imgpostbuffer;b++)t.push(new Image),t[b].imaginaryID=-1,t[b].addEventListener("load",k,!1);r(h,void 0===v||null===v||isNaN(v)?q.startpage:v);c[1].height=480;c[1].width=640;c[1].background=q.back;c[1].style.zIndex=1;c[1].style.position="relative";m?m.appendChild(c[1]):document.body.appendChild(c[1]);this.canvi=c};/**/
+k,!1);for(b=0;b<d.config.imgpostbuffer;b++)t.push(new Image),t[b].imaginaryID=-1,t[b].addEventListener("load",k,!1);r(h,void 0===v||null===v||isNaN(v)?q.startpage:v);c[1].height=480;c[1].width=640;c[1].background=q.back;c[1].style.zIndex=1;c[1].style.position="relative";m?m.appendChild(c[1]):document.body.appendChild(c[1]);this.canvi=c;this.internals=d};
+/**/
     var get;//still undefined
     if(typeof(Storage) !== "undefined") {
         get = parseInt(localStorage.getItem(cG.comicID+"|"+name+"|curPage"),10);
@@ -164,6 +165,56 @@ k,!1);for(b=0;b<d.config.imgpostbuffer;b++)t.push(new Image),t[b].imaginaryID=-1
         main.at = 0;
         main.navto = function(a){
             if(a<main.pg.length) return main.pg[a]._nav()
+        }
+        main.ch_data = function(a){
+            var c = main.internals.chapters;
+            var sre = (a===null||void 0===a)?main.ch_current():parseInt(a,10);
+            return (main.ch_current()==-1)?{}:(isNaN(sre))?c[main.ch_current()]:c[sre];
+        }
+        main.ch_count = function(){
+            return main.internals.chapters.length;
+        }
+        main.ch_current = function(){
+            var c = main.internals.chapters,
+                d = main.current();
+            for(var a=0;a<c.length;a++){
+                if(c[a].start<=d&&d<=c[a].end) return a;
+            }
+            return -1;
+        }
+        main.ch_go = function(a,b){
+            var sre = (a===null||void 0===a)?0:parseInt(a,10);
+            sre = (isNaN(sre))?0:sre;
+            if (main.ch_current()==-1) return main.go()
+            return main.go(main.internals.chapters[Math.floor(Math.max(0,Math.min(main.internals.chapters.length-1,sre)))][g]);
+        }
+        main.ch_prev = function(b){
+            if (main.ch_current()==-1) return main.go();
+            var g;
+            if(b===null&&b===void 0) g = "start";
+            else g = "end"
+            return main.go(main.internals.chapters[Math.max(0,main.ch_current()-1)][g]);
+        }
+        main.ch_next = function(b){
+            if (main.ch_current()==-1) return main.go();
+            var g;
+            if(b===null&&b===void 0) g = "start";
+            else g = "end"
+            return main.go(main.internals.chapters[Math.min(main.ch_count()-1,main.ch_current()+1)][g]);
+        }
+        main.ch_frst = function(b){
+            if (main.ch_current()==-1) return main.go();
+            var g;
+            if(b===null&&b===void 0) g = "start";
+            else g = "end"
+            return main.go(main.internals.chapters[0][g]);
+        }
+        main.ch_last = function(b){
+            if (main.ch_current()==-1) return main.go();
+            var g;
+            if(b===null&&b===void 0) g = "start";
+            else g = "end"
+            return main.go(main.internals.chapters[main.ch_count()-1][g]);
         }
     }
     var lscurrent = function(){
