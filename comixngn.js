@@ -51,11 +51,20 @@ if(avx[0]>0&&avx[1]>0){
     cG.info.vrb = 1;
     cG.verbose = function(a){
         var submit = [];
-        for(var k=1;k < arguments.length;k++){
+        var b=1,c,d=1;
+        if(a===null||a===void 0||isNaN(parseInt(a,10))) d = 0;
+        else b=a;
+        for(var k=d;k < arguments.length;k++){
             submit.push(arguments[k]);
         }
+        if(cG.info.vrb===null||cG.info.vrb===void 0) c = 0;
+        else c=cG.info.vrb
         //e = new Error();
-        if(cG.info.vrb>=a) console.log([].concat(submit).join(" "));//,e.linenumber,e.stack);
+        /*if (b==-2&&c>=b){
+            //arguments.slice(0,1)
+            console.log(submit);
+        }
+        else*/ if(c>=b) console.log([].concat(submit).join(" "));//,e.linenumber,e.stack);
     }
 }
 if(cG.dis.rollbar!=true){
@@ -153,6 +162,9 @@ k,!1);for(b=0;b<d.config.imgpostbuffer;b++)t.push(new Image),t[b].imaginaryID=-1
     if(avx[0]>0&&avx[1]>0){
         main.pg = [anchor]
         main.at = 0;
+        main.navto = function(a){
+            if(a<main.pg.length) return main.pg[a]._nav()
+        }
     }
     var lscurrent = function(){
         if(typeof(Storage) !== void 0) {
@@ -166,8 +178,8 @@ k,!1);for(b=0;b<d.config.imgpostbuffer;b++)t.push(new Image),t[b].imaginaryID=-1
         }
         var strct = cG.cPanel["def_"+name].data(cG.cPanel["def_"+name].current()).special;
         var zombie = document.getElementById(name+"_tempScript");//fetch zombie child
-        var preload = cG.HELPERS.stick(cG.cPanel["def_"+name].canvi[0]);
-        var display = cG.HELPERS.stick(cG.cPanel["def_"+name].canvi[1]);
+        var preload = cG.HELPERS.stick(cG.cPanel["def_"+name].canvi[0],null,null,0);
+        var display = cG.HELPERS.stick(cG.cPanel["def_"+name].canvi[1],null,null,1);
         if(zombie!==void 0&&zombie!==null){
             anchor.removeChild(zombie);//kill the zombie
             if(avx[0]>0&&avx[1]>0){
@@ -367,7 +379,7 @@ cG.stageInjection = function(SPECIFIC){
                     final_res[srch].pg.push(nestcom[s]);
                 }
                 for(var r = 0;r<final_res[srch].pg.length;r++){
-                    var frspr = cG.HELPERS.stick(final_res[srch].pg[r]);
+                    var frspr = cG.HELPERS.stick(final_res[srch].pg[r],final_res[srch].pg,final_res[srch],r);
                 }
             }
         };
@@ -413,20 +425,82 @@ cG.HELPERS.smartAttrib = function(source,mapper,ignore){
     } else ig--;
     for(var x=0;x<source.children.length;x++) cG.HELPERS.smartAttrib(source.children[x],mapper,ig);
 }
-cG.HELPERS.stick = function(obj){
+cG.HELPERS.stick = function(obj,parent,sauce,pos){
     if(avx[0]>0&&avx[1]>0){
         var ftns = [
-            function(a){},
-            function(a){},
-            function(){},
-            function(){},
-            function(){},
-            function(){},
-            function(){},
-            function(a){},
-            function(a){},
-            function(a){},
-            function(a){}
+            function(a){//order
+                if(parent!==void 0||parent!==null){
+                    parent.splice(a, 0, this);
+                    this._pos = a;
+                    return a;
+                }
+            },
+            function(a){//switch
+                if(parent!==void 0||parent!==null){
+                    var b = parent[this._pos];
+                    parent[this._pos] = parent[a];
+                    parent[a] = b;
+                    this._pos = a;
+                    return a;
+                }
+            },
+            function(){//nav
+                if(sauce!==void 0||sauce!==null){
+                    sauce._at = this._pos;
+                    this._show();
+                    var b = this._pos;
+                    for(var y=0;y<parent.length;y++){
+                        if(this._pos==y) continue;
+                        parent[y]._hide();
+                    }
+                    if(this._chain.length) b = [b];
+                    for(var x=0;x<this._chain.length;x++){
+                        //console.log(this,this._chain,x,this._chain[x]);
+                        this._chain[x]._show();
+                        b.push(x);
+                    }
+                    return b;
+                }
+            },
+            function(){//show
+                this.setAttribute("style",this.getAttribute("style")+"display: block;");
+                return this._pos;
+            },
+            function(){//hide
+                this.setAttribute("style",this.getAttribute("style")+"display: none;");
+                return this._pos;
+            },
+            function(){//cloak
+                this.setAttribute("style",this.getAttribute("style")+"visibility:hidden;");
+                return this._pos;
+            },
+            function(){//uncloak
+                this.setAttribute("style",this.getAttribute("style")+"visibility: visible;");
+                return this._pos;
+            },
+            function(a){//link
+                if(parent!==void 0||parent!==null){
+                    this._chain.push(parent[a]);
+                    return a;
+                }
+            },
+            function(a){//unlink
+                if(parent!==void 0||parent!==null){
+                    return this._chain.splice(this._chain.indexOf(parent[a]),1);
+                }
+            },
+            function(a){//bind
+                if(parent!==void 0||parent!==null){
+                    this._chain.push(parent[a]);
+                    parent[a]._chain.push(this);
+                    return [a,this._pos]
+                }
+            },
+            function(a){//unbind
+                if(parent!==void 0||parent!==null){
+                    return this._chain.splice(this._chain.indexOf(parent[a]),1).concat(parent[a]._chain.splice(parent[a]._chain.indexOf(this._pos), 1));
+                }
+            }
         ]
         obj._order = ftns[0];
         obj._switch = ftns[1];
@@ -437,8 +511,10 @@ cG.HELPERS.stick = function(obj){
         obj._uncloak = ftns[6];
         obj._link = ftns[7];
         obj._unlink = ftns[8];
-        obj._bind = ftns[7];
-        obj._unbind = ftns[8];
+        obj._bind = ftns[9];
+        obj._unbind = ftns[10];
+        obj._pos = pos;
+        obj._chain = [];
     }
     return obj;
 }
@@ -484,9 +560,7 @@ domReady(function(){
     //Path.history.listen(true);
     /*everything else occurs here*/
     if(!document.getElementById("$COMICNGWRITER$$$")){/*prints version information*/
-        if(avx[0]>0&&avx[1]>0) cG.verbose(9,"%c %c %c comix-ngn v"+ cG.info.vix +" %c \u262F %c \u00A9 2015 Oluwaseun Ogedengbe %c Plugins: "+$GPC, "color:white; background:#2EB531", "background:purple","color:white; background:#32E237", 'color:red; background:black', "color:white; background:#2EB531", "color:white; background:purple");
-        else console.log("%c %c %c comix-ngn v"+ cG.info.vix +" %c \u262F %c \u00A9 2015 Oluwaseun Ogedengbe %c Plugins: "+$GPC, "color:white; background:#2EB531", "background:purple","color:white; background:#32E237", 'color:red; background:black', "color:white; background:#2EB531", "color:white; background:purple");
-    }
+        console.log("%c %c %c comix-ngn v"+ cG.info.vix +" %c \u262F %c \u00A9 2015 Oluwaseun Ogedengbe %c Plugins: "+$GPC, "color:white; background:#2EB531", "background:purple","color:white; background:#32E237", 'color:red; background:black', "color:white; background:#2EB531", "color:white; background:purple");}
     //console.log(JSON.stringify(cG, null, 2) );
     var a = document.getElementsByTagName("SCRIPT");
     var b;
