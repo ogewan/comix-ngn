@@ -416,6 +416,35 @@ cG.stageInjection = function(SPECIFIC){
                 },1);
             }
             anchorto.style.display = "block";
+            if(avx[0]>0&&avx[1]>0){
+                var archival = document.getElementById(id_attr+"_archive");
+                if(archival!==void 0&&archival!==null){
+                    var transcriptPG = "<ul>";
+                    var transcriptCH = "<ul>";
+                    var transcriptBH = "<ul>";
+                    var chpapp = 0;
+                    var pagapp = 0;
+                    if(myScript.config.pagestartnum) pagapp=1;
+                    if(myScript.config.chapterstartnum) chpapp=1;
+                    for(var y=0;y<myScript.pages.length;y++){
+                        transcriptPG=transcriptPG+'<li onclick="cG.cPanel['+"'"+'def_'+id_attr+"'"+'].go('+y+');this.parentElement.parentElement.style.display='+"'none'"+';document.getElementById('+"'"+id_attr+"_location'"+').style.display='+"'block'"+';" style="display:block;">'+(y+pagapp)+'</li>';
+                        //console.log(transcriptPG)
+                    }
+                    for(var x=0;y<myScript.chapters.length;y++){
+                        transcriptCH=transcriptCH+'<li onclick="cG.cPanel['+"'"+'def_'+id_attr+"'"+'].ch_go('+x+');this.parentElement.parentElement.style.display='+"'none'"+';document.getElementById('+"'"+id_attr+"_location'"+').style.display='+"'block'"+';" style="display:block;">'+(x+chpapp)+'</li>';
+                        transcriptBH=transcriptBH+'<ul>';
+                        for(var u=myScript.chapters[y].start;u<myScript.chapters[y].end+1;u++){
+                            transcriptBH=transcriptBH+'<li onclick="cG.cPanel['+"'"+'def_'+id_attr+"'"+'].go('+u+');this.parentElement.parentElement.parentElement.style.display='+"'none'"+';document.getElementById('+"'"+id_attr+"_location'"+').style.display='+"'block'"+';" style="display:block;">'+(u+pagapp)+'</li>';
+                        }
+                        transcriptBH=transcriptBH+'</ul>';
+                    }
+                    transcriptPG=transcriptPG+'</ul>';
+                    transcriptCH=transcriptCH+'</ul>';
+                    transcriptBH=transcriptBH+'</ul>';
+                    if(archival.innerHTML==''||archival.innerHTML=='Archive') archival.innerHTML=transcriptBH+transcriptPG+transcriptCH;
+                }
+                    //console.log(transcriptBH,transcriptPG,transcriptCH);
+            }
             //console.log(anchorto,anchorto.style)
             var srch = use_attr+"_"+id_attr;
             final_res[srch] = cG.stage.construct(id_attr,myScript,anchorto,config_attr);
@@ -514,19 +543,27 @@ cG.HELPERS.stick = function(obj,parent,sauce,pos){
                 }
             },
             function(){//show
-                this.setAttribute("style",this.getAttribute("style")+"display: block;");
+                if(this.style.display===null||this.style.display===void 0)
+                    this.setAttribute("style",this.getAttribute("style")+"display: block;");
+                else this.style.display="block";
                 return this._pos;
             },
             function(){//hide
-                this.setAttribute("style",this.getAttribute("style")+"display: none;");
+                if(this.style.display===null||this.style.display===void 0)
+                    this.setAttribute("style",this.getAttribute("style")+"display: none;");
+                else this.style.display="none";
                 return this._pos;
             },
             function(){//cloak
-                this.setAttribute("style",this.getAttribute("style")+"visibility:hidden;");
+                if(this.style.visibility===null||this.style.visibility===void 0)
+                    this.setAttribute("style",this.getAttribute("style")+"visibility:hidden;");
+                else this.style.visibility="hidden";
                 return this._pos;
             },
             function(){//uncloak
-                this.setAttribute("style",this.getAttribute("style")+"visibility: visible;");
+                if(this.style.visibility===null||this.style.visibility===void 0)
+                    this.setAttribute("style",this.getAttribute("style")+"visibility: visible;");
+                else this.style.visibility="visible";
                 return this._pos;
             },
             function(a){//link
