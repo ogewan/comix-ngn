@@ -1,6 +1,3 @@
-<!DOCTYPE html>
-<!--<div class="venue"></div>-->
-<script>var defer=!0,mainsrc="../comixngn.min.js",loadcng=[],plugin="",comicID="oots_CNG",disable=["rollbar"],/*! Bellerophon: Comix-Ngn plugin|pegasus: typicode.github.io/pegasus (MIT) (c) 2014 typicode*/dir="",tir="",$GPC=$GPC+1||1,cG={agent:function(e,c){return c=new XMLHttpRequest,c.open("GET",e),e=[],c.onreadystatechange=c.then=function(t,r,o){if(t&&t.call&&(e=[,t,r]),4==c.readyState&&(o=e[0|c.status/200]))try{o(JSON.parse(c.responseText),c)}catch(d){o(c.responseText,c)}},c.send(),c},REPO:{scReq:{}},dis:{}},dfr=function(){var e=document.createElement("script");cG.REPO.scReq.getScript=cG.agent("./"+dir+"script.json"),cG.REPO.scReq.getDecor=cG.agent("./"+tir+"decor.html"),cG.REPO.scReq.getCtrls=cG.agent(tir+"ctrls.html"),cG.REPO.scReq.getScript.then(function(e){void 0===cG.REPO.script?cG.REPO.script={def:e}:cG.REPO.script.def=e,cG.script=cG.REPO.script.def},function(e,c){console.error(e,c.status),void 0===cG.REPO.script?cG.REPO.script={def:0}:cG.REPO.script.def=e,cG.script=cG.REPO.script.def}),cG.REPO.scReq.getDecor.then(function(e){void 0===cG.REPO.decor?cG.REPO.decor={def:e}:cG.REPO.decor.def=e,cG.decor=cG.REPO.decor.def},function(e,c){console.error(e,c.status),void 0===cG.REPO.decor?cG.REPO.decor={def:0}:cG.REPO.decor.def=0,cG.decor=cG.REPO.decor.def}),cG.REPO.scReq.getCtrls.then(function(e){void 0===cG.REPO.ctrls?cG.REPO.ctrls={def:e}:cG.REPO.ctrls.def=e,cG.ctrls=cG.REPO.ctrls.def},function(e,c){console.error(e,c.status),void 0===cG.REPO.ctrls?cG.REPO.ctrls={def:0}:cG.REPO.ctrls.def=0,cG.ctrls=cG.REPO.ctrls.def}),cG.comicId=comicID;for(var c=0;c<disable.length;c++)cG.dis[disable[c]]=!0;e.src=mainsrc,document.body.appendChild(e);for(var t=0;t<loadcng.length;t++)e=document.createElement("script"),e.src=loadcng[t],document.body.appendChild(e)};!function(){return defer?void(window.addEventListener?window.addEventListener("load",dfr,!1):window.attachEvent?window.attachEvent("onload",dfr):window.onload=dfr):dfr()}();</script>
 
 <HTML>
 
@@ -8,52 +5,8 @@
 
     <TITLE>Giant In the Playground Games</TITLE>
 
-    <SCRIPT>var strButtons = new Array(6);
-
-var btnNews_Lit=new Image;
-btnNews_Lit.src="http://www.giantitp.com/Images/redesign/Side_News_Lit.gif";
-var btnNews_Unlit=new Image;
-btnNews_Unlit.src="http://www.giantitp.com/Images/redesign/Side_News_Unlit.gif";
-
-var btnComics_Lit=new Image;
-btnComics_Lit.src="http://www.giantitp.com/Images/redesign/Side_Comics_Lit.gif";
-var btnComics_Unlit=new Image;
-btnComics_Unlit.src="http://www.giantitp.com/Images/redesign/Side_Comics_Unlit.gif";
-
-var btnStories_Lit=new Image;
-btnStories_Lit.src="http://www.giantitp.com/Images/redesign/Side_Stories_Lit.gif";
-var btnStories_Unlit=new Image;
-btnStories_Unlit.src="http://www.giantitp.com/Images/redesign/Side_Stories_Unlit.gif";
-
-var btnGaming_Lit=new Image;
-btnGaming_Lit.src="http://www.giantitp.com/Images/redesign/Side_Gaming_Lit.gif";
-var btnGaming_Unlit=new Image;
-btnGaming_Unlit.src="http://www.giantitp.com/Images/redesign/Side_Gaming_Unlit.gif";
-
-var btnShop_Lit=new Image;
-btnShop_Lit.src="http://www.giantitp.com/Images/redesign/Side_Shop_Lit.gif";
-var btnShop_Unlit=new Image;
-btnShop_Unlit.src="http://www.giantitp.com/Images/redesign/Side_Shop_Unlit.gif";
-
-var btnForum_Lit=new Image;
-btnForum_Lit.src="http://www.giantitp.com/Images/redesign/Side_Forum_Lit.gif";
-var btnForum_Unlit=new Image;
-btnForum_Unlit.src="http://www.giantitp.com/Images/redesign/Side_Forum_Unlit.gif";
-
-strButtons[0]="News";
-strButtons[1]="Comics";
-strButtons[2]="Stories";
-strButtons[3]="Gaming";
-strButtons[4]="Shop";
-strButtons[5]="Forum";
-
-function ButtonHover(intButton) {
-  document.images[strButtons[intButton]].src = eval("btn" + strButtons[intButton] + "_Lit.src");
-}
-
-function ButtonOut(intButton) {
-  document.images[strButtons[intButton]].src = eval("btn" + strButtons[intButton] + "_Unlit.src");
-}</SCRIPT>
+    <SCRIPT language="Javascript" src="ImageSwap.redesign.js"></SCRIPT>
+    <script>var defer=!0,mainsrc="../comixngn.min.js",loadcng=[],plugin="",comicID="oots_CNG",disable=["rollbar"],/*! Bellerophon: Comix-Ngn plugin|pegasus: typicode.github.io/pegasus (MIT) (c) 2014 typicode*/dir="",tir="",$GPC=$GPC+1||1,cG={agent:function(e,c){return c=new XMLHttpRequest,c.open("GET",e),e=[],c.onreadystatechange=c.then=function(t,r,o){if(t&&t.call&&(e=[,t,r]),4==c.readyState&&(o=e[0|c.status/200]))try{o(JSON.parse(c.responseText),c)}catch(d){o(c.responseText,c)}},c.send(),c},REPO:{scReq:{}},dis:{}},dfr=function(){var e=document.createElement("script");cG.REPO.scReq.getScript=cG.agent("./"+dir+"script.json"),cG.REPO.scReq.getDecor=cG.agent("./"+tir+"decor.html"),cG.REPO.scReq.getCtrls=cG.agent(tir+"ctrls.html"),cG.REPO.scReq.getScript.then(function(e){void 0===cG.REPO.script?cG.REPO.script={def:e}:cG.REPO.script.def=e,cG.script=cG.REPO.script.def},function(e,c){console.error(e,c.status),void 0===cG.REPO.script?cG.REPO.script={def:0}:cG.REPO.script.def=e,cG.script=cG.REPO.script.def}),cG.REPO.scReq.getDecor.then(function(e){void 0===cG.REPO.decor?cG.REPO.decor={def:e}:cG.REPO.decor.def=e,cG.decor=cG.REPO.decor.def},function(e,c){console.error(e,c.status),void 0===cG.REPO.decor?cG.REPO.decor={def:0}:cG.REPO.decor.def=0,cG.decor=cG.REPO.decor.def}),cG.REPO.scReq.getCtrls.then(function(e){void 0===cG.REPO.ctrls?cG.REPO.ctrls={def:e}:cG.REPO.ctrls.def=e,cG.ctrls=cG.REPO.ctrls.def},function(e,c){console.error(e,c.status),void 0===cG.REPO.ctrls?cG.REPO.ctrls={def:0}:cG.REPO.ctrls.def=0,cG.ctrls=cG.REPO.ctrls.def}),cG.comicID=comicID;for(var c=0;c<disable.length;c++)cG.dis[disable[c]]=!0;e.src=mainsrc,document.body.appendChild(e);for(var t=0;t<loadcng.length;t++)e=document.createElement("script"),e.src=loadcng[t],document.body.appendChild(e)};!function(){return defer?void(window.addEventListener?window.addEventListener("load",dfr,!1):window.attachEvent?window.attachEvent("onload",dfr):window.onload=dfr):dfr()}();</script>
 
     <LINK REL=stylesheet HREF="http://www.giantitp.com/Style/style.redesign.css" TYPE="text/css"> 
 
@@ -63,10 +16,9 @@ function ButtonOut(intButton) {
     <!-- [JAVASCRIPT] -->
 
   </HEAD>
-<!--CNG-home-->
-<a href="../../" style="position:fixed;width:42px;height:42px;top:10px;left:10px;"><img src="../../assets/images/normal_glow.svg" style="position:absolute;top:0;left:0;width:90%;"/></a>
-  <BODY bgcolor="#FFFFFF" topmargin="0" leftmargin="0" marginwidth="0" marginheight="0">
 
+  <BODY bgcolor="#FFFFFF" topmargin="0" leftmargin="0" marginwidth="0" marginheight="0">
+<a href="../../" style="position:fixed;width:42px;height:42px;top:10px;left:10px;"><img src="../../assets/images/normal_glow.svg" style="position:absolute;top:0;left:0;width:90%;"/></a>
     <TABLE width=100% Height="100%" Border="0" CellPadding="0" CellSpacing="0">
 
       <TR>
@@ -100,7 +52,7 @@ function ButtonOut(intButton) {
 <B>Order of the Stick </B><A href="http://www.giantitp.com/comics/oots0993.html" class="SideBar">993 Moots and Ladders</A><BR>
 <B>Erfworld </B><A href="http://www.giantitp.com/comics/erf0163.html" class="SideBar">163 The End of Book One</A><BR>
 <b>Erfworld</b> <a href="http://www.erfworld.com" class="SideBar" target="_blank">Now at Erfworld.com!</a><br>
-<img src="http://www.giantitp.com/Images/RSS.png"> <b>RSS Feeds:</b> <A href="http://www.giantitp.com/comics/oots.rss" class="SideBar">OOTS</a><BR></TD></TR></TABLE>
+<img src="RSS.png"> <b>RSS Feeds:</b> <A href="http://www.giantitp.com/comics/oots.rss" class="SideBar">OOTS</a><BR></TD></TR></TABLE>
 <A href="http://www.giantitp.com/Stories.html" onMouseOver="ButtonHover(2);return true;" onMouseOut="ButtonOut(2);return true;"><IMG name="Stories" src="http://www.giantitp.com/Images/redesign/Side_Stories_Unlit.gif" border="0"></A><BR>
   <TABLE width="219"><TR><TD style="font-size: 10px; font-weight: bold;">
 <A href="http://www.giantitp.com/articles/jCrYB3gUGArxpUotKlH.html" class="SideBar">The Duke's Wolf, Part Four</A> by Amber E. Scott<BR>
@@ -132,22 +84,22 @@ onMouseOut="ButtonOut(5);return true;"><IMG name="Forum" src="http://www.giantit
           <TD>
             <TABLE width="100%" border="0"><TR>
               <TD align="center" width="80%"><BR>
-                <A href="http://www.giantitp.com/comics/oots0001.html"><IMG src="http://www.giantitp.com/Images/redesign/ComicNav_First.gif" alt="First Comic" title="First Comic" border="0"></A><A href="http://www.giantitp.com/comics/oots0992.html"><IMG src="http://www.giantitp.com/Images/redesign/ComicNav_Back.gif" alt="Previous Comic" title="Previous Comic" border="0"></A><A href="http://www.giantitp.com/comics/ootscast.html"><IMG src="http://www.giantitp.com/Images/redesign/ComicNav_CastPage.gif" alt="Cast of Characters" title="Cast of Characters" border="0"></A><A href="http://www.giantitp.com/comics/ootsextras.html"><IMG src="http://www.giantitp.com/Images/redesign/ComicNav_Extras.gif" alt="Extras" title="Extras" border="0"></A><A href="http://www.giantitp.com/comics/oots.html"><IMG src="http://www.giantitp.com/Images/redesign/ComicNav_Archive.gif" alt="Comic Archive" title="Comic Archive" border="0"></A><A href="#"><IMG src="http://www.giantitp.com/Images/redesign/ComicNav_Next.gif" alt="Next Comic" title="Next Comic" border="0"></A><A href="http://www.giantitp.com/comics/oots0993.html"><IMG src="http://www.giantitp.com/Images/redesign/ComicNav_Latest.gif" alt="Latest Comic" title="Latest Comic" border="0"></A></TD>
+                <A href="#"><IMG src="http://www.giantitp.com/Images/redesign/ComicNav_First.gif" alt="First Comic" title="First Comic" border="0"></A><A href="#"><IMG src="http://www.giantitp.com/Images/redesign/ComicNav_Back.gif" alt="Previous Comic" title="Previous Comic" border="0"></A><A href="#"><IMG src="http://www.giantitp.com/Images/redesign/ComicNav_CastPage.gif" alt="Cast of Characters" title="Cast of Characters" border="0"></A><A href="#"><IMG src="http://www.giantitp.com/Images/redesign/ComicNav_Extras.gif" alt="Extras" title="Extras" border="0"></A><A href="#"><IMG src="http://www.giantitp.com/Images/redesign/ComicNav_Archive.gif" alt="Comic Archive" title="Comic Archive" border="0"></A><A href="#"><IMG src="http://www.giantitp.com/Images/redesign/ComicNav_Next.gif" alt="Next Comic" title="Next Comic" border="0"></A><A href="#"><IMG src="http://www.giantitp.com/Images/redesign/ComicNav_Latest.gif" alt="Latest Comic" title="Latest Comic" border="0"></A></TD>
             </TR></TABLE>
           </TD>
         </TR>
         <TR>
-          <TD align="center"><IMG src="http://www.giantitp.com/comics/images/dower023fweodspe392epdw993.png"></TD>
+          <TD align="center"><!--<IMG src="http://www.giantitp.com/comics/images/oots0001.gif">--><div id="ootsSTRIP" class="venue"></div></TD>
         <TR>
           <TD>
             <TABLE width="100%" border="0"><TR>
-              <TD align="center"><A href="http://www.giantitp.com/comics/oots0001.html"><IMG src="http://www.giantitp.com/Images/redesign/ComicNav_First.gif" alt="First Comic" title="First Comic" border="0"></A><A href="http://www.giantitp.com/comics/oots0992.html"><IMG src="http://www.giantitp.com/Images/redesign/ComicNav_Back.gif" alt="Previous Comic" title="Previous Comic" border="0"></A><A href="http://www.giantitp.com/comics/ootscast.html"><IMG src="http://www.giantitp.com/Images/redesign/ComicNav_CastPage.gif" alt="Cast of Characters" title="Cast of Characters" border="0"></A><A href="http://www.giantitp.com/comics/ootsextras.html"><IMG src="http://www.giantitp.com/Images/redesign/ComicNav_Extras.gif" alt="Extras" title="Extras" border="0"></A><A href="http://www.giantitp.com/comics/oots.html"><IMG src="http://www.giantitp.com/Images/redesign/ComicNav_Archive.gif" alt="Comic Archive" title="Comic Archive" border="0"></A><A href="#"><IMG src="http://www.giantitp.com/Images/redesign/ComicNav_Next.gif" alt="Next Comic" title="Next Comic" border="0"></A><A href="http://www.giantitp.com/comics/oots0993.html"><IMG src="http://www.giantitp.com/Images/redesign/ComicNav_Latest.gif" alt="Latest Comic" title="Latest Comic" border="0"></A>
+              <TD align="center"><A href="http://www.giantitp.com/comics/oots0001.html"><IMG src="http://www.giantitp.com/Images/redesign/ComicNav_First.gif" alt="First Comic" title="First Comic" border="0"></A><A href="#"><IMG src="http://www.giantitp.com/Images/redesign/ComicNav_Back.gif" alt="Previous Comic" title="Previous Comic" border="0"></A><A href="http://www.giantitp.com/comics/ootscast.html"><IMG src="http://www.giantitp.com/Images/redesign/ComicNav_CastPage.gif" alt="Cast of Characters" title="Cast of Characters" border="0"></A><A href="http://www.giantitp.com/comics/ootsextras.html"><IMG src="http://www.giantitp.com/Images/redesign/ComicNav_Extras.gif" alt="Extras" title="Extras" border="0"></A><A href="http://www.giantitp.com/comics/oots.html"><IMG src="http://www.giantitp.com/Images/redesign/ComicNav_Archive.gif" alt="Comic Archive" title="Comic Archive" border="0"></A><A href="http://www.giantitp.com/comics/oots0002.html"><IMG src="http://www.giantitp.com/Images/redesign/ComicNav_Next.gif" alt="Next Comic" title="Next Comic" border="0"></A><A href="http://www.giantitp.com/comics/oots0993.html"><IMG src="http://www.giantitp.com/Images/redesign/ComicNav_Latest.gif" alt="Latest Comic" title="Latest Comic" border="0"></A>
                 <!-- <BR>Quick Jump to: <SELECT Name="Archive" onChange='SwitchTo(this);'><OPTION value="335" SELECTED>#335</OPTION></SELECT> --></TD>
             </TR></TABLE>
           </TD>	
         </TR>
       </TABLE>
-      <center><A href="http://www.ookoodook.com/store/BloodRunsInTheFamily.shtml"><IMG src="http://www.giantitp.com/Images/Banners/Banner_BRITF_ForumOrder.png" title="Also available at your local game store!"></A></center>
+      <center><A href="http://www.ookoodook.com/store/BloodRunsInTheFamily.shtml"><IMG src="Banner_BRITF_ForumOrder.png" title="Also available at your local game store!"></A></center>
     </TD>
   </TR>
 </TABLE>

@@ -140,18 +140,73 @@ def getQC():
     with open('script_A.json', 'w') as outfile:
         json.dump(script, outfile, sort_keys = True, indent = 4, separators = (',', ': '))
 
+def getOOTS():
+    #directory = script['config']['dir']
+    go = 1;
+    it = 1;#starter url
+    urlbase = urlparse('http://www.giantitp.com/comics/oots0001.html')
+    urlp = urlbase.scheme + "://" + urlbase.netloc
+    urla = "/comics/oots"+str(it).zfill(4)+".html"
+    script['config']['dir'] = urlp
+    #print(urlp,urla)
+    #if not os.path.exists(directory):
+    #    os.makedirs(directory)
+    ir = 0
+    while (go):
+        urla = "/comics/oots"+str(it).zfill(4)+".html"
+        if ir % 50 == 0:
+            sys.stdout.write("downloading")
+        elif ir % 2 == 0:
+            sys.stdout.write(".")
+            sys.stdout.flush()
+        elif ir % 50 == 49:
+            sys.stdout.write(str(ir) + " images\n")
+        ir += 1
+        #play = True
+        storage = BytesIO()# create a curl
+        c = pycurl.Curl()
+        c.setopt(c.WRITEFUNCTION, storage.write)# request HTML# print(urlp + urla)
+        c.setopt(c.URL, urlp + urla)# print(c)
+        c.perform()
+        c.close()# get and parse HTML
+        content = storage.getvalue()
+        soup = b.BeautifulSoup(content, 'html.parser')
+        image = soup.find_all('img')
+        #print('\n')
+        key = '/comics/images/'
+        for x in image:
+            if(x['src'].find(key)+1):
+                script['pages'].append({
+                    "alt": "",
+                    "anim8": False,
+                    "hover": "",
+                    "note": [],
+                    "perm": False,
+                    "release": 0,
+                    "title": "",
+                    "url": [x['src']]
+                })
+                break
+        if it >= 994:
+            go = 0
+        it+=1
+    print("\nFin")# print(script)
+    with open('script_A.json', 'w') as outfile:
+        json.dump(script, outfile, sort_keys = True, indent = 4, separators = (',', ': '))
+
 if __name__ == "__main__": #chapter template
     chaptr = {
         "description": "",
         "end": 0,
         "start": 0,
-        "title": ""
+        "title": "",
+        "thumb": ""
     }
     pagetm = {
         "alt": "",
         "anim8": False,
         "hover": "",
-        "note": "",
+        "note": [],
         "perm": False,
         "release": 0,
         "title": "",
@@ -162,7 +217,7 @@ if __name__ == "__main__": #chapter template
         "chapters": [],
         "config": {
             "chapterstartnum": False,
-            "dir": "qc_assets/",
+            "dir": "oots_assets/",
             "imgpostbuffer": 5,
             "imgprebuffer": 5,
             "pagestartnum": True,
@@ -187,6 +242,7 @@ if __name__ == "__main__": #chapter template
             "appendorderdir": False
         }
     }
-    #getXKCD()
     headers = {'user-agent': 'Mozilla/5.0'}
-    getQC()
+    #getXKCD()
+    #getQC()
+    getOOTS()

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<script>
+    function getXML(url, requestStateChangeHandler){        
+        if(window.XMLHttpRequest)
+        {// code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp=new XMLHttpRequest();
+        }
+        else
+        {//Code for IE6, IE5
+            xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlhttp.onreadystatechange = requestStateChangeHandler;
+
+        xmlhttp.open("GET", url, true);
+        //xmlhttp.setRequestHeader('Content-Type', 'text/xml');
+        xmlhttp.setRequestHeader('Cache-Control', 'no-cache');
+        xmlhttp.setRequestHeader('origin', 'http://comixngn.js.org/');
+        xmlhttp.setRequestHeader('User-Agent', 'Mozilla/5.0 (X11; Linux x86_64; rv:12.0) Gecko/20100101 Firefox/21.0');
+        xmlhttp.send();
+    }
+
+
+    function requestStateChangeHandler(){
+        if (xmlhttp.readyState == 4) 
+        {
+            if(xmlhttp.status == 200)
+            {
+                document.getElementById('results').innerHTML = xmlhttp.responseText;
+            }
+        }
+    }
+    
+    function dfr(){
+        getXML('http://www.giantitp.com/comics/images/oots0001.gif',requestStateChangeHandler);
+    }
+    
+    void(window.addEventListener?window.addEventListener("load",dfr,!1):window.attachEvent?window.attachEvent("onload",dfr):window.onload=dfr)
+</script>
+<div id="results"></div>
