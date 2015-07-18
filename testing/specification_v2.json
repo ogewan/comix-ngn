@@ -14,8 +14,8 @@
         "lines":16,//lines in spinner
         "rate":1000 / 30,//spin rate
         "diameter": 250,//spinner diameter
-        "xpos":1/2,//x position of spinner relative to canvas size
-        "ypos":1/2, //y position of spinner relative to canvas size
+        "xpos":1/2,//x position of spinner relative to canvas size(legacy)
+        "ypos":1/2, //y position of spinner relative to canvas size(Legacy)
         "back":"#FFF",//background color of spinner
         "color":"#373737"//color of spinner
     },
@@ -26,7 +26,9 @@
         "imgprebuffer": 5,//# of images to preload before current page
         "imgpostbuffer": 5,//# of images to preload after current page
         "startpage": 0,//The page that the comic loads first, 0 loads first, >0 loads most recent
-        "back":"#FFF"//background color of pages
+        "back":"#FFF",//background color of pages
+        "orderby":0,//controls how the url of the page appears, 0 for by page, 1 for by chapter/page, 2 by year, chapter and page are affected by page/chapterstartnum
+        "dateformat":"MMDDYY"//controls the format of dates displayed, MM-month,DD-second,YY-year,UU-minute,SS-second
     },
     "pages": [//Array of pages, comic stages will follow this order
         {
@@ -35,7 +37,7 @@
             "title": "",//this gives the page a title
             "url": [""],/*this is the source of the page. If the image is layered, add multiple sources. Lowest number = Highest Layer Priority*/
             "release": 0,//release date
-            "note": "",//additional note to append to the page
+            "note": [],//additional notes to append to the page
             "perm": false,//is this page permanent? It will be preloaded first
             "anim8": false//is this page animated? Only works with gif and video(not implemented)
         }
@@ -45,7 +47,8 @@
             "description": "",//chapter description
             "start": 0,//index of starting page of chapter
             "end": 0,//index of last page of chapter
-            "title": ""//chapter title
+            "title": "",//chapter title
+            "thumb": ""//the thumbnail of the chapter
         }
     ]
 }
