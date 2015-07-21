@@ -1,33 +1,21 @@
 <script>
     //Minify before use
-    var defer = !0,
-        mainsrc = "comixngn.min.js",
-        loadcng = [],/*to load*/
-        plugin = "",
-        comicID = "",
-        disable = [],
+    var cG = {};
+    cG.recyclebin = {
+        defer : !0,
+        mainsrc : "comixngn.min.js",
+        loadcng : [],/*to load*/
+        plugin : "",
+        comicID : "",
+        disable : [],
         /*! Bellerophon: Comix-Ngn plugin|pegasus: typicode.github.io/pegasus (MIT) (c) 2014 typicode*/
-        dir = "",
-        tir = "",
-        $GPC = $GPC+1||1,
-        cG = {
-            agent: function(c, e) {
-                return e = new XMLHttpRequest, e.open("GET", c), c = [], e.onreadystatechange = e.then = function(t, r, o) {
-                    if (t && t.call && (c = [, t, r]), 4 == e.readyState && (o = c[0 | e.status / 200])) try {
-                        o(JSON.parse(e.responseText), e)
-                    } catch (d) {
-                        o(e.responseText, e)
-                    }
-                }, e.send(), e
-            },
-            REPO: {scReq:{}},
-            dis: {}
-        },
-        dfr = function() {
+        dir : "",
+        tir : "",
+        dfr : function() {
             var c = document.createElement("script");
-            cG.REPO.scReq.getScript = cG.agent("./" + dir + "script.json");
-            cG.REPO.scReq.getDecor = cG.agent("./" + tir + "decor.html");
-            cG.REPO.scReq.getCtrls = cG.agent(tir+'ctrls.html');
+            cG.REPO.scReq.getScript = cG.agent("./" + cG.recyclebin.dir + "script.json");
+            cG.REPO.scReq.getDecor = cG.agent("./" + cG.recyclebin.tir + "decor.html");
+            cG.REPO.scReq.getCtrls = cG.agent(cG.recyclebin.tir+'ctrls.html');
             cG.REPO.scReq.getScript.then(function(c) {
                 void 0 === cG.REPO.script ? cG.REPO.script = {
                     def: c
@@ -53,17 +41,30 @@
                     def: 0
                 } : cG.REPO.ctrls.def = 0, cG.ctrls = cG.REPO.ctrls.def
             });
-            cG.comicID = comicID;
-            for(var b=0;b<disable.length;b++){
-                cG.dis[disable[b]]=true;
+            cG.comicID = cG.recyclebin.comicID;
+            for(var b=0;b<cG.recyclebin.disable.length;b++){
+                cG.dis[cG.recyclebin.disable[b]]=true;
             }
-            c.src = mainsrc, document.body.appendChild(c);
-            for(var a=0;a<loadcng.length;a++){
+            c.src = cG.recyclebin.mainsrc, document.body.appendChild(c);
+            for(var a=0;a<cG.recyclebin.loadcng.length;a++){
                 c = document.createElement("script");
-                c.src = loadcng[a], document.body.appendChild(c);
+                c.src = cG.recyclebin.loadcng[a], document.body.appendChild(c);
             }
-        };
+        }
+    }
+    cG.agent = function(c, e) {
+        return e = new XMLHttpRequest, e.open("GET", c), c = [], e.onreadystatechange = e.then = function(t, r, o) {
+            if (t && t.call && (c = [, t, r]), 4 == e.readyState && (o = c[0 | e.status / 200])) try {
+                o(JSON.parse(e.responseText), e)
+            } catch (d) {
+                o(e.responseText, e)
+            }
+        }, e.send(), e
+    };
+    cG.REPO= {scReq:{}};
+    cG.dis= {};
+    cG.$GPC = cG.$GPC+1||1;
     ! function() {
-        return defer ? void(window.addEventListener ? window.addEventListener("load", dfr, !1) : window.attachEvent ? window.attachEvent("onload", dfr) : window.onload = dfr) : dfr()
+        return cG.recyclebin.defer ? void(window.addEventListener ? window.addEventListener("load", cG.recyclebin.dfr, !1) : window.attachEvent ? window.attachEvent("onload", cG.recyclebin.dfr) : window.onload = cG.recyclebin.dfr) : cG.recyclebin.dfr()
     }();
 </script>

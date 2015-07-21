@@ -7,8 +7,8 @@ Order: [[before comixngn.js, first or last after comixngn.js]]
     /*Delete one of the following if/else blocks*/
     if(typeof cG === 'undefined'){
         /*if the plug in must do an action at the beginning of runtime. This is rare and typically for modifying script loading. This plugin WILL be overwritten*/
-        if(typeof $GPC === 'undefined') var $GPC = 1;
-        else $GPC++;}
+        if(cG.$GPC === void 0) cG.$GPC = 1;
+        else cG.$GPC++;}
     else console.error("CNG Plug-in: [[Name]] must be loaded before comixngn.js");
 
     if(typeof cG !== 'undefined'){
@@ -42,4 +42,4 @@ NOTE: It is is preferable to simply enter in "cG.property = value"
     else console.error("CNG Plug-in: [[Name]] must be loaded after comixngn.js");
     /*If you can, minify the plug-in. 
 /*Including this file (plugin.cng.js) in to the HTML will have no effect.*/
-}():
+}();

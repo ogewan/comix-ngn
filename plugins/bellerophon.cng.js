@@ -4,7 +4,7 @@ pegasus: typicode.github.io/pegasus (MIT) (c) 2014 typicode
 Order: before comixNgn.js
 */
 !function(){
-    if(typeof cG === 'undefined'){
+    if(cG === void 0){
         var dir = "";
         var tir = "";
         var src = document.getElementsByTagName("SCRIPT");
@@ -21,8 +21,8 @@ Order: before comixNgn.js
         //if (dir[dir.length-1]!="/") dir +="/";
         if (1||void 0==tir) tir="";
         //if (tir[tir.length-1]!="/") tir =bse+tir+"/";
-        if(void 0===$GPC) var $GPC = 1;
-        else $GPC++;
+        if(void 0===cG.$GPC) cG.$GPC = 1;
+        else cG.$GPC++;
         var cG = {/*comic-ng pre everything here will be overwritten*/
             agent: function(t,e){return e=new XMLHttpRequest,e.open("GET",t),t=[],e.onreadystatechange=e.then=function(n,o,i){if(n&&n.call&&(t=[,n,o]),4==e.readyState&&(i=t[0|e.status/200]))try{i(JSON.parse(e.responseText),e)}catch(r){i(e.responseText,e)}},e.send(),e},
             REPO: {scReq:{}}

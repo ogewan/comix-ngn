@@ -5,18 +5,20 @@ var cG = cG||{};/*if(void 0===cG) var cG = {};*//*check if cG is already is inst
 /*comix-ngn default properties*/
 /*IMMUTABLE*/
 /*version settings*/
-function N(){return 0};/*null function*/
-if(void 0===$GPC){var $GPC=0;}
+cG.N =function(){return 0};/*null function*/
+if(void 0===cG.$GPC){cG.$GPC=0;}
 cG.root = '';
 cG.cPanel = cG.cPanel||{};
 cG.info = {vix: "1.0.5",vwr: "0.5.0",vpr: "0.1.0"};
 cG.dis = cG.dis||{};
+cG.recyclebin = cG.recyclebin||{};
+cG.queue = cG.queue||[];
 cG.comicID = cG.comicID||window.location.host;
 cG.prePage = cG.prePage||-1;
 !function(){
     var selfScript = document.getElementsByTagName("SCRIPT");
     //console.log(selfScript);
-    if(void 0!==selfScript||selfScript===null){
+    if(void 0!==selfScript||selfScript!==null){
         for(var q = 0;q<selfScript.length;q++){
             if(selfScript[q].src.indexOf("comixngn")>=0){
                 selfScript = selfScript[q];
@@ -46,8 +48,8 @@ cG.prePage = cG.prePage||-1;
     }
 }()
 
-var avx = cG.info.vix.split(".");
-if(avx[0]>0&&avx[1]>0){
+cG.avx = cG.avx||cG.info.vix.split(".");
+if(cG.avx[0]>0&&cG.avx[1]>0){
     cG.info.vrb = 1;
     cG.verbose = function(a){
         var submit = [];
@@ -135,7 +137,7 @@ cG.REPO.agent = {def:/*pegasus.js*/function(t,e){return e=new XMLHttpRequest,e.o
 
 cG.REPO.director = {"def":Path};
 
-cG.REPO.producer = {"def":N};
+cG.REPO.producer = {"def":cG.N};
 
 ///////
 cG.REPO.stage = {"def":{id:"def",construct:function(name,scriptt,anchor,options){   
@@ -153,14 +155,14 @@ k,!1);for(b=0;b<d.config.imgpostbuffer;b++)t.push(new Image),t[b].imaginaryID=-1
     var get;//still undefined
     if(typeof(Storage) !== "undefined") {
         get = parseInt(localStorage.getItem(cG.comicID+"|"+name+"|curPage"),10);
-        if(avx[0]>0&&avx[1]>0) cG.verbose(1,cG.comicID+"|"+name+"|curPage",":",get);
+        if(cG.avx[0]>0&&cG.avx[1]>0) cG.verbose(1,cG.comicID+"|"+name+"|curPage",":",get);
         else console.log(cG.comicID+"|"+name+"|curPage",":",get);
     }
     if(cG.comix===void 0&&cG.prePage>=0) get = cG.prePage;//prepage, which is from router, overwrites localStorage if over -1, only works on comix
     var main = new direction(scriptt,anchor,get);
     main.name = name;
     main.type = "def";
-    if(avx[0]>0&&avx[1]>0){
+    if(cG.avx[0]>0&&cG.avx[1]>0){
         main.pg = [anchor]
         main.at = 0;
         main.navto = function(a){
@@ -223,17 +225,21 @@ k,!1);for(b=0;b<d.config.imgpostbuffer;b++)t.push(new Image),t[b].imaginaryID=-1
         }
         if(cG.comix===cG.cPanel["def_"+name]){//if comic is the comix, then push its state
             var modify = (cG.script.config.pagestartnum)?1:0;
-            if(avx[0]>0&&avx[1]>0) cG.verbose(1,name,"Pushing state:",(cG.cPanel["def_"+name].current()+modify));
+            if(cG.avx[0]>0&&cG.avx[1]>0) cG.verbose(1,name,"Pushing state:",(cG.cPanel["def_"+name].current()+modify));
             else console.log(name,"Pushing state:",(cG.cPanel["def_"+name].current()+modify));
             history.pushState({}, null, "#/"+(cG.cPanel["def_"+name].current()+modify));
         }
+        /*if(cG.queue.stageChange!==void 0)
+            for(var ftn=0;ftn<cG.queue.stageChangee.length;ftn++){
+                cG[cG.queue.stageinjection[ftn]]();
+            }*/
         var strct = cG.cPanel["def_"+name].data(cG.cPanel["def_"+name].current()).special;
         var zombie = document.getElementById(name+"_tempScript");//fetch zombie child
         var preload = cG.HELPERS.stick(cG.cPanel["def_"+name].canvi[0],null,null,0);
         var display = cG.HELPERS.stick(cG.cPanel["def_"+name].canvi[1],null,null,1);
         if(zombie!==void 0&&zombie!==null){
             anchor.removeChild(zombie);//kill the zombie
-            if(avx[0]>0&&avx[1]>0){
+            if(cG.avx[0]>0&&cG.avx[1]>0){
                 preload._show();
                 display._show();
             }
@@ -248,7 +254,7 @@ k,!1);for(b=0;b<d.config.imgpostbuffer;b++)t.push(new Image),t[b].imaginaryID=-1
             spanr.setAttribute("id", name+"_tempScript");
             spanr.innerHTML=strct;
             anchor.appendChild(spanr);
-            if(avx[0]>0&&avx[1]>0){
+            if(cG.avx[0]>0&&cG.avx[1]>0){
                 preload._hide();
                 display._hide();
             }
@@ -278,58 +284,62 @@ cG.stage = cG.REPO.stage.def;
 /*HELPERS*/
 cG.HELPERS = {};
 /*END comix-ngn properties*/
-
-/*AJAX Calls*/
-/*debugging: ensures cG is correctly instaniated*//*console.log(cG);*/
-var dir,
-    tir,
-    src = document.getElementsByTagName("SCRIPT");
-for (var i = 0; i < src.length; i++) {
-    if(src[i].src.indexOf("comixngn")>=0||src[i].src.indexOf(".cng.")>=0){
-        dir=src[i].getAttribute("dir");
-        tir=src[i].getAttribute("template");
-        break;
+! function(){
+    /*AJAX Calls*/
+    /*debugging: ensures cG is correctly instaniated*//*console.log(cG);*/
+    var dir,
+        tir,
+        src = document.getElementsByTagName("SCRIPT");
+    for (var i = 0; i < src.length; i++) {
+        if(src[i].src.indexOf("comixngn")>=0||src[i].src.indexOf(".cng.")>=0){
+            dir=src[i].getAttribute("dir");
+            tir=src[i].getAttribute("template");
+            break;
+        }
     }
-}
-dir=dir||"";
-tir=tir||"";
-if(cG.root=="") cG.root="def";
-if(void 0===cG.REPO.scReq.getScript){/*create script.json promise if not already created*/
-    cG.REPO.scReq.getScript = cG.agent(dir+'script.json');
-    cG.REPO.scReq.getScript.then(
-        function(data, xhr) {
-            cG.script = cG.REPO.script.def = data;
-        },
-        function(data, xhr) {
-            console.error(data, xhr.status);
-        cG.script = cG.REPO.script.def = 0;
-    });
-}
-if(void 0===cG.REPO.scReq.getDecor){
-    cG.REPO.scReq.getDecor = cG.agent(tir+'decor.html');
-    cG.REPO.scReq.getDecor.then(
-    function(data, xhr) {
-        cG.decor = cG.REPO.decor.def = data;
-    },
-    function(data, xhr) {
-        console.error(data, xhr.status);
-        cG.decor = cG.REPO.decor.def = 0;
-    });
-}
-if(void 0===cG.REPO.scReq.getCtrls){
-    cG.REPO.scReq.getCtrls = cG.agent(tir+'ctrls.html');
-    cG.REPO.scReq.getCtrls.then(
-    function(data, xhr) {
-        cG.ctrls = cG.REPO.ctrls.def = data;
-    },
-    function(data, xhr) {
-        console.error(data, xhr.status);
-        cG.ctrls = cG.REPO.ctrls.def = 0;
-    });
-}
-/*END AJAX calls*/
+    dir=dir||"";
+    tir=tir||"";
+    if(cG.root=="") cG.root="def";
+    if(void 0===cG.REPO.scReq.getScript){/*create script.json promise if not already created*/
+        cG.REPO.scReq.getScript = cG.agent(dir+'script.json');
+        cG.REPO.scReq.getScript.then(
+            function(data, xhr) {
+                cG.script = cG.REPO.script.def = data;
+            },
+            function(data, xhr) {
+                console.error(data, xhr.status);
+                cG.script = cG.REPO.script.def = 0;
+            });
+    }
+    if(void 0===cG.REPO.scReq.getDecor){
+        cG.REPO.scReq.getDecor = cG.agent(tir+'decor.html');
+        cG.REPO.scReq.getDecor.then(
+            function(data, xhr) {
+                cG.decor = cG.REPO.decor.def = data;
+            },
+            function(data, xhr) {
+                console.error(data, xhr.status);
+                cG.decor = cG.REPO.decor.def = 0;
+            });
+    }
+    if(void 0===cG.REPO.scReq.getCtrls){
+        cG.REPO.scReq.getCtrls = cG.agent(tir+'ctrls.html');
+        cG.REPO.scReq.getCtrls.then(
+            function(data, xhr) {
+                cG.ctrls = cG.REPO.ctrls.def = data;
+            },
+            function(data, xhr) {
+                console.error(data, xhr.status);
+                cG.ctrls = cG.REPO.ctrls.def = 0;
+            });
+    }
+    /*END AJAX calls*/
+}();
 /*STAGE creation-REDACTED*/
-cG.HELPERS.jstagecreate = N;
+cG.HELPERS.jstagecreate = cG.N;
+cG.controlInjection = function(SPECIFIC){
+    return -1;
+}
 cG.stageInjection = function(SPECIFIC){
     if(cG.script === '' || cG.decor === ''|| cG.ctrls === '') {//although we don't need decor, if there is a template, we prioritize it
         /*if are stuff isn't ready yet we are going to wait for it*/
@@ -348,6 +358,9 @@ cG.stageInjection = function(SPECIFIC){
         if(void 0 === SPECIFIC.nodeName) return console.error(errr);
         stages.push(SPECIFIC);/*if not array and not undefined, assume it is a Element*/
     }
+    for(var p in cG.recyclebin)
+    if(cG.recyclebin.hasOwnProperty(p)&&p!==null)
+        cG.recyclebin[p] = null;
     var final_res = cG.cPanel,
         decor = (cG.decor)?cG.decor:'<div id="location"></div><div id="archive">Archive</div><div id="me">About Me</div>',
         ctrls = (cG.ctrls)?cG.ctrls:'<div>NOT IMPLEMENTED YET</div>',
@@ -397,7 +410,7 @@ cG.stageInjection = function(SPECIFIC){
                 }
             } else config_attr={};
             /*END initial set up*/
-            if(avx[0]>0&&avx[1]>0){
+            if(cG.avx[0]>0&&cG.avx[1]>0){
                 var nstpost = [];
                 var nestcom = stages[iD].children;
                 for(var h = 0;h<nestcom.length; h++){
@@ -416,7 +429,7 @@ cG.stageInjection = function(SPECIFIC){
                 },1);
             }
             anchorto.style.display = "block";
-            if(avx[0]>0&&avx[1]>0){
+            if(cG.avx[0]>0&&cG.avx[1]>0){
                 var archival = document.getElementById(id_attr+"_archive");
                 if(archival!==void 0&&archival!==null){
                     var transcriptPG = "<ul>";
@@ -448,7 +461,7 @@ cG.stageInjection = function(SPECIFIC){
             //console.log(anchorto,anchorto.style)
             var srch = use_attr+"_"+id_attr;
             final_res[srch] = cG.stage.construct(id_attr,myScript,anchorto,config_attr);
-            if(avx[0]>0&&avx[1]>0){
+            if(cG.avx[0]>0&&cG.avx[1]>0){
                 var chl = stages[iD].children;
                 for(var t = 1;t<chl.length;t++){
                     if(chl[t]==anchorto) continue;
@@ -469,7 +482,7 @@ cG.stageInjection = function(SPECIFIC){
 };
 /*end STAGE creation*/
 /*ROUTING*/
-var route2page = function(orgvalue){
+cG.route2page = cG.route2page||function(orgvalue){
     var value = orgvalue||parseInt(this.params['page'],10);
     if(cG.script === '') return setTimeout(route2page,300,value);
     if(!cG.script) return -1;
@@ -477,10 +490,10 @@ var route2page = function(orgvalue){
     cG.prePage = value-modify;
     //search for page mismatch
     if(cG.comix!==void 0&&cG.prePage!=cG.comix.current()) cG.comix.go(cG.prePage);
-    if(avx[0]>0&&avx[1]>0) cG.verbose(1,"AutoPage: "+cG.prePage)
+    if(cG.avx[0]>0&&cG.avx[1]>0) cG.verbose(1,"AutoPage: "+cG.prePage)
     else console.log("AutoPage: "+cG.prePage)
 }
-Path.map("#/:page").to(route2page);
+Path.map("#/:page").to(cG.route2page);
 /*end routing*/
 /*/////////////////////////////////////////////////
 HELPER FUNCTIONS*/
@@ -492,7 +505,7 @@ cG.HELPERS.smartAttrib = function(source,mapper,ignore){
     if(void 0 !== srch&&ig<=0){
         if(srch.count === void 0 || srch.count != 0){/*as long as count != 0 we can set the attribute*/
             base = Object.keys(srch);
-            for(y=0;y<base.length;y++){
+            for(var y=0;y<base.length;y++){
                 if(base[y]=="count") continue;
                 if(base[y]=="innerHTML"){
                     source.innerHTML = srch[base[y]];
@@ -506,7 +519,7 @@ cG.HELPERS.smartAttrib = function(source,mapper,ignore){
     for(var x=0;x<source.children.length;x++) cG.HELPERS.smartAttrib(source.children[x],mapper,ig);
 }
 cG.HELPERS.stick = function(obj,parent,sauce,pos){
-    if(avx[0]>0&&avx[1]>0){
+    if(cG.avx[0]>0&&cG.avx[1]>0){
         var ftns = [
             function(a){//order
                 if(parent!==void 0||parent!==null){
@@ -648,11 +661,11 @@ domReady(function(){
     //Path.history.listen(true);
     /*everything else occurs here*/
     if(!document.getElementById("$COMICNGWRITER$$$")){/*prints version information*/
-        console.log("%c %c %c comix-ngn v"+ cG.info.vix +" %c \u262F %c \u00A9 2015 Oluwaseun Ogedengbe %c Plugins: "+$GPC, "color:white; background:#2EB531", "background:purple","color:white; background:#32E237", 'color:red; background:black', "color:white; background:#2EB531", "color:white; background:purple");}
+        console.log("%c %c %c comix-ngn v"+ cG.info.vix +" %c \u262F %c \u00A9 2015 Oluwaseun Ogedengbe %c Plugins: "+cG.$GPC, "color:white; background:#2EB531", "background:purple","color:white; background:#32E237", 'color:red; background:black', "color:white; background:#2EB531", "color:white; background:purple");}
     //console.log(JSON.stringify(cG, null, 2) );
     var a = document.getElementsByTagName("SCRIPT");
     var b;
-    for (i = 0; i < a.length; i++) {
+    for (var i = 0; i < a.length; i++) {
         if(void 0==a[i].getAttribute("src")) continue;
         if(a[i].getAttribute("src").indexOf("comixngn")>=0){
             b=a[i].getAttribute("auto");
