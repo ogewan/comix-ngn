@@ -1,4 +1,4 @@
-# comix-ngn
+# ![C](https://raw.githubusercontent.com/ogewan/comix-ngn/nightly/assets/static-c-comixngn.png)omix-ngn
 [![JS.ORG](https://img.shields.io/badge/js.org-dns-ffb400.svg?style=flat-square)](http://js.org) [![Join the chat at https://gitter.im/seun40/comic-ng](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/seun40/comic-ng?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Issue Stats](http://www.issuestats.com/github/ogewan/comix-ngn/badge/pr?style=flat)](http://www.issuestats.com/github/ogewan/comix-ngn) [![Issue Stats](http://www.issuestats.com/github/ogewan/comix-ngn/badge/issue?style=flat)](http://www.issuestats.com/github/ogewan/comix-ngn)
 
 **The Modern Webcomic Engine**
