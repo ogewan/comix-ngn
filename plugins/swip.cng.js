@@ -5,8 +5,8 @@ Order: after comixngn.js
 */
 !function(){
     if(typeof cG !== 'undefined'){
-        if(typeof $GPC === 'undefined') var $GPC = 1;/*Global Plug in count*/
-        else $GPC++;
+        if(cG.$GPC === void 0) cG.$GPC = 1;/*Global Plug in count*/
+        else cG.$GPC++;
         //adding to comix-ngn
         var key_to_change = "stage",
             pluginname = "swip";

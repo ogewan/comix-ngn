@@ -1,22 +1,24 @@
-/** @preserve comix-ngn v1.0.3 | (c) 2015 Oluwaseun Ogedengbe| seun40.github.io/comic-ng/ |License: MIT|
+/** @preserve comix-ngn v1.0.5 | (c) 2015 Oluwaseun Ogedengbe| ogewan.github.io/comix-ngn/ |License: MIT|
 embeds domReady: github.com/ded/domready (MIT) (c) 2013 Dustin Diaz, pegasus: typicode.github.io/pegasus (MIT) (c) 2014 typicode, pathjs (MIT) (c) 2011 Mike Trpcic, direction.js*/
 
 var cG = cG||{};/*if(void 0===cG) var cG = {};*//*check if cG is already is instantiated*/
 /*comix-ngn default properties*/
 /*IMMUTABLE*/
 /*version settings*/
-function N(){return 0};/*null function*/
-if(void 0===$GPC){var $GPC=0;}
+cG.N =function(){return 0};/*null function*/
+if(void 0===cG.$GPC){cG.$GPC=0;}
 cG.root = '';
 cG.cPanel = cG.cPanel||{};
-cG.info = {vix: "1.0.4",vwr: "0.5.0",vpr: "0.1.0"};
+cG.info = {vix: "1.0.5",vwr: "0.5.0",vpr: "0.1.0"};
 cG.dis = cG.dis||{};
+cG.recyclebin = cG.recyclebin||{};
+cG.queue = cG.queue||[];
 cG.comicID = cG.comicID||window.location.host;
 cG.prePage = cG.prePage||-1;
 !function(){
     var selfScript = document.getElementsByTagName("SCRIPT");
     //console.log(selfScript);
-    if(void 0!==selfScript||selfScript===null){
+    if(void 0!==selfScript||selfScript!==null){
         for(var q = 0;q<selfScript.length;q++){
             if(selfScript[q].src.indexOf("comixngn")>=0){
                 selfScript = selfScript[q];
@@ -46,16 +48,25 @@ cG.prePage = cG.prePage||-1;
     }
 }()
 
-var avx = cG.info.vix.split(".");
-if(avx[0]>0&&avx[1]>0){
+cG.avx = cG.avx||cG.info.vix.split(".");
+if(cG.avx[0]>0&&cG.avx[1]>0){
     cG.info.vrb = 1;
     cG.verbose = function(a){
         var submit = [];
-        for(var k=1;k < arguments.length;k++){
+        var b=1,c,d=1;
+        if(a===null||a===void 0||isNaN(parseInt(a,10))) d = 0;
+        else b=a;
+        for(var k=d;k < arguments.length;k++){
             submit.push(arguments[k]);
         }
+        if(cG.info.vrb===null||cG.info.vrb===void 0) c = 0;
+        else c=cG.info.vrb
         //e = new Error();
-        if(cG.info.vrb>=a) console.log([].concat(submit).join(" "));//,e.linenumber,e.stack);
+        /*if (b==-2&&c>=b){
+            //arguments.slice(0,1)
+            console.log(submit);
+        }
+        else*/ if(c>=b) console.log([].concat(submit).join(" "));//,e.linenumber,e.stack);
     }
 }
 if(cG.dis.rollbar!=true){
@@ -126,7 +137,7 @@ cG.REPO.agent = {def:/*pegasus.js*/function(t,e){return e=new XMLHttpRequest,e.o
 
 cG.REPO.director = {"def":Path};
 
-cG.REPO.producer = {"def":N};
+cG.REPO.producer = {"def":cG.N};
 
 ///////
 cG.REPO.stage = {"def":{id:"def",construct:function(name,scriptt,anchor,options){   
@@ -135,25 +146,78 @@ cG.REPO.stage = {"def":{id:"def",construct:function(name,scriptt,anchor,options)
 b,E={context:c[0].getContext("2d"),color:p.color,start:Date.now(),lines:p.lines,diameter:p.diameter,rate:p.rate},F=function(a){c[0].style.paddingLeft=(c[1].width-300)/2+"px";var b=Math.floor((Date.now()-a.start)/1E3*a.lines)/a.lines,g=a.color.substr(1);a.context.save();a.context.clearRect(0,0,300,c[1].height);a.context.translate(150,c[1].height/2);a.context.rotate(2*Math.PI*b);3==g.length&&(g=g[0]+C[0]+g[1]+g[1]+g[2]+g[2]);for(var b=parseInt(g.substr(0,2),16).toString(),d=parseInt(g.substr(2,2),16).toString(),
 g=parseInt(g.substr(4,2),16).toString(),e=0;e<a.lines;e++)a.context.beginPath(),a.context.rotate(2*Math.PI/a.lines),a.context.moveTo(a.diameter/10,0),a.context.lineTo(a.diameter/4,0),a.context.lineWidth=a.diameter/30,a.context.strokeStyle="rgba("+b+","+d+","+g+","+e/a.lines+")",a.context.stroke();a.context.restore();y?window.setTimeout(F,a.rate,E):a.context.clearRect(0,0,300,c[1].height)},G=function(a,b){if(null===a||void 0===a)a={x:0,y:0};else if(isNaN(a)){if(null===a.y||void 0===a.y)a.y=0;if(null===
 a.x||void 0===a.x)a.x=0}else a={x:0,y:a};if(null===b||void 0===b||0>=b)b=400;0>a.y&&(a.y=window.innerHeight||document.documentElement.clientHeight||document.body.clientHeight);0>a.x&&(a.x=window.innerWidth||document.documentElement.clientWidth||document.body.clientWidth);var c={x:void 0!==window.pageXOffset?a.x-window.pageXOffset:a.x-document.documentElement.scrollLeft,y:void 0!==window.pageYOffset?a.y-window.pageYOffset:a.y-document.documentElement.scrollTop};if(c=={x:0,y:0})return c;var d=function(a,
-b,c){window.scrollBy(Math.floor(a.x)/b,Math.floor(a.y)/b);c+1<5*b&&window.setTimeout(d,5,a,b,c+1)};window.setTimeout(d,5,c,Math.floor(b/5),0);return c},k=function(){e[this.imaginaryID].loaded=!0},r=function(a,b){y=!0;window.setTimeout(F,p.rate,E);B();0>b&&(b=0);b>=l&&(b=l-1);e[b].loaded||A.clearRect(0,0,c[1].width,c[1].height);a.imaginaryID=b;a.src=q.dir+e[b].url[0];for(var d=0,f=b-1;f>b-q.imgprebuffer-1&&0<=f;f--)e[f].loaded||(u[d].imaginaryID=f,u[d].src=q.dir+e[f].url,d++);d=0;for(f=b+1;f<q.imgpostbuffer+
+b,c){window.scrollBy(Math.floor(a.x)/b,Math.floor(a.y)/b);c+1<5*b&&window.setTimeout(d,5,a,b,c+1)};window.setTimeout(d,5,c,Math.floor(b/5),0);return c},k=function(){e[this.imaginaryID].loaded=!0},r=function(a,b){y=!0;window.setTimeout(F,p.rate,E);B();0>b&&(b=0);b>=l&&(b=l-1);e[b].loaded||A.clearRect(0,0,c[1].width,c[1].height);a.imaginaryID=b;a.src=q.dir+e[b].url[0];n=b;for(var d=0,f=b-1;f>b-q.imgprebuffer-1&&0<=f;f--)e[f].loaded||(u[d].imaginaryID=f,u[d].src=q.dir+e[f].url,d++);d=0;for(f=b+1;f<q.imgpostbuffer+
 b+1&&f<l;f++)e[f].loaded||(t[d].imaginaryID=f,t[d].src=q.dir+e[f].url,d++)};this.count=function(){return l};this.current=function(){return n};this.callback=function(a,b){if(null===a||void 0===a)return w;if(null===b||void 0===b)return a?0<a?D:B:w;a?0<a?D=b:B=b:w=b;return 1};this.go=function(a){a=null===a||void 0===a?0:parseInt(a,10);a=isNaN(a)?0:a;r(h,Math.floor(Math.max(0,Math.min(l-1,a))));return a};this.prev=function(){var a=n-1;0<=a&&r(h,a);return a};this.next=function(){var a=n+1;a<l&&r(h,a);
 return a};this.frst=function(){0<=n&&r(h,0);return 0};this.last=function(){r(h,l-1);return l-1};this.rand=function(){var a=Math.floor(Math.random()*(l-1));r(h,a);return a};this.data=function(a){a=null===a||void 0===a?n:parseInt(a,10);return isNaN(a)?e[n]:e[a]};this.scroll=function(a){return null===a||void 0===a?z:z=a};this.scrollTo=function(a,b){return G(a,b)};c[0].height=480;c[0].style.background=p.back;c[0].style.paddingLeft="170px";c[0].style.zIndex=0;c[0].style.position="absolute";m?m.appendChild(c[0]):
-document.body.appendChild(c[0]);window.setTimeout(F,p.rate,E);h=new Image;h.imaginaryID=-1;h.addEventListener("load",function(){e[this.imaginaryID].loaded?A.clearRect(0,0,this.width,this.height):e[this.imaginaryID].loaded=!0;w();c[1].width=this.width;c[1].height=c[0].height=this.height;A.drawImage(this,0,0);n=this.imaginaryID;y=0;z&&G();D()},!1);for(b=0;b<e.length;b++)e[b].desig=b?b==e.length-1?1:0:-1,e[b].loaded=!1;for(b=0;b<d.config.imgprebuffer;b++)u.push(new Image),u[b].imaginaryID=-1,u[b].addEventListener("load",
-k,!1);for(b=0;b<d.config.imgpostbuffer;b++)t.push(new Image),t[b].imaginaryID=-1,t[b].addEventListener("load",k,!1);r(h,void 0===v||null===v||isNaN(v)?q.startpage:v);c[1].height=480;c[1].width=640;c[1].background=q.back;c[1].style.zIndex=1;c[1].style.position="relative";m?m.appendChild(c[1]):document.body.appendChild(c[1]);this.canvi=c};
+document.body.appendChild(c[0]);window.setTimeout(F,p.rate,E);h=new Image;h.imaginaryID=-1;h.addEventListener("load",function(){e[this.imaginaryID].loaded?A.clearRect(0,0,this.width,this.height):e[this.imaginaryID].loaded=!0;w();c[1].width=this.width;c[1].height=c[0].height=this.height;A.drawImage(this,0,0);y=0;z&&G();D()},!1);for(b=0;b<e.length;b++)e[b].desig=b?b==e.length-1?1:0:-1,e[b].loaded=!1;for(b=0;b<d.config.imgprebuffer;b++)u.push(new Image),u[b].imaginaryID=-1,u[b].addEventListener("load",
+k,!1);for(b=0;b<d.config.imgpostbuffer;b++)t.push(new Image),t[b].imaginaryID=-1,t[b].addEventListener("load",k,!1);r(h,void 0===v||null===v||isNaN(v)?q.startpage:v);c[1].height=480;c[1].width=640;c[1].background=q.back;c[1].style.zIndex=1;c[1].style.position="relative";m?m.appendChild(c[1]):document.body.appendChild(c[1]);this.canvi=c;this.internals=d};
 /**/
     var get;//still undefined
     if(typeof(Storage) !== "undefined") {
         get = parseInt(localStorage.getItem(cG.comicID+"|"+name+"|curPage"),10);
-        if(avx[0]>0&&avx[1]>0) cG.verbose(1,cG.comicID+"|"+name+"|curPage",":",get);
+        if(cG.avx[0]>0&&cG.avx[1]>0) cG.verbose(1,cG.comicID+"|"+name+"|curPage",":",get);
         else console.log(cG.comicID+"|"+name+"|curPage",":",get);
     }
     if(cG.comix===void 0&&cG.prePage>=0) get = cG.prePage;//prepage, which is from router, overwrites localStorage if over -1, only works on comix
     var main = new direction(scriptt,anchor,get);
     main.name = name;
     main.type = "def";
-    if(avx[0]>0&&avx[1]>0){
+    if(cG.avx[0]>0&&cG.avx[1]>0){
         main.pg = [anchor]
         main.at = 0;
+        main.navto = function(a){
+            if(a<main.pg.length) return main.pg[a]._nav()
+        }
+        main.ch_data = function(a){
+            var c = main.internals.chapters;
+            var sre = (a===null||void 0===a)?main.ch_current():parseInt(a,10);
+            return (main.ch_current()==-1)?{}:(isNaN(sre))?c[main.ch_current()]:c[sre];
+        }
+        main.ch_count = function(){
+            return main.internals.chapters.length;
+        }
+        main.ch_current = function(){
+            var c = main.internals.chapters,
+                d = main.current();
+            for(var a=0;a<c.length;a++){
+                if(c[a].start<=d&&d<=c[a].end) return a;
+            }
+            return -1;
+        }
+        main.ch_go = function(a,b){
+            var sre = (a===null||void 0===a)?0:parseInt(a,10);
+            sre = (isNaN(sre))?0:sre;
+            if (main.ch_current()==-1) return main.go()
+            return main.go(main.internals.chapters[Math.floor(Math.max(0,Math.min(main.internals.chapters.length-1,sre)))][g]);
+        }
+        main.ch_prev = function(b){
+            if (main.ch_current()==-1) return main.go();
+            var g;
+            if(b===null&&b===void 0) g = "start";
+            else g = "end"
+            return main.go(main.internals.chapters[Math.max(0,main.ch_current()-1)][g]);
+        }
+        main.ch_next = function(b){
+            if (main.ch_current()==-1) return main.go();
+            var g;
+            if(b===null&&b===void 0) g = "start";
+            else g = "end"
+            return main.go(main.internals.chapters[Math.min(main.ch_count()-1,main.ch_current()+1)][g]);
+        }
+        main.ch_frst = function(b){
+            if (main.ch_current()==-1) return main.go();
+            var g;
+            if(b===null&&b===void 0) g = "start";
+            else g = "end"
+            return main.go(main.internals.chapters[0][g]);
+        }
+        main.ch_last = function(b){
+            if (main.ch_current()==-1) return main.go();
+            var g;
+            if(b===null&&b===void 0) g = "start";
+            else g = "end"
+            return main.go(main.internals.chapters[main.ch_count()-1][g]);
+        }
     }
     var lscurrent = function(){
         if(typeof(Storage) !== void 0) {
@@ -161,17 +225,21 @@ k,!1);for(b=0;b<d.config.imgpostbuffer;b++)t.push(new Image),t[b].imaginaryID=-1
         }
         if(cG.comix===cG.cPanel["def_"+name]){//if comic is the comix, then push its state
             var modify = (cG.script.config.pagestartnum)?1:0;
-            if(avx[0]>0&&avx[1]>0) cG.verbose(1,name,"Pushing state:",(cG.cPanel["def_"+name].current()+modify));
+            if(cG.avx[0]>0&&cG.avx[1]>0) cG.verbose(1,name,"Pushing state:",(cG.cPanel["def_"+name].current()+modify));
             else console.log(name,"Pushing state:",(cG.cPanel["def_"+name].current()+modify));
             history.pushState({}, null, "#/"+(cG.cPanel["def_"+name].current()+modify));
         }
+        if(cG.queue.stageChange!==void 0)
+            for(var ftn=0;ftn<cG.queue.stageChange.length;ftn++){
+                cG.queue.stageChange[ftn](cG.cPanel["def_"+name]);
+            }
         var strct = cG.cPanel["def_"+name].data(cG.cPanel["def_"+name].current()).special;
         var zombie = document.getElementById(name+"_tempScript");//fetch zombie child
-        var preload = cG.HELPERS.stick(cG.cPanel["def_"+name].canvi[0]);
-        var display = cG.HELPERS.stick(cG.cPanel["def_"+name].canvi[1]);
+        var preload = cG.HELPERS.stick(cG.cPanel["def_"+name].canvi[0],null,null,0);
+        var display = cG.HELPERS.stick(cG.cPanel["def_"+name].canvi[1],null,null,1);
         if(zombie!==void 0&&zombie!==null){
             anchor.removeChild(zombie);//kill the zombie
-            if(avx[0]>0&&avx[1]>0){
+            if(cG.avx[0]>0&&cG.avx[1]>0){
                 preload._show();
                 display._show();
             }
@@ -186,7 +254,7 @@ k,!1);for(b=0;b<d.config.imgpostbuffer;b++)t.push(new Image),t[b].imaginaryID=-1
             spanr.setAttribute("id", name+"_tempScript");
             spanr.innerHTML=strct;
             anchor.appendChild(spanr);
-            if(avx[0]>0&&avx[1]>0){
+            if(cG.avx[0]>0&&cG.avx[1]>0){
                 preload._hide();
                 display._hide();
             }
@@ -216,58 +284,62 @@ cG.stage = cG.REPO.stage.def;
 /*HELPERS*/
 cG.HELPERS = {};
 /*END comix-ngn properties*/
-
-/*AJAX Calls*/
-/*debugging: ensures cG is correctly instaniated*//*console.log(cG);*/
-var dir,
-    tir,
-    src = document.getElementsByTagName("SCRIPT");
-for (var i = 0; i < src.length; i++) {
-    if(src[i].src.indexOf("comixngn")>=0||src[i].src.indexOf(".cng.")>=0){
-        dir=src[i].getAttribute("dir");
-        tir=src[i].getAttribute("template");
-        break;
+! function(){
+    /*AJAX Calls*/
+    /*debugging: ensures cG is correctly instaniated*//*console.log(cG);*/
+    var dir,
+        tir,
+        src = document.getElementsByTagName("SCRIPT");
+    for (var i = 0; i < src.length; i++) {
+        if(src[i].src.indexOf("comixngn")>=0||src[i].src.indexOf(".cng.")>=0){
+            dir=src[i].getAttribute("dir");
+            tir=src[i].getAttribute("template");
+            break;
+        }
     }
-}
-dir=dir||"";
-tir=tir||"";
-if(cG.root=="") cG.root="def";
-if(void 0===cG.REPO.scReq.getScript){/*create script.json promise if not already created*/
-    cG.REPO.scReq.getScript = cG.agent(dir+'script.json');
-    cG.REPO.scReq.getScript.then(
-        function(data, xhr) {
-            cG.script = cG.REPO.script.def = data;
-        },
-        function(data, xhr) {
-            console.error(data, xhr.status);
-        cG.script = cG.REPO.script.def = 0;
-    });
-}
-if(void 0===cG.REPO.scReq.getDecor){
-    cG.REPO.scReq.getDecor = cG.agent(tir+'decor.html');
-    cG.REPO.scReq.getDecor.then(
-    function(data, xhr) {
-        cG.decor = cG.REPO.decor.def = data;
-    },
-    function(data, xhr) {
-        console.error(data, xhr.status);
-        cG.decor = cG.REPO.decor.def = 0;
-    });
-}
-if(void 0===cG.REPO.scReq.getCtrls){
-    cG.REPO.scReq.getCtrls = cG.agent(tir+'ctrls.html');
-    cG.REPO.scReq.getCtrls.then(
-    function(data, xhr) {
-        cG.ctrls = cG.REPO.ctrls.def = data;
-    },
-    function(data, xhr) {
-        console.error(data, xhr.status);
-        cG.ctrls = cG.REPO.ctrls.def = 0;
-    });
-}
-/*END AJAX calls*/
+    dir=dir||"";
+    tir=tir||"";
+    if(cG.root=="") cG.root="def";
+    if(void 0===cG.REPO.scReq.getScript){/*create script.json promise if not already created*/
+        cG.REPO.scReq.getScript = cG.agent(dir+'script.json');
+        cG.REPO.scReq.getScript.then(
+            function(data, xhr) {
+                cG.script = cG.REPO.script.def = data;
+            },
+            function(data, xhr) {
+                console.error(data, xhr.status);
+                cG.script = cG.REPO.script.def = 0;
+            });
+    }
+    if(void 0===cG.REPO.scReq.getDecor){
+        cG.REPO.scReq.getDecor = cG.agent(tir+'decor.html');
+        cG.REPO.scReq.getDecor.then(
+            function(data, xhr) {
+                cG.decor = cG.REPO.decor.def = data;
+            },
+            function(data, xhr) {
+                console.error(data, xhr.status);
+                cG.decor = cG.REPO.decor.def = 0;
+            });
+    }
+    if(void 0===cG.REPO.scReq.getCtrls){
+        cG.REPO.scReq.getCtrls = cG.agent(tir+'ctrls.html');
+        cG.REPO.scReq.getCtrls.then(
+            function(data, xhr) {
+                cG.ctrls = cG.REPO.ctrls.def = data;
+            },
+            function(data, xhr) {
+                console.error(data, xhr.status);
+                cG.ctrls = cG.REPO.ctrls.def = 0;
+            });
+    }
+    /*END AJAX calls*/
+}();
 /*STAGE creation-REDACTED*/
-cG.HELPERS.jstagecreate = N;
+cG.HELPERS.jstagecreate = cG.N;
+cG.controlInjection = function(SPECIFIC){
+    return -1;
+}
 cG.stageInjection = function(SPECIFIC){
     if(cG.script === '' || cG.decor === ''|| cG.ctrls === '') {//although we don't need decor, if there is a template, we prioritize it
         /*if are stuff isn't ready yet we are going to wait for it*/
@@ -286,6 +358,9 @@ cG.stageInjection = function(SPECIFIC){
         if(void 0 === SPECIFIC.nodeName) return console.error(errr);
         stages.push(SPECIFIC);/*if not array and not undefined, assume it is a Element*/
     }
+    for(var p in cG.recyclebin)
+    if(cG.recyclebin.hasOwnProperty(p)&&p!==null)
+        cG.recyclebin[p] = null;
     var final_res = cG.cPanel,
         decor = (cG.decor)?cG.decor:'<div id="location"></div><div id="archive">Archive</div><div id="me">About Me</div>',
         ctrls = (cG.ctrls)?cG.ctrls:'<div>NOT IMPLEMENTED YET</div>',
@@ -335,7 +410,7 @@ cG.stageInjection = function(SPECIFIC){
                 }
             } else config_attr={};
             /*END initial set up*/
-            if(avx[0]>0&&avx[1]>0){
+            if(cG.avx[0]>0&&cG.avx[1]>0){
                 var nstpost = [];
                 var nestcom = stages[iD].children;
                 for(var h = 0;h<nestcom.length; h++){
@@ -354,10 +429,39 @@ cG.stageInjection = function(SPECIFIC){
                 },1);
             }
             anchorto.style.display = "block";
+            if(cG.avx[0]>0&&cG.avx[1]>0){
+                var archival = document.getElementById(id_attr+"_archive");
+                if(archival!==void 0&&archival!==null){
+                    var transcriptPG = "<ul>";
+                    var transcriptCH = "<ul>";
+                    var transcriptBH = "<ul>";
+                    var chpapp = 0;
+                    var pagapp = 0;
+                    if(myScript.config.pagestartnum) pagapp=1;
+                    if(myScript.config.chapterstartnum) chpapp=1;
+                    for(var y=0;y<myScript.pages.length;y++){
+                        transcriptPG=transcriptPG+'<li onclick="cG.cPanel['+"'"+'def_'+id_attr+"'"+'].go('+y+');this.parentElement.parentElement.style.display='+"'none'"+';document.getElementById('+"'"+id_attr+"_location'"+').style.display='+"'block'"+';" style="display:block;">'+(y+pagapp)+'</li>';
+                        //console.log(transcriptPG)
+                    }
+                    for(var x=0;y<myScript.chapters.length;y++){
+                        transcriptCH=transcriptCH+'<li onclick="cG.cPanel['+"'"+'def_'+id_attr+"'"+'].ch_go('+x+');this.parentElement.parentElement.style.display='+"'none'"+';document.getElementById('+"'"+id_attr+"_location'"+').style.display='+"'block'"+';" style="display:block;">'+(x+chpapp)+'</li>';
+                        transcriptBH=transcriptBH+'<ul>';
+                        for(var u=myScript.chapters[y].start;u<myScript.chapters[y].end+1;u++){
+                            transcriptBH=transcriptBH+'<li onclick="cG.cPanel['+"'"+'def_'+id_attr+"'"+'].go('+u+');this.parentElement.parentElement.parentElement.style.display='+"'none'"+';document.getElementById('+"'"+id_attr+"_location'"+').style.display='+"'block'"+';" style="display:block;">'+(u+pagapp)+'</li>';
+                        }
+                        transcriptBH=transcriptBH+'</ul>';
+                    }
+                    transcriptPG=transcriptPG+'</ul>';
+                    transcriptCH=transcriptCH+'</ul>';
+                    transcriptBH=transcriptBH+'</ul>';
+                    if(archival.innerHTML==''||archival.innerHTML=='Archive') archival.innerHTML=transcriptBH+transcriptPG+transcriptCH;
+                }
+                    //console.log(transcriptBH,transcriptPG,transcriptCH);
+            }
             //console.log(anchorto,anchorto.style)
             var srch = use_attr+"_"+id_attr;
             final_res[srch] = cG.stage.construct(id_attr,myScript,anchorto,config_attr);
-            if(avx[0]>0&&avx[1]>0){
+            if(cG.avx[0]>0&&cG.avx[1]>0){
                 var chl = stages[iD].children;
                 for(var t = 1;t<chl.length;t++){
                     if(chl[t]==anchorto) continue;
@@ -368,7 +472,7 @@ cG.stageInjection = function(SPECIFIC){
                     final_res[srch].pg.push(nestcom[s]);
                 }
                 for(var r = 0;r<final_res[srch].pg.length;r++){
-                    var frspr = cG.HELPERS.stick(final_res[srch].pg[r]);
+                    var frspr = cG.HELPERS.stick(final_res[srch].pg[r],final_res[srch].pg,final_res[srch],r);
                 }
             }
         };
@@ -378,7 +482,7 @@ cG.stageInjection = function(SPECIFIC){
 };
 /*end STAGE creation*/
 /*ROUTING*/
-var route2page = function(orgvalue){
+cG.route2page = cG.route2page||function(orgvalue){
     var value = orgvalue||parseInt(this.params['page'],10);
     if(cG.script === '') return setTimeout(route2page,300,value);
     if(!cG.script) return -1;
@@ -386,10 +490,10 @@ var route2page = function(orgvalue){
     cG.prePage = value-modify;
     //search for page mismatch
     if(cG.comix!==void 0&&cG.prePage!=cG.comix.current()) cG.comix.go(cG.prePage);
-    if(avx[0]>0&&avx[1]>0) cG.verbose(1,"AutoPage: "+cG.prePage)
+    if(cG.avx[0]>0&&cG.avx[1]>0) cG.verbose(1,"AutoPage: "+cG.prePage)
     else console.log("AutoPage: "+cG.prePage)
 }
-Path.map("#/:page").to(route2page);
+Path.map("#/:page").to(cG.route2page);
 /*end routing*/
 /*/////////////////////////////////////////////////
 HELPER FUNCTIONS*/
@@ -401,7 +505,7 @@ cG.HELPERS.smartAttrib = function(source,mapper,ignore){
     if(void 0 !== srch&&ig<=0){
         if(srch.count === void 0 || srch.count != 0){/*as long as count != 0 we can set the attribute*/
             base = Object.keys(srch);
-            for(y=0;y<base.length;y++){
+            for(var y=0;y<base.length;y++){
                 if(base[y]=="count") continue;
                 if(base[y]=="innerHTML"){
                     source.innerHTML = srch[base[y]];
@@ -414,20 +518,90 @@ cG.HELPERS.smartAttrib = function(source,mapper,ignore){
     } else ig--;
     for(var x=0;x<source.children.length;x++) cG.HELPERS.smartAttrib(source.children[x],mapper,ig);
 }
-cG.HELPERS.stick = function(obj){
-    if(avx[0]>0&&avx[1]>0){
+cG.HELPERS.stick = function(obj,parent,sauce,pos){
+    if(cG.avx[0]>0&&cG.avx[1]>0){
         var ftns = [
-            function(a){},
-            function(a){},
-            function(){},
-            function(){},
-            function(){},
-            function(){},
-            function(){},
-            function(a){},
-            function(a){},
-            function(a){},
-            function(a){}
+            function(a){//order
+                if(parent!==void 0||parent!==null){
+                    parent.splice(a, 0, this);
+                    this._pos = a;
+                    return a;
+                }
+            },
+            function(a){//switch
+                if(parent!==void 0||parent!==null){
+                    var b = parent[this._pos];
+                    parent[this._pos] = parent[a];
+                    parent[a] = b;
+                    this._pos = a;
+                    return a;
+                }
+            },
+            function(){//nav
+                if(sauce!==void 0||sauce!==null){
+                    sauce._at = this._pos;
+                    this._show();
+                    var b = this._pos;
+                    for(var y=0;y<parent.length;y++){
+                        if(this._pos==y) continue;
+                        parent[y]._hide();
+                    }
+                    if(this._chain.length) b = [b];
+                    for(var x=0;x<this._chain.length;x++){
+                        //console.log(this,this._chain,x,this._chain[x]);
+                        this._chain[x]._show();
+                        b.push(x);
+                    }
+                    return b;
+                }
+            },
+            function(){//show
+                if(this.style.display===null||this.style.display===void 0)
+                    this.setAttribute("style",this.getAttribute("style")+"display: block;");
+                else this.style.display="block";
+                return this._pos;
+            },
+            function(){//hide
+                if(this.style.display===null||this.style.display===void 0)
+                    this.setAttribute("style",this.getAttribute("style")+"display: none;");
+                else this.style.display="none";
+                return this._pos;
+            },
+            function(){//cloak
+                if(this.style.visibility===null||this.style.visibility===void 0)
+                    this.setAttribute("style",this.getAttribute("style")+"visibility:hidden;");
+                else this.style.visibility="hidden";
+                return this._pos;
+            },
+            function(){//uncloak
+                if(this.style.visibility===null||this.style.visibility===void 0)
+                    this.setAttribute("style",this.getAttribute("style")+"visibility: visible;");
+                else this.style.visibility="visible";
+                return this._pos;
+            },
+            function(a){//link
+                if(parent!==void 0||parent!==null){
+                    this._chain.push(parent[a]);
+                    return a;
+                }
+            },
+            function(a){//unlink
+                if(parent!==void 0||parent!==null){
+                    return this._chain.splice(this._chain.indexOf(parent[a]),1);
+                }
+            },
+            function(a){//bind
+                if(parent!==void 0||parent!==null){
+                    this._chain.push(parent[a]);
+                    parent[a]._chain.push(this);
+                    return [a,this._pos]
+                }
+            },
+            function(a){//unbind
+                if(parent!==void 0||parent!==null){
+                    return this._chain.splice(this._chain.indexOf(parent[a]),1).concat(parent[a]._chain.splice(parent[a]._chain.indexOf(this._pos), 1));
+                }
+            }
         ]
         obj._order = ftns[0];
         obj._switch = ftns[1];
@@ -438,8 +612,10 @@ cG.HELPERS.stick = function(obj){
         obj._uncloak = ftns[6];
         obj._link = ftns[7];
         obj._unlink = ftns[8];
-        obj._bind = ftns[7];
-        obj._unbind = ftns[8];
+        obj._bind = ftns[9];
+        obj._unbind = ftns[10];
+        obj._pos = pos;
+        obj._chain = [];
     }
     return obj;
 }
@@ -485,13 +661,11 @@ domReady(function(){
     //Path.history.listen(true);
     /*everything else occurs here*/
     if(!document.getElementById("$COMICNGWRITER$$$")){/*prints version information*/
-        if(avx[0]>0&&avx[1]>0) cG.verbose(9,"%c %c %c comix-ngn v"+ cG.info.vix +" %c \u262F %c \u00A9 2015 Oluwaseun Ogedengbe %c Plugins: "+$GPC, "color:white; background:#2EB531", "background:purple","color:white; background:#32E237", 'color:red; background:black', "color:white; background:#2EB531", "color:white; background:purple");
-        else console.log("%c %c %c comix-ngn v"+ cG.info.vix +" %c \u262F %c \u00A9 2015 Oluwaseun Ogedengbe %c Plugins: "+$GPC, "color:white; background:#2EB531", "background:purple","color:white; background:#32E237", 'color:red; background:black', "color:white; background:#2EB531", "color:white; background:purple");
-    }
+        console.log("%c %c %c comix-ngn v"+ cG.info.vix +" %c \u262F %c \u00A9 2015 Oluwaseun Ogedengbe %c Plugins: "+cG.$GPC, "color:white; background:#2EB531", "background:purple","color:white; background:#32E237", 'color:red; background:black', "color:white; background:#2EB531", "color:white; background:purple");}
     //console.log(JSON.stringify(cG, null, 2) );
     var a = document.getElementsByTagName("SCRIPT");
     var b;
-    for (i = 0; i < a.length; i++) {
+    for (var i = 0; i < a.length; i++) {
         if(void 0==a[i].getAttribute("src")) continue;
         if(a[i].getAttribute("src").indexOf("comixngn")>=0){
             b=a[i].getAttribute("auto");
