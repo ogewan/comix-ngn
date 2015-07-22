@@ -1,4 +1,4 @@
-/** @preserve comix-ngn v1.0.5 | (c) 2015 Oluwaseun Ogedengbe| ogewan.github.io/comix-ngn/ |License: MIT|
+/** @preserve comix-ngn v1.0.6 | (c) 2015 Oluwaseun Ogedengbe| ogewan.github.io/comix-ngn/ |License: MIT|
 embeds domReady: github.com/ded/domready (MIT) (c) 2013 Dustin Diaz, pegasus: typicode.github.io/pegasus (MIT) (c) 2014 typicode, pathjs (MIT) (c) 2011 Mike Trpcic, direction.js*/
 
 var cG = cG||{};/*if(void 0===cG) var cG = {};*//*check if cG is already is instantiated*/
@@ -9,10 +9,10 @@ cG.N =function(){return 0};/*null function*/
 if(void 0===cG.$GPC){cG.$GPC=0;}
 cG.root = '';
 cG.cPanel = cG.cPanel||{};
-cG.info = {vix: "1.0.5",vwr: "0.5.0",vpr: "0.1.0"};
+cG.info = {vix: "1.0.6",vwr: "0.5.0",vpr: "0.1.0"};
 cG.dis = cG.dis||{};
 cG.recyclebin = cG.recyclebin||{};
-cG.queue = cG.queue||[];
+cG.queue = cG.queue||{};
 cG.comicID = cG.comicID||window.location.host;
 cG.prePage = cG.prePage||-1;
 !function(){

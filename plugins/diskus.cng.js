@@ -8,7 +8,8 @@ Order: after comixngn.js
         if(cG.$GPC === void 0) cG.$GPC = 1;/*Global Plug in count*/
         else cG.$GPC++;
         var slfScr = document.getElementsByTagName("SCRIPT");
-        if(void 0!==slfScr||slfScr!==null||void 0!==cG.disqus.shortname||cG.disqus.shortname!==null){
+        //console.log(cG.disqus);
+        if((void 0!==slfScr||slfScr!==null)&&(void 0===cG.disqus.shortname||cG.disqus.shortname===null)){
             for(var q = 0;q<slfScr.length;q++){
                 if(slfScr[q].src.indexOf("diskus")>=0){
                     cG.disqus = {shortname:slfScr[q]};
@@ -17,7 +18,8 @@ Order: after comixngn.js
             }
             return console.error("CNG Plug-in: Diskus requires a disqus_shortname");
         }
-        domReady(function(){/*runs once the DOM is ready*/
+        var ready = function(){/*runs once the DOM is ready*/
+            //console.log("diskus ready running");
             var dsq = document.createElement('script');
             dsq.type = 'text/javascript'; dsq.async = true;
             dsq.src = '//' + cG.disqus.shortname + '.disqus.com/embed.js';
@@ -25,9 +27,9 @@ Order: after comixngn.js
             //cG.disqus.disqus_identifier = '';
             //cG.disqus.disqus_title = '';
             //cG.disqus.disqus_url = '';
-            cG.disqus.reset = function(a,b){
-            };
-            if(cG.queue.stageChange!==void 0) cG.queue.stageChange.push(function(a,c){
+            cG.queue=cG.queue||{};
+            cG.queue.stageChange=cG.queue.stageChange||[];
+            cG.queue.stageChange.push(function(a,c){
                 if(c){
                     
                 }
@@ -47,7 +49,9 @@ Order: after comixngn.js
             /*cG.queue=cG.queue||[];
             cG.queue.stageInjection=cG.queue.stageInjection||[];
             cG.queue.stageInjection.push("disqus");*/
-        });
+        }
+        window.addEventListener?window.addEventListener("load",ready,!1):window.attachEvent?window.attachEvent("onload",ready):window.onload=ready;
+        ready();
     }
     else console.error("CNG Plug-in: Diskus must be loaded after comixngn.js");
     /*If you can, minify the plug-in. 
