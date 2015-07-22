@@ -229,10 +229,10 @@ k,!1);for(b=0;b<d.config.imgpostbuffer;b++)t.push(new Image),t[b].imaginaryID=-1
             else console.log(name,"Pushing state:",(cG.cPanel["def_"+name].current()+modify));
             history.pushState({}, null, "#/"+(cG.cPanel["def_"+name].current()+modify));
         }
-        /*if(cG.queue.stageChange!==void 0)
-            for(var ftn=0;ftn<cG.queue.stageChangee.length;ftn++){
-                cG[cG.queue.stageinjection[ftn]]();
-            }*/
+        if(cG.queue.stageChange!==void 0)
+            for(var ftn=0;ftn<cG.queue.stageChange.length;ftn++){
+                cG.queue.stageChange[ftn](cG.cPanel["def_"+name]);
+            }
         var strct = cG.cPanel["def_"+name].data(cG.cPanel["def_"+name].current()).special;
         var zombie = document.getElementById(name+"_tempScript");//fetch zombie child
         var preload = cG.HELPERS.stick(cG.cPanel["def_"+name].canvi[0],null,null,0);
