@@ -8,6 +8,7 @@ from urllib.parse import urlparse
 import sys
 import shutil
 import requests
+import datetime
 
 def getXKCD():
     directory = script['config']['dir']
@@ -194,6 +195,80 @@ def getOOTS():
     with open('script_A.json', 'w') as outfile:
         json.dump(script, outfile, sort_keys = True, indent = 4, separators = (',', ': '))
 
+def getSPIN():
+    for g in range(24):
+        script['chapters'].append(chaptr)
+    go = 1;
+    it = 0;
+    urlbase = 'http://www.spinnyverse.com/comic/02-09-2010'
+    script['config']['dir'] = "http://www.spinnyverse.com/comics/"
+    ir = 0
+    while (go):
+        if ir % 50 == 0:
+            sys.stdout.write("downloading")
+        elif ir % 2 == 0:
+            sys.stdout.write(".")
+            sys.stdout.flush()
+        elif ir % 50 == 49:
+            sys.stdout.write(str(ir) + " images\n")
+        ir += 1
+        storage = BytesIO()# create a curl
+        c = pycurl.Curl()
+        c.setopt(c.WRITEFUNCTION, storage.write)
+        c.setopt(c.URL, urlbase)
+        c.perform()
+        c.close()
+        content = storage.getvalue()
+        soup = b.BeautifulSoup(content, 'html.parser')
+        image = soup.find_all('img', id='cc-comic')
+        nextt = soup.find_all('a', class_='next')
+        getTitle = soup.find('title').contents[0]
+        giR = urlparse(image[0]['src']);
+        getimg = giR.path.split('/')[2]
+        getRD = image[0]['title'].split('-')
+        if(len(getRD)<3):
+            break
+        d1 = datetime.datetime(int(getRD[2]),int(getRD[0]),int(getRD[1]))
+        getNote = soup.find('div',style="float:left; width:130px;")
+        getNews = soup.find('div',class_="cc-newsarea")
+        #print(getNews)
+        #print('\n',getTitle,getimg,int(d1.timestamp()))
+        script['pages'].append({
+            "alt": "",
+            "anim8": False,
+            "hover": image[0]['title'],
+            "note": "[]",#[getNote,getNews],
+            "perm": False,
+            "release": d1.timestamp(),
+            "title": getTitle,
+            "url": [getimg],
+            "disqus_identifier": "",
+            "disqus_url": urlbase
+        })
+        urlbase = nextt[0]['href'];
+        if it >= 575 or urlbase=="" or urlbase==None:
+            go = 0
+        it+=1
+    print("\nFin")
+    #print(script)
+    with open('script_A.json', 'w') as outfile:
+        json.dump(script, outfile, sort_keys = True, indent = 4, separators = (',', ': '))
+
+def category():
+    with open('script_A.json', 'r') as infile:
+        text = json.load(infile)
+        text=text['pages']
+        while(1):
+            b=1
+            #query = int(input("enter release date\n"))
+            query = input("enter hover\n")
+            for y in range(len(text)):
+                if text[y]['hover'] == query:
+                    print(y)
+                    b=0
+                    break
+            if b:
+                print("not found")
 if __name__ == "__main__": #chapter template
     chaptr = {
         "description": "",
@@ -245,4 +320,6 @@ if __name__ == "__main__": #chapter template
     headers = {'user-agent': 'Mozilla/5.0'}
     #getXKCD()
     #getQC()
-    getOOTS()
+    #getOOTS()
+    #getSPIN()
+    category()
