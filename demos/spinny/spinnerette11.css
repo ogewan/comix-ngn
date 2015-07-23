@@ -1,0 +1,571 @@
+html {
+overflow-y:scroll;
+}
+body {
+font-family:"Trebuchet MS" , Arial, sans-serif;
+font-size:14px;
+color:#000;
+background:#151719;
+margin:0;
+}
+a {
+color:#EDDC88;
+text-decoration:underline;
+}
+a:link {
+color:#b00;
+}
+a:visited {
+color:#600;
+}
+a:hover {
+color:#EDDC88;
+text-decoration:none;
+}
+hr {
+color:#000;
+background-color:#000;
+border:0;
+display:block;
+height:2px;
+background:url('http://www.spinnyverse.com/images/comment-divider.png') repeat-x scroll;
+margin:24px 0;
+}
+h1,h1 a {
+font-size:48px;
+line-height:44px;
+letter-spacing:-3px;
+margin:0;
+padding:3px;
+}
+h2 {
+font-size:24px;
+line-height:24px;
+letter-spacing:-1px;
+margin:0;
+padding:0 0 2px;
+}
+#header .description {
+display:block;
+margin-left:140px;
+position:absolute;
+text-indent:-9999px;
+overflow:hidden;
+}
+#menubar-wrapper {
+clear:both;
+display:block;
+text-transform:uppercase;
+line-height:25px;
+width:980px;
+height:85px;
+position:absolute;
+top:210px;
+}
+.text{
+clear:both;
+}
+.menunav-rss {
+
+background:url(http://spinnyverse.com/images/rss.png) right 0 no-repeat;
+margin:0 3px;
+padding:0 4px;
+}
+.menunav-rss:hover {
+color:#fff;
+background:url(http://spinnyverse.com/images/rss.png) right -15px no-repeat;
+}
+.menu {
+height:85px;
+float:right;
+}
+
+
+
+.menu a:hover {
+background:url(http://spinnyverse.com/images/menu-hover-glow.png) no-repeat center 7px scroll;
+height:76px;
+text-decoration:none !important;
+color:#fff;
+}
+
+
+.uentry {
+border:solid 1px Transparent;
+}
+
+
+/*button {
+background:#aaa url(http://www.spinnyverse.com/images/menu.png);
+color:#000;
+font-family:Arial, sans-serif;
+font-size:13px;
+line-height:16px;
+border:1px solid #999;
+cursor:pointer;
+}
+
+button:hover {
+color:#fff;
+background:red url(http://www.spinnyverse.com/images/menu.png) 0 -75px;
+}*/
+
+h2,h3 {
+font-family:"Trebuchet MS" , Arial, sans-serif;
+color:#ccc;
+text-shadow:0 1px 0 #000;
+letter-spacing:.25px;
+font-weight:700;
+}
+
+/*button {
+font-family:"Trebuchet MS" , Arial, sans-serif;
+font-size:14px;
+font-weight:400;
+color:#333;
+text-decoration:none;
+line-height:40px;
+height:40px;
+text-shadow:0 1px 0 #ccb76e;
+text-align:center;
+border:none;
+cursor:pointer;
+padding:0;
+}*/
+
+#logo{
+	display:block;
+	padding:0;
+	background:url(http://www.spinnyverse.com/images/spin-header.jpg) no-repeat;
+	float:left;
+	width:1401px;
+	height:256px;
+	position:relative;
+	left:-419px;
+	top:-1px;
+	overflow:hidden;
+}
+
+#ad728x90 {
+display:block;
+float:right;
+background:#666;
+position:relative;
+top:-258px;
+right:20px;
+line-height:0;
+}
+
+#latest-cover-wrapper {
+display:block;
+position:absolute;
+height:113px;
+width:178px;
+background:url(http://spinnyverse.com/images/issue-selector-bg.png) no-repeat 0 0 transparent;
+top:181px;
+z-index:1;
+padding:0 0 0 20px;
+}
+
+#latest-cover {
+position: absolute;
+height:113px;
+width: 136px;
+overflow:hidden;
+padding:0 0 0 1px;
+}
+
+#latest-cover-overlay {
+width:136px;
+height:113px;
+background:url('http://spinnyverse.com/images/issue-selector-overlay.png) no-repeat;
+position:absolute;
+}
+
+#header-wrap {
+background:url(http://spinnyverse.com/images/nav-bg.png) repeat-x 0 255px;
+height:295px;
+overflow:hidden;
+}
+
+.menu{
+float:right;
+display:inline;
+margin:0;
+padding:0;
+}
+
+.menu a {
+float:left;
+display:inline;
+margin:0 0 0 18px;
+font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
+letter-spacing:-.5px;
+font-weight:700;
+font-size:18px;
+line-height:23px;
+padding:9px 12px 0;
+text-decoration:none !important;
+}
+
+.menu a:link,.menu a:visited {
+color:#f0f0f0;
+}
+
+
+
+#top-content-wrapper {
+background:url(http://spinnyverse.com/images/top-content-bg.jpg) repeat-x #1d2022;
+overflow:hidden;
+}
+
+#top-content {
+width:940px;
+position:relative;
+margin:20px auto;
+}
+
+
+
+
+
+
+
+#bottom-content-wrapper {
+border-top:#2d3033 1px solid;
+background:url(http://spinnyverse.com/images/bottom-content-bg.jpg) no-repeat center top scroll #16171b;
+min-height:360px;
+padding:0;
+}
+
+#bottom-content-wrapper-2 {
+width:940px;
+margin:0 auto;
+padding:20px 0px;
+}
+
+#bottom-content {
+width:630px;
+position:relative;
+float:left;
+margin:24px auto 0;
+}
+
+
+h2#bottom-content-header {
+font-size:18px;
+line-height:18px;
+display:block;
+margin:0 0 20px;
+padding:0;
+}
+
+
+h2.post-date {
+font-family:Georgia, "Times New Roman" , serif;
+font-size:28px;
+line-height:32px;
+color:#ccc;
+font-style:italic;
+font-weight:400;
+float:left;
+margin:0;
+padding:0;
+}
+
+
+#comic-wrap {
+width:650px;
+float:left;
+}
+
+#comic {
+width:670px;
+background:#fff;
+float:left;
+box-shadow: 0px 2px 16px #000;
+}
+
+#cc-comicbody{
+	width:650px;
+	float:left;
+}
+
+#comic-head,#comic-foot {
+width:650px;
+margin:16px 0;
+clear:both;
+}
+
+.cc-newsheader{
+	display:none;
+}
+
+#comic-foot{
+	padding:16px 0px;
+}
+
+#sidebar-ad-below-comic{
+	width:930px;
+	padding:15px 0px 0px 10px;
+	clear:both;
+}
+
+#sidebar-social {
+width:86px;
+float:left;
+margin:72px 0 0 12px;
+}
+
+.spin-social {
+display:block;
+text-align:center;
+}
+
+#sidebar-project-wonderful {
+float:right;
+line-height:0;
+text-align:center;
+margin-top:72px;
+}
+
+#sidebar-project-wonderful #donation-desktop-button {
+margin:0 0 20px;
+}
+
+.nav{
+	width:152px;
+	float:right;
+	height:40px;
+}
+.nav button{
+	width:38px;
+	height:40px;
+	float:left;
+	display:block;
+    padding: 0;
+border: none;
+}
+.nav button:hover{
+	background-position:0px -38px;
+}
+.frst{
+	background:url('http://spinnyverse.com/images/first.png');
+}
+.next{
+	background:url('http://spinnyverse.com/images/next.png');
+}
+.prev{
+	background:url('http://spinnyverse.com/images/prev.png');
+}
+.last{
+	background:url('http://spinnyverse.com/images/last.png');
+}
+.firstdis{
+	background:url('http://spinnyverse.com/images/first.png');
+	background-position:0px -76px;
+	float:left;
+	width:38px;
+	height:40px;
+}
+.nextdis{
+	background:url('http://spinnyverse.com/images/next.png');
+	background-position:0px -76px;
+	float:left;
+	width:38px;
+	height:40px;
+}
+.prevdis{
+	background:url('http://spinnyverse.com/images/prev.png');
+	background-position:0px -76px;
+	float:left;
+	width:38px;
+	height:40px;
+}
+.lastdis{
+	background:url('http://spinnyverse.com/images/last.png');
+	background-position:0px -76px;
+	float:left;
+	width:38px;
+	height:40px;
+}
+.post {
+width:590px;
+float:left;
+}
+
+
+
+
+.post-date {
+font-family:Georgia, "Times New Roman" , serif;
+font-size:12px;
+color:#959595;
+font-style:italic;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+a img {
+border:none;
+}
+
+
+small {
+font-size:12px;
+}
+
+form {
+margin:0;
+}
+
+
+.page-content {
+width:980px;
+margin:0 auto;
+}
+
+
+
+
+.uentry {
+margin-bottom:10px;
+}
+
+
+
+
+
+
+.nav button {
+display:block;
+float:left;
+}
+
+#blogheader {
+border-color:#999;
+}
+
+
+
+
+.clear {
+clear:both;
+}
+
+
+
+
+
+/*button:hover {
+color:#000;
+}*/
+
+
+
+.cc-newsarea  {
+font-family: "Trebuchet MS" , "Arial", sans-serif;
+font-size: 13px;
+color: #ffffff;
+line-height: 21px;
+padding: 0;
+margin: 0 0 12px 0;
+}
+
+.post-author-gravatar img {
+max-width: inherit;
+}
+.avatar {
+box-shadow: 0px 2px 16px #000;
+}
+.post-author {
+font-family: "Trebuchet MS" , "Arial", sans-serif;
+font-size: 18px;
+color: #ffffff;
+display: block;
+}
+.post-author-description {
+font-family: "Georgia", "Times New Roman" , serif;
+font-size: 13px;
+color: #959595;
+font-style: italic;
+display: block;
+}
+a:hover {
+color: #EDDC88;
+text-decoration: none;
+}
+#footer{
+
+text-align: center;
+width: 200px;
+margin: 0 auto;
+}
+.textpages{
+color: white;
+width: 950px;
+margin: 0 auto;
+text-align:center;
+padding-bottom:30px;
+padding-top:20px;
+}
+#chaptertiles{
+width:85%;
+margin: 0 auto;
+
+}
+#chaptertiles img{
+	width:198px;
+	height:auto;
+}
