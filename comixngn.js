@@ -187,6 +187,9 @@ k,!1);for(b=0;b<d.config.imgpostbuffer;b++)t.push(new Image),t[b].imaginaryID=-1
         main.ch_go = function(a,b){
             var sre = (a===null||void 0===a)?0:parseInt(a,10);
             sre = (isNaN(sre))?0:sre;
+            var g;
+            if(b===null&&b===void 0) g = "start";
+            else g = "end"
             if (main.ch_current()==-1) return main.go()
             return main.go(main.internals.chapters[Math.floor(Math.max(0,Math.min(main.internals.chapters.length-1,sre)))][g]);
         }
@@ -443,13 +446,13 @@ cG.stageInjection = function(SPECIFIC){
                         transcriptPG=transcriptPG+'<li onclick="cG.cPanel['+"'"+'def_'+id_attr+"'"+'].go('+y+');this.parentElement.parentElement.style.display='+"'none'"+';document.getElementById('+"'"+id_attr+"_location'"+').style.display='+"'block'"+';" style="display:block;">'+(y+pagapp)+'</li>';
                         //console.log(transcriptPG)
                     }
-                    for(var x=0;y<myScript.chapters.length;y++){
+                    for(var x=0;x<myScript.chapters.length;x++){
                         transcriptCH=transcriptCH+'<li onclick="cG.cPanel['+"'"+'def_'+id_attr+"'"+'].ch_go('+x+');this.parentElement.parentElement.style.display='+"'none'"+';document.getElementById('+"'"+id_attr+"_location'"+').style.display='+"'block'"+';" style="display:block;">'+(x+chpapp)+'</li>';
-                        transcriptBH=transcriptBH+'<ul>';
-                        for(var u=myScript.chapters[y].start;u<myScript.chapters[y].end+1;u++){
+                        transcriptBH=transcriptBH+'<li onclick="cG.cPanel['+"'"+'def_'+id_attr+"'"+'].ch_go('+x+');this.parentElement.parentElement.style.display='+"'none'"+';document.getElementById('+"'"+id_attr+"_location'"+').style.display='+"'block'"+';" style="display:block;">'+(x+chpapp)+'<ul>';
+                        for(var u=myScript.chapters[x].start;u<myScript.chapters[x].end+1;u++){
                             transcriptBH=transcriptBH+'<li onclick="cG.cPanel['+"'"+'def_'+id_attr+"'"+'].go('+u+');this.parentElement.parentElement.parentElement.style.display='+"'none'"+';document.getElementById('+"'"+id_attr+"_location'"+').style.display='+"'block'"+';" style="display:block;">'+(u+pagapp)+'</li>';
                         }
-                        transcriptBH=transcriptBH+'</ul>';
+                        transcriptBH=transcriptBH+'</ul></li>';
                     }
                     transcriptPG=transcriptPG+'</ul>';
                     transcriptCH=transcriptCH+'</ul>';
