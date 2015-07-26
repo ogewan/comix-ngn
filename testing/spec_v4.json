@@ -15,7 +15,7 @@
         "startpage": 0,
         "back":"#FFF",
         "orderby":0,
-        "dateformat":"MMDDYY"
+        "dateformat":"MM/DD/YY"
     },
     "loading": {
         "diameter": 250,

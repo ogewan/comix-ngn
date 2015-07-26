@@ -227,10 +227,29 @@ k,!1);for(b=0;b<d.config.imgpostbuffer;b++)t.push(new Image),t[b].imaginaryID=-1
             localStorage.setItem(cG.comicID+"|"+name+"|curPage",cG.cPanel["def_"+name].current().toString());
         }
         if(cG.comix===cG.cPanel["def_"+name]){//if comic is the comix, then push its state
-            var modify = (cG.script.config.pagestartnum)?1:0;
-            if(cG.avx[0]>0&&cG.avx[1]>0) cG.verbose(1,name,"Pushing state:",(cG.cPanel["def_"+name].current()+modify));
-            else console.log(name,"Pushing state:",(cG.cPanel["def_"+name].current()+modify));
-            history.pushState({}, null, "#/"+(cG.cPanel["def_"+name].current()+modify));
+            var chpmod = (cG.script.config.chapterstartnum)?1:0,
+                modify = (cG.script.config.pagestartnum)?1:0,
+                result = cG.cPanel["def_"+name].current();
+            switch(cG.script.config.orderby) {
+                case 2:
+                    var mechp = cG.cPanel["def_"+name].ch_current();
+                    result=(mechp+chpmod)+"/"+(result-mechp+modify)
+                    break;
+                case 3:
+                    var nT = new Date(cG.cPanel["def_"+name].data().release);
+                    var guide=cG.script.config.dateformat.split("/");
+                    for(var tim=0;tim<3;tim++){
+                        if(guide[tim].indexOf("Y")+1) guide[tim]=nT.getYear();
+                        else if(guide[tim].indexOf("M")+1) guide[tim]=nT.getMonth();
+                        else if(guide[tim].indexOf("D")+1) guide[tim]=nT.getDay();
+                    }
+                    result=guide.join("/");
+                default:
+                    result+=modify;
+            }
+            if(cG.avx[0]>0&&cG.avx[1]>0) cG.verbose(1,name,"Pushing state:",result);
+            else console.log(name,"Pushing state:",result);
+            history.pushState({}, null, "#/"+result);
         }
         if(cG.queue.stageChange!==void 0)
             for(var ftn=0;ftn<cG.queue.stageChange.length;ftn++){
@@ -486,17 +505,78 @@ cG.stageInjection = function(SPECIFIC){
 /*end STAGE creation*/
 /*ROUTING*/
 cG.route2page = cG.route2page||function(orgvalue){
-    var value = orgvalue||parseInt(this.params['page'],10);
+    //var com = cG.script.config.orderby,
+    var value;
+    if(orgvalue===null||orgvalue===void 0||!orgvalue){
+        var z = 0;
+        value=[];
+        for(var y in this.params){
+            if(this.params.hasOwnProperty(y)&&y!==null&&y!==void 0){
+                z=Number(this.params[y]);
+                if(isNaN(z)) value.push(this.params[y]);
+                else value.push(z);
+            }
+        }
+        if(!value.length) value=0;
+    } else {
+        value = orgvalue
+    }
     if(cG.script === '') return setTimeout(cG.route2page,300,value);
     if(!cG.script) return -1;
+    var chpmod = (cG.script.config.chapterstartnum)?1:0;
     var modify = (cG.script.config.pagestartnum)?1:0;
+    if(Array.isArray(value)){
+        if(value.length==1&&!isNaN(value[0]%1)&&value[0]>=cG.script.pages.length){
+            value=value[0];
+        } else{
+            var query,
+                b=cG.script.pages;
+            switch(value.length) {
+                case 1: 
+                    value=value[0]
+                    break;
+                case 2:
+                    if(value[0]<cG.script.chapters.length)
+                        query=cG.script.chapters[value[0]].start+(value[1]-modify)+modify;
+                    else {
+                        value=-1
+                        b=[];
+                    }
+                    break;
+                case 3:
+                    var guide=cG.script.config.dateformat.split("/");
+                    if(isNaN(value[0]%1)||isNaN(value[1]%1)||isNaN(value[2]%1)){
+                        value=-1
+                        b=[];
+                        break;
+                    }
+                    for(var tim=0;tim<3;tim++){
+                        if(guide[tim].indexOf("Y")+1) guide[tim]=0;
+                        else if(guide[tim].indexOf("M")+1) guide[tim]=1;
+                        else if(guide[tim].indexOf("D")+1) guide[tim]=2; //2,1,0
+                    }
+                    if(value[guide[0]].length > 1900) value[guide[0]]+=2000;
+                    var timme = new Date(value[guide[0]], value[guide[1]], value[guide[2]]);
+                    value=timme.getTime();
+                    break;
+            }
+            query=String(value);
+            for(var a=0;a<b.length;a++){
+                if(b[a].alt.indexOf(query)+1||b[a].hover.indexOf(query)+1||b[a].title.indexOf(query)+1||b[a].release==Number(query)){
+                    //console.log(b[a].alt.indexOf(query),b[a].hover.indexOf(query),b[a].title.indexOf(query),b[a].release==Number(query))
+                    value=a+modify;
+                    break;
+                }
+            }
+        }
+    }
     cG.prePage = value-modify;
     //search for page mismatch
     if(cG.comix!==void 0&&cG.prePage!=cG.comix.current()) cG.comix.go(cG.prePage);
     if(cG.avx[0]>0&&cG.avx[1]>0) cG.verbose(1,"AutoPage: "+cG.prePage)
     else console.log("AutoPage: "+cG.prePage)
 }
-Path.map("#/:page").to(cG.route2page);
+Path.map("#/:v1(/:v2/:v3/:v4/:v5/:v6/:v7/:v8/:v9)").to(cG.route2page);
 /*end routing*/
 /*/////////////////////////////////////////////////
 HELPER FUNCTIONS*/
