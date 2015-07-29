@@ -13,7 +13,7 @@ Order: after comixngn.js
         cG.REPO[key_to_change] = cG.REPO[key_to_change]||{};/*object initialization*/
         cG[key_to_change] = cG.REPO[key_to_change][pluginname] = {
             id:"infinite",
-            construct:function(name,scriptt,anchor,options){   
+            construct:function(name,scriptt,anchor,options,xper,yper){   
             var infinite=function(c,n,y,a,K,L){a=a||{};var k={parent:null,offset:0,loading:{lines:a.lines||16,rate:a.rate||1E3/30,diameter:a.diameter||250,back:a.loaderback||"#FFF",color:a.color||"#373737"},config:{dir:a.dir||"assets/",pagestartnum:!1,chapterstartnum:!1,imgprebuffer:a.imgprebuffer||5,imgpostbuffer:a.imgpostbuffer||5,startpage:0,back:a.back||"#FFF"},pages:[]};if(void 0===c)return-1;if("string"===typeof c)k.pages.push({alt:"",hover:"",title:"",url:[c],release:0,note:"",perm:!1,anim8:!1}),c=k;else if(Array.isArray(c)){for(a=
 0;a<c.length;a++)if(k.pages.push({alt:"",hover:"",title:"",url:[],release:0,note:"",perm:!1,anim8:!1}),Array.isArray(c[a]))for(var E=0;E<c[a].length;E++)k.pages[a].url.push(c[a][E]);else k.pages[a].url.push(c[a]);c=k}else if(void 0===c.pages[0].url)return-1;if(void 0===n||null==n)n=0;var f=c.pages,g=c.pages.length,z=!0,h=-1,p=c.loading,q=c.config,u=[],v=[],A=!1,B=!1,b=[],r={increment:1,duration:1},d=[document.createElement("canvas"),document.createElement("canvas")],l=d[1].getContext("2d"),F=a=function(){return 0},
 D=a,G=a,H={context:d[0].getContext("2d"),color:p.color,start:Date.now(),lines:p.lines,diameter:p.diameter,rate:p.rate},J=function(e){d[0].style.paddingLeft=(d[1].width-300)/2+"px";var b=Math.floor((Date.now()-e.start)/1E3*e.lines)/e.lines,a=e.color.substr(1);e.context.save();e.context.clearRect(0,0,300,d[1].height);e.context.translate(150,d[1].height/2);e.context.rotate(2*Math.PI*b);3==a.length&&(a=a[0]+C[0]+a[1]+a[1]+a[2]+a[2]);for(var b=parseInt(a.substr(0,2),16).toString(),w=parseInt(a.substr(2,
@@ -35,7 +35,7 @@ document.documentElement.clientWidth||document.body.clientWidth);d[1].background
                 else console.log(cG.comicID+"|"+name+"|curPage",":",get);
             }
             if(cG.comix===void 0&&cG.prePage>=0) get = cG.prePage;//prepage, which is from router, overwrites localStorage if over -1, only works on comix
-            var main = new direction(scriptt,anchor,get);
+            var main = new infinite(scriptt,anchor,get,null,xper||50,yper||50);
             main.name = name;
             main.type = "infinite";
             if(cG.avx[0]>0&&cG.avx[1]>0){
@@ -131,7 +131,8 @@ document.documentElement.clientWidth||document.body.clientWidth);d[1].background
                     for(var ftn=0;ftn<cG.queue.stageChange.length;ftn++){
                         cG.queue.stageChange[ftn](cG.cPanel["def_"+name]);
                     }
-                var strct = cG.cPanel["def_"+name].data(cG.cPanel["def_"+name].current()).special;
+                /*disable special, since infinite has different navigation scheme, current special method doesn't work*/
+                /*var strct = cG.cPanel["def_"+name].data(cG.cPanel["def_"+name].current()).special;
                 var zombie = document.getElementById(name+"_tempScript");//fetch zombie child
                 var preload = cG.HELPERS.stick(cG.cPanel["def_"+name].canvi[0],null,null,0);
                 var display = cG.HELPERS.stick(cG.cPanel["def_"+name].canvi[1],null,null,1);
@@ -160,7 +161,7 @@ document.documentElement.clientWidth||document.body.clientWidth);d[1].background
                         preload.setAttribute("style",preload.getAttribute("style")+"display: none;");
                         display.setAttribute("style",display.getAttribute("style")+"display: none;");    
                     }
-                }
+                }*/
             }
             main.callback(1,lscurrent);
             cG.comix = cG.comix||main;//this should only set the comix on the first call
