@@ -218,19 +218,19 @@ k,!1);for(b=0;b<d.config.imgpostbuffer;b++)t.push(new Image),t[b].imaginaryID=-1
     }
     var lscurrent = function(){
         if(typeof(Storage) !== void 0) {
-            localStorage.setItem(cG.comicID+"|"+name+"|curPage",cG.cPanel["def_"+name].current().toString());
+            localStorage.setItem(cG.comicID+"|"+name+"|curPage",cG.cPanel[/*"def_"+*/name].current().toString());
         }
-        if(cG.comix===cG.cPanel["def_"+name]){//if comic is the comix, then push its state
+        if(cG.comix===cG.cPanel[/*"def_"+*/name]){//if comic is the comix, then push its state
             var chpmod = (cG.script.config.chapterstartnum)?1:0,
                 modify = (cG.script.config.pagestartnum)?1:0,
-                result = cG.cPanel["def_"+name].current();
+                result = cG.cPanel[/*"def_"+*/name].current();
             switch(cG.script.config.orderby) {
                 case 2:
-                    var mechp = cG.cPanel["def_"+name].ch_current();
+                    var mechp = cG.cPanel[/*"def_"+*/name].ch_current();
                     result=(mechp+chpmod)+"/"+(result-mechp+modify)
                     break;
                 case 3:
-                    var nT = new Date(cG.cPanel["def_"+name].data().release);
+                    var nT = new Date(cG.cPanel[/*"def_"+*/name].data().release);
                     var guide=cG.script.config.dateformat.split("/");
                     for(var tim=0;tim<3;tim++){
                         if(guide[tim].indexOf("Y")+1) guide[tim]=nT.getYear();
@@ -247,12 +247,12 @@ k,!1);for(b=0;b<d.config.imgpostbuffer;b++)t.push(new Image),t[b].imaginaryID=-1
         }
         if(cG.queue.stageChange!==void 0)
             for(ftn in cG.queue.stageChange){
-                if (cG.queue.stageChange.hasOwnProperty(ftn)) cG.queue.stageChange[ftn](cG.cPanel["def_"+name]);
+                if (cG.queue.stageChange.hasOwnProperty(ftn)) cG.queue.stageChange[ftn](cG.cPanel[/*"def_"+*/name]);
             }
-        var strct = cG.cPanel["def_"+name].data(cG.cPanel["def_"+name].current()).special;
+        var strct = cG.cPanel[/*"def_"+*/name].data(cG.cPanel[/*"def_"+*/name].current()).special;
         var zombie = document.getElementById(name+"_tempScript");//fetch zombie child
-        var preload = cG.HELPERS.stick(cG.cPanel["def_"+name].canvi[0],null,null,0);
-        var display = cG.HELPERS.stick(cG.cPanel["def_"+name].canvi[1],null,null,1);
+        var preload = cG.HELPERS.stick(cG.cPanel[/*"def_"+*/name].canvi[0],null,null,0);
+        var display = cG.HELPERS.stick(cG.cPanel[/*"def_"+*/name].canvi[1],null,null,1);
         if(zombie!==void 0&&zombie!==null){
             anchor.removeChild(zombie);//kill the zombie
             //if(cG.avx[0]>1&&cG.avx[1]>0){}
@@ -345,9 +345,36 @@ cG.HELPERS = {};
 cG.HELPERS.jstagecreate = cG.N;
 cG.queue.stageChange={controller:function(target){
     console.log(target.data().desig);
-}
+}};
 cG.controlInjection = function(SPECIFIC){
-    return -1;
+    var stages = [],
+        ctrls = (cG.ctrls)?cG.ctrls:'<div>NOT IMPLEMENTED YET</div>',
+        pod,podling,
+        errr = "stageInjection can only operate on elements or arrays of elements";
+    if(void 0 === SPECIFIC) stages = document.getElementsByClassName("venue");/*get all entry points*/
+    else if(Array.isArray(SPECIFIC)){
+        if(SPECIFIC.length>0) if(void 0 ===SPECIFIC[0].nodeName) return console.error(errr);
+            else return console.error(errr);
+        stages = stages.concat(SPECIFIC);
+    } else{
+        if(void 0 === SPECIFIC.nodeName) return console.error(errr);
+        stages.push(SPECIFIC);/*if not array and not undefined, assume it is a Element*/
+    }
+    for(var u=0;u<stages.length;u++){
+        pod = document.createElement("DIV");
+        pod.innerHTML=ctrls;
+        podling = pod.children[0];
+        if(!stages[u].getAttribute("comix")) podling.setAttribute("style","display:none;");
+        else podling.setAttribute("style","display:block;");
+        podling.setAttribute("cGlink",stages[u].id);
+        stages[u].parentNode.insertBefore(podling, stages[u].nextSibling);
+        //console.log(stages[u],stages[u].nextSibling)
+        cG.cPanel[stages[u].id].brains = cG.cPanel[stages[u].id].brains || [];
+        cG.cPanel[stages[u].id].brains.push(podling);
+        if(!stages[u].getAttribute("mind")){//add event handlers
+            stages[u].setAttribute("mind",1);
+        }
+    }
 }
 cG.stageInjection = function(SPECIFIC){
     if(cG.script === '' || cG.decor === ''|| cG.ctrls === '') {//although we don't need decor, if there is a template, we prioritize it
@@ -402,6 +429,7 @@ cG.stageInjection = function(SPECIFIC){
                 use_attr = stages[iD].getAttribute("use"),
                 config_attr = stages[iD].getAttribute("config");
             /*////attribute processing */
+            stages[iD].setAttribute("cgcij",1);
             if(id_attr==""||void 0===id_attr||id_attr===null){/*if no ID, make one*/
                 var name = "STG"+iD;
                 var j = 1;
@@ -452,14 +480,14 @@ cG.stageInjection = function(SPECIFIC){
                 if(myScript.config.pagestartnum) pagapp=1;
                 if(myScript.config.chapterstartnum) chpapp=1;
                 for(var y=0;y<myScript.pages.length;y++){
-                    transcriptPG=transcriptPG+'<li onclick="cG.cPanel['+"'"+'def_'+id_attr+"'"+'].go('+y+');this.parentElement.parentElement.style.display='+"'none'"+';document.getElementById('+"'"+id_attr+"_location'"+').style.display='+"'block'"+';" style="display:block;">'+(y+pagapp)+'</li>';
+                    transcriptPG=transcriptPG+'<li onclick="cG.cPanel['+"'"/*+'def_'*/+id_attr+"'"+'].go('+y+');this.parentElement.parentElement.style.display='+"'none'"+';document.getElementById('+"'"+id_attr+"_location'"+').style.display='+"'block'"+';" style="display:block;">'+(y+pagapp)+'</li>';
                     //console.log(transcriptPG)
                 }
                 for(var x=0;x<myScript.chapters.length;x++){
-                    transcriptCH=transcriptCH+'<li onclick="cG.cPanel['+"'"+'def_'+id_attr+"'"+'].ch_go('+x+');this.parentElement.parentElement.style.display='+"'none'"+';document.getElementById('+"'"+id_attr+"_location'"+').style.display='+"'block'"+';" style="display:block;">'+(x+chpapp)+'</li>';
-                    transcriptBH=transcriptBH+'<li onclick="cG.cPanel['+"'"+'def_'+id_attr+"'"+'].ch_go('+x+');this.parentElement.parentElement.style.display='+"'none'"+';document.getElementById('+"'"+id_attr+"_location'"+').style.display='+"'block'"+';" style="display:block;">'+(x+chpapp)+'<ul>';
+                    transcriptCH=transcriptCH+'<li onclick="cG.cPanel['+"'"/*+'def_'*/+id_attr+"'"+'].ch_go('+x+');this.parentElement.parentElement.style.display='+"'none'"+';document.getElementById('+"'"+id_attr+"_location'"+').style.display='+"'block'"+';" style="display:block;">'+(x+chpapp)+'</li>';
+                    transcriptBH=transcriptBH+'<li onclick="cG.cPanel['+"'"/*+'def_'*/+id_attr+"'"+'].ch_go('+x+');this.parentElement.parentElement.style.display='+"'none'"+';document.getElementById('+"'"+id_attr+"_location'"+').style.display='+"'block'"+';" style="display:block;">'+(x+chpapp)+'<ul>';
                     for(var u=myScript.chapters[x].start;u<myScript.chapters[x].end+1;u++){
-                        transcriptBH=transcriptBH+'<li onclick="cG.cPanel['+"'"+'def_'+id_attr+"'"+'].go('+u+');this.parentElement.parentElement.parentElement.style.display='+"'none'"+';document.getElementById('+"'"+id_attr+"_location'"+').style.display='+"'block'"+';" style="display:block;">'+(u+pagapp)+'</li>';
+                        transcriptBH=transcriptBH+'<li onclick="cG.cPanel['+"'"/*+'def_'*/+id_attr+"'"+'].go('+u+');this.parentElement.parentElement.parentElement.style.display='+"'none'"+';document.getElementById('+"'"+id_attr+"_location'"+').style.display='+"'block'"+';" style="display:block;">'+(u+pagapp)+'</li>';
                     }
                     transcriptBH=transcriptBH+'</ul></li>';
                 }
@@ -468,11 +496,12 @@ cG.stageInjection = function(SPECIFIC){
                 transcriptBH=transcriptBH+'</ul>';
                 if(archival.innerHTML==''||archival.innerHTML=='Archive') archival.innerHTML=transcriptBH+transcriptPG+transcriptCH;
             }
-            var srch = use_attr+"_"+id_attr;
+            var srch = /*use_attr+"_"+*/id_attr;
             final_res[srch] = cG.stage.construct(id_attr,myScript,anchorto,config_attr);
             //console.log(sbvenue,nstpost)
             //if(cG.avx[0]>1&&cG.avx[1]>0){}
             //console.log(stages[iD])
+            if(stages[iD].getAttribute("id")==cG.comix.name) stages[iD].setAttribute("comix",1);
             var chl = stages[iD].children;
             for(var t = 1;t<chl.length;t++){
                 if(chl[t]==anchorto) continue;
@@ -491,7 +520,7 @@ cG.stageInjection = function(SPECIFIC){
                 //console.log(sia,sia||id_attr+"_"+z,id_attr+"_"+z)
                 //console.log(final_res[srch])
                 var childling = document.createElement("DIV");
-                childling.setAttribute("id",sia||id_attr+"_location_"+z)
+                childling.setAttribute("id",sia||id_attr+"_"+z)
                 childling.setAttribute("style","display:none;");
                 childling.my = z;
                 final_res[srch+"_"+z] = cG.stage.construct(sia||id_attr+"_"+z,sua||myScript,childling,sca||config_attr);
@@ -504,8 +533,9 @@ cG.stageInjection = function(SPECIFIC){
                 var frspr = cG.HELPERS.stick(final_res[srch].pg[r],final_res[srch].pg,final_res[srch],r);
             }
         };
-    for (var i = 0; i < stages.length; i++) request(i);
+    for (var i = 0; i < stages.length; i++) if(!stages[i].getAttribute("cgcij")==true) request(i);
     cG.cPanel=final_res;
+    cG.controlInjection();
     return final_res;
 };
 /*end STAGE creation*/
