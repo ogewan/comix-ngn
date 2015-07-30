@@ -1,4 +1,4 @@
-/** @preserve comix-ngn v1.0.7 | (c) 2015 Oluwaseun Ogedengbe| ogewan.github.io/comix-ngn/ |License: MIT|
+/** @preserve comix-ngn v1.1.0 | (c) 2015 Oluwaseun Ogedengbe| ogewan.github.io/comix-ngn/ |License: MIT|
 embeds domReady: github.com/ded/domready (MIT) (c) 2013 Dustin Diaz, pegasus: typicode.github.io/pegasus (MIT) (c) 2014 typicode, pathjs (MIT) (c) 2011 Mike Trpcic, direction.js*/
 
 var cG = cG||{};/*if(void 0===cG) var cG = {};*//*check if cG is already is instantiated*/
@@ -15,6 +15,7 @@ cG.recyclebin = cG.recyclebin||{};
 cG.queue = cG.queue||{};
 cG.comicID = cG.comicID||window.location.host;
 cG.prePage = cG.prePage||-1;
+cG.controllers = cG.controllers||{};
 !function(){
     var selfScript = document.getElementsByTagName("SCRIPT");
     //console.log(selfScript);
@@ -245,8 +246,8 @@ k,!1);for(b=0;b<d.config.imgpostbuffer;b++)t.push(new Image),t[b].imaginaryID=-1
             history.pushState({}, null, "#/"+result);
         }
         if(cG.queue.stageChange!==void 0)
-            for(var ftn=0;ftn<cG.queue.stageChange.length;ftn++){
-                cG.queue.stageChange[ftn](cG.cPanel["def_"+name]);
+            for(ftn in cG.queue.stageChange){
+                if (cG.queue.stageChange.hasOwnProperty(ftn)) cG.queue.stageChange[ftn](cG.cPanel["def_"+name]);
             }
         var strct = cG.cPanel["def_"+name].data(cG.cPanel["def_"+name].current()).special;
         var zombie = document.getElementById(name+"_tempScript");//fetch zombie child
@@ -342,6 +343,9 @@ cG.HELPERS = {};
 }();
 /*STAGE creation-REDACTED*/
 cG.HELPERS.jstagecreate = cG.N;
+cG.queue.stageChange={controller:function(target){
+    console.log(target.data().desig);
+}
 cG.controlInjection = function(SPECIFIC){
     return -1;
 }
