@@ -157,9 +157,11 @@ k,!1);for(b=0;b<d.config.imgpostbuffer;b++)t.push(new Image),t[b].imaginaryID=-1
     //if(cG.avx[0]>1&&cG.avx[1]>0){}
     main.pg = [anchor]
     main.at = 0;
+    main.my = 0;
     main.navto = function(a){
-        if(a<main.pg.length) return main.pg[a]._nav()
-            }
+        if(a<main.pg.length&&a!==null&a!==void 0) return main.pg[a]._nav();
+        else return main.pg[main.my]._nav();
+    }
     main.ch_data = function(a){
         var c = main.internals.chapters;
         var sre = (a===null||void 0===a)?main.ch_current():parseInt(a,10);
@@ -415,12 +417,15 @@ cG.stageInjection = function(SPECIFIC){
             } else config_attr={};
             /*END initial set up*/
             //if(cG.avx[0]>1&&cG.avx[1]>0){}
-            var nstpost = [];
-            var nestcom = stages[iD].children;
+            var sbvenue = [],
+                nstpost = [],
+                nestcom = stages[iD].children;
             for(var h = 0;h<nestcom.length; h++){
-                nstpost.push(nestcom[h]);
+                if(nestcom[h].getAttribute("class")=="venue") sbvenue.push(nestcom[h]);
+                else nstpost.push(nestcom[h]);
             }
             stages[iD].innerHTML = decor;
+            //console.log(stages[iD],decor)
             cG.HELPERS.renameEles(false,stages[iD],id_attr);
             var anchorto = document.getElementById(id_attr+"_location");
             if(anchorto===void 0||anchorto===null) anchorto = stages[iD];
@@ -461,15 +466,35 @@ cG.stageInjection = function(SPECIFIC){
             }
             var srch = use_attr+"_"+id_attr;
             final_res[srch] = cG.stage.construct(id_attr,myScript,anchorto,config_attr);
+            //console.log(sbvenue,nstpost)
             //if(cG.avx[0]>1&&cG.avx[1]>0){}
+            //console.log(stages[iD])
             var chl = stages[iD].children;
             for(var t = 1;t<chl.length;t++){
                 if(chl[t]==anchorto) continue;
                 final_res[srch].pg.push(chl[t]);
             }
-            for(var s = 0;s<nstpost.length;s++){
-                //actually push another direction
-                final_res[srch].pg.push(nestcom[s]);
+            for(var y = 0;y<nstpost.length;y++){
+                nstpost[y].style="display: none;"
+                stages[iD].appendChild(nstpost[y]);
+                final_res[srch].pg.push(nstpost[y]);
+            }
+            //console.log(sbvenue,nstpost);
+            for(var z = 0;z<sbvenue.length;z++){
+                var sia = sbvenue[z].getAttribute("id"),
+                    sua = sbvenue[z].getAttribute("use"),
+                    sca = sbvenue[z].getAttribute("config");
+                //console.log(sia,sia||id_attr+"_"+z,id_attr+"_"+z)
+                //console.log(final_res[srch])
+                var childling = document.createElement("DIV");
+                childling.setAttribute("id",sia||id_attr+"_location_"+z)
+                childling.setAttribute("style","display:none;");
+                childling.my = z;
+                final_res[srch+"_"+z] = cG.stage.construct(sia||id_attr+"_"+z,sua||myScript,childling,sca||config_attr);
+                stages[iD].appendChild(childling);
+                final_res[srch].pg.push(childling);
+                final_res[srch+"_"+z].my = z;
+                //console.log()
             }
             for(var r = 0;r<final_res[srch].pg.length;r++){
                 var frspr = cG.HELPERS.stick(final_res[srch].pg[r],final_res[srch].pg,final_res[srch],r);
@@ -598,7 +623,7 @@ cG.HELPERS.stick = function(obj,parent,sauce,pos){
         },
         function(){//nav
             if(sauce!==void 0||sauce!==null){
-                sauce._at = this._pos;
+                sauce.at = this._pos;
                 this._show();
                 var b = this._pos;
                 for(var y=0;y<parent.length;y++){
