@@ -1,5 +1,5 @@
 # ![C](https://raw.githubusercontent.com/ogewan/comix-ngn/master/assets/static-c-comixngn.png)omix-ngn
-![](https://img.shields.io/github/release/ogewan/comix-ngn.svg) [![JS.ORG](https://img.shields.io/badge/js.org-dns-ffb400.svg?style=flat-square)](http://js.org) [![Join the chat at https://gitter.im/seun40/comic-ng](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/seun40/comic-ng?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Issue Stats](http://www.issuestats.com/github/ogewan/comix-ngn/badge/pr?style=flat)](http://www.issuestats.com/github/ogewan/comix-ngn) [![Issue Stats](http://www.issuestats.com/github/ogewan/comix-ngn/badge/issue?style=flat)](http://www.issuestats.com/github/ogewan/comix-ngn) ![](https://img.shields.io/github/downloads/ogewan/comix-ngn/latest/total.svg)
+![](https://img.shields.io/github/release/ogewan/comix-ngn.svg) [![JS.ORG](https://img.shields.io/badge/js.org-dns-ffb400.svg?style=flat-square)](http://js.org) [![Join the chat at https://gitter.im/seun40/comic-ng](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/ogewan/comix-ngn?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Issue Stats](http://www.issuestats.com/github/ogewan/comix-ngn/badge/pr?style=flat)](http://www.issuestats.com/github/ogewan/comix-ngn) [![Issue Stats](http://www.issuestats.com/github/ogewan/comix-ngn/badge/issue?style=flat)](http://www.issuestats.com/github/ogewan/comix-ngn) ![](https://img.shields.io/github/downloads/ogewan/comix-ngn/latest/total.svg)
 
 **The Modern Webcomic Engine**
 ## Usage
@@ -20,16 +20,16 @@
   * set **mainsrc** to the version of comix-ngn use want to use: comixngn.js or comixngn.min.js __[Recommended]__. You probably shouldn't change this unless you are debugging.
   * If using Bellerophon Embed, do not add additional plugins via the script tag. Since they load immediately while comixngn.js may be deffered, the plugins will panic and refuse to load. Simply add the plugin path as a string to the **loadcng** array in Bellerophon Embed to include plugins.
 
-  * The **plugin**, **comicID**, **dir**, and **tir** variable functions exactly like the **plugin**, **comicID**, **dir**, and **template** attributes respectively. The **disable** array functions similarly to the **disable attribute**.
+  * The **plugin**, **comicID**, **dir**, **tir**, and **air** variable functions exactly like the **plugin**, **comicID**, **dir**, **tir**, and **air** attributes respectively. The **disable** array functions similarly to the **disable attribute**.
 
 * For more fine-grain control, use the following additional attributes:
   * __comicID__ - This sets the Id of the comic which is allows the framework to save site specific settings to user's browsers, such as most recently viewed page. It will default to the website's host name if not given.
 
   ```<script src="comixngn.js" comixID="comixngn"></script>```
 
-  * __dir__ & __template__ - dir sets the directory of all the scripts, template/tir sets the directory of all html templates. If the scripts or html templates are in the root directory, the attributes can be blank, which is the default. Note: you must include the ending slash in the path.
+  * __dir__ , __tir__ & __air__ - dir sets the directory of all the scripts, tir sets the directory of all html templates, and air overrides the asset directory listed in script.json. If the scripts or html templates are in the root directory, the attributes can be blank, which is the default. If air is left blank it will default to the directory present in the script.json. Note: you must include the ending slash in the path.
 
-  * __plugin__ - By default, the last installed plugin will be set as default. To use a specific plug-in as default, simply set the **plugin** attribute in the script tag to the plugin name. Setting it to "default" will use the original framework settings. Setting it as an array, will create plug-in priority. ~~Note, an array must be submitted as a string: "1,2,3"~~. Priority queue is currently unsupported.
+  * __plugin__ - By default, the last installed plugin will be set as default. To use a specific plug-in as default, simply set the **plugthin** attribute in the script tag to the plugin name. Setting it to "default" will use the original framework settings. Setting it as an array, will create plug-in priority. ~~Note, an array must be submitted as a string: "1,2,3"~~. Priority queue is currently unsupported.
 
   ```<script src="comixngn.js" plugin="default"></script>```
 
@@ -48,11 +48,11 @@
   * __config__ - This attribute adds an object that adds additional parameters such as slide duration or transition type, to the stage. The properties in config are specific to the plug-in being used so the same config might not work for different plug-ins, you must check the documentation. This must be submitted as a JSON string.
 
   ``` html
-  <div id class="venue" config='{
+  <div id class="venue" config="{
     "startSlide": 0,
     "speed": 400,
     "auto": 3000,
     "continuous": true,
-  }" ></div>'
+  }" ></div>
   ```
 _*Time to render or DOM Content Loaded_

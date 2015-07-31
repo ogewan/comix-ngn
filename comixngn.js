@@ -1,4 +1,4 @@
-/** @preserve comix-ngn v1.0.7 | (c) 2015 Oluwaseun Ogedengbe| ogewan.github.io/comix-ngn/ |License: MIT|
+/** @preserve comix-ngn v1.1.0 | (c) 2015 Oluwaseun Ogedengbe| ogewan.github.io/comix-ngn/ |License: MIT|
 embeds domReady: github.com/ded/domready (MIT) (c) 2013 Dustin Diaz, pegasus: typicode.github.io/pegasus (MIT) (c) 2014 typicode, pathjs (MIT) (c) 2011 Mike Trpcic, direction.js*/
 
 var cG = cG||{};/*if(void 0===cG) var cG = {};*//*check if cG is already is instantiated*/
@@ -9,12 +9,13 @@ cG.N =function(){return 0};/*null function*/
 if(void 0===cG.$GPC){cG.$GPC=0;}
 cG.root = '';
 cG.cPanel = cG.cPanel||{};
-cG.info = {vix: "1.0.7",vwr: "0.5.0",vpr: "0.1.0"};
+cG.info = {vix: "1.1.0",vwr: "0.5.0",vpr: "0.1.0"};
 cG.dis = cG.dis||{};
 cG.recyclebin = cG.recyclebin||{};
 cG.queue = cG.queue||{};
 cG.comicID = cG.comicID||window.location.host;
 cG.prePage = cG.prePage||-1;
+cG.controllers = cG.controllers||{};
 !function(){
     var selfScript = document.getElementsByTagName("SCRIPT");
     //console.log(selfScript);
@@ -45,29 +46,26 @@ cG.prePage = cG.prePage||-1;
         if(selfScript.getAttribute("VERSION") !== void 0&&selfScript.getAttribute("VERSION")!==null){
             cG.info.vix=selfScript.getAttribute("VERSION");//version override
         }
+        if(selfScript.getAttribute("air") !== void 0&&selfScript.getAttribute("air")!==null){
+            cG.recyclebin.air=selfScript.getAttribute("air");//asset path override
+        }
     }
 }()
 
 cG.avx = cG.avx||cG.info.vix.split(".");
-if(cG.avx[0]>0&&cG.avx[1]>0){
-    cG.info.vrb = 1;
-    cG.verbose = function(a){
-        var submit = [];
-        var b=1,c,d=1;
-        if(a===null||a===void 0||isNaN(parseInt(a,10))) d = 0;
-        else b=a;
-        for(var k=d;k < arguments.length;k++){
-            submit.push(arguments[k]);
-        }
-        if(cG.info.vrb===null||cG.info.vrb===void 0) c = 0;
-        else c=cG.info.vrb
-        //e = new Error();
-        /*if (b==-2&&c>=b){
-            //arguments.slice(0,1)
-            console.log(submit);
-        }
-        else*/ if(c>=b) console.log([].concat(submit).join(" "));//,e.linenumber,e.stack);
+//if(cG.avx[0]>1&&cG.avx[1]>0){}
+cG.info.vrb = 1;
+cG.verbose = function(a){
+    var submit = [];
+    var b=1,c,d=1;
+    if(a===null||a===void 0||isNaN(parseInt(a,10))) d = 0;
+    else b=a;
+    for(var k=d;k < arguments.length;k++){
+        submit.push(arguments[k]);
     }
+    if(cG.info.vrb===null||cG.info.vrb===void 0) c = 0;
+    else c=cG.info.vrb
+    if(c>=b) console.log([].concat(submit).join(" "));
 }
 if(cG.dis.rollbar!=true){
     /*rollbar*/
@@ -98,40 +96,35 @@ var Path={version:"0.8.4",map:function(a){if(Path.routes.defined.hasOwnProperty(
 /*domready cannot be embedded into the cG object, which means it is not replacable via plugin*/
 
 function syncJSON(filePath) {/*! http://stackoverflow.com/a/4117299*/
-  // Load json file;
-  var json = loadTextFileAjaxSync(filePath, "application/json");
-  // Parse json
-  return (json)?JSON.parse(json):0;
+    // Load json file;
+    var json = loadTextFileAjaxSync(filePath, "application/json");
+    // Parse json
+    return (json)?JSON.parse(json):0;
 }   
 
 // Load text with Ajax synchronously: takes path to file and optional MIME type
 function loadTextFileAjaxSync(filePath, mimeType){
-  var xmlhttp=new XMLHttpRequest();
-  xmlhttp.open("GET",filePath,false);
-  if (mimeType != null) {
-    if (xmlhttp.overrideMimeType) {
-      xmlhttp.overrideMimeType(mimeType);
+    var xmlhttp=new XMLHttpRequest();
+    xmlhttp.open("GET",filePath,false);
+    if (mimeType != null) {
+        if (xmlhttp.overrideMimeType) {
+            xmlhttp.overrideMimeType(mimeType);
+        }
     }
-  }
-  xmlhttp.send();
-  if (xmlhttp.status>=200&&xmlhttp.status<=304)
-  {
-    return xmlhttp.responseText;
-  }
-  else {
-    // TODO Throw exception
-    return null;
-  }
+    xmlhttp.send();
+    if (xmlhttp.status>=200&&xmlhttp.status<=304)
+    {
+        return xmlhttp.responseText;
+    }
+    else {
+        // TODO Throw exception
+        return null;
+    }
 }
 /*MUTABLE REPOS*/
 /*Repos are objects that assign a key to a plug-in's version of function*/
 /*Check repo existence*/
 cG.REPO = cG.REPO||{};
-/*var q = ["agent","director","stage","scenography","producer","actor","decor","stage"];
-for (p in q) {
-    if(void 0===cG.REPO[q[p]]) cG.REPO[q[p]] = {};
-}
-q = void 0;*/
 /*Set repo defaults - ASSUMES defaults aren't set, will overwrite them*/
 cG.REPO.agent = {def:/*pegasus.js*/function(t,e){return e=new XMLHttpRequest,e.open("GET",t),t=[],e.onreadystatechange=e.then=function(n,o,i){if(n&&n.call&&(t=[,n,o]),4==e.readyState&&(i=t[0|e.status/200]))try{i(JSON.parse(e.responseText),e)}catch(r){i(e.responseText,e)}},e.send(),e}};
 
@@ -143,7 +136,7 @@ cG.REPO.producer = {"def":cG.N};
 cG.REPO.stage = {"def":{id:"def",construct:function(name,scriptt,anchor,options){   
     var direction=function(d,m,v,b){b=b||{};var k={parent:null,offset:0,loading:{lines:b.lines||16,rate:b.rate||1E3/30,diameter:b.diameter||250,back:b.loaderback||"#FFF",color:b.color||"#373737"},config:{dir:b.dir||"assets/",pagestartnum:!1,chapterstartnum:!1,imgprebuffer:b.imgprebuffer||5,imgpostbuffer:b.imgpostbuffer||5,startpage:0,back:b.back||"#FFF"},pages:[]};if(void 0===d)return-1;if("string"===typeof d)k.pages.push({alt:"",hover:"",title:"",url:[d],release:0,note:"",perm:!1,anim8:!1}),d=k;else if(Array.isArray(d)){for(b=
 0;b<d.length;b++)if(k.pages.push({alt:"",hover:"",title:"",url:[],release:0,note:"",perm:!1,anim8:!1}),Array.isArray(d[b]))for(var x=0;x<d[b].length;x++)k.pages[b].url.push(d[b][x]);else k.pages[b].url.push(d[b]);d=k}else if(void 0===d.pages[0].url)return-1;if(void 0===m||null==m)m=0;var e=d.pages,l=d.pages.length,y=!0,n=-1,p=d.loading,q=d.config,t=[],u=[],h=new Image,z=!0,c=[document.createElement("canvas"),document.createElement("canvas")],A=c[1].getContext("2d"),B=b=function(){return 0},w=b,D=
-b,E={context:c[0].getContext("2d"),color:p.color,start:Date.now(),lines:p.lines,diameter:p.diameter,rate:p.rate},F=function(a){c[0].style.paddingLeft=(c[1].width-300)/2+"px";var b=Math.floor((Date.now()-a.start)/1E3*a.lines)/a.lines,g=a.color.substr(1);a.context.save();a.context.clearRect(0,0,300,c[1].height);a.context.translate(150,c[1].height/2);a.context.rotate(2*Math.PI*b);3==g.length&&(g=g[0]+C[0]+g[1]+g[1]+g[2]+g[2]);for(var b=parseInt(g.substr(0,2),16).toString(),d=parseInt(g.substr(2,2),16).toString(),
+        b,E={context:c[0].getContext("2d"),color:p.color,start:Date.now(),lines:p.lines,diameter:p.diameter,rate:p.rate},F=function(a){c[0].style.paddingLeft=(c[1].width-300)/2+"px";var b=Math.floor((Date.now()-a.start)/1E3*a.lines)/a.lines,g=a.color.substr(1);a.context.save();a.context.clearRect(0,0,300,c[1].height);a.context.translate(150,c[1].height/2);a.context.rotate(2*Math.PI*b);3==g.length&&(g=g[0]+C[0]+g[1]+g[1]+g[2]+g[2]);for(var b=parseInt(g.substr(0,2),16).toString(),d=parseInt(g.substr(2,2),16).toString(),
 g=parseInt(g.substr(4,2),16).toString(),e=0;e<a.lines;e++)a.context.beginPath(),a.context.rotate(2*Math.PI/a.lines),a.context.moveTo(a.diameter/10,0),a.context.lineTo(a.diameter/4,0),a.context.lineWidth=a.diameter/30,a.context.strokeStyle="rgba("+b+","+d+","+g+","+e/a.lines+")",a.context.stroke();a.context.restore();y?window.setTimeout(F,a.rate,E):a.context.clearRect(0,0,300,c[1].height)},G=function(a,b){if(null===a||void 0===a)a={x:0,y:0};else if(isNaN(a)){if(null===a.y||void 0===a.y)a.y=0;if(null===
 a.x||void 0===a.x)a.x=0}else a={x:0,y:a};if(null===b||void 0===b||0>=b)b=400;0>a.y&&(a.y=window.innerHeight||document.documentElement.clientHeight||document.body.clientHeight);0>a.x&&(a.x=window.innerWidth||document.documentElement.clientWidth||document.body.clientWidth);var c={x:void 0!==window.pageXOffset?a.x-window.pageXOffset:a.x-document.documentElement.scrollLeft,y:void 0!==window.pageYOffset?a.y-window.pageYOffset:a.y-document.documentElement.scrollTop};if(c=={x:0,y:0})return c;var d=function(a,
 b,c){window.scrollBy(Math.floor(a.x)/b,Math.floor(a.y)/b);c+1<5*b&&window.setTimeout(d,5,a,b,c+1)};window.setTimeout(d,5,c,Math.floor(b/5),0);return c},k=function(){e[this.imaginaryID].loaded=!0},r=function(a,b){y=!0;window.setTimeout(F,p.rate,E);B();0>b&&(b=0);b>=l&&(b=l-1);e[b].loaded||A.clearRect(0,0,c[1].width,c[1].height);a.imaginaryID=b;a.src=q.dir+e[b].url[0];n=b;for(var d=0,f=b-1;f>b-q.imgprebuffer-1&&0<=f;f--)e[f].loaded||(u[d].imaginaryID=f,u[d].src=q.dir+e[f].url,d++);d=0;for(f=b+1;f<q.imgpostbuffer+
@@ -151,7 +144,7 @@ b+1&&f<l;f++)e[f].loaded||(t[d].imaginaryID=f,t[d].src=q.dir+e[f].url,d++)};this
 return a};this.frst=function(){0<=n&&r(h,0);return 0};this.last=function(){r(h,l-1);return l-1};this.rand=function(){var a=Math.floor(Math.random()*(l-1));r(h,a);return a};this.data=function(a){a=null===a||void 0===a?n:parseInt(a,10);return isNaN(a)?e[n]:e[a]};this.scroll=function(a){return null===a||void 0===a?z:z=a};this.scrollTo=function(a,b){return G(a,b)};c[0].height=480;c[0].style.background=p.back;c[0].style.paddingLeft="170px";c[0].style.zIndex=0;c[0].style.position="absolute";m?m.appendChild(c[0]):
 document.body.appendChild(c[0]);window.setTimeout(F,p.rate,E);h=new Image;h.imaginaryID=-1;h.addEventListener("load",function(){e[this.imaginaryID].loaded?A.clearRect(0,0,this.width,this.height):e[this.imaginaryID].loaded=!0;w();c[1].width=this.width;c[1].height=c[0].height=this.height;A.drawImage(this,0,0);y=0;z&&G();D()},!1);for(b=0;b<e.length;b++)e[b].desig=b?b==e.length-1?1:0:-1,e[b].loaded=!1;for(b=0;b<d.config.imgprebuffer;b++)u.push(new Image),u[b].imaginaryID=-1,u[b].addEventListener("load",
 k,!1);for(b=0;b<d.config.imgpostbuffer;b++)t.push(new Image),t[b].imaginaryID=-1,t[b].addEventListener("load",k,!1);r(h,void 0===v||null===v||isNaN(v)?q.startpage:v);c[1].height=480;c[1].width=640;c[1].background=q.back;c[1].style.zIndex=1;c[1].style.position="relative";m?m.appendChild(c[1]):document.body.appendChild(c[1]);this.canvi=c;this.internals=d};
-/**/
+    /**/
     var get;//still undefined
     if(typeof(Storage) !== "undefined") {
         get = parseInt(localStorage.getItem(cG.comicID+"|"+name+"|curPage"),10);
@@ -162,91 +155,109 @@ k,!1);for(b=0;b<d.config.imgpostbuffer;b++)t.push(new Image),t[b].imaginaryID=-1
     var main = new direction(scriptt,anchor,get);
     main.name = name;
     main.type = "def";
-    if(cG.avx[0]>0&&cG.avx[1]>0){
-        main.pg = [anchor]
-        main.at = 0;
-        main.navto = function(a){
-            if(a<main.pg.length) return main.pg[a]._nav()
+    //if(cG.avx[0]>1&&cG.avx[1]>0){}
+    main.pg = [anchor]
+    main.at = 0;
+    main.my = 0;
+    main.navto = function(a){
+        if(a<main.pg.length&&a!==null&a!==void 0) return main.pg[a]._nav();
+        else return main.pg[main.my]._nav();
+    }
+    main.ch_data = function(a){
+        var c = main.internals.chapters;
+        var sre = (a===null||void 0===a)?main.ch_current():parseInt(a,10);
+        return (main.ch_current()==-1)?{}:(isNaN(sre))?c[main.ch_current()]:c[sre];
+    }
+    main.ch_count = function(){
+        return main.internals.chapters.length;
+    }
+    main.ch_current = function(){
+        var c = main.internals.chapters,
+            d = main.current();
+        for(var a=0;a<c.length;a++){
+            if(c[a].start<=d&&d<=c[a].end) return a;
         }
-        main.ch_data = function(a){
-            var c = main.internals.chapters;
-            var sre = (a===null||void 0===a)?main.ch_current():parseInt(a,10);
-            return (main.ch_current()==-1)?{}:(isNaN(sre))?c[main.ch_current()]:c[sre];
-        }
-        main.ch_count = function(){
-            return main.internals.chapters.length;
-        }
-        main.ch_current = function(){
-            var c = main.internals.chapters,
-                d = main.current();
-            for(var a=0;a<c.length;a++){
-                if(c[a].start<=d&&d<=c[a].end) return a;
-            }
-            return -1;
-        }
-        main.ch_go = function(a,b){
-            var sre = (a===null||void 0===a)?0:parseInt(a,10);
-            sre = (isNaN(sre))?0:sre;
-            if (main.ch_current()==-1) return main.go()
-            return main.go(main.internals.chapters[Math.floor(Math.max(0,Math.min(main.internals.chapters.length-1,sre)))][g]);
-        }
-        main.ch_prev = function(b){
-            if (main.ch_current()==-1) return main.go();
-            var g;
-            if(b===null&&b===void 0) g = "start";
-            else g = "end"
-            return main.go(main.internals.chapters[Math.max(0,main.ch_current()-1)][g]);
-        }
-        main.ch_next = function(b){
-            if (main.ch_current()==-1) return main.go();
-            var g;
-            if(b===null&&b===void 0) g = "start";
-            else g = "end"
-            return main.go(main.internals.chapters[Math.min(main.ch_count()-1,main.ch_current()+1)][g]);
-        }
-        main.ch_frst = function(b){
-            if (main.ch_current()==-1) return main.go();
-            var g;
-            if(b===null&&b===void 0) g = "start";
-            else g = "end"
-            return main.go(main.internals.chapters[0][g]);
-        }
-        main.ch_last = function(b){
-            if (main.ch_current()==-1) return main.go();
-            var g;
-            if(b===null&&b===void 0) g = "start";
-            else g = "end"
-            return main.go(main.internals.chapters[main.ch_count()-1][g]);
-        }
+        return -1;
+    }
+    main.ch_go = function(a,b){
+        var sre = (a===null||void 0===a)?0:parseInt(a,10);
+        sre = (isNaN(sre))?0:sre;
+        var g;
+        if(b===null&&b===void 0) g = "start";
+        else g = "end"
+        if (main.ch_current()==-1) return main.go()
+        return main.go(main.internals.chapters[Math.floor(Math.max(0,Math.min(main.internals.chapters.length-1,sre)))][g]);
+    }
+    main.ch_prev = function(b){
+        if (main.ch_current()==-1) return main.go();
+        var g;
+        if(b===null&&b===void 0) g = "start";
+        else g = "end"
+        return main.go(main.internals.chapters[Math.max(0,main.ch_current()-1)][g]);
+    }
+    main.ch_next = function(b){
+        if (main.ch_current()==-1) return main.go();
+        var g;
+        if(b===null&&b===void 0) g = "start";
+        else g = "end"
+        return main.go(main.internals.chapters[Math.min(main.ch_count()-1,main.ch_current()+1)][g]);
+    }
+    main.ch_frst = function(b){
+        if (main.ch_current()==-1) return main.go();
+        var g;
+        if(b===null&&b===void 0) g = "start";
+        else g = "end"
+        return main.go(main.internals.chapters[0][g]);
+    }
+    main.ch_last = function(b){
+        if (main.ch_current()==-1) return main.go();
+        var g;
+        if(b===null&&b===void 0) g = "start";
+        else g = "end"
+        return main.go(main.internals.chapters[main.ch_count()-1][g]);
     }
     var lscurrent = function(){
         if(typeof(Storage) !== void 0) {
-            localStorage.setItem(cG.comicID+"|"+name+"|curPage",cG.cPanel["def_"+name].current().toString());
+            localStorage.setItem(cG.comicID+"|"+name+"|curPage",cG.cPanel[/*"def_"+*/name].current().toString());
         }
-        if(cG.comix===cG.cPanel["def_"+name]){//if comic is the comix, then push its state
-            var modify = (cG.script.config.pagestartnum)?1:0;
-            if(cG.avx[0]>0&&cG.avx[1]>0) cG.verbose(1,name,"Pushing state:",(cG.cPanel["def_"+name].current()+modify));
-            else console.log(name,"Pushing state:",(cG.cPanel["def_"+name].current()+modify));
-            history.pushState({}, null, "#/"+(cG.cPanel["def_"+name].current()+modify));
+        if(cG.comix===cG.cPanel[/*"def_"+*/name]){//if comic is the comix, then push its state
+            var chpmod = (cG.script.config.chapterstartnum)?1:0,
+                modify = (cG.script.config.pagestartnum)?1:0,
+                result = cG.cPanel[/*"def_"+*/name].current();
+            switch(cG.script.config.orderby) {
+                case 2:
+                    var mechp = cG.cPanel[/*"def_"+*/name].ch_current();
+                    result=(mechp+chpmod)+"/"+(result-mechp+modify)
+                    break;
+                case 3:
+                    var nT = new Date(cG.cPanel[/*"def_"+*/name].data().release);
+                    var guide=cG.script.config.dateformat.split("/");
+                    for(var tim=0;tim<3;tim++){
+                        if(guide[tim].indexOf("Y")+1) guide[tim]=nT.getYear();
+                        else if(guide[tim].indexOf("M")+1) guide[tim]=nT.getMonth();
+                        else if(guide[tim].indexOf("D")+1) guide[tim]=nT.getDay();
+                    }
+                    result=guide.join("/");
+                default:
+                    result+=modify;
+            }
+            //if(cG.avx[0]>0&&cG.avx[1]>0) 
+            cG.verbose(1,name,"Pushing state:",result);
+            history.pushState({}, null, "#/"+result);
         }
         if(cG.queue.stageChange!==void 0)
-            for(var ftn=0;ftn<cG.queue.stageChange.length;ftn++){
-                cG.queue.stageChange[ftn](cG.cPanel["def_"+name]);
+            for(ftn in cG.queue.stageChange){
+                if (cG.queue.stageChange.hasOwnProperty(ftn)) cG.queue.stageChange[ftn](cG.cPanel[/*"def_"+*/name]);
             }
-        var strct = cG.cPanel["def_"+name].data(cG.cPanel["def_"+name].current()).special;
+        var strct = cG.cPanel[/*"def_"+*/name].data(cG.cPanel[/*"def_"+*/name].current()).special;
         var zombie = document.getElementById(name+"_tempScript");//fetch zombie child
-        var preload = cG.HELPERS.stick(cG.cPanel["def_"+name].canvi[0],null,null,0);
-        var display = cG.HELPERS.stick(cG.cPanel["def_"+name].canvi[1],null,null,1);
+        var preload = cG.HELPERS.stick(cG.cPanel[/*"def_"+*/name].canvi[0],null,null,0);
+        var display = cG.HELPERS.stick(cG.cPanel[/*"def_"+*/name].canvi[1],null,null,1);
         if(zombie!==void 0&&zombie!==null){
             anchor.removeChild(zombie);//kill the zombie
-            if(cG.avx[0]>0&&cG.avx[1]>0){
-                preload._show();
-                display._show();
-            }
-            else {
-            preload.setAttribute("style",preload.getAttribute("style")+"display: block;");
-            display.setAttribute("style",display.getAttribute("style")+"display: block;");
-            }
+            //if(cG.avx[0]>1&&cG.avx[1]>0){}
+            preload._show();
+            display._show();
         }
         if(strct!==null&&strct!==void 0&&strct!=""){
             //anchor.innerHTML += anchor.innerHTML+strct;//this breaks the cavases
@@ -254,14 +265,9 @@ k,!1);for(b=0;b<d.config.imgpostbuffer;b++)t.push(new Image),t[b].imaginaryID=-1
             spanr.setAttribute("id", name+"_tempScript");
             spanr.innerHTML=strct;
             anchor.appendChild(spanr);
-            if(cG.avx[0]>0&&cG.avx[1]>0){
-                preload._hide();
-                display._hide();
-            }
-            else {
-            preload.setAttribute("style",preload.getAttribute("style")+"display: none;");
-            display.setAttribute("style",display.getAttribute("style")+"display: none;");    
-            }
+            //if(cG.avx[0]>1&&cG.avx[1]>0){}
+            preload._hide();
+            display._hide();
         }
     }
     main.callback(1,lscurrent);
@@ -293,7 +299,7 @@ cG.HELPERS = {};
     for (var i = 0; i < src.length; i++) {
         if(src[i].src.indexOf("comixngn")>=0||src[i].src.indexOf(".cng.")>=0){
             dir=src[i].getAttribute("dir");
-            tir=src[i].getAttribute("template");
+            tir=src[i].getAttribute("tir");
             break;
         }
     }
@@ -337,8 +343,114 @@ cG.HELPERS = {};
 }();
 /*STAGE creation-REDACTED*/
 cG.HELPERS.jstagecreate = cG.N;
+cG.queue.stageChange={controller:function(target){
+    //console.log(target.data().desig);
+    var b,
+        c,
+        bcollect=[],
+        check = target.data().desig;
+    for(var o=0;o<target.brains.length;o++){
+        bcollect = cG.HELPERS.FindClassesInside(target.brains[o],["frst","last","prev","next","rand"]);
+        //console.log(bcollect);
+        for(var p=0;p<bcollect.length;p++){
+            b=bcollect[p];
+            c=b.getAttribute("class");
+            //console.log(b,p,bcollect);
+            if((c=="frst"||c=="prev")&&check==-1){
+                b.setAttribute("class","frst disable");
+                if(!b.getAttribute("nohide")) b.setAttribute("style","display:none;");
+            }
+            else if(c=="frst disable"||c=="prev disable"){
+                b.setAttribute("class","frst");
+                if(!b.getAttribute("nohide")) b.setAttribute("style","display:inline;");
+            }
+            if((c=="last"||c=="next")&&check==1){
+                b.setAttribute("class","last disable");
+                if(!b.getAttribute("nohide")) b.setAttribute("style","display:none;");
+            }
+            else if(c=="last disable"||c=="next disable"){
+                b.setAttribute("class","last");
+                if(!b.getAttribute("nohide")) b.setAttribute("style","display:inline;");
+            }
+        }
+    }
+}};
 cG.controlInjection = function(SPECIFIC){
-    return -1;
+    var stages = [],
+        ctrls = (cG.ctrls)?cG.ctrls:'<ul><li style="display: inline;"><button class="frst" >|&lt;</button></li><li style="display: inline;"><button class="prev" rel="prev" accesskey="p">&lt; Prev</button></li><li style="display: inline;"><button class="rand" >Random</button></li><li style="display: inline;"><button class="next" rel="next" accesskey="n">Next &gt;</button></li><li style="display: inline;"><button class="last" >&gt;|</button></li></ul>',
+        pod,podling,
+        errr = "controlInjection can only operate on elements or arrays of elements";
+    if(void 0 === SPECIFIC) stages = document.getElementsByClassName("venue");/*get all entry points*/
+    else if(Array.isArray(SPECIFIC)){
+        if(SPECIFIC.length>0) if(void 0 ===SPECIFIC[0].nodeName) return console.error(errr);
+            else return console.error(errr);
+        stages = stages.concat(SPECIFIC);
+    } else{
+        if(void 0 === SPECIFIC.nodeName) return console.error(errr);
+        stages.push(SPECIFIC);/*if not array and not undefined, assume it is a Element*/
+    }
+    for(var u=0;u<stages.length;u++){
+        pod = document.createElement("DIV");
+        pod.innerHTML=ctrls;
+        podling = pod.children[0];
+        if(!stages[u].getAttribute("comix")) podling.setAttribute("style","display:none;");
+        else podling.setAttribute("style","display:block;");
+        podling.setAttribute("cGlink",stages[u].id);
+        stages[u].parentNode.insertBefore(podling, stages[u].nextSibling);
+        //console.log(stages[u],stages[u].nextSibling)
+        cG.cPanel[stages[u].id].brains = cG.cPanel[stages[u].id].brains || [];
+        cG.cPanel[stages[u].id].brains.push(podling);
+        if(!stages[u].getAttribute("mind")){//add event handlers
+            stages[u].setAttribute("mind",1);
+            document.getElementById(stages[u].id+"_location").title=cG.cPanel[stages[u].id].data().hover;
+            var classstuff = (stages[u].getAttribute("comix"))?document.getElementsByClassName("cGtitle"):[];
+            for(var eq=0;eq<classstuff.length;eq++)
+                classstuff[eq].innerHTML=cG.cPanel[stages[u].id].data().title;
+            var q=document.getElementsByClassName("frst"),
+                w=document.getElementsByClassName("prev"),
+                e=document.getElementsByClassName("rand"),
+                r=document.getElementsByClassName("next"),
+                t=document.getElementsByClassName("last"),
+                getme=""+stages[u].id;
+            //console.log(q,w,e,r,t,cG.cPanel["def_"+name]);
+            for (var y = 0; y < q.length; y++) if(podling.getAttribute("cglink")==getme) q[y].addEventListener("click", function() {  
+                //console.log(getme)
+                box = cG.cPanel[getme].data(cG.cPanel[getme].frst());
+                document.getElementById(getme+"_location").title = box.hover;
+                var boe = document.getElementById(getme);
+                classstuff = (boe.getAttribute("comix"))?document.getElementsByClassName("cGtitle"):[];
+                for(var eq=0;eq<classstuff.length;eq++) classstuff[eq].innerHTML=box.title;
+            });
+            for (var y = 0; y < w.length; y++) if(podling.getAttribute("cglink")==getme) w[y].addEventListener("click", function() {
+                box = cG.cPanel[getme].data(cG.cPanel[getme].prev());
+                document.getElementById(getme+"_location").title = box.hover;
+                var boe = document.getElementById(getme);
+                classstuff = (boe.getAttribute("comix"))?document.getElementsByClassName("cGtitle"):[];
+                for(var eq=0;eq<classstuff.length;eq++) classstuff[eq].innerHTML=box.title;
+            });
+            for (var y = 0; y < e.length; y++) if(podling.getAttribute("cglink")==getme) e[y].addEventListener("click", function() {
+                box = cG.cPanel[getme].data(cG.cPanel[getme].rand());
+                document.getElementById(getme+"_location").title = box.hover;
+                var boe = document.getElementById(getme);
+                classstuff = (boe.getAttribute("comix"))?document.getElementsByClassName("cGtitle"):[];
+                for(var eq=0;eq<classstuff.length;eq++) classstuff[eq].innerHTML=box.title;
+            });
+            for (var y = 0; y < r.length; y++) if(podling.getAttribute("cglink")==getme) r[y].addEventListener("click", function() {
+                box = cG.cPanel[getme].data(cG.cPanel[getme].next());
+                document.getElementById(getme+"_location").title = box.hover;
+                var boe = document.getElementById(getme);
+                classstuff = (boe.getAttribute("comix"))?document.getElementsByClassName("cGtitle"):[];
+                for(var eq=0;eq<classstuff.length;eq++) classstuff[eq].innerHTML=box.title;
+            });
+            for (var y = 0; y < t.length; y++) if(podling.getAttribute("cglink")==getme) t[y].addEventListener("click", function() {
+                box = cG.cPanel[getme].data(cG.cPanel[getme].last());
+                document.getElementById(getme+"_location").title = box.hover;
+                var boe = document.getElementById(getme);
+                classstuff = (boe.getAttribute("comix"))?document.getElementsByClassName("cGtitle"):[];
+                for(var eq=0;eq<classstuff.length;eq++) classstuff[eq].innerHTML=box.title;
+            });
+        }
+    }
 }
 cG.stageInjection = function(SPECIFIC){
     if(cG.script === '' || cG.decor === ''|| cG.ctrls === '') {//although we don't need decor, if there is a template, we prioritize it
@@ -358,9 +470,10 @@ cG.stageInjection = function(SPECIFIC){
         if(void 0 === SPECIFIC.nodeName) return console.error(errr);
         stages.push(SPECIFIC);/*if not array and not undefined, assume it is a Element*/
     }
+    if(cG.recyclebin.air!=""&&cG.recyclebin.air!==void 0&&cG.recyclebin.air!==null) cG.script.config.dir=cG.recyclebin.air;
     for(var p in cG.recyclebin)
-    if(cG.recyclebin.hasOwnProperty(p)&&p!==null)
-        cG.recyclebin[p] = null;
+        if(cG.recyclebin.hasOwnProperty(p)&&p!==null)
+            cG.recyclebin[p] = null;
     var final_res = cG.cPanel,
         decor = (cG.decor)?cG.decor:'<div id="location"></div><div id="archive">Archive</div><div id="me">About Me</div>',
         ctrls = (cG.ctrls)?cG.ctrls:'<div>NOT IMPLEMENTED YET</div>',
@@ -392,6 +505,7 @@ cG.stageInjection = function(SPECIFIC){
                 use_attr = stages[iD].getAttribute("use"),
                 config_attr = stages[iD].getAttribute("config");
             /*////attribute processing */
+            stages[iD].setAttribute("cgcij",1);
             if(id_attr==""||void 0===id_attr||id_attr===null){/*if no ID, make one*/
                 var name = "STG"+iD;
                 var j = 1;
@@ -410,14 +524,16 @@ cG.stageInjection = function(SPECIFIC){
                 }
             } else config_attr={};
             /*END initial set up*/
-            if(cG.avx[0]>0&&cG.avx[1]>0){
-                var nstpost = [];
-                var nestcom = stages[iD].children;
-                for(var h = 0;h<nestcom.length; h++){
-                    nstpost.push(nestcom[h]);
-                }
+            //if(cG.avx[0]>1&&cG.avx[1]>0){}
+            var sbvenue = [],
+                nstpost = [],
+                nestcom = stages[iD].children;
+            for(var h = 0;h<nestcom.length; h++){
+                if(nestcom[h].getAttribute("class")=="venue") sbvenue.push(nestcom[h]);
+                else nstpost.push(nestcom[h]);
             }
             stages[iD].innerHTML = decor;
+            //console.log(stages[iD],decor)
             cG.HELPERS.renameEles(false,stages[iD],id_attr);
             var anchorto = document.getElementById(id_attr+"_location");
             if(anchorto===void 0||anchorto===null) anchorto = stages[iD];
@@ -429,71 +545,150 @@ cG.stageInjection = function(SPECIFIC){
                 },1);
             }
             anchorto.style.display = "block";
-            if(cG.avx[0]>0&&cG.avx[1]>0){
-                var archival = document.getElementById(id_attr+"_archive");
-                if(archival!==void 0&&archival!==null){
-                    var transcriptPG = "<ul>";
-                    var transcriptCH = "<ul>";
-                    var transcriptBH = "<ul>";
-                    var chpapp = 0;
-                    var pagapp = 0;
-                    if(myScript.config.pagestartnum) pagapp=1;
-                    if(myScript.config.chapterstartnum) chpapp=1;
-                    for(var y=0;y<myScript.pages.length;y++){
-                        transcriptPG=transcriptPG+'<li onclick="cG.cPanel['+"'"+'def_'+id_attr+"'"+'].go('+y+');this.parentElement.parentElement.style.display='+"'none'"+';document.getElementById('+"'"+id_attr+"_location'"+').style.display='+"'block'"+';" style="display:block;">'+(y+pagapp)+'</li>';
-                        //console.log(transcriptPG)
-                    }
-                    for(var x=0;y<myScript.chapters.length;y++){
-                        transcriptCH=transcriptCH+'<li onclick="cG.cPanel['+"'"+'def_'+id_attr+"'"+'].ch_go('+x+');this.parentElement.parentElement.style.display='+"'none'"+';document.getElementById('+"'"+id_attr+"_location'"+').style.display='+"'block'"+';" style="display:block;">'+(x+chpapp)+'</li>';
-                        transcriptBH=transcriptBH+'<ul>';
-                        for(var u=myScript.chapters[y].start;u<myScript.chapters[y].end+1;u++){
-                            transcriptBH=transcriptBH+'<li onclick="cG.cPanel['+"'"+'def_'+id_attr+"'"+'].go('+u+');this.parentElement.parentElement.parentElement.style.display='+"'none'"+';document.getElementById('+"'"+id_attr+"_location'"+').style.display='+"'block'"+';" style="display:block;">'+(u+pagapp)+'</li>';
-                        }
-                        transcriptBH=transcriptBH+'</ul>';
-                    }
-                    transcriptPG=transcriptPG+'</ul>';
-                    transcriptCH=transcriptCH+'</ul>';
-                    transcriptBH=transcriptBH+'</ul>';
-                    if(archival.innerHTML==''||archival.innerHTML=='Archive') archival.innerHTML=transcriptBH+transcriptPG+transcriptCH;
+            //if(cG.avx[0]>1&&cG.avx[1]>0){}
+            var archival = document.getElementById(id_attr+"_archive");
+            if(archival!==void 0&&archival!==null){
+                var transcriptPG = "<ul>";
+                var transcriptCH = "<ul>";
+                var transcriptBH = "<ul>";
+                var chpapp = 0;
+                var pagapp = 0;
+                if(myScript.config.pagestartnum) pagapp=1;
+                if(myScript.config.chapterstartnum) chpapp=1;
+                for(var y=0;y<myScript.pages.length;y++){
+                    transcriptPG=transcriptPG+'<li onclick="cG.cPanel['+"'"/*+'def_'*/+id_attr+"'"+'].go('+y+');this.parentElement.parentElement.style.display='+"'none'"+';document.getElementById('+"'"+id_attr+"_location'"+').style.display='+"'block'"+';" style="display:block;">'+(y+pagapp)+'</li>';
+                    //console.log(transcriptPG)
                 }
-                    //console.log(transcriptBH,transcriptPG,transcriptCH);
+                for(var x=0;x<myScript.chapters.length;x++){
+                    transcriptCH=transcriptCH+'<li onclick="cG.cPanel['+"'"/*+'def_'*/+id_attr+"'"+'].ch_go('+x+');this.parentElement.parentElement.style.display='+"'none'"+';document.getElementById('+"'"+id_attr+"_location'"+').style.display='+"'block'"+';" style="display:block;">'+(x+chpapp)+'</li>';
+                    transcriptBH=transcriptBH+'<li onclick="cG.cPanel['+"'"/*+'def_'*/+id_attr+"'"+'].ch_go('+x+');this.parentElement.parentElement.style.display='+"'none'"+';document.getElementById('+"'"+id_attr+"_location'"+').style.display='+"'block'"+';" style="display:block;">'+(x+chpapp)+'<ul>';
+                    for(var u=myScript.chapters[x].start;u<myScript.chapters[x].end+1;u++){
+                        transcriptBH=transcriptBH+'<li onclick="cG.cPanel['+"'"/*+'def_'*/+id_attr+"'"+'].go('+u+');this.parentElement.parentElement.parentElement.style.display='+"'none'"+';document.getElementById('+"'"+id_attr+"_location'"+').style.display='+"'block'"+';" style="display:block;">'+(u+pagapp)+'</li>';
+                    }
+                    transcriptBH=transcriptBH+'</ul></li>';
+                }
+                transcriptPG=transcriptPG+'</ul>';
+                transcriptCH=transcriptCH+'</ul>';
+                transcriptBH=transcriptBH+'</ul>';
+                if(archival.innerHTML==''||archival.innerHTML=='Archive') archival.innerHTML=transcriptBH+transcriptPG+transcriptCH;
             }
-            //console.log(anchorto,anchorto.style)
-            var srch = use_attr+"_"+id_attr;
+            var srch = /*use_attr+"_"+*/id_attr;
             final_res[srch] = cG.stage.construct(id_attr,myScript,anchorto,config_attr);
-            if(cG.avx[0]>0&&cG.avx[1]>0){
-                var chl = stages[iD].children;
-                for(var t = 1;t<chl.length;t++){
-                    if(chl[t]==anchorto) continue;
-                    final_res[srch].pg.push(chl[t]);
-                }
-                for(var s = 0;s<nstpost.length;s++){
-                    //actually push another direction
-                    final_res[srch].pg.push(nestcom[s]);
-                }
-                for(var r = 0;r<final_res[srch].pg.length;r++){
-                    var frspr = cG.HELPERS.stick(final_res[srch].pg[r],final_res[srch].pg,final_res[srch],r);
-                }
+            //console.log(sbvenue,nstpost)
+            //if(cG.avx[0]>1&&cG.avx[1]>0){}
+            //console.log(stages[iD])
+            if(stages[iD].getAttribute("id")==cG.comix.name) stages[iD].setAttribute("comix",1);
+            var chl = stages[iD].children;
+            for(var t = 1;t<chl.length;t++){
+                if(chl[t]==anchorto) continue;
+                final_res[srch].pg.push(chl[t]);
+            }
+            for(var y = 0;y<nstpost.length;y++){
+                nstpost[y].style="display: none;"
+                stages[iD].appendChild(nstpost[y]);
+                final_res[srch].pg.push(nstpost[y]);
+            }
+            //console.log(sbvenue,nstpost);
+            for(var z = 0;z<sbvenue.length;z++){
+                var sia = sbvenue[z].getAttribute("id"),
+                    sua = sbvenue[z].getAttribute("use"),
+                    sca = sbvenue[z].getAttribute("config");
+                //console.log(sia,sia||id_attr+"_"+z,id_attr+"_"+z)
+                //console.log(final_res[srch])
+                var childling = document.createElement("DIV");
+                childling.setAttribute("id",sia||id_attr+"_"+z)
+                childling.setAttribute("style","display:none;");
+                childling.my = z;
+                final_res[srch+"_"+z] = cG.stage.construct(sia||id_attr+"_"+z,sua||myScript,childling,sca||config_attr);
+                stages[iD].appendChild(childling);
+                final_res[srch].pg.push(childling);
+                final_res[srch+"_"+z].my = z;
+                //console.log()
+            }
+            for(var r = 0;r<final_res[srch].pg.length;r++){
+                var frspr = cG.HELPERS.stick(final_res[srch].pg[r],final_res[srch].pg,final_res[srch],r);
             }
         };
-    for (var i = 0; i < stages.length; i++) request(i);
+    for (var i = 0; i < stages.length; i++) if(!stages[i].getAttribute("cgcij")==true) request(i);
     cG.cPanel=final_res;
+    cG.controlInjection();
     return final_res;
 };
 /*end STAGE creation*/
 /*ROUTING*/
 cG.route2page = cG.route2page||function(orgvalue){
-    var value = orgvalue||parseInt(this.params['page'],10);
+    //var com = cG.script.config.orderby,
+    var value;
+    if(orgvalue===null||orgvalue===void 0||!orgvalue){
+        var z = 0;
+        value=[];
+        for(var y in this.params){
+            if(this.params.hasOwnProperty(y)&&y!==null&&y!==void 0){
+                z=Number(this.params[y]);
+                if(isNaN(z)) value.push(this.params[y]);
+                else value.push(z);
+            }
+        }
+        if(!value.length) value=0;
+    } else {
+        value = orgvalue
+    }
     if(cG.script === '') return setTimeout(cG.route2page,300,value);
     if(!cG.script) return -1;
+    var chpmod = (cG.script.config.chapterstartnum)?1:0;
     var modify = (cG.script.config.pagestartnum)?1:0;
+    if(Array.isArray(value)){
+        if(value.length==1&&!isNaN(value[0]%1)&&value[0]>=cG.script.pages.length){
+            value=value[0];
+        } else{
+            var query,
+                b=cG.script.pages;
+            switch(value.length) {
+                case 1: 
+                    value=value[0]
+                    break;
+                case 2:
+                    if(value[0]<cG.script.chapters.length)
+                        query=cG.script.chapters[value[0]].start+(value[1]-modify)+modify;
+                    else {
+                        value=-1
+                        b=[];
+                    }
+                    break;
+                case 3:
+                    var guide=cG.script.config.dateformat.split("/");
+                    if(isNaN(value[0]%1)||isNaN(value[1]%1)||isNaN(value[2]%1)){
+                        value=-1
+                        b=[];
+                        break;
+                    }
+                    for(var tim=0;tim<3;tim++){
+                        if(guide[tim].indexOf("Y")+1) guide[tim]=0;
+                        else if(guide[tim].indexOf("M")+1) guide[tim]=1;
+                        else if(guide[tim].indexOf("D")+1) guide[tim]=2; //2,1,0
+                    }
+                    if(value[guide[0]].length > 1900) value[guide[0]]+=2000;
+                    var timme = new Date(value[guide[0]], value[guide[1]], value[guide[2]]);
+                    value=timme.getTime();
+                    break;
+            }
+            query=String(value);
+            for(var a=0;a<b.length;a++){
+                if(b[a].alt.indexOf(query)+1||b[a].hover.indexOf(query)+1||b[a].title.indexOf(query)+1||b[a].release==Number(query)){
+                    //console.log(b[a].alt.indexOf(query),b[a].hover.indexOf(query),b[a].title.indexOf(query),b[a].release==Number(query))
+                    value=a+modify;
+                    break;
+                }
+            }
+        }
+    }
     cG.prePage = value-modify;
     //search for page mismatch
     if(cG.comix!==void 0&&cG.prePage!=cG.comix.current()) cG.comix.go(cG.prePage);
     if(cG.avx[0]>0&&cG.avx[1]>0) cG.verbose(1,"AutoPage: "+cG.prePage)
     else console.log("AutoPage: "+cG.prePage)
-}
-Path.map("#/:page").to(cG.route2page);
+        }
+Path.map("#/:v1(/:v2/:v3/:v4/:v5/:v6/:v7/:v8/:v9)").to(cG.route2page);
 /*end routing*/
 /*/////////////////////////////////////////////////
 HELPER FUNCTIONS*/
@@ -519,104 +714,102 @@ cG.HELPERS.smartAttrib = function(source,mapper,ignore){
     for(var x=0;x<source.children.length;x++) cG.HELPERS.smartAttrib(source.children[x],mapper,ig);
 }
 cG.HELPERS.stick = function(obj,parent,sauce,pos){
-    if(cG.avx[0]>0&&cG.avx[1]>0){
-        var ftns = [
-            function(a){//order
-                if(parent!==void 0||parent!==null){
-                    parent.splice(a, 0, this);
-                    this._pos = a;
-                    return a;
-                }
-            },
-            function(a){//switch
-                if(parent!==void 0||parent!==null){
-                    var b = parent[this._pos];
-                    parent[this._pos] = parent[a];
-                    parent[a] = b;
-                    this._pos = a;
-                    return a;
-                }
-            },
-            function(){//nav
-                if(sauce!==void 0||sauce!==null){
-                    sauce._at = this._pos;
-                    this._show();
-                    var b = this._pos;
-                    for(var y=0;y<parent.length;y++){
-                        if(this._pos==y) continue;
-                        parent[y]._hide();
-                    }
-                    if(this._chain.length) b = [b];
-                    for(var x=0;x<this._chain.length;x++){
-                        //console.log(this,this._chain,x,this._chain[x]);
-                        this._chain[x]._show();
-                        b.push(x);
-                    }
-                    return b;
-                }
-            },
-            function(){//show
-                if(this.style.display===null||this.style.display===void 0)
-                    this.setAttribute("style",this.getAttribute("style")+"display: block;");
-                else this.style.display="block";
-                return this._pos;
-            },
-            function(){//hide
-                if(this.style.display===null||this.style.display===void 0)
-                    this.setAttribute("style",this.getAttribute("style")+"display: none;");
-                else this.style.display="none";
-                return this._pos;
-            },
-            function(){//cloak
-                if(this.style.visibility===null||this.style.visibility===void 0)
-                    this.setAttribute("style",this.getAttribute("style")+"visibility:hidden;");
-                else this.style.visibility="hidden";
-                return this._pos;
-            },
-            function(){//uncloak
-                if(this.style.visibility===null||this.style.visibility===void 0)
-                    this.setAttribute("style",this.getAttribute("style")+"visibility: visible;");
-                else this.style.visibility="visible";
-                return this._pos;
-            },
-            function(a){//link
-                if(parent!==void 0||parent!==null){
-                    this._chain.push(parent[a]);
-                    return a;
-                }
-            },
-            function(a){//unlink
-                if(parent!==void 0||parent!==null){
-                    return this._chain.splice(this._chain.indexOf(parent[a]),1);
-                }
-            },
-            function(a){//bind
-                if(parent!==void 0||parent!==null){
-                    this._chain.push(parent[a]);
-                    parent[a]._chain.push(this);
-                    return [a,this._pos]
-                }
-            },
-            function(a){//unbind
-                if(parent!==void 0||parent!==null){
-                    return this._chain.splice(this._chain.indexOf(parent[a]),1).concat(parent[a]._chain.splice(parent[a]._chain.indexOf(this._pos), 1));
-                }
+    var ftns = [
+        function(a){//order
+            if(parent!==void 0||parent!==null){
+                parent.splice(a, 0, this);
+                this._pos = a;
+                return a;
             }
-        ]
-        obj._order = ftns[0];
-        obj._switch = ftns[1];
-        obj._nav = ftns[2];
-        obj._show = ftns[3];
-        obj._hide = ftns[4];
-        obj._cloak = ftns[5];
-        obj._uncloak = ftns[6];
-        obj._link = ftns[7];
-        obj._unlink = ftns[8];
-        obj._bind = ftns[9];
-        obj._unbind = ftns[10];
-        obj._pos = pos;
-        obj._chain = [];
-    }
+        },
+        function(a){//switch
+            if(parent!==void 0||parent!==null){
+                var b = parent[this._pos];
+                parent[this._pos] = parent[a];
+                parent[a] = b;
+                this._pos = a;
+                return a;
+            }
+        },
+        function(){//nav
+            if(sauce!==void 0||sauce!==null){
+                sauce.at = this._pos;
+                this._show();
+                var b = this._pos;
+                for(var y=0;y<parent.length;y++){
+                    if(this._pos==y) continue;
+                    parent[y]._hide();
+                }
+                if(this._chain.length) b = [b];
+                for(var x=0;x<this._chain.length;x++){
+                    //console.log(this,this._chain,x,this._chain[x]);
+                    this._chain[x]._show();
+                    b.push(x);
+                }
+                return b;
+            }
+        },
+        function(){//show
+            if(this.style.display===null||this.style.display===void 0)
+                this.setAttribute("style",this.getAttribute("style")+"display: block;");
+            else this.style.display="block";
+            return this._pos;
+        },
+        function(){//hide
+            if(this.style.display===null||this.style.display===void 0)
+                this.setAttribute("style",this.getAttribute("style")+"display: none;");
+            else this.style.display="none";
+            return this._pos;
+        },
+        function(){//cloak
+            if(this.style.visibility===null||this.style.visibility===void 0)
+                this.setAttribute("style",this.getAttribute("style")+"visibility:hidden;");
+            else this.style.visibility="hidden";
+            return this._pos;
+        },
+        function(){//uncloak
+            if(this.style.visibility===null||this.style.visibility===void 0)
+                this.setAttribute("style",this.getAttribute("style")+"visibility: visible;");
+            else this.style.visibility="visible";
+            return this._pos;
+        },
+        function(a){//link
+            if(parent!==void 0||parent!==null){
+                this._chain.push(parent[a]);
+                return a;
+            }
+        },
+        function(a){//unlink
+            if(parent!==void 0||parent!==null){
+                return this._chain.splice(this._chain.indexOf(parent[a]),1);
+            }
+        },
+        function(a){//bind
+            if(parent!==void 0||parent!==null){
+                this._chain.push(parent[a]);
+                parent[a]._chain.push(this);
+                return [a,this._pos]
+            }
+        },
+        function(a){//unbind
+            if(parent!==void 0||parent!==null){
+                return this._chain.splice(this._chain.indexOf(parent[a]),1).concat(parent[a]._chain.splice(parent[a]._chain.indexOf(this._pos), 1));
+            }
+        }
+    ]
+    obj._order = ftns[0];
+    obj._switch = ftns[1];
+    obj._nav = ftns[2];
+    obj._show = ftns[3];
+    obj._hide = ftns[4];
+    obj._cloak = ftns[5];
+    obj._uncloak = ftns[6];
+    obj._link = ftns[7];
+    obj._unlink = ftns[8];
+    obj._bind = ftns[9];
+    obj._unbind = ftns[10];
+    obj._pos = pos;
+    obj._chain = [];
     return obj;
 }
 cG.HELPERS.FEbyIdAI = function(source,ids,inner){
@@ -638,11 +831,29 @@ cG.HELPERS.FEbyIdAI = function(source,ids,inner){
         source.innerHTML = inner[q-1];
         ret.push(source);
     }
-    
+
     for(var a=0;a<source.children.length;a++){
         ret = ret.concat(cG.HELPERS.FEbyIdAI(source.children[a],ids,inner));
     }
     //console.log(q,ret,source);
+    return ret;
+}
+cG.HELPERS.FindClassesInside = function(source,cls){
+    //console.log(source);
+    var ret = [],
+        q,
+        w = source.className.split(" ");
+    for(var u=0;u<w.length;u++){
+        //console.log(cls,w[u]);
+        q=cls.indexOf(w[u])+1;
+        if(q) break;
+    }
+    if(q){
+        ret.push(source);
+    }
+    for(var a=0;a<source.children.length;a++){
+        ret = ret.concat(cG.HELPERS.FindClassesInside(source.children[a],cls));
+    }
     return ret;
 }
 cG.HELPERS.renameEles = function(bool,source,prepend,append){
