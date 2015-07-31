@@ -344,13 +344,42 @@ cG.HELPERS = {};
 /*STAGE creation-REDACTED*/
 cG.HELPERS.jstagecreate = cG.N;
 cG.queue.stageChange={controller:function(target){
-    console.log(target.data().desig);
+    //console.log(target.data().desig);
+    var b,
+        c,
+        bcollect=[],
+        check = target.data().desig;
+    for(var o=0;o<target.brains.length;o++){
+        bcollect = cG.HELPERS.FindClassesInside(target.brains[o],["frst","last","prev","next","rand"]);
+        //console.log(bcollect);
+        for(var p=0;p<bcollect.length;p++){
+            b=bcollect[p];
+            c=b.getAttribute("class");
+            //console.log(b,p,bcollect);
+            if((c=="frst"||c=="prev")&&check==-1){
+                b.setAttribute("class","frst disable");
+                if(!b.getAttribute("nohide")) b.setAttribute("style","display:none;");
+            }
+            else if(c=="frst disable"||c=="prev disable"){
+                b.setAttribute("class","frst");
+                if(!b.getAttribute("nohide")) b.setAttribute("style","display:inline;");
+            }
+            if((c=="last"||c=="next")&&check==1){
+                b.setAttribute("class","last disable");
+                if(!b.getAttribute("nohide")) b.setAttribute("style","display:none;");
+            }
+            else if(c=="last disable"||c=="next disable"){
+                b.setAttribute("class","last");
+                if(!b.getAttribute("nohide")) b.setAttribute("style","display:inline;");
+            }
+        }
+    }
 }};
 cG.controlInjection = function(SPECIFIC){
     var stages = [],
-        ctrls = (cG.ctrls)?cG.ctrls:'<div>NOT IMPLEMENTED YET</div>',
+        ctrls = (cG.ctrls)?cG.ctrls:'<ul><li style="display: inline;"><button class="frst" >|&lt;</button></li><li style="display: inline;"><button class="prev" rel="prev" accesskey="p">&lt; Prev</button></li><li style="display: inline;"><button class="rand" >Random</button></li><li style="display: inline;"><button class="next" rel="next" accesskey="n">Next &gt;</button></li><li style="display: inline;"><button class="last" >&gt;|</button></li></ul>',
         pod,podling,
-        errr = "stageInjection can only operate on elements or arrays of elements";
+        errr = "controlInjection can only operate on elements or arrays of elements";
     if(void 0 === SPECIFIC) stages = document.getElementsByClassName("venue");/*get all entry points*/
     else if(Array.isArray(SPECIFIC)){
         if(SPECIFIC.length>0) if(void 0 ===SPECIFIC[0].nodeName) return console.error(errr);
@@ -373,6 +402,53 @@ cG.controlInjection = function(SPECIFIC){
         cG.cPanel[stages[u].id].brains.push(podling);
         if(!stages[u].getAttribute("mind")){//add event handlers
             stages[u].setAttribute("mind",1);
+            document.getElementById(stages[u].id+"_location").title=cG.cPanel[stages[u].id].data().hover;
+            var classstuff = (stages[u].getAttribute("comix"))?document.getElementsByClassName("cGtitle"):[];
+            for(var eq=0;eq<classstuff.length;eq++)
+                classstuff[eq].innerHTML=cG.cPanel[stages[u].id].data().title;
+            var q=document.getElementsByClassName("frst"),
+                w=document.getElementsByClassName("prev"),
+                e=document.getElementsByClassName("rand"),
+                r=document.getElementsByClassName("next"),
+                t=document.getElementsByClassName("last"),
+                getme=""+stages[u].id;
+            //console.log(q,w,e,r,t,cG.cPanel["def_"+name]);
+            for (var y = 0; y < q.length; y++) if(podling.getAttribute("cglink")==getme) q[y].addEventListener("click", function() {  
+                //console.log(getme)
+                box = cG.cPanel[getme].data(cG.cPanel[getme].frst());
+                document.getElementById(getme+"_location").title = box.hover;
+                var boe = document.getElementById(getme);
+                classstuff = (boe.getAttribute("comix"))?document.getElementsByClassName("cGtitle"):[];
+                for(var eq=0;eq<classstuff.length;eq++) classstuff[eq].innerHTML=box.title;
+            });
+            for (var y = 0; y < w.length; y++) if(podling.getAttribute("cglink")==getme) w[y].addEventListener("click", function() {
+                box = cG.cPanel[getme].data(cG.cPanel[getme].prev());
+                document.getElementById(getme+"_location").title = box.hover;
+                var boe = document.getElementById(getme);
+                classstuff = (boe.getAttribute("comix"))?document.getElementsByClassName("cGtitle"):[];
+                for(var eq=0;eq<classstuff.length;eq++) classstuff[eq].innerHTML=box.title;
+            });
+            for (var y = 0; y < e.length; y++) if(podling.getAttribute("cglink")==getme) e[y].addEventListener("click", function() {
+                box = cG.cPanel[getme].data(cG.cPanel[getme].rand());
+                document.getElementById(getme+"_location").title = box.hover;
+                var boe = document.getElementById(getme);
+                classstuff = (boe.getAttribute("comix"))?document.getElementsByClassName("cGtitle"):[];
+                for(var eq=0;eq<classstuff.length;eq++) classstuff[eq].innerHTML=box.title;
+            });
+            for (var y = 0; y < r.length; y++) if(podling.getAttribute("cglink")==getme) r[y].addEventListener("click", function() {
+                box = cG.cPanel[getme].data(cG.cPanel[getme].next());
+                document.getElementById(getme+"_location").title = box.hover;
+                var boe = document.getElementById(getme);
+                classstuff = (boe.getAttribute("comix"))?document.getElementsByClassName("cGtitle"):[];
+                for(var eq=0;eq<classstuff.length;eq++) classstuff[eq].innerHTML=box.title;
+            });
+            for (var y = 0; y < t.length; y++) if(podling.getAttribute("cglink")==getme) t[y].addEventListener("click", function() {
+                box = cG.cPanel[getme].data(cG.cPanel[getme].last());
+                document.getElementById(getme+"_location").title = box.hover;
+                var boe = document.getElementById(getme);
+                classstuff = (boe.getAttribute("comix"))?document.getElementsByClassName("cGtitle"):[];
+                for(var eq=0;eq<classstuff.length;eq++) classstuff[eq].innerHTML=box.title;
+            });
         }
     }
 }
@@ -760,6 +836,24 @@ cG.HELPERS.FEbyIdAI = function(source,ids,inner){
         ret = ret.concat(cG.HELPERS.FEbyIdAI(source.children[a],ids,inner));
     }
     //console.log(q,ret,source);
+    return ret;
+}
+cG.HELPERS.FindClassesInside = function(source,cls){
+    //console.log(source);
+    var ret = [],
+        q,
+        w = source.className.split(" ");
+    for(var u=0;u<w.length;u++){
+        //console.log(cls,w[u]);
+        q=cls.indexOf(w[u])+1;
+        if(q) break;
+    }
+    if(q){
+        ret.push(source);
+    }
+    for(var a=0;a<source.children.length;a++){
+        ret = ret.concat(cG.HELPERS.FindClassesInside(source.children[a],cls));
+    }
     return ret;
 }
 cG.HELPERS.renameEles = function(bool,source,prepend,append){
