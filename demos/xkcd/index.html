@@ -2,7 +2,7 @@
 <html>
 <head>
 <link rel="stylesheet" type="text/css" href="http://xkcd.com/s/b0dcca.css" title="Default"/>
-<title id="btitle">xkcd: TITLENAME</title>
+<title class="cGtitle">xkcd: TITLENAME</title>
 <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
 <link rel="shortcut icon" href="http://xkcd.com/s/919f27.ico" type="image/x-icon"/>
 <link rel="icon" href="http://xkcd.com/s/919f27.ico" type="image/x-icon"/>
@@ -46,56 +46,6 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 ga('create', 'UA-25700708-7', 'auto');
 ga('send', 'pageview');*/
 </script>
-<script>
-    var disposeme = function() {
-        //console.log("running");
-        var name = "comic";//document.getElementById("comic").getAttribute("id");
-        if(cG===void 0) return setTimeout(disposeme, 400);
-        else if(cG.cPanel===void 0) return setTimeout(disposeme, 400);
-        else if(cG.cPanel["def_"+name]===void 0) return setTimeout(disposeme, 400);
-        else if(cG.cPanel["def_"+name]===void 0) return setTimeout(disposeme, 400);//possible race condition bug, when url has hash in it
-        else if(cG.cPanel["def_"+name].data()===void 0) return setTimeout(disposeme, 400);//possible race condition bug, when url has hash in it
-        document.getElementById("comic_location").title=cG.cPanel["def_"+name].data().hover;
-        document.getElementById("btitle").innerHTML=cG.cPanel["def_"+name].data().title;
-        document.getElementById("ctitle").innerHTML=cG.cPanel["def_"+name].data().title;
-        var q=document.getElementsByClassName("frst"),
-            w=document.getElementsByClassName("prev"),
-            e=document.getElementsByClassName("rand"),
-            r=document.getElementsByClassName("next"),
-            t=document.getElementsByClassName("last");
-        //console.log(q,w,e,r,t,cG.cPanel["def_"+name]);
-        for (var y = 0; y < q.length; y++) q[y].addEventListener("click", function() {
-            box = cG.cPanel["def_"+name].data(cG.cPanel["def_"+name].frst());
-            document.getElementById("comic_location").title = box.hover;
-            document.getElementById("btitle").innerHTML = document.getElementById("ctitle").innerHTML = box.title;
-        });
-        for (var y = 0; y < w.length; y++) w[y].addEventListener("click", function() {
-            box = cG.cPanel["def_"+name].data(cG.cPanel["def_"+name].prev());
-            document.getElementById("comic_location").title = box.hover;
-            document.getElementById("btitle").innerHTML = document.getElementById("ctitle").innerHTML = box.title;
-        });
-        for (var y = 0; y < e.length; y++) e[y].addEventListener("click", function() {
-            box = cG.cPanel["def_"+name].data(cG.cPanel["def_"+name].rand());
-            document.getElementById("comic_location").title = box.hover;
-            document.getElementById("btitle").innerHTML = document.getElementById("ctitle").innerHTML = box.title;
-        });
-        for (var y = 0; y < r.length; y++) r[y].addEventListener("click", function() {
-            box = cG.cPanel["def_"+name].data(cG.cPanel["def_"+name].next());
-            document.getElementById("comic_location").title = box.hover;
-            document.getElementById("btitle").innerHTML = document.getElementById("ctitle").innerHTML = box.title;
-        });
-        for (var y = 0; y < t.length; y++) t[y].addEventListener("click", function() {
-            box = cG.cPanel["def_"+name].data(cG.cPanel["def_"+name].last());
-            document.getElementById("comic_location").title = box.hover;
-            document.getElementById("btitle").innerHTML = document.getElementById("ctitle").innerHTML = box.title;
-        });
-        //console.log("complete");
-    }
-    var imagedeffer = function() {
-        document.getElementById("te-news").src="http://imgs.xkcd.com/store/te-news.png";
-    }
-    disposeme();
-</script>
     <!--<script type="text/javascript" src="//xkcd.com/1350/jquery.min.js"></script>
 <script type="text/javascript" src="//xkcd.com/static/json2.js"></script>-->
 
@@ -130,8 +80,8 @@ In other news, <a href="https://www.youtube.com/watch?v=ygrdAvmr-MA">Space Weird
 </div>
 <div id="middleContainer" class="box">
 
-<div id="ctitle">TITLENAME</div>
-<ul class="comicNav">
+<div id="ctitle" class="cGtitle">TITLENAME</div>
+<ul class="comicNav" cglink="comic">
 <li><button class="frst" >|&lt;</button></li>
 <li><button class="prev" rel="prev" accesskey="p">&lt; Prev</button></li>
 <li><button class="rand" >Random</button></li>
@@ -141,7 +91,7 @@ In other news, <a href="https://www.youtube.com/watch?v=ygrdAvmr-MA">Space Weird
 <div id="comic" class="venue">
 <!--<img src="//imgs.xkcd.com/comics/barrel_cropped_(1).jpg" title="Don&#39;t we all." alt="Barrel - Part 1" />-->
 </div>
-<ul class="comicNav">
+<ul class="comicNav" cglink="comic">
 <li><button class="frst" >|&lt;</button></li>
 <li><button class="prev" rel="prev" accesskey="p">&lt; Prev</button></li>
 <li><button class="rand" >Random</button></li>
@@ -207,5 +157,5 @@ This means you're free to copy and share these comics (but not to sell them). <a
 </div>
 </div>
 </body>
-<!-- Layout by Ian Clasbey, davean, and chromakode -->
+<!-- Layout by Ian Clasbey, davean, and chromakode|| modified by ogewan -->
 </html>
