@@ -379,7 +379,56 @@ cG.controlInjection = function(SPECIFIC){
     var stages = [],
         ctrls = (cG.ctrls)?cG.ctrls:'<ul><li style="display: inline;"><button class="frst" >|&lt;</button></li><li style="display: inline;"><button class="prev" rel="prev" accesskey="p">&lt; Prev</button></li><li style="display: inline;"><button class="rand" >Random</button></li><li style="display: inline;"><button class="next" rel="next" accesskey="n">Next &gt;</button></li><li style="display: inline;"><button class="last" >&gt;|</button></li></ul>',
         pod,podling,
-        errr = "controlInjection can only operate on elements or arrays of elements";
+        errr = "controlInjection can only operate on elements or arrays of elements",
+        eventer=function(par,chd){
+            par.setAttribute("mind",1);
+            document.getElementById(par.id+"_location").title=cG.cPanel[par.id].data().hover;
+            var classstuff = (par.getAttribute("comix"))?document.getElementsByClassName("cGtitle"):[];
+            for(var eq=0;eq<classstuff.length;eq++)
+                classstuff[eq].innerHTML=cG.cPanel[par.id].data().title;
+            var q=document.getElementsByClassName("frst"),
+                w=document.getElementsByClassName("prev"),
+                e=document.getElementsByClassName("rand"),
+                r=document.getElementsByClassName("next"),
+                t=document.getElementsByClassName("last"),
+                getme=""+par.id;
+            //console.log(q,w,e,r,t,cG.cPanel["def_"+name]);
+            for (var y = 0; y < q.length; y++) if(chd.getAttribute("cglink")==getme) q[y].addEventListener("click", function() {  
+                var box = cG.cPanel[getme].data(cG.cPanel[getme].frst());
+                document.getElementById(getme+"_location").title = box.hover;
+                var boe = document.getElementById(getme);
+                classstuff = (boe.getAttribute("comix"))?document.getElementsByClassName("cGtitle"):[];
+                for(var eq=0;eq<classstuff.length;eq++) classstuff[eq].innerHTML=box.title;
+            });
+            for (var y = 0; y < w.length; y++) if(chd.getAttribute("cglink")==getme) w[y].addEventListener("click", function() {
+                var box = cG.cPanel[getme].data(cG.cPanel[getme].prev());
+                document.getElementById(getme+"_location").title = box.hover;
+                var boe = document.getElementById(getme);
+                classstuff = (boe.getAttribute("comix"))?document.getElementsByClassName("cGtitle"):[];
+                for(var eq=0;eq<classstuff.length;eq++) classstuff[eq].innerHTML=box.title;
+            });
+            for (var y = 0; y < e.length; y++) if(chd.getAttribute("cglink")==getme) e[y].addEventListener("click", function() {
+                var box = cG.cPanel[getme].data(cG.cPanel[getme].rand());
+                document.getElementById(getme+"_location").title = box.hover;
+                var boe = document.getElementById(getme);
+                classstuff = (boe.getAttribute("comix"))?document.getElementsByClassName("cGtitle"):[];
+                for(var eq=0;eq<classstuff.length;eq++) classstuff[eq].innerHTML=box.title;
+            });
+            for (var y = 0; y < r.length; y++) if(chd.getAttribute("cglink")==getme) r[y].addEventListener("click", function() {
+                var box = cG.cPanel[getme].data(cG.cPanel[getme].next());
+                document.getElementById(getme+"_location").title = box.hover;
+                var boe = document.getElementById(getme);
+                classstuff = (boe.getAttribute("comix"))?document.getElementsByClassName("cGtitle"):[];
+                for(var eq=0;eq<classstuff.length;eq++) classstuff[eq].innerHTML=box.title;
+            });
+            for (var y = 0; y < t.length; y++) if(chd.getAttribute("cglink")==getme) t[y].addEventListener("click", function() {
+                var box = cG.cPanel[getme].data(cG.cPanel[getme].last());
+                document.getElementById(getme+"_location").title = box.hover;
+                var boe = document.getElementById(getme);
+                classstuff = (boe.getAttribute("comix"))?document.getElementsByClassName("cGtitle"):[];
+                for(var eq=0;eq<classstuff.length;eq++) classstuff[eq].innerHTML=box.title;
+            });
+        };
     if(void 0 === SPECIFIC) stages = document.getElementsByClassName("venue");/*get all entry points*/
     else if(Array.isArray(SPECIFIC)){
         if(SPECIFIC.length>0) if(void 0 ===SPECIFIC[0].nodeName) return console.error(errr);
@@ -389,66 +438,30 @@ cG.controlInjection = function(SPECIFIC){
         if(void 0 === SPECIFIC.nodeName) return console.error(errr);
         stages.push(SPECIFIC);/*if not array and not undefined, assume it is a Element*/
     }
+    var exist = document.querySelectorAll('[cglink]'),
+        linkcg;
+    //console.log(exist)
+    for(var v=0;v<exist.length;v++){
+        linkcg = exist[v].getAttribute("cglink");
+        if(cG.cPanel[linkcg]!==void 0&&cG.cPanel[linkcg]!==null){
+            cG.cPanel[linkcg].brains = cG.cPanel[linkcg].brains || [];
+            cG.cPanel[linkcg].brains.push(exist[v]);
+            eventer(document.getElementById(linkcg),exist[v]);
+        }
+    }
     for(var u=0;u<stages.length;u++){
-        pod = document.createElement("DIV");
-        pod.innerHTML=ctrls;
-        podling = pod.children[0];
-        if(!stages[u].getAttribute("comix")) podling.setAttribute("style","display:none;");
-        else podling.setAttribute("style","display:block;");
-        podling.setAttribute("cGlink",stages[u].id);
-        stages[u].parentNode.insertBefore(podling, stages[u].nextSibling);
-        //console.log(stages[u],stages[u].nextSibling)
-        cG.cPanel[stages[u].id].brains = cG.cPanel[stages[u].id].brains || [];
-        cG.cPanel[stages[u].id].brains.push(podling);
         if(!stages[u].getAttribute("mind")){//add event handlers
-            stages[u].setAttribute("mind",1);
-            document.getElementById(stages[u].id+"_location").title=cG.cPanel[stages[u].id].data().hover;
-            var classstuff = (stages[u].getAttribute("comix"))?document.getElementsByClassName("cGtitle"):[];
-            for(var eq=0;eq<classstuff.length;eq++)
-                classstuff[eq].innerHTML=cG.cPanel[stages[u].id].data().title;
-            var q=document.getElementsByClassName("frst"),
-                w=document.getElementsByClassName("prev"),
-                e=document.getElementsByClassName("rand"),
-                r=document.getElementsByClassName("next"),
-                t=document.getElementsByClassName("last"),
-                getme=""+stages[u].id;
-            //console.log(q,w,e,r,t,cG.cPanel["def_"+name]);
-            for (var y = 0; y < q.length; y++) if(podling.getAttribute("cglink")==getme) q[y].addEventListener("click", function() {  
-                //console.log(getme)
-                box = cG.cPanel[getme].data(cG.cPanel[getme].frst());
-                document.getElementById(getme+"_location").title = box.hover;
-                var boe = document.getElementById(getme);
-                classstuff = (boe.getAttribute("comix"))?document.getElementsByClassName("cGtitle"):[];
-                for(var eq=0;eq<classstuff.length;eq++) classstuff[eq].innerHTML=box.title;
-            });
-            for (var y = 0; y < w.length; y++) if(podling.getAttribute("cglink")==getme) w[y].addEventListener("click", function() {
-                box = cG.cPanel[getme].data(cG.cPanel[getme].prev());
-                document.getElementById(getme+"_location").title = box.hover;
-                var boe = document.getElementById(getme);
-                classstuff = (boe.getAttribute("comix"))?document.getElementsByClassName("cGtitle"):[];
-                for(var eq=0;eq<classstuff.length;eq++) classstuff[eq].innerHTML=box.title;
-            });
-            for (var y = 0; y < e.length; y++) if(podling.getAttribute("cglink")==getme) e[y].addEventListener("click", function() {
-                box = cG.cPanel[getme].data(cG.cPanel[getme].rand());
-                document.getElementById(getme+"_location").title = box.hover;
-                var boe = document.getElementById(getme);
-                classstuff = (boe.getAttribute("comix"))?document.getElementsByClassName("cGtitle"):[];
-                for(var eq=0;eq<classstuff.length;eq++) classstuff[eq].innerHTML=box.title;
-            });
-            for (var y = 0; y < r.length; y++) if(podling.getAttribute("cglink")==getme) r[y].addEventListener("click", function() {
-                box = cG.cPanel[getme].data(cG.cPanel[getme].next());
-                document.getElementById(getme+"_location").title = box.hover;
-                var boe = document.getElementById(getme);
-                classstuff = (boe.getAttribute("comix"))?document.getElementsByClassName("cGtitle"):[];
-                for(var eq=0;eq<classstuff.length;eq++) classstuff[eq].innerHTML=box.title;
-            });
-            for (var y = 0; y < t.length; y++) if(podling.getAttribute("cglink")==getme) t[y].addEventListener("click", function() {
-                box = cG.cPanel[getme].data(cG.cPanel[getme].last());
-                document.getElementById(getme+"_location").title = box.hover;
-                var boe = document.getElementById(getme);
-                classstuff = (boe.getAttribute("comix"))?document.getElementsByClassName("cGtitle"):[];
-                for(var eq=0;eq<classstuff.length;eq++) classstuff[eq].innerHTML=box.title;
-            });
+            pod = document.createElement("DIV");
+            pod.innerHTML=ctrls;
+            podling = pod.children[0];
+            if(!stages[u].getAttribute("comix")) podling.setAttribute("style","display:none;");
+            else podling.setAttribute("style","display:block;");
+            podling.setAttribute("cglink",stages[u].id);
+            stages[u].parentNode.insertBefore(podling, stages[u].nextSibling);
+            //console.log(stages[u],stages[u].nextSibling)
+            cG.cPanel[stages[u].id].brains = cG.cPanel[stages[u].id].brains || [];
+            cG.cPanel[stages[u].id].brains.push(podling);
+            eventer(stages[u],podling);
         }
     }
 }
