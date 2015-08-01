@@ -224,19 +224,22 @@ return a};this.frst=function(){0<=n&&r(k,0);return 0};this.last=function(){r(k,h
                 modify = (cG.script.config.pagestartnum)?1:0,
                 result = cG.cPanel[/*"def_"+*/name].current();
             switch(cG.script.config.orderby) {
-                case 2:
+                case 1:
+                    console.log(result);
                     var mechp = cG.cPanel[/*"def_"+*/name].ch_current();
-                    result=(mechp+chpmod)+"/"+(result-mechp+modify)
+                    result=(mechp+chpmod)+"/"+(result-cG.cPanel[/*"def_"+*/name].internals.chapters[mechp].start+modify)
                     break;
-                case 3:
-                    var nT = new Date(cG.cPanel[/*"def_"+*/name].data().release);
+                case 2:
+                    var nT = new Date(cG.cPanel[/*"def_"+*/name].data().release*1000);
                     var guide=cG.script.config.dateformat.split("/");
                     for(var tim=0;tim<3;tim++){
-                        if(guide[tim].indexOf("Y")+1) guide[tim]=nT.getYear();
-                        else if(guide[tim].indexOf("M")+1) guide[tim]=nT.getMonth();
-                        else if(guide[tim].indexOf("D")+1) guide[tim]=nT.getDay();
+                        if(guide[tim].indexOf("Y")+1) guide[tim]=nT.getYear()-100;
+                        else if(guide[tim].indexOf("M")+1) guide[tim]=nT.getMonth()+1;
+                        else if(guide[tim].indexOf("D")+1) guide[tim]=nT.getDate();
                     }
                     result=guide.join("/");
+                    //console.log(result,guide,nT);
+                    break;
                 default:
                     result+=modify;
             }
@@ -346,6 +349,8 @@ cG.queue.stageChange={controller:function(target){
     //console.log(target.data().desig);
     var b,
         c,
+        key,
+        mykey,
         bcollect=[],
         check = target.data().desig;
     for(var o=0;o<target.brains.length;o++){
@@ -355,21 +360,30 @@ cG.queue.stageChange={controller:function(target){
             b=bcollect[p];
             c=b.getAttribute("class");
             //console.log(b,p,bcollect);
+            //console.log(target.brains[o],b.getAttribute("nohide"))
+            key = target.brains[o].getAttribute("nohide");
+            if(key) mykey = key;
+            else mykey = "disable";
+            //console.log(check)
             if((c=="frst"||c=="prev")&&check==-1){
-                b.setAttribute("class","frst disable");
-                if(!b.getAttribute("nohide")) b.setAttribute("style","display:none;");
+                if(c=="frst") b.setAttribute("class","frst "+mykey);
+                else b.setAttribute("class","prev "+mykey);
+                if(!key) b.setAttribute("style","display:none;");
             }
-            else if(c=="frst disable"||c=="prev disable"){
-                b.setAttribute("class","frst");
-                if(!b.getAttribute("nohide")) b.setAttribute("style","display:inline;");
+            else if((c=="frst "+mykey||c=="prev "+mykey)){
+                if(c=="frst "+mykey) b.setAttribute("class","frst");
+                else b.setAttribute("class","prev");
+                if(!key) b.setAttribute("style","display:inline;");
             }
             if((c=="last"||c=="next")&&check==1){
-                b.setAttribute("class","last disable");
-                if(!b.getAttribute("nohide")) b.setAttribute("style","display:none;");
+                if(c=="last") b.setAttribute("class","last "+mykey);
+                else b.setAttribute("class","next "+mykey);
+                if(!key) b.setAttribute("style","display:none;");
             }
-            else if(c=="last disable"||c=="next disable"){
-                b.setAttribute("class","last");
-                if(!b.getAttribute("nohide")) b.setAttribute("style","display:inline;");
+            else if((c=="last "+mykey||c=="next "+mykey)){
+                if(c=="last "+mykey) b.setAttribute("class","last");
+                else b.setAttribute("class","next");
+                if(!key) b.setAttribute("style","display:inline;");
             }
         }
     }
@@ -382,9 +396,15 @@ cG.controlInjection = function(SPECIFIC){
         eventer=function(par,chd){
             par.setAttribute("mind",1);
             document.getElementById(par.id+"_location").title=cG.cPanel[par.id].data().hover;
-            var classstuff = (par.getAttribute("comix"))?document.getElementsByClassName("cGtitle"):[];
+            var classstuff = (par.getAttribute("comix"))?document.getElementsByClassName("cgtitle"):[],
+                working,
+                classdate = (par.getAttribute("comix"))?document.getElementsByClassName("cgdate"):[];
             for(var eq=0;eq<classstuff.length;eq++)
                 classstuff[eq].innerHTML=cG.cPanel[par.id].data().title;
+            for(var eq=0;eq<classdate.length;eq++){
+                working=new Date(cG.cPanel[par.id].data().release*1000);
+                classdate[eq].innerHTML = working.toDateString();
+            }
             var q=document.getElementsByClassName("frst"),
                 w=document.getElementsByClassName("prev"),
                 e=document.getElementsByClassName("rand"),
@@ -392,41 +412,82 @@ cG.controlInjection = function(SPECIFIC){
                 t=document.getElementsByClassName("last"),
                 getme=""+par.id;
             //console.log(q,w,e,r,t,cG.cPanel["def_"+name]);
-            for (var y = 0; y < q.length; y++) if(chd.getAttribute("cglink")==getme) q[y].addEventListener("click", function() {  
-                var box = cG.cPanel[getme].data(cG.cPanel[getme].frst());
-                document.getElementById(getme+"_location").title = box.hover;
-                var boe = document.getElementById(getme);
-                classstuff = (boe.getAttribute("comix"))?document.getElementsByClassName("cGtitle"):[];
-                for(var eq=0;eq<classstuff.length;eq++) classstuff[eq].innerHTML=box.title;
-            });
-            for (var y = 0; y < w.length; y++) if(chd.getAttribute("cglink")==getme) w[y].addEventListener("click", function() {
-                var box = cG.cPanel[getme].data(cG.cPanel[getme].prev());
-                document.getElementById(getme+"_location").title = box.hover;
-                var boe = document.getElementById(getme);
-                classstuff = (boe.getAttribute("comix"))?document.getElementsByClassName("cGtitle"):[];
-                for(var eq=0;eq<classstuff.length;eq++) classstuff[eq].innerHTML=box.title;
-            });
-            for (var y = 0; y < e.length; y++) if(chd.getAttribute("cglink")==getme) e[y].addEventListener("click", function() {
-                var box = cG.cPanel[getme].data(cG.cPanel[getme].rand());
-                document.getElementById(getme+"_location").title = box.hover;
-                var boe = document.getElementById(getme);
-                classstuff = (boe.getAttribute("comix"))?document.getElementsByClassName("cGtitle"):[];
-                for(var eq=0;eq<classstuff.length;eq++) classstuff[eq].innerHTML=box.title;
-            });
-            for (var y = 0; y < r.length; y++) if(chd.getAttribute("cglink")==getme) r[y].addEventListener("click", function() {
-                var box = cG.cPanel[getme].data(cG.cPanel[getme].next());
-                document.getElementById(getme+"_location").title = box.hover;
-                var boe = document.getElementById(getme);
-                classstuff = (boe.getAttribute("comix"))?document.getElementsByClassName("cGtitle"):[];
-                for(var eq=0;eq<classstuff.length;eq++) classstuff[eq].innerHTML=box.title;
-            });
-            for (var y = 0; y < t.length; y++) if(chd.getAttribute("cglink")==getme) t[y].addEventListener("click", function() {
-                var box = cG.cPanel[getme].data(cG.cPanel[getme].last());
-                document.getElementById(getme+"_location").title = box.hover;
-                var boe = document.getElementById(getme);
-                classstuff = (boe.getAttribute("comix"))?document.getElementsByClassName("cGtitle"):[];
-                for(var eq=0;eq<classstuff.length;eq++) classstuff[eq].innerHTML=box.title;
-            });
+            //console.log(arguments.callee,chd);
+            for (var y = 0; y < q.length; y++){
+                if(chd.getAttribute("cglink")==getme&&!q[y].getAttribute("cgae")) q[y].addEventListener("click", function() {  
+                    var box = cG.cPanel[getme].data(cG.cPanel[getme].frst());
+                    document.getElementById(getme+"_location").title = box.hover;
+                    var boe = document.getElementById(getme);
+                    classstuff = (boe.getAttribute("comix"))?document.getElementsByClassName("cgtitle"):[];
+                    for(var eq=0;eq<classstuff.length;eq++) classstuff[eq].innerHTML=box.title;
+                    classdate = (boe.getAttribute("comix"))?document.getElementsByClassName("cgdate"):[];
+                    for(var eq=0;eq<classdate.length;eq++){
+                        working=new Date(cG.cPanel[par.id].data().release*1000);
+                        classdate[eq].innerHTML = working.toDateString();
+                    }
+                });
+                q[y].setAttribute("cgae","1");
+            }
+            for (var y = 0; y < w.length; y++){
+                if(chd.getAttribute("cglink")==getme&&!w[y].getAttribute("cgae")) w[y].addEventListener("click", function() {
+                    var box = cG.cPanel[getme].data(cG.cPanel[getme].prev());
+                    document.getElementById(getme+"_location").title = box.hover;
+                    var boe = document.getElementById(getme);
+                    classstuff = (boe.getAttribute("comix"))?document.getElementsByClassName("cgtitle"):[];
+                    for(var eq=0;eq<classstuff.length;eq++) classstuff[eq].innerHTML=box.title;
+                    classdate = (boe.getAttribute("comix"))?document.getElementsByClassName("cgdate"):[];
+                    for(var eq=0;eq<classdate.length;eq++){
+                        working=new Date(cG.cPanel[par.id].data().release*1000);
+                        classdate[eq].innerHTML = working.toDateString();
+                    }
+                });
+                w[y].setAttribute("cgae","1");
+            }
+            for (var y = 0; y < e.length; y++){
+                if(chd.getAttribute("cglink")==getme&&!e[y].getAttribute("cgae")) e[y].addEventListener("click", function() {
+                    var box = cG.cPanel[getme].data(cG.cPanel[getme].rand());
+                    document.getElementById(getme+"_location").title = box.hover;
+                    var boe = document.getElementById(getme);
+                    classstuff = (boe.getAttribute("comix"))?document.getElementsByClassName("cgtitle"):[];
+                    for(var eq=0;eq<classstuff.length;eq++) classstuff[eq].innerHTML=box.title;
+                    classdate = (boe.getAttribute("comix"))?document.getElementsByClassName("cgdate"):[];
+                    for(var eq=0;eq<classdate.length;eq++){
+                        working=new Date(cG.cPanel[par.id].data().release*1000);
+                        classdate[eq].innerHTML = working.toDateString();
+                    }
+                });
+                e[y].setAttribute("cgae","1");
+            }
+            for (var y = 0; y < r.length; y++){
+                if(chd.getAttribute("cglink")==getme&&!r[y].getAttribute("cgae")) r[y].addEventListener("click", function() {
+                    var box = cG.cPanel[getme].data(cG.cPanel[getme].next());
+                    document.getElementById(getme+"_location").title = box.hover;
+                    var boe = document.getElementById(getme);
+                    classstuff = (boe.getAttribute("comix"))?document.getElementsByClassName("cgtitle"):[];
+                    for(var eq=0;eq<classstuff.length;eq++) classstuff[eq].innerHTML=box.title;
+                    classdate = (boe.getAttribute("comix"))?document.getElementsByClassName("cgdate"):[];
+                    for(var eq=0;eq<classdate.length;eq++){
+                        working=new Date(cG.cPanel[par.id].data().release*1000);
+                        classdate[eq].innerHTML = working.toDateString();
+                    }
+                });
+                r[y].setAttribute("cgae","1");
+            }
+            for (var y = 0; y < t.length; y++){
+                if(chd.getAttribute("cglink")==getme&&!t[y].getAttribute("cgae")) t[y].addEventListener("click", function() {
+                    var box = cG.cPanel[getme].data(cG.cPanel[getme].last());
+                    document.getElementById(getme+"_location").title = box.hover;
+                    var boe = document.getElementById(getme);
+                    classstuff = (boe.getAttribute("comix"))?document.getElementsByClassName("cgtitle"):[];
+                    for(var eq=0;eq<classstuff.length;eq++) classstuff[eq].innerHTML=box.title;
+                    classdate = (boe.getAttribute("comix"))?document.getElementsByClassName("cgdate"):[];
+                    for(var eq=0;eq<classdate.length;eq++){
+                        working=new Date(cG.cPanel[par.id].data().release*1000);
+                        classdate[eq].innerHTML = working.toDateString();
+                    }
+                });
+                t[y].setAttribute("cgae","1");
+            }
         };
     if(void 0 === SPECIFIC) stages = document.getElementsByClassName("venue");/*get all entry points*/
     else if(Array.isArray(SPECIFIC)){
@@ -701,7 +762,7 @@ cG.route2page = cG.route2page||function(orgvalue){
         var box = cG.comix.data(cG.prePage);
         document.getElementById(cG.comix.name+"_location").title = box.hover;
         var boe = document.getElementById(cG.comix.name+"_location");
-        var csf = document.getElementsByClassName("cGtitle");
+        var csf = document.getElementsByClassName("cgtitle");
         for(var eq=0;eq<csf.length;eq++) csf[eq].innerHTML=box.title;
         //console.log(cG.comix.name+"_location");
     }
