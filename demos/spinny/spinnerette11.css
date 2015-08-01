@@ -178,7 +178,7 @@ padding:0 0 0 1px;
 #latest-cover-overlay {
 width:136px;
 height:113px;
-background:url('http://spinnyverse.com/images/issue-selector-overlay.png) no-repeat;
+background:url('http://spinnyverse.com/images/issue-selector-overlay.png') no-repeat;
 position:absolute;
 }
 
@@ -361,28 +361,28 @@ border: none;
 .last{
 	background:url('http://spinnyverse.com/images/last.png');
 }
-.firstdis{
+.frst.disable{
 	background:url('http://spinnyverse.com/images/first.png');
 	background-position:0px -76px;
 	float:left;
 	width:38px;
 	height:40px;
 }
-.nextdis{
+.next.disable{
 	background:url('http://spinnyverse.com/images/next.png');
 	background-position:0px -76px;
 	float:left;
 	width:38px;
 	height:40px;
 }
-.prevdis{
+.prev.disable{
 	background:url('http://spinnyverse.com/images/prev.png');
 	background-position:0px -76px;
 	float:left;
 	width:38px;
 	height:40px;
 }
-.lastdis{
+.last.disable{
 	background:url('http://spinnyverse.com/images/last.png');
 	background-position:0px -76px;
 	float:left;

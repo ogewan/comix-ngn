@@ -92,44 +92,7 @@ $('.bxslider').bxSlider({
   preloadimages: 'all',
   randomStart: true, 
 });</script>-->
-<script>
-        //console.log("scripting");
-    var disposeme = function() {
-        //console.log("running");
-        var name = "strip";//document.getElementById("comic").getAttribute("id");
-        if(cG===void 0) return setTimeout(disposeme, 400);
-        else if(cG.cPanel===void 0) return setTimeout(disposeme, 400);
-        else if(cG.cPanel["def_"+name]===void 0) return setTimeout(disposeme, 400);
-        else if(cG.cPanel["def_"+name]===void 0) return setTimeout(disposeme, 400);//possible race condition bug, when url has hash in it
-        else if(cG.cPanel["def_"+name].data()===void 0) return setTimeout(disposeme, 400);//possible race condition bug, when url has hash in it
-        //document.getElementById("comic_location").title=cG.cPanel["def_"+name].data().hover;
-        //document.getElementById("btitle").innerHTML=cG.cPanel["def_"+name].data().title;
-        //document.getElementById("ctitle").innerHTML=cG.cPanel["def_"+name].data().title;
-        var q=document.getElementsByClassName("frst"),
-            w=document.getElementsByClassName("prev"),
-            e=document.getElementsByClassName("rand"),
-            r=document.getElementsByClassName("next"),
-            t=document.getElementsByClassName("last");
-        //console.log(q,w,e,r,t,cG.cPanel["def_"+name]);
-        for (var y = 0; y < q.length; y++) q[y].addEventListener("click", function() {
-            cG.cPanel["def_"+name].data(cG.cPanel["def_"+name].frst());
-        });
-        for (var y = 0; y < w.length; y++) w[y].addEventListener("click", function() {
-            cG.cPanel["def_"+name].data(cG.cPanel["def_"+name].prev());
-        });
-        for (var y = 0; y < e.length; y++) e[y].addEventListener("click", function() {
-            cG.cPanel["def_"+name].data(cG.cPanel["def_"+name].rand());
-        });
-        for (var y = 0; y < r.length; y++) r[y].addEventListener("click", function() {
-            cG.cPanel["def_"+name].data(cG.cPanel["def_"+name].next());
-        });
-        for (var y = 0; y < t.length; y++) t[y].addEventListener("click", function() {
-            cG.cPanel["def_"+name].data(cG.cPanel["def_"+name].last());
-        });
-        //console.log("complete");
-    }
-    disposeme();
-</script>
+
 </head>
 <body TOPMARGIN="0" RIGHTMARGIN="0" LEFTMARGIN="0" MARGINHEIGHT="0" MARGINWIDTH="0">
 <!--CNG-home-->
@@ -218,7 +181,7 @@ pw_d.projectwonderful_background_color = "";
 </script>
 	-->
 
-<ul class="inline-list" id="comicnav">
+<ul class="inline-list" id="comicnav" cglink="strip">
 <li><button class="frst">First</button></li>
 <li><button class="prev">Previous</button></li>
 <li><button class="next">Next</button></li>
@@ -230,16 +193,12 @@ pw_d.projectwonderful_background_color = "";
 
 	
 
-<ul class="inline-list" id="comicnav">
-<li><a href="view.php?comic=1">First</a></li>
-
-<li><a href="view.php?comic=2998">Previous</a></li>
-
-<li><a href="#">Next</a></li>
-
-<li><a href="#">Last</a></li>
-
-<li><a href="http://www.questionablecontent.net/view.php?comic=717">Random</a></li>
+<ul class="inline-list" id="comicnav" cglink="strip">
+<li><button class="frst">First</button></li>
+<li><button class="prev">Previous</button></li>
+<li><button class="next">Next</button></li>
+<li><button class="last">Last</button></li>
+<li><button class="rand">Random</button></li>
 </ul>
 
 </div>
