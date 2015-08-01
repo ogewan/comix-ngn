@@ -13,7 +13,7 @@
 
 * To control the Stage. add a **[Controller]**:
 
-   ```<div cglink="cng"></div>```, *Adding the attribute* **cglink** *turns any element into a controller. Note: cglink binds the controller to a* **[stage]**
+   ```<div cglink="cng"><button class="prev"></button><button class="next"></button></div>```, *Adding the attribute* **cglink** *turns any element into a controller. Note: cglink binds the controller to a* **[stage]**
 
 * To add additional features, use a plug-in:
 
@@ -25,6 +25,9 @@
   * If using Bellerophon Embed, do not add additional plugins via the script tag. Since they load immediately while comixngn.js may be deffered, the plugins will panic and refuse to load. Simply add the plugin path as a string to the **loadcng** array in Bellerophon Embed to include plugins.
 
   * The **plugin**, **comicID**, **dir**, **tir**, and **air** variable functions exactly like the **plugin**, **comicID**, **dir**, **tir**, and **air** attributes respectively. The **disable** array functions similarly to the **disable attribute**.
+
+### Script
+If the Stage is the Body, and the Core is the Mind, then Scripts are the Soul. The Script is a JSON file that sets up the configuration options and adds images for each page. [This is how to do it.](https://github.com/ogewan/comix-ngn/wiki/How-to-Script)
 
 ### Attributes
 For more fine-grain control, use the following additional attributes or class properties:
