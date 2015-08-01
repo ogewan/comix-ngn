@@ -3,15 +3,19 @@
 
 **The Modern Webcomic Engine**
 ## Usage
-* Simply include the script:
+* Simply include the script, **[Core]**:
 
   ```<script src="comixngn.js"></script>```
 
-* And create a Webcomic Stage:
+* And create a Webcomic **[Stage]**:
 
-   ```<div id class="venue"></div>```
+   ```<div id="cng" class="venue"></div>```, *Adding the class* **venue** *turns any element into a stage*
 
-* To add additional features, use a plug-in.
+* To control the Stage. add a **[Controller]**:
+
+   ```<div cglink="cng"></div>```, *Adding the attribute* **cglink** *turns any element into a controller. Note: cglink binds the controller to a* **[stage]**
+
+* To add additional features, use a plug-in:
 
    ```<script src="bellerophon.cng.min.js"></script>```
 
@@ -22,21 +26,27 @@
 
   * The **plugin**, **comicID**, **dir**, **tir**, and **air** variable functions exactly like the **plugin**, **comicID**, **dir**, **tir**, and **air** attributes respectively. The **disable** array functions similarly to the **disable attribute**.
 
-* For more fine-grain control, use the following additional attributes:
-  * __comicID__ - This sets the Id of the comic which is allows the framework to save site specific settings to user's browsers, such as most recently viewed page. It will default to the website's host name if not given.
+### Attributes
+For more fine-grain control, use the following additional attributes or class properties:
+* __SPECIAL__ - These classes change the properties of whatever they are set on.
+  * __cgdate__ - This sets the elements [innerHTML](https://developer.mozilla.org/en-US/docs/Web/API/Element/innerHTML) or inner text to the release date of Stage page.
+  * __cgtitle__ - This sets the elements [innerHTML](https://developer.mozilla.org/en-US/docs/Web/API/Element/innerHTML) or inner text to the title of Stage page.
+* __CORE__ - These attributes customizes settings and performance of comix-ngn.
+  * __comicID__ - This sets the ID of the comic which is allows the framework to save site specific settings to user's browsers, such as most recently viewed page. It will default to the website's host name if not given.
 
   ```<script src="comixngn.js" comixID="comixngn"></script>```
 
   * __dir__ , __tir__ & __air__ - dir sets the directory of all the scripts, tir sets the directory of all html templates, and air overrides the asset directory listed in script.json. If the scripts or html templates are in the root directory, the attributes can be blank, which is the default. If air is left blank it will default to the directory present in the script.json. Note: you must include the ending slash in the path.
 
-  * __plugin__ - By default, the last installed plugin will be set as default. To use a specific plug-in as default, simply set the **plugthin** attribute in the script tag to the plugin name. Setting it to "default" will use the original framework settings. Setting it as an array, will create plug-in priority. ~~Note, an array must be submitted as a string: "1,2,3"~~. Priority queue is currently unsupported.
+  * __plugin__ - By default, the last installed plugin will be set as default. To use a specific plug-in as default, simply set the **plugin** attribute in the script tag to the plugin name. Setting it to "default" will use the original framework settings. Setting it as an array, will create plug-in priority. ~~Note, an array must be submitted as a string: "1,2,3"~~. Priority queue is currently unsupported.
 
   ```<script src="comixngn.js" plugin="default"></script>```
 
   * __disable__ - This disables comix-ngn's error reporting and tracking functions. An array can be provided, to disable multiple error reporters, but it must be submitted as a string: "1,2,3". Currently, comix-ngn uses RollBar.
 
   ```<script src="comixngn.js" disable="rollbar"></script>```
-
+* __STAGE__ - These attributes customizes and changes the functionality of a Webcomic Stage
+  * __id__ - __[OPTIONAL]__ This sets the id that refers to the HTML element containing the Stage. Although it is optional, it is __[RECOMMENDED]__ to set because it is __[REQUIRED]__ to link a control element to.
   * __use__ - Stages will use the currently set defaults for creation and operation. Simply set the **use** attribute in the "venue" element that you want to use specified plug-ins for. Setting it to "default" will use the original framework settings. Setting it as an array, will create plugin priority. Note, an array must be submitted as a string: "[1,2,3]".
 
   ```<div id class="venue" use="[Infinite, Parallel]"></div>```
@@ -55,4 +65,8 @@
     "continuous": true,
   }" ></div>
   ```
+* __CONTROLLER__ - This customizes a controller element.
+  * __cglink__ - This designates an element as a controller. Its value must be the ID of the stage it controls.
+  * __nohide__ - By default, certain buttons will be hidden automatically on certain conditions. To disable this functionality, add this attribute. The value that this attribute is set to will become a class that is added to the element on those conditions.
+
 _*Time to render or DOM Content Loaded_
