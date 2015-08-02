@@ -139,7 +139,7 @@
             <h2 class="title">Features</h2>
             <ul class="feature-list list-unstyled">
                 <li><i class="fa fa-check"></i> Remarklably easy to set up, can be done in two HTML tags</li>
-                <li><i class="fa fa-check"></i> 23 KB Minified + No external dependicies</li>
+                <li><i class="fa fa-check"></i> 36 KB Minified + No external dependicies</li>
                 <li><i class="fa fa-check"></i> Loads fast on first load, 200-400 ms</li>
                 <li><i class="fa fa-check"></i> Drastically reduces page reloads and page requests, as everything is down on a single page</li>
                 <li><i class="fa fa-check"></i> Does not conflict with any other JS libraries, it minds its own buisness</li>
@@ -159,30 +159,38 @@
     <section id="docs" class="docs section">
         <div class="container">
             <div class="docs-inner">
-                <h2 class="title text-center">Get Started</h2>            
+                <h2 class="title text-center">Get Started</h2>
                 <div class="block">
                     <div class="code-block">
                         <ul>
-                            <li>Simply include the script:
-                                <pre><code class="language-markup">&lt;script src=&quot;comixngn.js&quot;&gt;&lt;/script&gt;</code></pre>
+                            <li>Simply include the script, <strong>[Core]</strong>:
+                                <pre><code class="language-markup">lt;script src=&quot;comixngn.js&quot;&gt;&lt;/script&gt;</code></pre>
                             </li>
-                            <li>And create a Webcomic Stage:
-                                <pre><code class="language-markup">&lt;div id class=&quot;venue&quot;&gt;&lt;/div&gt;</code></pre>
+                            <li>And create a Webcomic <strong>[Stage]</strong>:
+                                <pre><code class="language-markup">&lt;div id=&quot;cng&quot; class=&quot;venue&quot;&gt;&lt;/div&gt;</code></pre> <em>Adding the class</em> <strong>venue</strong> <em>turns any element into a stage</em>
                             </li>
-                            <li>
-                                To add additional features, use a plug-in:
+                            <li>To control the Stage. add a <strong>[Controller]</strong>:
+                                <pre><code class="language-markup">&lt;div cglink=&quot;cng&quot;&gt;&lt;button class=&quot;prev&quot;&gt;&lt;/button&gt;&lt;button class=&quot;next&quot;&gt;&lt;/button&gt;&lt;/div&gt;</code></pre><em>Adding the attribute</em> <strong>cglink</strong> <em>turns any element into a controller. Note: cglink binds the controller to a</em> <strong>[stage]</strong>
+                            </li>
+                            <li>To add additional features, use a plug-in:
                                 <pre><code class="language-markup">&lt;script src=&quot;bellerophon.cng.min.js&quot;&gt;&lt;/script&gt;</code></pre>
                             </li>
                             <li>
-                                <p><strong>[Recommended]</strong>: For fastest load time, copy and paste the  contents of <strong>bellerophon.cng.min.embed.html</strong> into your html. While this adds 1.8KB to your HTML file that won't be cached, it will virtually eliminate the app from increasing the load time of your site*.</p>
+                                <p><strong>[Recommended]</strong>: For fastest load time, copy and paste the contents of <strong>bellerophon.cng.min.embed.html</strong> into your html. While this adds 1.8KB to your HTML file that won't be cached, it will virtually eliminate the app from increasing the load time of your site*.</p>
                                 <ul>
+                                    <li>
+                                        <p>set <strong>defer</strong> = true or !0, to defer the loading of all of the apps scripts so that it is removed from the critical render path. Set it to false or 0, to load immediately <strong>[Not Recommended]</strong>.</p>
+                                    </li>
+                                    <li>
+                                        <p>set <strong>mainsrc</strong> to the version of comix-ngn use want to use: comixngn.js or comixngn.min.js <strong>[Recommended]</strong>. You probably shouldn't change this unless you are debugging.</p>
+                                    </li>
                                     <li>
                                         <p>If using Bellerophon Embed, do not add additional plugins via the script tag. Since they load immediately while comixngn.js may be deffered, the plugins will panic and refuse to load. Simply add the plugin path as a string to the <strong>loadcng</strong> array in Bellerophon Embed to include plugins.</p>
                                     </li>
                                 </ul>
                             </li>
-                            <p><em>*Time to render or DOM Content Loaded</em></p>
                         </ul>
+                        <p><em>*Time to render or DOM Content Loaded</em></p>
                     </div>
                 </div><!--//block-->
                 <h2 class="title text-center">Setting the Stage</h2>            
