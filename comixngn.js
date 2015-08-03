@@ -1,31 +1,37 @@
-/** @preserve comix-ngn v1.1.0 | (c) 2015 Oluwaseun Ogedengbe| ogewan.github.io/comix-ngn/ |License: MIT|
+/** @preserve comix-ngn v1.1.1 | (c) 2015 Oluwaseun Ogedengbe| ogewan.github.io/comix-ngn/ |License: MIT|
 embeds domReady: github.com/ded/domready (MIT) (c) 2013 Dustin Diaz, pegasus: typicode.github.io/pegasus (MIT) (c) 2014 typicode, pathjs (MIT) (c) 2011 Mike Trpcic, direction.js*/
-
-var cG = cG||{};/*if(void 0===cG) var cG = {};*//*check if cG is already is instantiated*/
+/*The namespace of comix-ngn
+all variables should be properties of this to prevent global namespace pollution*/
+var cG = cG||{};/*Instantiate cG if not*/
 /*comix-ngn default properties*/
 /*IMMUTABLE*/
-/*version settings*/
 cG.N =function(){return 0};/*null function*/
-if(void 0===cG.$GPC){cG.$GPC=0;}
-cG.root = '';
-cG.cPanel = cG.cPanel||{};
-cG.info = {vix: "1.1.0",vwr: "0.5.0",vpr: "0.1.0"};
-cG.dis = cG.dis||{};
-cG.recyclebin = cG.recyclebin||{};
-cG.queue = cG.queue||{};
-cG.comicID = cG.comicID||window.location.host;
-cG.prePage = cG.prePage||-1;
-cG.controllers = cG.controllers||{};
+if(void 0===cG.$GPC){cG.$GPC=0;}/*Global Plugin Counter (no longer global)*/
+cG.root = '';/*current default settings of cng, overwritten by plugins*/
+cG.cPanel = cG.cPanel||{};/*cG control panel, all stages are stored here*/
+cG.info = {vix: "1.1.1",vwr: "0.5.0",vpr: "0.1.0"};/*version settings*/
+cG.dis = cG.dis||{};//disables statistic and error reporting
+cG.recyclebin = cG.recyclebin||{};//variables that are used in initialization, disposed at stage injection
+cG.queue = cG.queue||{};//stores functions that are called incertain events
+cG.comicID = cG.comicID||window.location.host;//unique comic ID, defaults to host
+cG.prePage = cG.prePage||-1;//page given to the engine before initialization finishes, navigates if 0 or higher
+cG.controllers = cG.controllers||{};//stores all nav bars that control stages here
+//self executable function (SEF): retrieve additional parameters from script tag
 !function(){
-    var selfScript = document.getElementsByTagName("SCRIPT");
-    //console.log(selfScript);
+    //get all scripts
+    var selfScript = document.getElementsByTagName("SCRIPT"),
+        pass=0;//checks if search is succesful
+    //if no scripts can be found ATM, simply quit
     if(void 0!==selfScript||selfScript!==null){
+        //iterate over all scripts till you find this one, (comixngn.min) matches as well
         for(var q = 0;q<selfScript.length;q++){
-            if(selfScript[q].src.indexOf("comixngn")>=0){
+            if(selfScript[q].src.indexOf("comixngn")>=0){//found one
                 selfScript = selfScript[q];
+                pass=1;
                 break;
             }
         }
+        if(!pass) return -1;//return if not found
         cG.comicID = (selfScript.getAttribute("comicID") !== void 0&&selfScript.getAttribute("disable") !== null)?selfScript.getAttribute("comicID"):cG.comicID;
         if(selfScript.getAttribute("plugin") !== void 0&&selfScript.getAttribute("plugin")!==null){
             var plugin = selfScript.getAttribute("plugin").replace(/\s+/g, '').split(',');
@@ -248,7 +254,7 @@ return a};this.frst=function(){0<=n&&r(k,0);return 0};this.last=function(){r(k,h
             history.pushState({}, null, "#/"+result);
         }
         if(cG.queue.stageChange!==void 0)
-            for(ftn in cG.queue.stageChange){
+            for(var ftn in cG.queue.stageChange){
                 if (cG.queue.stageChange.hasOwnProperty(ftn)) cG.queue.stageChange[ftn](cG.cPanel[/*"def_"+*/name]);
             }
         var strct = cG.cPanel[/*"def_"+*/name].data(cG.cPanel[/*"def_"+*/name].current()).special;
