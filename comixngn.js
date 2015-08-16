@@ -351,7 +351,8 @@ cG.HELPERS = {};
 }();
 /*STAGE creation-REDACTED*/
 cG.HELPERS.jstagecreate = cG.N;
-cG.queue.stageChange={controller:function(target){
+cG.queue.stageChange=cG.queue.stageChange||{};
+cG.queue.stageChange.controller=function(target){
     //console.log(target.data().desig);
     var b,
         c,
@@ -393,7 +394,7 @@ cG.queue.stageChange={controller:function(target){
             }
         }
     }
-}};
+};
 cG.controlInjection = function(SPECIFIC){
     var stages = [],
         ctrls = (cG.ctrls)?cG.ctrls:'<ul><li style="display: inline;"><button class="frst" >|&lt;</button></li><li style="display: inline;"><button class="prev" rel="prev" accesskey="p">&lt; Prev</button></li><li style="display: inline;"><button class="rand" >Random</button></li><li style="display: inline;"><button class="next" rel="next" accesskey="n">Next &gt;</button></li><li style="display: inline;"><button class="last" >&gt;|</button></li></ul>',
