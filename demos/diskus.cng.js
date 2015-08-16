@@ -40,7 +40,7 @@ Order: after comixngn.js
                     cG.disqus.url = b.disqus_url;
                 }
                 var settheRESET = function(){
-                    console.log(window.DISQUS,"setTHERESET");
+                    console.log(window.DISQUS,void 0,"setTHERESET");
                     if(window.DISQUS===void 0||window.DISQUS===null) setTimeout(settheRESET, 400);
                     else{
                         window.DISQUS.reset({
