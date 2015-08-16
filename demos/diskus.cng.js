@@ -8,7 +8,7 @@ Order: after comixngn.js
         if(cG.$GPC === void 0) cG.$GPC = 1;/*Global Plug in count*/
         else cG.$GPC++;
         var slfScr = document.getElementsByTagName("SCRIPT");
-        console.log(cG.disqus);
+        ccconsole.log(cG.disqus);
         if((void 0!==slfScr||slfScr!==null)&&(void 0===cG.disqus.shortname||cG.disqus.shortname===null)){
             for(var q = 0;q<slfScr.length;q++){
                 if(slfScr[q].src.indexOf("diskus")>=0){
@@ -28,7 +28,7 @@ Order: after comixngn.js
             //cG.disqus.disqus_title = '';
             //cG.disqus.disqus_url = '';
             cG.queue=cG.queue||{};
-            cG.queue.stageChange=cG.queue.stageChange||[];
+            cG.queue.stageChange=cG.queue.stageChange||{};
             cG.queue.stageChange.diskus = function(a,c){
                 console.log(c,a.data(),cG.disqus,window.DISQUS);
                 if(c){
@@ -47,6 +47,7 @@ Order: after comixngn.js
                     }
                 });
             };
+            console.log(cG.queue.stageChange.diskus);
             /*cG.queue=cG.queue||[];
             cG.queue.stageInjection=cG.queue.stageInjection||[];
             cG.queue.stageInjection.push("disqus");*/
