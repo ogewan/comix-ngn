@@ -8,7 +8,7 @@ Order: after comixngn.js
         if(cG.$GPC === void 0) cG.$GPC = 1;/*Global Plug in count*/
         else cG.$GPC++;
         var slfScr = document.getElementsByTagName("SCRIPT");
-        //console.log(cG.disqus);
+        console.log(cG.disqus);
         if((void 0!==slfScr||slfScr!==null)&&(void 0===cG.disqus.shortname||cG.disqus.shortname===null)){
             for(var q = 0;q<slfScr.length;q++){
                 if(slfScr[q].src.indexOf("diskus")>=0){
@@ -19,7 +19,7 @@ Order: after comixngn.js
             return console.error("CNG Plug-in: Diskus requires a disqus_shortname");
         }
         var ready = function(){/*runs once the DOM is ready*/
-            //console.log("diskus ready running");
+            console.log("diskus ready running");
             var dsq = document.createElement('script');
             dsq.type = 'text/javascript'; dsq.async = true;
             dsq.src = '//' + cG.disqus.shortname + '.disqus.com/embed.js';
