@@ -41,7 +41,8 @@ Order: after comixngn.js
                 }
                 var settheRESET = function(){
                     console.log(window.DISQUS,"setTHERESET");
-                    if(window.DISQUS===void 0||window.DISQUS===null){
+                    if(window.DISQUS===void 0||window.DISQUS===null) setTimeout(settheRESET, 400);
+                    else{
                         window.DISQUS.reset({
                             reload: true,
                             config: function(){  
@@ -49,7 +50,7 @@ Order: after comixngn.js
                                 this.page.url = cG.disqus.url;  
                             }
                         });
-                    } else setTimeout(settheRESET, 400);
+                    }
                 }
                 settheRESET();
             };
