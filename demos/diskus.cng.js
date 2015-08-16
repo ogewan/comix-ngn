@@ -39,13 +39,18 @@ Order: after comixngn.js
                     cG.disqus.identifier = b.disqus_identifier;
                     cG.disqus.url = b.disqus_url;
                 }
-                window.DISQUS.reset({
-                    reload: true,
-                    config: function(){  
-                        this.page.identifier = cG.disqus.identifier;  
-                        this.page.url = cG.disqus.url;  
-                    }
-                });
+                var settheRESET = function(){
+                    if(window.DISQUS===void 0||window.DISQUS===null){
+                        window.DISQUS.reset({
+                            reload: true,
+                            config: function(){  
+                                this.page.identifier = cG.disqus.identifier;  
+                                this.page.url = cG.disqus.url;  
+                            }
+                        });
+                    } else setTimeout(settheRESET, 400);
+                }
+                settheRESET();
             };
             console.log(cG.queue.stageChange.diskus);
             /*cG.queue=cG.queue||[];
