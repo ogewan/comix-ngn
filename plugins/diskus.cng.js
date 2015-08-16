@@ -29,7 +29,8 @@ Order: after comixngn.js
             //cG.disqus.disqus_url = '';
             cG.queue=cG.queue||{};
             cG.queue.stageChange=cG.queue.stageChange||[];
-            cG.queue.stageChange.push(function(a,c){
+            cG.queue.stageChange.diskus = function(a,c){
+                console.log(c,a.data(),cG.disqus,window.DISQUS);
                 if(c){
                     
                 }
@@ -38,14 +39,14 @@ Order: after comixngn.js
                     cG.disqus.identifier = b.disqus_identifier;
                     cG.disqus.url = b.disqus_url;
                 }
-                DISQUS.reset({
+                window.DISQUS.reset({
                     reload: true,
                     config: function(){  
                         this.page.identifier = cG.disqus.identifier;  
                         this.page.url = cG.disqus.url;  
                     }
                 });
-            });
+            };
             /*cG.queue=cG.queue||[];
             cG.queue.stageInjection=cG.queue.stageInjection||[];
             cG.queue.stageInjection.push("disqus");*/
