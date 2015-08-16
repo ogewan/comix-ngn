@@ -8,7 +8,7 @@ Order: after comixngn.js
         if(cG.$GPC === void 0) cG.$GPC = 1;/*Global Plug in count*/
         else cG.$GPC++;
         var slfScr = document.getElementsByTagName("SCRIPT");
-        ccconsole.log(cG.disqus);
+        console.log(cG.disqus);
         if((void 0!==slfScr||slfScr!==null)&&(void 0===cG.disqus.shortname||cG.disqus.shortname===null)){
             for(var q = 0;q<slfScr.length;q++){
                 if(slfScr[q].src.indexOf("diskus")>=0){
