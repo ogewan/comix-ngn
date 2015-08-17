@@ -32,7 +32,9 @@ cG.controllers = cG.controllers||{};//stores all nav bars that control stages he
             }
         }
         if(!pass) return -1;//return if not found
-        cG.comicID = (selfScript.getAttribute("comicID") !== void 0&&selfScript.getAttribute("disable") !== null)?selfScript.getAttribute("comicID"):cG.comicID;
+        //check for comicID, no getAttribute if we have cG.comicID
+        cG.comicID = cG.comicID||selfScript.getAttribute("comicID");
+        //change default plugin
         if(selfScript.getAttribute("plugin") !== void 0&&selfScript.getAttribute("plugin")!==null){
             var plugin = selfScript.getAttribute("plugin").replace(/\s+/g, '').split(',');
             cG.root = plugin;
