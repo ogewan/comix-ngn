@@ -15,6 +15,8 @@
 
    ```<div cglink="cng"><button class="prev"></button><button class="next"></button></div>```, *Adding the attribute* **cglink** *turns any element into a controller. Note: cglink binds the controller to a* **[stage]**
 
+* :new: To update any element dynamically, add the **cg-hot** class. This updates the element and its children every time the page changes.
+
 * To add additional features, use a plug-in:
 
    ```<script src="bellerophon.cng.min.js"></script>```
