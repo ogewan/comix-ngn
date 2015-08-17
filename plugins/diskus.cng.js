@@ -26,10 +26,11 @@ Order: after comixngn.js
             (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
             //cG.disqus.disqus_identifier = '';
             //cG.disqus.disqus_title = '';
-            //cG.disqus.disqus_url = '';
+            //cG.discqus.disqus_url = '';
             cG.queue=cG.queue||{};
-            cG.queue.stageChange=cG.queue.stageChange||[];
-            cG.queue.stageChange.push(function(a,c){
+            cG.queue.stageChange=cG.queue.stageChange||{};
+            cG.queue.stageChange.diskus = function(a,c){
+                //console.log(c,a.data(),cG.disqus,window.DISQUS);
                 if(c){
                     
                 }
@@ -38,14 +39,22 @@ Order: after comixngn.js
                     cG.disqus.identifier = b.disqus_identifier;
                     cG.disqus.url = b.disqus_url;
                 }
-                DISQUS.reset({
-                    reload: true,
-                    config: function(){  
-                        this.page.identifier = cG.disqus.identifier;  
-                        this.page.url = cG.disqus.url;  
+                var settheRESET = function(){
+                    //console.log(window.DISQUS,void 0,"setTHERESET");
+                    if(window.DISQUS===void 0||window.DISQUS===null) setTimeout(settheRESET, 400);
+                    else{
+                        window.DISQUS.reset({
+                            reload: true,
+                            config: function(){  
+                                this.page.identifier = cG.disqus.identifier;  
+                                this.page.url = cG.disqus.url;  
+                            }
+                        });
                     }
-                });
-            });
+                }
+                settheRESET();
+            };
+            //console.log(cG.queue.stageChange.diskus);
             /*cG.queue=cG.queue||[];
             cG.queue.stageInjection=cG.queue.stageInjection||[];
             cG.queue.stageInjection.push("disqus");*/
