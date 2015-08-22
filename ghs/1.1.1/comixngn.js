@@ -32,7 +32,9 @@ cG.controllers = cG.controllers||{};//stores all nav bars that control stages he
             }
         }
         if(!pass) return -1;//return if not found
-        cG.comicID = (selfScript.getAttribute("comicID") !== void 0&&selfScript.getAttribute("disable") !== null)?selfScript.getAttribute("comicID"):cG.comicID;
+        //check for comicID, no getAttribute if we have cG.comicID
+        cG.comicID = cG.comicID||selfScript.getAttribute("comicID");
+        //change default plugin
         if(selfScript.getAttribute("plugin") !== void 0&&selfScript.getAttribute("plugin")!==null){
             var plugin = selfScript.getAttribute("plugin").replace(/\s+/g, '').split(',');
             cG.root = plugin;
@@ -352,6 +354,23 @@ cG.HELPERS = {};
 /*STAGE creation-REDACTED*/
 cG.HELPERS.jstagecreate = cG.N;
 cG.queue.stageChange=cG.queue.stageChange||{};
+cG.queue.stageChange.hotcontent=function(){
+    var hotstuff = document.getElementsByClassName("cg-hot");
+    var hotqueue = [];//window.hotqueue||[];
+    for (var i = 0; i < hotstuff.length; i++) { 
+        hotqueue.push({place:hotstuff[i].parentNode,time:hotstuff[i]});
+    }
+    while (hotstuff.length) {
+        hotstuff[0].parentNode.removeChild(hotstuff[0]);
+    }
+    for (var j = 0; j < hotqueue.length; j++) { 
+        console.log("queued stuff",cG.info.vrb,hotqueue[j])
+            hotqueue[j].place.appendChild(hotqueue[j].time);/*
+        if(cG.info.vrb!=500){
+            hotqueue[j].place.appendChild(hotqueue[j].time);
+        } else window.hotqueue = hotqueue;*/
+    }    
+}
 cG.queue.stageChange.controller=function(target){
     //console.log(target.data().desig);
     var b,
