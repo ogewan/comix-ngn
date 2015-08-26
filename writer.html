@@ -5,6 +5,7 @@
         mainsrc = "http://comixngn.js.org/ghs/1.1.1/comixngn.min.js",
         loadng = ["http://comixngn.js.org/ghs/1.1.1/plugins/comixngn.jq.js","http://code.jquery.com/jquery-2.1.4.min.js", "https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"],
         aftjq = ["http://code.jquery.com/ui/1.11.4/jquery-ui.min.js", "https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.7.0/spectrum.min.js"],
+        fuse = {fstrun: true, pgepsh: true, pgesve: true, rtepge: true},
         plugin = "",
         disable = ["rollbar"],
         comicID="CNGwriter",
@@ -35,7 +36,7 @@
             <!--<li><button id="nav-undo"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true" style="z-index:999;"></span></button></li>
             <li><button id="nav-redo"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true" style="z-index:999;"></span></button></li>-->
             <li>
-                <select name="select-choice-1" id="select-choice-1" data-mini="true" data-inline="true">
+                <select id="nav-select" data-mini="true" data-inline="true">
                     <option value="list">List</option>
                     <option value="thum">Thumbnail</option>
                     <!--<option value="express">Express: next day</option>
@@ -43,6 +44,8 @@
                 </select>
             </li>
             <li><button id="_set">* Settings</button></li>
+            <li><button id="ExBtnCL" title="Save Settings">Export</button></li>
+            <li><span id=MHEADCL></span></li>
             <li><button id="_des">* Design</button></li>
         </ul>
     </div>
@@ -168,8 +171,8 @@
         <h3 class="button" role="button">* Design</h3>
         <div id="design_contain"><!-- style="display: none;">-->
             <p>
-                <button id="InBtn" title="Create site template; this does not save settings it simply creates an index.html file">Site Template</button>&nbsp;
-                <button id="DsBtn" title="Save Stage Design">Save Design</button>
+                <!--<button id="InBtn" title="Create site template; this does not save settings it simply creates an index.html file">Site Template</button>&nbsp;
+                <button id="DsBtn" title="Save Stage Design">Save Design</button>-->
             </p>
             <div id class="venue"></div>
         </div>
@@ -177,7 +180,8 @@
 </body>
 
 <script>
-    var settingsC,
+    var expfunct,
+        settingsC,
         settingsP,
         remveC,
         remveP,
@@ -294,7 +298,7 @@
                     $("#Csort").removeClass("empty");
                 }
                 var oper = $("#Csort").childElementCount;
-                $("#Csort").append("<li id=c" + oper + ">" + "Chapter" + " <button onClick=settingsC('#c" + oper + "')>&#x2731</button><button onClick=$('#c" + oper + "').remove()>X</button> </li>").sortable({
+                $("#Csort").append("<li id=c" + oper + ">" + "Chapter" + " <button onClick=settingsC('#c" + oper + "')>&#x2731</button><button onClick=remveC('#c" + oper + "')>X</button> </li>").sortable({
                     scroll: true
                 });
                 $("#c" + oper).data({
@@ -307,6 +311,20 @@
                     }
                 }).addClass("chap");
             });
+            $("#nav-select").change(function() {
+                var src = $(".page");
+                var ico = $(".page_icon");
+                //console.log($("#"+src[0].id).data().body.title);
+                if($("#nav-select").val()=="list"){
+                    for(var i=0;i<src.length;i++){
+                        $("#"+ico[i].id).html($("#"+src[i].id).data().body.url);
+                    }
+                } else {
+                    for(var i=0;i<src.length;i++){
+                        $("#"+ico[i].id).html("<img style='max-width:64px;max-height:64px;' src='"+cG.script.config.dir+$("#"+src[i].id).data().body.url+"'>");
+                    }
+                }
+            });
             $("#conductor").change(function() {
                 if ($("#sorted").hasClass("empty")) {
                     $("#sorted").removeClass("empty");
@@ -314,7 +332,7 @@
                 console.log(this.files);
                 /*$("#sorted").innerHTML ="";*/
                 for (i = 0; i < this.files.length; i++) {
-                    $("#sorted").append("<li id=s" + i + ">" + this.files[i].name + " <button onClick=settingsP('#s" + i + "');>&#x2731</button><button onClick=$('#s" + i + "').remove()>X</button></li>").sortable({
+                    $("#sorted").append("<li id=s" + i + ">" + this.files[i].name + " <button onClick=settingsP('#s" + i + "');>&#x2731</button><button onClick=remveP('#s" + i + "')>X</button></li>").sortable({
                         scroll: true
                     });
                     $("#s" + i).data({
@@ -379,7 +397,9 @@
             $("#_des").click(function() {
                 $("#design_contain").slideToggle();
             });
-            $("#ExBtn").click(function() {
+            $("#ExBtn").click(function(){return expfunct()});
+            $("#ExBtnCL").click(function(){return expfunct()});
+            expfunct = function() {
                 var setOBJ = {
                     parent: null,
                     offset: 0,
@@ -423,12 +443,13 @@
                     setOBJ.pages.push($(".page,li").eq(j).data().body);
                 }
                 console.log(setOBJ);
-                $('#setlink').remove();
-                var refh = "<a onClick=$('#setlink').remove() id='setlink' href='data: text/json;charset=utf-8," + JSON.stringify(setOBJ, ["parent","offset","config", "pyr", "loading", "pages", "chapters", "dir", "startpage", "pagestartnum", "chapterstartnum", "imgprebuffer", "imgpostbuffer", "back", "appendmismatch", "appendorder", "appendorderdir", "alt", "hover", "title","perm","anim8","special", "url", "release", "note", "description", "start", "end", "title", "diameter","lines","rate","xpos","ypos","back","color"]) + "' download='config.json' autofocus>config.json<br></a>",
-                    formref = "<a onClick=$('#setlink').remove() id='setlink' href='data: text/json;charset=utf-8," + JSON.stringify(setOBJ, ["parent","offset","config", "pyr", "loading", "pages", "chapters", "dir", "startpage", "pagestartnum", "chapterstartnum", "imgprebuffer", "imgpostbuffer", "back", "appendmismatch", "appendorder", "appendorderdir", "alt", "hover", "title","perm","anim8","special", "url", "release", "note", "description", "start", "end", "title", "diameter","lines","rate","xpos","ypos","back","color"],4) + "' download='config.json' autofocus>config.json<br></a>";
+                $('.setlink').remove();
+                var refh = "<a onClick=$('.setlink').remove() class='setlink' href='data: text/json;charset=utf-8," + JSON.stringify(setOBJ, ["parent","offset","config", "pyr", "loading", "pages", "chapters", "dir", "startpage", "pagestartnum", "chapterstartnum", "imgprebuffer", "imgpostbuffer", "back", "appendmismatch", "appendorder", "appendorderdir", "alt", "hover", "title","perm","anim8","special", "url", "release", "note", "description", "start", "end", "title", "diameter","lines","rate","xpos","ypos","back","color"]) + "' download='config.json' autofocus>config.json<br></a>",
+                    formref = "<a onClick=$('.setlink').remove() class='setlink' href='data: text/json;charset=utf-8," + JSON.stringify(setOBJ, ["parent","offset","config", "pyr", "loading", "pages", "chapters", "dir", "startpage", "pagestartnum", "chapterstartnum", "imgprebuffer", "imgpostbuffer", "back", "appendmismatch", "appendorder", "appendorderdir", "alt", "hover", "title","perm","anim8","special", "url", "release", "note", "description", "start", "end", "title", "diameter","lines","rate","xpos","ypos","back","color"],4) + "' download='config.json' autofocus>config.json<br></a>";
                 console.log(formref);
                 $(refh).appendTo("#MHEAD");
-            });
+                $(refh).appendTo("#MHEADCL");
+            };
             $("#InBtn").click(function() {
                 $('#indlink').remove();
                 var refh = "";
@@ -457,7 +478,7 @@
                     $(ele).data().body.release = $("#TEMP_release" + lee).val();
                     var ent = $("#TEMP_url" + lee).val();
                     $(ele).data().body.url = ent;
-                    $("#name_" + lee).html(ent);
+                    $("#name_" + lee).html(($("#nav-select").val()=="list")?ent:"<img style='max-width:64px;max-height:64px;' src='"+cG.script.config.dir+ent+"'>");
                     $(ele).data().body.perm = document.getElementById("TEMP_perm" + lee).checked;
                     $(ele).data().body.anim8 = document.getElementById("TEMP_anim8" + lee).checked;
                     $(ele).data().body.special = $("#TEMP_special" + lee).val();
@@ -626,9 +647,10 @@
                     $("#back_load").spectrum.color=conf.loading.back;
                     $("#color_load").spectrum.color=conf.loading.color;
                 }
-
+                var fillin;
                 for (var i = 0; i < conf.pages.length; i++) {
-                    $("#sorted").append("<li id=s" + i + "><span id=name_s" + i + ">" + conf.pages[i].url + "</span> <button onClick=settingsP('#s" + i + "');>&#x2731</button><button onClick=$('#s" + i + "').remove()>X</button></li>").sortable({
+                    fillin = ($("#nav-select").val()=="list")?conf.pages[i].url:"<img style='max-width:64px;max-height:64px;' src='" + cG.script.config.dir+conf.pages[i].url + "'>";
+                    $("#sorted").append("<li id=s" + i + "><span class=page_icon id=name_s" + i + ">" + fillin + "</span> <button onClick=settingsP('#s" + i + "');>&#x2731</button><button onClick=remveP('#s" + i + "')>X</button></li>").sortable({
                         scroll: true
                     });
                     if (typeof conf.pages[i].perm === 'undefined') {
@@ -651,7 +673,7 @@
                 }
                 for (var oper = 0; oper < conf.chapters.length; oper++) {
                     //console.log(i);
-                    $("#Csort").append("<li id=c" + oper + "><span id=name_c" + oper + ">" + conf.chapters[oper].title + "</span> <button onClick=settingsC('#c" + oper + "')>&#x2731</button><button onClick=$('#c" + oper + "').remove()>X</button> </li>").sortable({
+                    $("#Csort").append("<li id=c" + oper + "><span id=name_c" + oper + ">" + conf.chapters[oper].title + "</span> <button onClick=settingsC('#c" + oper + "')>&#x2731</button><button onClick=remveC('#c" + oper + "')>X</button> </li>").sortable({
                         scroll: true
                     });
                     $("#c" + oper).data({
@@ -685,7 +707,7 @@
      *
      * @author Georg Tavonius a.k.a. Calamari (http://github.com/Calamari)
      * @homepage http://github.com/Calamari/shunting-yard.js
-     */!function(){"use strict";var e=window.jaz||{};e.resolveRPN=function(t){function n(t){return e.Operators[t]||e.Functions[t]}var r,i,s,c=[];for(r=0,i=t.length;i>r;++r)s=n(t[r]),c.push(s?s.method.apply(this,c.splice(-s.params)):parseFloat(t[r]));return c[0]},window.jaz=e}();var e=document.createElement("script");cG.REPO.scReq.getScript=cG.agent("./"+dir+"script.json"),cG.REPO.scReq.getDecor=cG.agent("./"+tir+"decor.html"),cG.REPO.scReq.getCtrls=cG.agent("./"+tir+"ctrls.html"),cG.REPO.scReq.getScript.then(function(e){void 0===cG.REPO.script?cG.REPO.script={def:e}:cG.REPO.script.def=e,cG.script=cG.REPO.script.def},function(e,t){console.error(e,t.status),void 0===cG.REPO.script?cG.REPO.script={def:0}:cG.REPO.script.def=e,cG.script=cG.REPO.script.def}),cG.REPO.scReq.getDecor.then(function(e){void 0===cG.REPO.decor?cG.REPO.decor={def:e}:cG.REPO.decor.def=e,cG.decor=cG.REPO.decor.def},function(e,t){console.error(e,t.status),void 0===cG.REPO.decor?cG.REPO.decor={def:0}:cG.REPO.decor.def=0,cG.decor=cG.REPO.decor.def}),cG.REPO.scReq.getCtrls.then(function(e){void 0===cG.REPO.ctrls?cG.REPO.ctrls={def:e}:cG.REPO.ctrls.def=e,cG.ctrls=cG.REPO.ctrls.def},function(e,t){console.error(e,t.status),void 0===cG.REPO.ctrls?cG.REPO.ctrls={def:0}:cG.REPO.ctrls.def=0,cG.ctrls=cG.REPO.ctrls.def}),cG.comicID=comicID;for(var t=0;t<disable.length;t++)cG.dis[disable[t]]=!0;e.src=mainsrc,document.body.appendChild(e);for(var n=0;n<loadng.length;n++)e=document.createElement("script"),e.src=loadng[n],document.body.appendChild(e);jqdep(),/*! humane.js: wavded.github.com/humane-js/ (MIT) (c) Marc Harter (@wavded)*/!function(e,t,n){"undefined"!=typeof module?module.exports=n(e,t):"function"==typeof define&&"object"==typeof define.amd?define(n):t[e]=n(e,t)}("humane",this,function(){var e=window,t=document,n={on:function(t,n,r){"addEventListener"in e?t.addEventListener(n,r,!1):t.attachEvent("on"+n,r)},off:function(t,n,r){"removeEventListener"in e?t.removeEventListener(n,r,!1):t.detachEvent("on"+n,r)},bind:function(e,t){return function(){e.apply(t,arguments)}},isArray:Array.isArray||function(e){return"[object Array]"===Object.prototype.toString.call(e)},config:function(e,t){return null!=e?e:t},transSupport:!1,useFilter:/msie [678]/i.test(navigator.userAgent),_checkTransition:function(){var e=t.createElement("div"),n={webkit:"webkit",Moz:"",O:"o",ms:"MS"};for(var r in n)r+"Transition"in e.style&&(this.vendorPrefix=n[r],this.transSupport=!0)}};n._checkTransition();var r=function(t){t||(t={}),this.queue=[],this.baseCls=t.baseCls||"humane",this.addnCls=t.addnCls||"",this.timeout="timeout"in t?t.timeout:2500,this.waitForMove=t.waitForMove||!1,this.clickToClose=t.clickToClose||!1,this.timeoutAfterMove=t.timeoutAfterMove||!1,this.container=t.container;try{this._setupEl()}catch(r){n.on(e,"load",n.bind(this._setupEl,this))}};return r.prototype={constructor:r,_setupEl:function(){var e=t.createElement("div");if(e.style.display="none",!this.container){if(!t.body)throw"document.body is null";this.container=t.body}this.container.appendChild(e),this.el=e,this.removeEvent=n.bind(function(){var e=n.config(this.currentMsg.timeoutAfterMove,this.timeoutAfterMove);e?setTimeout(n.bind(this.remove,this),e):this.remove()},this),this.transEvent=n.bind(this._afterAnimation,this),this._run()},_afterTimeout:function(){n.config(this.currentMsg.waitForMove,this.waitForMove)?this.removeEventsSet||(n.on(t.body,"mousemove",this.removeEvent),n.on(t.body,"click",this.removeEvent),n.on(t.body,"keypress",this.removeEvent),n.on(t.body,"touchstart",this.removeEvent),this.removeEventsSet=!0):this.remove()},_run:function(){if(!this._animating&&this.queue.length&&this.el){this._animating=!0,this.currentTimer&&(clearTimeout(this.currentTimer),this.currentTimer=null);var e=this.queue.shift(),t=n.config(e.clickToClose,this.clickToClose);t&&(n.on(this.el,"click",this.removeEvent),n.on(this.el,"touchstart",this.removeEvent));var r=n.config(e.timeout,this.timeout);r>0&&(this.currentTimer=setTimeout(n.bind(this._afterTimeout,this),r)),n.isArray(e.html)&&(e.html="<ul><li>"+e.html.join("<li>")+"</ul>"),this.el.innerHTML=e.html,this.currentMsg=e,this.el.className=this.baseCls,n.transSupport?(this.el.style.display="block",setTimeout(n.bind(this._showMsg,this),50)):this._showMsg()}},_setOpacity:function(e){if(n.useFilter)try{this.el.filters.item("DXImageTransform.Microsoft.Alpha").Opacity=100*e}catch(t){}else this.el.style.opacity=e+""},_showMsg:function(){var e=n.config(this.currentMsg.addnCls,this.addnCls);if(n.transSupport)this.el.className=this.baseCls+" "+e+" "+this.baseCls+"-animate";else{var t=0;this.el.className=this.baseCls+" "+e+" "+this.baseCls+"-js-animate",this._setOpacity(0),this.el.style.display="block";var r=this,i=setInterval(function(){1>t?(t+=.1,t>1&&(t=1),r._setOpacity(t)):clearInterval(i)},30)}},_hideMsg:function(){var e=n.config(this.currentMsg.addnCls,this.addnCls);if(n.transSupport)this.el.className=this.baseCls+" "+e,n.on(this.el,n.vendorPrefix?n.vendorPrefix+"TransitionEnd":"transitionend",this.transEvent);else var t=1,r=this,i=setInterval(function(){t>0?(t-=.1,0>t&&(t=0),r._setOpacity(t)):(r.el.className=r.baseCls+" "+e,clearInterval(i),r._afterAnimation())},30)},_afterAnimation:function(){n.transSupport&&n.off(this.el,n.vendorPrefix?n.vendorPrefix+"TransitionEnd":"transitionend",this.transEvent),this.currentMsg.cb&&this.currentMsg.cb(),this.el.style.display="none",this._animating=!1,this._run()},remove:function(e){var r="function"==typeof e?e:null;n.off(t.body,"mousemove",this.removeEvent),n.off(t.body,"click",this.removeEvent),n.off(t.body,"keypress",this.removeEvent),n.off(t.body,"touchstart",this.removeEvent),n.off(this.el,"click",this.removeEvent),n.off(this.el,"touchstart",this.removeEvent),this.removeEventsSet=!1,r&&this.currentMsg&&(this.currentMsg.cb=r),this._animating?this._hideMsg():r&&r()},log:function(e,t,n,r){var i={};if(r)for(var s in r)i[s]=r[s];if("function"==typeof t)n=t;else if(t)for(var s in t)i[s]=t[s];return i.html=e,n&&(i.cb=n),this.queue.push(i),this._run(),this},spawn:function(e){var t=this;return function(n,r,i){return t.log.call(t,n,r,i,e),t}},create:function(e){return new r(e)}},new r})},jqdep=function(){if(void 0===window.jQuery)return setTimeout(jqdep,300);var e;/*! jquery-spoiler v1.3.0: (MIT) (c)2014 Triangle717 (http://le717.github.io) and Jarred Ballard (http://jarred.io/)*/!function(e){"use strict";"function"==typeof define&&define.amd?define(["jquery"],e):"object"==typeof exports?module.exports=e:e(jQuery)}(function(e){"use strict";e.fn.spoiler=function(t){var n=e.extend({contentClass:"spoiler-content",paddingValue:6,triggerEvents:!1,includePadding:!0,buttonActiveClass:"spoiler-active",spoilerVisibleClass:"spoiler-content-visible"},t),r="."+n.contentClass,i={};return e(r).each(function(){var t=e(this);t.css("overflow","hidden");var r=t.prop("scrollHeight");r=n.includePadding?r+parseInt(n.paddingValue,10):r;var s=t.attr("data-spoiler-link");i[s]=r+"px",t.css("height","0")}),e(this).on("click",function(){var t=e(this),s=t.attr("data-spoiler-link"),c=e(r+"[data-spoiler-link="+s+"]"),o={height:i[s]},a={height:"0"},d=c.hasClass(n.spoilerVisibleClass);c.css(d?a:o),n.triggerEvents&&t.trigger(d?"jq-spoiler-hidden":"jq-spoiler-visible"),c.toggleClass(n.spoilerVisibleClass),t.toggleClass(n.buttonActiveClass)}),this}});for(var t=0;t<aftjq.length;t++)e=document.createElement("script"),e.src=aftjq[t],document.body.appendChild(e);workhorse()};
+     */!function(){"use strict";var e=window.jaz||{};e.resolveRPN=function(t){function n(t){return e.Operators[t]||e.Functions[t]}var r,i,s,c=[];for(r=0,i=t.length;i>r;++r)s=n(t[r]),c.push(s?s.method.apply(this,c.splice(-s.params)):parseFloat(t[r]));return c[0]},window.jaz=e}();var e=document.createElement("script");cG.REPO.scReq.getScript=cG.agent("./"+dir+"script.json"),cG.REPO.scReq.getDecor=cG.agent("./"+tir+"decor.html"),cG.REPO.scReq.getCtrls=cG.agent("./"+tir+"ctrls.html"),cG.REPO.scReq.getScript.then(function(e){void 0===cG.REPO.script?cG.REPO.script={def:e}:cG.REPO.script.def=e,cG.script=cG.REPO.script.def},function(e,t){console.error(e,t.status),void 0===cG.REPO.script?cG.REPO.script={def:0}:cG.REPO.script.def=e,cG.script=cG.REPO.script.def}),cG.REPO.scReq.getDecor.then(function(e){void 0===cG.REPO.decor?cG.REPO.decor={def:e}:cG.REPO.decor.def=e,cG.decor=cG.REPO.decor.def},function(e,t){console.error(e,t.status),void 0===cG.REPO.decor?cG.REPO.decor={def:0}:cG.REPO.decor.def=0,cG.decor=cG.REPO.decor.def}),cG.REPO.scReq.getCtrls.then(function(e){void 0===cG.REPO.ctrls?cG.REPO.ctrls={def:e}:cG.REPO.ctrls.def=e,cG.ctrls=cG.REPO.ctrls.def},function(e,t){console.error(e,t.status),void 0===cG.REPO.ctrls?cG.REPO.ctrls={def:0}:cG.REPO.ctrls.def=0,cG.ctrls=cG.REPO.ctrls.def}),cG.comicID=comicID,cG.fBox=fuse;for(var t=0;t<disable.length;t++)cG.dis[disable[t]]=!0;e.src=mainsrc,document.body.appendChild(e);for(var n=0;n<loadng.length;n++)e=document.createElement("script"),e.src=loadng[n],document.body.appendChild(e);jqdep(),/*! humane.js: wavded.github.com/humane-js/ (MIT) (c) Marc Harter (@wavded)*/!function(e,t,n){"undefined"!=typeof module?module.exports=n(e,t):"function"==typeof define&&"object"==typeof define.amd?define(n):t[e]=n(e,t)}("humane",this,function(){var e=window,t=document,n={on:function(t,n,r){"addEventListener"in e?t.addEventListener(n,r,!1):t.attachEvent("on"+n,r)},off:function(t,n,r){"removeEventListener"in e?t.removeEventListener(n,r,!1):t.detachEvent("on"+n,r)},bind:function(e,t){return function(){e.apply(t,arguments)}},isArray:Array.isArray||function(e){return"[object Array]"===Object.prototype.toString.call(e)},config:function(e,t){return null!=e?e:t},transSupport:!1,useFilter:/msie [678]/i.test(navigator.userAgent),_checkTransition:function(){var e=t.createElement("div"),n={webkit:"webkit",Moz:"",O:"o",ms:"MS"};for(var r in n)r+"Transition"in e.style&&(this.vendorPrefix=n[r],this.transSupport=!0)}};n._checkTransition();var r=function(t){t||(t={}),this.queue=[],this.baseCls=t.baseCls||"humane",this.addnCls=t.addnCls||"",this.timeout="timeout"in t?t.timeout:2500,this.waitForMove=t.waitForMove||!1,this.clickToClose=t.clickToClose||!1,this.timeoutAfterMove=t.timeoutAfterMove||!1,this.container=t.container;try{this._setupEl()}catch(r){n.on(e,"load",n.bind(this._setupEl,this))}};return r.prototype={constructor:r,_setupEl:function(){var e=t.createElement("div");if(e.style.display="none",!this.container){if(!t.body)throw"document.body is null";this.container=t.body}this.container.appendChild(e),this.el=e,this.removeEvent=n.bind(function(){var e=n.config(this.currentMsg.timeoutAfterMove,this.timeoutAfterMove);e?setTimeout(n.bind(this.remove,this),e):this.remove()},this),this.transEvent=n.bind(this._afterAnimation,this),this._run()},_afterTimeout:function(){n.config(this.currentMsg.waitForMove,this.waitForMove)?this.removeEventsSet||(n.on(t.body,"mousemove",this.removeEvent),n.on(t.body,"click",this.removeEvent),n.on(t.body,"keypress",this.removeEvent),n.on(t.body,"touchstart",this.removeEvent),this.removeEventsSet=!0):this.remove()},_run:function(){if(!this._animating&&this.queue.length&&this.el){this._animating=!0,this.currentTimer&&(clearTimeout(this.currentTimer),this.currentTimer=null);var e=this.queue.shift(),t=n.config(e.clickToClose,this.clickToClose);t&&(n.on(this.el,"click",this.removeEvent),n.on(this.el,"touchstart",this.removeEvent));var r=n.config(e.timeout,this.timeout);r>0&&(this.currentTimer=setTimeout(n.bind(this._afterTimeout,this),r)),n.isArray(e.html)&&(e.html="<ul><li>"+e.html.join("<li>")+"</ul>"),this.el.innerHTML=e.html,this.currentMsg=e,this.el.className=this.baseCls,n.transSupport?(this.el.style.display="block",setTimeout(n.bind(this._showMsg,this),50)):this._showMsg()}},_setOpacity:function(e){if(n.useFilter)try{this.el.filters.item("DXImageTransform.Microsoft.Alpha").Opacity=100*e}catch(t){}else this.el.style.opacity=e+""},_showMsg:function(){var e=n.config(this.currentMsg.addnCls,this.addnCls);if(n.transSupport)this.el.className=this.baseCls+" "+e+" "+this.baseCls+"-animate";else{var t=0;this.el.className=this.baseCls+" "+e+" "+this.baseCls+"-js-animate",this._setOpacity(0),this.el.style.display="block";var r=this,i=setInterval(function(){1>t?(t+=.1,t>1&&(t=1),r._setOpacity(t)):clearInterval(i)},30)}},_hideMsg:function(){var e=n.config(this.currentMsg.addnCls,this.addnCls);if(n.transSupport)this.el.className=this.baseCls+" "+e,n.on(this.el,n.vendorPrefix?n.vendorPrefix+"TransitionEnd":"transitionend",this.transEvent);else var t=1,r=this,i=setInterval(function(){t>0?(t-=.1,0>t&&(t=0),r._setOpacity(t)):(r.el.className=r.baseCls+" "+e,clearInterval(i),r._afterAnimation())},30)},_afterAnimation:function(){n.transSupport&&n.off(this.el,n.vendorPrefix?n.vendorPrefix+"TransitionEnd":"transitionend",this.transEvent),this.currentMsg.cb&&this.currentMsg.cb(),this.el.style.display="none",this._animating=!1,this._run()},remove:function(e){var r="function"==typeof e?e:null;n.off(t.body,"mousemove",this.removeEvent),n.off(t.body,"click",this.removeEvent),n.off(t.body,"keypress",this.removeEvent),n.off(t.body,"touchstart",this.removeEvent),n.off(this.el,"click",this.removeEvent),n.off(this.el,"touchstart",this.removeEvent),this.removeEventsSet=!1,r&&this.currentMsg&&(this.currentMsg.cb=r),this._animating?this._hideMsg():r&&r()},log:function(e,t,n,r){var i={};if(r)for(var s in r)i[s]=r[s];if("function"==typeof t)n=t;else if(t)for(var s in t)i[s]=t[s];return i.html=e,n&&(i.cb=n),this.queue.push(i),this._run(),this},spawn:function(e){var t=this;return function(n,r,i){return t.log.call(t,n,r,i,e),t}},create:function(e){return new r(e)}},new r})},jqdep=function(){if(void 0===window.jQuery)return setTimeout(jqdep,300);var e;/*! jquery-spoiler v1.3.0: (MIT) (c)2014 Triangle717 (http://le717.github.io) and Jarred Ballard (http://jarred.io/)*/!function(e){"use strict";"function"==typeof define&&define.amd?define(["jquery"],e):"object"==typeof exports?module.exports=e:e(jQuery)}(function(e){"use strict";e.fn.spoiler=function(t){var n=e.extend({contentClass:"spoiler-content",paddingValue:6,triggerEvents:!1,includePadding:!0,buttonActiveClass:"spoiler-active",spoilerVisibleClass:"spoiler-content-visible"},t),r="."+n.contentClass,i={};return e(r).each(function(){var t=e(this);t.css("overflow","hidden");var r=t.prop("scrollHeight");r=n.includePadding?r+parseInt(n.paddingValue,10):r;var s=t.attr("data-spoiler-link");i[s]=r+"px",t.css("height","0")}),e(this).on("click",function(){var t=e(this),s=t.attr("data-spoiler-link"),c=e(r+"[data-spoiler-link="+s+"]"),o={height:i[s]},a={height:"0"},d=c.hasClass(n.spoilerVisibleClass);c.css(d?a:o),n.triggerEvents&&t.trigger(d?"jq-spoiler-hidden":"jq-spoiler-visible"),c.toggleClass(n.spoilerVisibleClass),t.toggleClass(n.buttonActiveClass)}),this}});for(var t=0;t<aftjq.length;t++)e=document.createElement("script"),e.src=aftjq[t],document.body.appendChild(e);workhorse()};
 
     !function() {
         return defer ? void(window.addEventListener ? window.addEventListener("load", dfr, !1) : window.attachEvent ? window.attachEvent("onload", dfr) : window.onload = dfr) : dfr()
