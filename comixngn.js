@@ -1,4 +1,4 @@
-/** @preserve comix-ngn v1.1.1 | (c) 2015 Oluwaseun Ogedengbe| ogewan.github.io/comix-ngn/ |License: MIT|
+/** @preserve comix-ngn v1.1.2 | (c) 2015 Oluwaseun Ogedengbe| ogewan.github.io/comix-ngn/ |License: MIT|
 embeds domReady: github.com/ded/domready (MIT) (c) 2013 Dustin Diaz, pegasus: typicode.github.io/pegasus (MIT) (c) 2014 typicode, pathjs (MIT) (c) 2011 Mike Trpcic, direction.js*/
 /*The namespace of comix-ngn
 all variables should be properties of this to prevent global namespace pollution*/
@@ -9,7 +9,12 @@ cG.N =function(){return 0};/*null function*/
 if(void 0===cG.$GPC){cG.$GPC=0;}/*Global Plugin Counter (no longer global)*/
 cG.root = '';/*current default settings of cng, overwritten by plugins*/
 cG.cPanel = cG.cPanel||{};/*cG control panel, all stages are stored here*/
-cG.info = {vix: "1.1.1",vwr: "0.5.0",vpr: "0.1.0"};/*version settings*/
+cG.fBox = cG.fBox||{fstrun: true, pgepsh: true, pgesve: true, rtepge: true};/*cG fuse box, toggles various options
+* fstrun - toggles automatic stage injection on document ready
+* pgepsh - toggles page url push to urlbar and history
+* pgesve - toggles page saving in localstorage
+* rtepge - toggles routing*/
+cG.info = {vix: "1.1.2",vwr: "0.8.0",vpr: "0.1.0"};/*version settings*/
 cG.dis = cG.dis||{};//disables statistic and error reporting
 cG.recyclebin = cG.recyclebin||{};//variables that are used in initialization, disposed at stage injection
 cG.queue = cG.queue||{};//stores functions that are called incertain events
@@ -224,7 +229,7 @@ return a};this.frst=function(){0<=n&&r(k,0);return 0};this.last=function(){r(k,h
         return main.go(main.internals.chapters[main.ch_count()-1][g]);
     }
     var lscurrent = function(){
-        if(typeof(Storage) !== void 0) {
+        if(typeof(Storage) !== void 0&&cG.fBox.pgesve) {
             localStorage.setItem(cG.comicID+"|"+name+"|curPage",cG.cPanel[/*"def_"+*/name].current().toString());
         }
         if(cG.comix===cG.cPanel[/*"def_"+*/name]){//if comic is the comix, then push its state
@@ -253,7 +258,7 @@ return a};this.frst=function(){0<=n&&r(k,0);return 0};this.last=function(){r(k,h
             }
             //if(cG.avx[0]>0&&cG.avx[1]>0) 
             cG.verbose(1,name,"Pushing state:",result);
-            history.pushState({}, null, "#/"+result);
+            if(cG.fBox.pgepsh) history.pushState({}, null, "#/"+result);
         }
         if(cG.queue.stageChange!==void 0)
             for(var ftn in cG.queue.stageChange){
@@ -717,6 +722,7 @@ cG.stageInjection = function(SPECIFIC){
 /*ROUTING*/
 cG.route2page = cG.route2page||function(orgvalue){
     //var com = cG.script.config.orderby,
+    if(!cG.fBox.rtepge) return 0;
     var value;
     if(orgvalue===null||orgvalue===void 0||!orgvalue){
         var z = 0;
@@ -990,7 +996,7 @@ domReady(function(){
             break;
         };
     }
-    if(b||b==void 0||b==""){
+    if((b||b===void 0||b=="")&&cG.fBox.fstrun){
         //cG.HELPERS.jstagecreate();
         //cG.cPanel=cG.stageInjection();
         cG.stageInjection();
