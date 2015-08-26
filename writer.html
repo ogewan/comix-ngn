@@ -21,9 +21,34 @@
 <body style="margin:4px; padding:4px">
     <h1>Writer</h1>
     <span id=MHEAD></span>
+    <style>
+        #nav-toolbar li {
+            list-style-type: none;
+            display: inline;
+            margin: 0px;
+            padding: 0px;
+        }
+    </style>
+    <div id="nav-toolbar" style="border: 2px groove; position: fixed; left: 50%; z-index: 9;">
+        <ul style="padding: 0px; margin: 0px; top: 50%;">
+            <li><button id="nav-move"><span class="glyphicon glyphicon-move" aria-hidden="true" style="z-index:999;"></span></button></li>
+            <!--<li><button id="nav-undo"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true" style="z-index:999;"></span></button></li>
+            <li><button id="nav-redo"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true" style="z-index:999;"></span></button></li>-->
+            <li>
+                <select name="select-choice-1" id="select-choice-1" data-mini="true" data-inline="true">
+                    <option value="list">List</option>
+                    <option value="thum">Thumbnail</option>
+                    <!--<option value="express">Express: next day</option>
+<option value="overnight">Overnight</option>-->
+                </select>
+            </li>
+            <li><button id="_set">* Settings</button></li>
+            <li><button id="_des">* Design</button></li>
+        </ul>
+    </div>
     <div id="accordion">
         <h3 class="button" role="button">* Settings</h3>
-        <div>
+        <div id="settings_contain">
             <form onsubmit="return false;">
                 <table id="bodtab" border="0" style="width:100%">
                     <tr>
@@ -154,9 +179,12 @@
 <script>
     var settingsC,
         settingsP,
+        remveC,
+        remveP,
         report,
         workhorse = function() {
-            if (void 0 === window.jQuery || void 0 === window.jQuery.ui || void 0 === humane)
+            if (settingsC,
+        settingsP,void 0 === window.jQuery || void 0 === window.jQuery.ui || void 0 === humane)
                 return setTimeout(workhorse, 300);
             /*var jQ = jQuery.noConflict();*/
             console.log("%c %c %c comix-ngn Writer v" + cG.info.vwr + " %c \u262F %c \u00A9 2015 Oluwaseun Ogedengbe %c ", "color:white; background:#B5B5B5", "background:purple", "color:black; background:#E2E2E2", 'color:red; background:black', "color:black; background:#B5B5B5", "background:purple");
@@ -324,12 +352,32 @@
                 // Using FileReader to display the image content
                 var reader = new FileReader();
                 reader.onload = function(e) {
-                    report(JSON.parse(e.target.result));
+                    cG.script = JSON.parse(e.target.result);
+                    report(cG.script);
+                    $(".venue").stageInjection();
                 };
                 reader.readAsText(this.files[0]);
                 /*$.getJSON(this.files[0].name, function(conf) {
                     report(conf);
                 });*/
+            });
+            movingtoolbar=false;
+            $(document.body).mousemove(function() {
+                if(!movingtoolbar) return 0;
+                event.preventDefault();
+                $("#nav-toolbar").offset({top: event.pageY-10,left: event.pageX-10});
+            });
+            $("#nav-move").click(function() {
+                //console.log("nav-move");
+                if(movingtoolbar) movingtoolbar=false;
+                else movingtoolbar=true;
+                //event.preventDefault();
+            });
+            $("#_set").click(function() {
+                $("#settings_contain").slideToggle();
+            });
+            $("#_des").click(function() {
+                $("#design_contain").slideToggle();
             });
             $("#ExBtn").click(function() {
                 var setOBJ = {
@@ -407,10 +455,35 @@
                     $(ele).data().body.note = $("#TEMP_note" + lee).val();
                     $(ele).data().body.alt = $("#TEMP_alt" + lee).val();
                     $(ele).data().body.release = $("#TEMP_release" + lee).val();
-                    $(ele).data().body.url = $("#TEMP_url" + lee).val();
+                    var ent = $("#TEMP_url" + lee).val();
+                    $(ele).data().body.url = ent;
+                    $("#name_" + lee).html(ent);
                     $(ele).data().body.perm = document.getElementById("TEMP_perm" + lee).checked;
                     $(ele).data().body.anim8 = document.getElementById("TEMP_anim8" + lee).checked;
                     $(ele).data().body.special = $("#TEMP_special" + lee).val();
+                    //virtual changes
+                    var vrt = parseInt(ele.substring(2),10);
+                    cG.comix.internals.pages[vrt].title=$(ele).data().body.title;
+                    cG.comix.internals.pages[vrt].hover=$(ele).data().body.hover;
+                    cG.comix.internals.pages[vrt].note=$(ele).data().body.note;
+                    cG.comix.internals.pages[vrt].alt=$(ele).data().body.alt;
+                    cG.comix.internals.pages[vrt].release=$(ele).data().body.release;
+                    cG.comix.internals.pages[vrt].url=$(ele).data().body.url;
+                    cG.comix.internals.pages[vrt].perm=$(ele).data().body.perm;
+                    cG.comix.internals.pages[vrt].anim8=$(ele).data().body.anim8;
+                    cG.comix.internals.pages[vrt].special=$(ele).data().body.special;
+                    switch(vrt) {
+                        case 0:
+                            cG.comix.internals.pages[vrt].desig=-1
+                            break;
+                        case cG.comix.internals.pages.length-1:
+                            cG.comix.internals.pages[vrt].desig=1;
+                            break;
+                        default:
+                            cG.comix.internals.pages[vrt].desig=0;
+                    }
+                    cG.comix.internals.pages[vrt].loaded = false;
+                    //
                     $("#TEMPFORM_" + lee).remove();
                     /*document.getElementById(ele.substring(1)).removeChild(document.getElementById("TEMPFORM_"+ele));fallback*/
                     $(ele).focus();
@@ -435,7 +508,16 @@
                     $(ele).data().body.description = $("#TEMP_description" + lee).val();
                     $(ele).data().body.end = $("#TEMP_end" + lee).val();
                     $(ele).data().body.start = $("#TEMP_start" + lee).val();
-                    $(ele).data().body.title = $("#TEMP_title" + lee).val();
+                    var ent = $("#TEMP_title" + lee).val()
+                    $(ele).data().body.title = ent;
+                    $("#name_" + lee).html(ent);
+                    //virtual changes
+                    var vrt = parseInt(ele.substring(2),10);
+                    cG.comix.internals.chapters[vrt].title=$(ele).data().body.title;
+                    cG.comix.internals.chapters[vrt].description=$(ele).data().body.description;
+                    cG.comix.internals.chapters[vrt].end=$(ele).data().body.end;
+                    cG.comix.internals.chapters[vrt].start=$(ele).data().body.start;
+                    //
                     $("#TEMPFORM_" + lee).remove();
 
                     $(ele).focus();
@@ -447,6 +529,13 @@
                     $(ele).data().open = true;
                 }
                 return true;
+            };
+            remveP = function(ele) {
+                $(ele).remove();
+                cG.comix.internals.pages.splice(ele.substring(2), 1);
+            };
+            remveC = function(ele) {
+                $(ele).remove(); cG.comix.internals.chapters.splice(ele.substring(2), 1);
             };
             report = function(conf) {
                 console.log(conf);
@@ -538,8 +627,8 @@
                     $("#color_load").spectrum.color=conf.loading.color;
                 }
 
-                for (i = 0; i < conf.pages.length; i++) {
-                    $("#sorted").append("<li id=s" + i + ">" + conf.pages[i].url + " <button onClick=settingsP('#s" + i + "');>&#x2731</button><button onClick=$('#s" + i + "').remove()>X</button></li>").sortable({
+                for (var i = 0; i < conf.pages.length; i++) {
+                    $("#sorted").append("<li id=s" + i + "><span id=name_s" + i + ">" + conf.pages[i].url + "</span> <button onClick=settingsP('#s" + i + "');>&#x2731</button><button onClick=$('#s" + i + "').remove()>X</button></li>").sortable({
                         scroll: true
                     });
                     if (typeof conf.pages[i].perm === 'undefined') {
@@ -560,17 +649,18 @@
                         }
                     }).addClass("page");
                 }
-                for (oper = 0; oper < conf.chapters.length; oper++) {
-                    $("#Csort").append("<li id=c" + oper + ">" + conf.chapters[i].title + " <button onClick=settingsC('#c" + oper + "')>&#x2731</button><button onClick=$('#c" + oper + "').remove()>X</button> </li>").sortable({
+                for (var oper = 0; oper < conf.chapters.length; oper++) {
+                    //console.log(i);
+                    $("#Csort").append("<li id=c" + oper + "><span id=name_c" + oper + ">" + conf.chapters[oper].title + "</span> <button onClick=settingsC('#c" + oper + "')>&#x2731</button><button onClick=$('#c" + oper + "').remove()>X</button> </li>").sortable({
                         scroll: true
                     });
                     $("#c" + oper).data({
                         open: false,
                         body: {
-                            description: conf.chapters[i].description,
-                            end: conf.chapters[i].end,
-                            start: conf.chapters[i].start,
-                            title: conf.chapters[i].title,
+                            description: conf.chapters[oper].description,
+                            end: conf.chapters[oper].end,
+                            start: conf.chapters[oper].start,
+                            title: conf.chapters[oper].title,
                         }
                     }).addClass("chap");
                 }
