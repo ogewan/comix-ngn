@@ -9,11 +9,12 @@ cG.N =function(){return 0};/*null function*/
 if(void 0===cG.$GPC){cG.$GPC=0;}/*Global Plugin Counter (no longer global)*/
 cG.root = '';/*current default settings of cng, overwritten by plugins*/
 cG.cPanel = cG.cPanel||{};/*cG control panel, all stages are stored here*/
-cG.fBox = cG.fBox||{fstrun: true, pgepsh: true, pgesve: true, rtepge: true};/*cG fuse box, toggles various options
+cG.fBox = cG.fBox||{fstrun: true, pgepsh: true, pgesve: true, rtepge: true, protect: true};/*cG fuse box, toggles various options
 * fstrun - toggles automatic stage injection on document ready
 * pgepsh - toggles page url push to urlbar and history
 * pgesve - toggles page saving in localstorage
-* rtepge - toggles routing*/
+* rtepge - toggles routing
+* protect - toggles comix settings*/
 cG.info = {vix: "1.1.2",vwr: "0.8.0",vpr: "0.1.0"};/*version settings*/
 cG.dis = cG.dis||{};//disables statistic and error reporting
 cG.recyclebin = cG.recyclebin||{};//variables that are used in initialization, disposed at stage injection
@@ -286,7 +287,9 @@ return a};this.frst=function(){0<=n&&r(k,0);return 0};this.last=function(){r(k,h
         }
     }
     main.callback(1,lscurrent);
-    cG.comix = cG.comix||main;//this should only set the comix on the first call
+    cG.comix = (cG.fBox.protect)?cG.comix||main:main;
+    //if protect is true - set the comix on the first call
+    //else always overwrite comix
     return main;
 }}};
 ///////
