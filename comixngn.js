@@ -1000,7 +1000,7 @@ domReady(function(){
             break;
         };
     }
-    if((b||b===void 0||b=="")&&cG.fBox.fstrun){
+    if((b===null||b||b===void 0||b=="")&&cG.fBox.fstrun){
         //cG.HELPERS.jstagecreate();
         //cG.cPanel=cG.stageInjection();
         cG.stageInjection();
