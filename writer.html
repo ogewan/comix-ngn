@@ -2,7 +2,7 @@
 <title id="$COMICNGWRITER$$$">Writer</title>
 <script>
     var defer = !0,
-        mainsrc = "http://comixngn.js.org/ghs/lab/comixngn.min.js",
+        mainsrc = "http://comixngn.js.org/ghs/lab/comixngn.js",
         loadng = ["http://comixngn.js.org/ghs/1.1.1/plugins/comixngn.jq.js","http://code.jquery.com/jquery-2.1.4.min.js", "https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"],
         aftjq = ["http://code.jquery.com/ui/1.11.4/jquery-ui.min.js", "https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.7.0/spectrum.min.js"],
         fuse = {fstrun: true, pgepsh: false, pgesve: false, rtepge: false, protect: false},
@@ -298,7 +298,8 @@
                     $("#sorted").removeClass("empty");
                 }
                 var yun = ($("#nav-select").val()=="list")?'':"<img style='max-width:64px;max-height:64px;'>";
-                var i = $("#sorted").childElementCount;
+                var i = $("#sorted").get(0).childElementCount;
+                //console.log(i);
                 $("#sorted").append("<li id=s" + i + ">" + yun + " <button onClick=settingsP('#s" + i + "');>&#x2731</button><button onClick=remveP('#s" + i + "')>X</button></li>").sortable({
                         scroll: true
                     });
@@ -496,7 +497,7 @@
                     $(ele).data().body.perm = false;
                 }
                 if ($(ele).data().open) {
-                    /*console.log("deleting");*/
+                    console.log("deleting");
                     $(ele).data().body.title = $("#TEMP_title" + lee).val();
                     $(ele).data().body.hover = $("#TEMP_hover" + lee).val();
                     $(ele).data().body.note = $("#TEMP_note" + lee).val();
@@ -530,7 +531,7 @@
                             cG.comix.internals.pages[vrt].desig=0;
                     }
                     cG.comix.internals.pages[vrt].loaded = false;
-                    //
+                    console.log(lee);
                     $("#TEMPFORM_" + lee).remove();
                     /*document.getElementById(ele.substring(1)).removeChild(document.getElementById("TEMPFORM_"+ele));fallback*/
                     $(ele).focus();
