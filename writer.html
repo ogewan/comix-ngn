@@ -297,10 +297,11 @@
                 if ($("#sorted").hasClass("empty")) {
                     $("#sorted").removeClass("empty");
                 }
+                cG.comix.internals.pages.push({alt:"",hover:"",title:"",url:[],release:0,note:"",perm:!1,anim8:!1});
                 var yun = ($("#nav-select").val()=="list")?'':"<img style='max-width:64px;max-height:64px;'>";
                 var i = $("#sorted").get(0).childElementCount;
                 //console.log(i);
-                $("#sorted").append("<li id=s" + i + ">" + yun + " <button onClick=settingsP('#s" + i + "');>&#x2731</button><button onClick=remveP('#s" + i + "')>X</button></li>").sortable({
+                $("#sorted").append("<li id=s" + i + "><span class=page_icon id=name_s" + i + ">" + yun + "</span>" + " <button onClick=settingsP('#s" + i + "');>&#x2731</button><button onClick=remveP('#s" + i + "')>X</button></li>").sortable({
                         scroll: true
                     });
                     $("#s" + i).data({
@@ -357,9 +358,9 @@
                 console.log(this.files);
                 /*$("#sorted").innerHTML ="";*/
                 var yun;
-                for (i = 0; i < this.files.length; i++) {
+                for (var i = 0; i < this.files.length; i++) {
                     yun = ($("#nav-select").val()=="list")?this.files[i].name:"<img style='max-width:64px;max-height:64px;' src='" + this.files[i].name + "'>";
-                    $("#sorted").append("<li id=s" + i + ">" + yun + " <button onClick=settingsP('#s" + i + "');>&#x2731</button><button onClick=remveP('#s" + i + "')>X</button></li>").sortable({
+                    $("#sorted").append("<li id=s" + i + "><span class=page_icon id=name_s" + i + ">" + yun + "</span>" + " <button onClick=settingsP('#s" + i + "');>&#x2731</button><button onClick=remveP('#s" + i + "')>X</button></li>").sortable({
                         scroll: true
                     });
                     $("#s" + i).data({
@@ -467,7 +468,7 @@
                     setOBJ.chapters.push($(".class,li").eq(j).data().body);
                 }
                 for (j = 0; j < document.getElementById("sorted").childElementCount; j++) {
-                    setOBJ.pages.push($(".page,li").eq(j).data().body);
+                    setOBJ.pages.push($(".page"/*,li"*/).eq(j).data().body);
                 }
                 console.log(setOBJ);
                 $('.setlink').remove();
@@ -510,6 +511,7 @@
                     $(ele).data().body.anim8 = document.getElementById("TEMP_anim8" + lee).checked;
                     $(ele).data().body.special = $("#TEMP_special" + lee).val();
                     //virtual changes
+                    console.log(ele,$(ele).data());
                     var vrt = parseInt(ele.substring(2),10);
                     cG.comix.internals.pages[vrt].title=$(ele).data().body.title;
                     cG.comix.internals.pages[vrt].hover=$(ele).data().body.hover;
