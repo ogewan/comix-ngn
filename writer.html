@@ -9,8 +9,8 @@
         plugin = "",
         disable = ["rollbar"],
         comicID="CNGwriter",
-        dir = "",
-        tir = "",
+        dir = "http://comixngn.js.org/",
+        tir = "http://comixngn.js.org/",
         $GPC = $GPC + 1 || 1,
         cG={agent:function(e,t){return t=new XMLHttpRequest,t.open("GET",e),e=[],t.onreadystatechange=t.then=function(n,s,a){if(n&&n.call&&(e=[,n,s]),4==t.readyState&&(a=e[0|t.status/200]))try{a(JSON.parse(t.responseText),t)}catch(c){a(t.responseText,t)}},t.send(),t},REPO:{scReq:{}},dis:{}};
 </script>
@@ -713,8 +713,295 @@
                     }).addClass("chap");
                 }
             };
-        },
-        dfr=function(){/*!
+        },dfr = function() {
+    /*!
+     * Implementation of the Shunting yard algorithm
+     * look it up: http://en.wikipedia.org/wiki/Shunting-yard_algorithm
+     *
+     * Copyright 2013, Georg Tavonius
+     * Licensed under the MIT license.
+     *
+     * @version 1.0.1
+     *
+     * @author Georg Tavonius a.k.a. Calamari (http://github.com/Calamari)
+     * @homepage http://github.com/Calamari/shunting-yard.js
+     */
+    ! function(e) {
+        "use strict";
+
+        function t(e, t, n, r, i) {
+            return n = n || "left", {
+                name: e,
+                precedence: t,
+                params: r,
+                method: i,
+                greaterThen: function(e) {
+                    return t > e.precedence
+                },
+                greaterThenEqual: function(e) {
+                    return t >= e.precedence
+                },
+                equalThen: function(e) {
+                    return t === e.precedence
+                },
+                lessThen: function(e) {
+                    return t < e.precedence
+                },
+                lessThenEqual: function(e) {
+                    return t <= e.precedence
+                },
+                leftAssoc: function() {
+                    return "left" === n
+                },
+                rightAssoc: function() {
+                    return "right" === n
+                }
+            }
+        }
+
+        function n(e, t, n) {
+            return {
+                name: e,
+                params: t,
+                method: n
+            }
+        }
+        var r = window.jaz || {};
+        r.shuntingYard = function(t) {
+            function n(e) {
+                return "(" === e
+            }
+
+            function i(e) {
+                return ")" === e
+            }
+
+            function s(e) {
+                return r.Operators[e]
+            }
+
+            function c(e) {
+                return r.Functions[e]
+            }
+            var o, a, d, l, u, f, h, p = [],
+                v = [];
+            for (d = 0, l = t.length; l > d; ++d)
+                if (u = t[d], " " !== u) {
+                    if (a && (u = a += u, a = null), n(u)) v.push(u);
+                    else if (c(u)) v.push(u);
+                    else if (i(u)) {
+                        for (;
+                            (f = v.pop()) && !n(f);) c(f) || p.push(f);
+                        if (f === e) return null
+                    } else if (s(u)) {
+                        if (!o || "(" === o) {
+                            a = u;
+                            continue
+                        }
+                        for (; v.length && (h = r.Operators[u], f = r.Operators[v[v.length - 1]], f && h) && (h.leftAssoc() && h.lessThenEqual(f) || h.lessThen(f));) p.push(v.pop());
+                        v.push(u)
+                    } else !o || n(o) || s(o) ? p.push(u) : p[p.length - 1] += u;
+                    o = u
+                }
+            for (; v.length;) {
+                if (u = v.pop(), n(u)) return null;
+                p.push(u)
+            }
+            return p
+        }, r.Operator = t, r.Operators = {
+            "+": new t("+", 2, "left", 2, function(e, t) {
+                return e + t
+            }),
+            "-": new t("-", 2, "left", 2, function(e, t) {
+                return e - t
+            }),
+            "*": new t("*", 3, "left", 2, function(e, t) {
+                return e * t
+            }),
+            "/": new t("/", 3, "left", 2, function(e, t) {
+                return e / t
+            }),
+            "^": new t("^", 4, "right", 2, function(e, t) {
+                return Math.pow(e, t)
+            })
+        }, r.Function = n, r.Functions = {}, window.jaz = r
+    }(),
+    /*!
+     * Resolves a RPN
+     *
+     * Copyright 2013, Georg Tavonius
+     * Licensed under the MIT license.
+     *
+     * @author Georg Tavonius a.k.a. Calamari (http://github.com/Calamari)
+     * @homepage http://github.com/Calamari/shunting-yard.js
+     */
+    ! function() {
+        "use strict";
+        var e = window.jaz || {};
+        e.resolveRPN = function(t) {
+            function n(t) {
+                return e.Operators[t] || e.Functions[t]
+            }
+            var r, i, s, c = [];
+            for (r = 0, i = t.length; i > r; ++r) s = n(t[r]), c.push(s ? s.method.apply(this, c.splice(-s.params)) : parseFloat(t[r]));
+            return c[0]
+        }, window.jaz = e
+    }();
+    var e = document.createElement("script");
+    cG.REPO.scReq.getScript = cG.agent(dir + "script.json"), cG.REPO.scReq.getDecor = cG.agent(tir + "decor.html"), cG.REPO.scReq.getCtrls = cG.agent(tir + "ctrls.html"), cG.REPO.scReq.getScript.then(function(e) {
+        void 0 === cG.REPO.script ? cG.REPO.script = {
+            def: e
+        } : cG.REPO.script.def = e, cG.script = cG.REPO.script.def
+    }, function(e, t) {
+        console.error(e, t.status), void 0 === cG.REPO.script ? cG.REPO.script = {
+            def: 0
+        } : cG.REPO.script.def = e, cG.script = cG.REPO.script.def
+    }), cG.REPO.scReq.getDecor.then(function(e) {
+        void 0 === cG.REPO.decor ? cG.REPO.decor = {
+            def: e
+        } : cG.REPO.decor.def = e, cG.decor = cG.REPO.decor.def
+    }, function(e, t) {
+        console.error(e, t.status), void 0 === cG.REPO.decor ? cG.REPO.decor = {
+            def: 0
+        } : cG.REPO.decor.def = 0, cG.decor = cG.REPO.decor.def
+    }), cG.REPO.scReq.getCtrls.then(function(e) {
+        void 0 === cG.REPO.ctrls ? cG.REPO.ctrls = {
+            def: e
+        } : cG.REPO.ctrls.def = e, cG.ctrls = cG.REPO.ctrls.def
+    }, function(e, t) {
+        console.error(e, t.status), void 0 === cG.REPO.ctrls ? cG.REPO.ctrls = {
+            def: 0
+        } : cG.REPO.ctrls.def = 0, cG.ctrls = cG.REPO.ctrls.def
+    }), cG.comicID = comicID, cG.fBox = fuse;
+    for (var t = 0; t < disable.length; t++) cG.dis[disable[t]] = !0;
+    e.src = mainsrc, document.body.appendChild(e);
+    for (var n = 0; n < loadng.length; n++) e = document.createElement("script"), e.src = loadng[n], document.body.appendChild(e);
+    jqdep(), /*! humane.js: wavded.github.com/humane-js/ (MIT) (c) Marc Harter (@wavded)*/ ! function(e, t, n) {
+        "undefined" != typeof module ? module.exports = n(e, t) : "function" == typeof define && "object" == typeof define.amd ? define(n) : t[e] = n(e, t)
+    }("humane", this, function() {
+        var e = window,
+            t = document,
+            n = {
+                on: function(t, n, r) {
+                    "addEventListener" in e ? t.addEventListener(n, r, !1) : t.attachEvent("on" + n, r)
+                },
+                off: function(t, n, r) {
+                    "removeEventListener" in e ? t.removeEventListener(n, r, !1) : t.detachEvent("on" + n, r)
+                },
+                bind: function(e, t) {
+                    return function() {
+                        e.apply(t, arguments)
+                    }
+                },
+                isArray: Array.isArray || function(e) {
+                    return "[object Array]" === Object.prototype.toString.call(e)
+                },
+                config: function(e, t) {
+                    return null != e ? e : t
+                },
+                transSupport: !1,
+                useFilter: /msie [678]/i.test(navigator.userAgent),
+                _checkTransition: function() {
+                    var e = t.createElement("div"),
+                        n = {
+                            webkit: "webkit",
+                            Moz: "",
+                            O: "o",
+                            ms: "MS"
+                        };
+                    for (var r in n) r + "Transition" in e.style && (this.vendorPrefix = n[r], this.transSupport = !0)
+                }
+            };
+        n._checkTransition();
+        var r = function(t) {
+            t || (t = {}), this.queue = [], this.baseCls = t.baseCls || "humane", this.addnCls = t.addnCls || "", this.timeout = "timeout" in t ? t.timeout : 2500, this.waitForMove = t.waitForMove || !1, this.clickToClose = t.clickToClose || !1, this.timeoutAfterMove = t.timeoutAfterMove || !1, this.container = t.container;
+            try {
+                this._setupEl()
+            } catch (r) {
+                n.on(e, "load", n.bind(this._setupEl, this))
+            }
+        };
+        return r.prototype = {
+            constructor: r,
+            _setupEl: function() {
+                var e = t.createElement("div");
+                if (e.style.display = "none", !this.container) {
+                    if (!t.body) throw "document.body is null";
+                    this.container = t.body
+                }
+                this.container.appendChild(e), this.el = e, this.removeEvent = n.bind(function() {
+                    var e = n.config(this.currentMsg.timeoutAfterMove, this.timeoutAfterMove);
+                    e ? setTimeout(n.bind(this.remove, this), e) : this.remove()
+                }, this), this.transEvent = n.bind(this._afterAnimation, this), this._run()
+            },
+            _afterTimeout: function() {
+                n.config(this.currentMsg.waitForMove, this.waitForMove) ? this.removeEventsSet || (n.on(t.body, "mousemove", this.removeEvent), n.on(t.body, "click", this.removeEvent), n.on(t.body, "keypress", this.removeEvent), n.on(t.body, "touchstart", this.removeEvent), this.removeEventsSet = !0) : this.remove()
+            },
+            _run: function() {
+                if (!this._animating && this.queue.length && this.el) {
+                    this._animating = !0, this.currentTimer && (clearTimeout(this.currentTimer), this.currentTimer = null);
+                    var e = this.queue.shift(),
+                        t = n.config(e.clickToClose, this.clickToClose);
+                    t && (n.on(this.el, "click", this.removeEvent), n.on(this.el, "touchstart", this.removeEvent));
+                    var r = n.config(e.timeout, this.timeout);
+                    r > 0 && (this.currentTimer = setTimeout(n.bind(this._afterTimeout, this), r)), n.isArray(e.html) && (e.html = "<ul><li>" + e.html.join("<li>") + "</ul>"), this.el.innerHTML = e.html, this.currentMsg = e, this.el.className = this.baseCls, n.transSupport ? (this.el.style.display = "block", setTimeout(n.bind(this._showMsg, this), 50)) : this._showMsg()
+                }
+            },
+            _setOpacity: function(e) {
+                if (n.useFilter) try {
+                    this.el.filters.item("DXImageTransform.Microsoft.Alpha").Opacity = 100 * e
+                } catch (t) {} else this.el.style.opacity = e + ""
+            },
+            _showMsg: function() {
+                var e = n.config(this.currentMsg.addnCls, this.addnCls);
+                if (n.transSupport) this.el.className = this.baseCls + " " + e + " " + this.baseCls + "-animate";
+                else {
+                    var t = 0;
+                    this.el.className = this.baseCls + " " + e + " " + this.baseCls + "-js-animate", this._setOpacity(0), this.el.style.display = "block";
+                    var r = this,
+                        i = setInterval(function() {
+                            1 > t ? (t += .1, t > 1 && (t = 1), r._setOpacity(t)) : clearInterval(i)
+                        }, 30)
+                }
+            },
+            _hideMsg: function() {
+                var e = n.config(this.currentMsg.addnCls, this.addnCls);
+                if (n.transSupport) this.el.className = this.baseCls + " " + e, n.on(this.el, n.vendorPrefix ? n.vendorPrefix + "TransitionEnd" : "transitionend", this.transEvent);
+                else var t = 1,
+                    r = this,
+                    i = setInterval(function() {
+                        t > 0 ? (t -= .1, 0 > t && (t = 0), r._setOpacity(t)) : (r.el.className = r.baseCls + " " + e, clearInterval(i), r._afterAnimation())
+                    }, 30)
+            },
+            _afterAnimation: function() {
+                n.transSupport && n.off(this.el, n.vendorPrefix ? n.vendorPrefix + "TransitionEnd" : "transitionend", this.transEvent), this.currentMsg.cb && this.currentMsg.cb(), this.el.style.display = "none", this._animating = !1, this._run()
+            },
+            remove: function(e) {
+                var r = "function" == typeof e ? e : null;
+                n.off(t.body, "mousemove", this.removeEvent), n.off(t.body, "click", this.removeEvent), n.off(t.body, "keypress", this.removeEvent), n.off(t.body, "touchstart", this.removeEvent), n.off(this.el, "click", this.removeEvent), n.off(this.el, "touchstart", this.removeEvent), this.removeEventsSet = !1, r && this.currentMsg && (this.currentMsg.cb = r), this._animating ? this._hideMsg() : r && r()
+            },
+            log: function(e, t, n, r) {
+                var i = {};
+                if (r)
+                    for (var s in r) i[s] = r[s];
+                if ("function" == typeof t) n = t;
+                else if (t)
+                    for (var s in t) i[s] = t[s];
+                return i.html = e, n && (i.cb = n), this.queue.push(i), this._run(), this
+            },
+            spawn: function(e) {
+                var t = this;
+                return function(n, r, i) {
+                    return t.log.call(t, n, r, i, e), t
+                }
+            },
+            create: function(e) {
+                return new r(e)
+            }
+        }, new r
+    })
+},
+        adfr=function(){/*!
      * Implementation of the Shunting yard algorithm
      * look it up: http://en.wikipedia.org/wiki/Shunting-yard_algorithm
      *
@@ -733,7 +1020,7 @@
      *
      * @author Georg Tavonius a.k.a. Calamari (http://github.com/Calamari)
      * @homepage http://github.com/Calamari/shunting-yard.js
-     */!function(){"use strict";var e=window.jaz||{};e.resolveRPN=function(t){function n(t){return e.Operators[t]||e.Functions[t]}var r,i,s,c=[];for(r=0,i=t.length;i>r;++r)s=n(t[r]),c.push(s?s.method.apply(this,c.splice(-s.params)):parseFloat(t[r]));return c[0]},window.jaz=e}();var e=document.createElement("script");cG.REPO.scReq.getScript=cG.agent("./"+dir+"script.json"),cG.REPO.scReq.getDecor=cG.agent("./"+tir+"decor.html"),cG.REPO.scReq.getCtrls=cG.agent("./"+tir+"ctrls.html"),cG.REPO.scReq.getScript.then(function(e){void 0===cG.REPO.script?cG.REPO.script={def:e}:cG.REPO.script.def=e,cG.script=cG.REPO.script.def},function(e,t){console.error(e,t.status),void 0===cG.REPO.script?cG.REPO.script={def:0}:cG.REPO.script.def=e,cG.script=cG.REPO.script.def}),cG.REPO.scReq.getDecor.then(function(e){void 0===cG.REPO.decor?cG.REPO.decor={def:e}:cG.REPO.decor.def=e,cG.decor=cG.REPO.decor.def},function(e,t){console.error(e,t.status),void 0===cG.REPO.decor?cG.REPO.decor={def:0}:cG.REPO.decor.def=0,cG.decor=cG.REPO.decor.def}),cG.REPO.scReq.getCtrls.then(function(e){void 0===cG.REPO.ctrls?cG.REPO.ctrls={def:e}:cG.REPO.ctrls.def=e,cG.ctrls=cG.REPO.ctrls.def},function(e,t){console.error(e,t.status),void 0===cG.REPO.ctrls?cG.REPO.ctrls={def:0}:cG.REPO.ctrls.def=0,cG.ctrls=cG.REPO.ctrls.def}),cG.comicID=comicID,cG.fBox=fuse;for(var t=0;t<disable.length;t++)cG.dis[disable[t]]=!0;e.src=mainsrc,document.body.appendChild(e);for(var n=0;n<loadng.length;n++)e=document.createElement("script"),e.src=loadng[n],document.body.appendChild(e);jqdep(),/*! humane.js: wavded.github.com/humane-js/ (MIT) (c) Marc Harter (@wavded)*/!function(e,t,n){"undefined"!=typeof module?module.exports=n(e,t):"function"==typeof define&&"object"==typeof define.amd?define(n):t[e]=n(e,t)}("humane",this,function(){var e=window,t=document,n={on:function(t,n,r){"addEventListener"in e?t.addEventListener(n,r,!1):t.attachEvent("on"+n,r)},off:function(t,n,r){"removeEventListener"in e?t.removeEventListener(n,r,!1):t.detachEvent("on"+n,r)},bind:function(e,t){return function(){e.apply(t,arguments)}},isArray:Array.isArray||function(e){return"[object Array]"===Object.prototype.toString.call(e)},config:function(e,t){return null!=e?e:t},transSupport:!1,useFilter:/msie [678]/i.test(navigator.userAgent),_checkTransition:function(){var e=t.createElement("div"),n={webkit:"webkit",Moz:"",O:"o",ms:"MS"};for(var r in n)r+"Transition"in e.style&&(this.vendorPrefix=n[r],this.transSupport=!0)}};n._checkTransition();var r=function(t){t||(t={}),this.queue=[],this.baseCls=t.baseCls||"humane",this.addnCls=t.addnCls||"",this.timeout="timeout"in t?t.timeout:2500,this.waitForMove=t.waitForMove||!1,this.clickToClose=t.clickToClose||!1,this.timeoutAfterMove=t.timeoutAfterMove||!1,this.container=t.container;try{this._setupEl()}catch(r){n.on(e,"load",n.bind(this._setupEl,this))}};return r.prototype={constructor:r,_setupEl:function(){var e=t.createElement("div");if(e.style.display="none",!this.container){if(!t.body)throw"document.body is null";this.container=t.body}this.container.appendChild(e),this.el=e,this.removeEvent=n.bind(function(){var e=n.config(this.currentMsg.timeoutAfterMove,this.timeoutAfterMove);e?setTimeout(n.bind(this.remove,this),e):this.remove()},this),this.transEvent=n.bind(this._afterAnimation,this),this._run()},_afterTimeout:function(){n.config(this.currentMsg.waitForMove,this.waitForMove)?this.removeEventsSet||(n.on(t.body,"mousemove",this.removeEvent),n.on(t.body,"click",this.removeEvent),n.on(t.body,"keypress",this.removeEvent),n.on(t.body,"touchstart",this.removeEvent),this.removeEventsSet=!0):this.remove()},_run:function(){if(!this._animating&&this.queue.length&&this.el){this._animating=!0,this.currentTimer&&(clearTimeout(this.currentTimer),this.currentTimer=null);var e=this.queue.shift(),t=n.config(e.clickToClose,this.clickToClose);t&&(n.on(this.el,"click",this.removeEvent),n.on(this.el,"touchstart",this.removeEvent));var r=n.config(e.timeout,this.timeout);r>0&&(this.currentTimer=setTimeout(n.bind(this._afterTimeout,this),r)),n.isArray(e.html)&&(e.html="<ul><li>"+e.html.join("<li>")+"</ul>"),this.el.innerHTML=e.html,this.currentMsg=e,this.el.className=this.baseCls,n.transSupport?(this.el.style.display="block",setTimeout(n.bind(this._showMsg,this),50)):this._showMsg()}},_setOpacity:function(e){if(n.useFilter)try{this.el.filters.item("DXImageTransform.Microsoft.Alpha").Opacity=100*e}catch(t){}else this.el.style.opacity=e+""},_showMsg:function(){var e=n.config(this.currentMsg.addnCls,this.addnCls);if(n.transSupport)this.el.className=this.baseCls+" "+e+" "+this.baseCls+"-animate";else{var t=0;this.el.className=this.baseCls+" "+e+" "+this.baseCls+"-js-animate",this._setOpacity(0),this.el.style.display="block";var r=this,i=setInterval(function(){1>t?(t+=.1,t>1&&(t=1),r._setOpacity(t)):clearInterval(i)},30)}},_hideMsg:function(){var e=n.config(this.currentMsg.addnCls,this.addnCls);if(n.transSupport)this.el.className=this.baseCls+" "+e,n.on(this.el,n.vendorPrefix?n.vendorPrefix+"TransitionEnd":"transitionend",this.transEvent);else var t=1,r=this,i=setInterval(function(){t>0?(t-=.1,0>t&&(t=0),r._setOpacity(t)):(r.el.className=r.baseCls+" "+e,clearInterval(i),r._afterAnimation())},30)},_afterAnimation:function(){n.transSupport&&n.off(this.el,n.vendorPrefix?n.vendorPrefix+"TransitionEnd":"transitionend",this.transEvent),this.currentMsg.cb&&this.currentMsg.cb(),this.el.style.display="none",this._animating=!1,this._run()},remove:function(e){var r="function"==typeof e?e:null;n.off(t.body,"mousemove",this.removeEvent),n.off(t.body,"click",this.removeEvent),n.off(t.body,"keypress",this.removeEvent),n.off(t.body,"touchstart",this.removeEvent),n.off(this.el,"click",this.removeEvent),n.off(this.el,"touchstart",this.removeEvent),this.removeEventsSet=!1,r&&this.currentMsg&&(this.currentMsg.cb=r),this._animating?this._hideMsg():r&&r()},log:function(e,t,n,r){var i={};if(r)for(var s in r)i[s]=r[s];if("function"==typeof t)n=t;else if(t)for(var s in t)i[s]=t[s];return i.html=e,n&&(i.cb=n),this.queue.push(i),this._run(),this},spawn:function(e){var t=this;return function(n,r,i){return t.log.call(t,n,r,i,e),t}},create:function(e){return new r(e)}},new r})},jqdep=function(){if(void 0===window.jQuery)return setTimeout(jqdep,300);var e;/*! jquery-spoiler v1.3.0: (MIT) (c)2014 Triangle717 (http://le717.github.io) and Jarred Ballard (http://jarred.io/)*/!function(e){"use strict";"function"==typeof define&&define.amd?define(["jquery"],e):"object"==typeof exports?module.exports=e:e(jQuery)}(function(e){"use strict";e.fn.spoiler=function(t){var n=e.extend({contentClass:"spoiler-content",paddingValue:6,triggerEvents:!1,includePadding:!0,buttonActiveClass:"spoiler-active",spoilerVisibleClass:"spoiler-content-visible"},t),r="."+n.contentClass,i={};return e(r).each(function(){var t=e(this);t.css("overflow","hidden");var r=t.prop("scrollHeight");r=n.includePadding?r+parseInt(n.paddingValue,10):r;var s=t.attr("data-spoiler-link");i[s]=r+"px",t.css("height","0")}),e(this).on("click",function(){var t=e(this),s=t.attr("data-spoiler-link"),c=e(r+"[data-spoiler-link="+s+"]"),o={height:i[s]},a={height:"0"},d=c.hasClass(n.spoilerVisibleClass);c.css(d?a:o),n.triggerEvents&&t.trigger(d?"jq-spoiler-hidden":"jq-spoiler-visible"),c.toggleClass(n.spoilerVisibleClass),t.toggleClass(n.buttonActiveClass)}),this}});for(var t=0;t<aftjq.length;t++)e=document.createElement("script"),e.src=aftjq[t],document.body.appendChild(e);workhorse()};
+     */!function(){"use strict";var e=window.jaz||{};e.resolveRPN=function(t){function n(t){return e.Operators[t]||e.Functions[t]}var r,i,s,c=[];for(r=0,i=t.length;i>r;++r)s=n(t[r]),c.push(s?s.method.apply(this,c.splice(-s.params)):parseFloat(t[r]));return c[0]},window.jaz=e}();var e=document.createElement("script");cG.REPO.scReq.getScript=cG.agent(dir+"script.json"),cG.REPO.scReq.getDecor=cG.agent(tir+"decor.html"),cG.REPO.scReq.getCtrls=cG.agent(tir+"ctrls.html"),cG.REPO.scReq.getScript.then(function(e){void 0===cG.REPO.script?cG.REPO.script={def:e}:cG.REPO.script.def=e,cG.script=cG.REPO.script.def},function(e,t){console.error(e,t.status),void 0===cG.REPO.script?cG.REPO.script={def:0}:cG.REPO.script.def=e,cG.script=cG.REPO.script.def}),cG.REPO.scReq.getDecor.then(function(e){void 0===cG.REPO.decor?cG.REPO.decor={def:e}:cG.REPO.decor.def=e,cG.decor=cG.REPO.decor.def},function(e,t){console.error(e,t.status),void 0===cG.REPO.decor?cG.REPO.decor={def:0}:cG.REPO.decor.def=0,cG.decor=cG.REPO.decor.def}),cG.REPO.scReq.getCtrls.then(function(e){void 0===cG.REPO.ctrls?cG.REPO.ctrls={def:e}:cG.REPO.ctrls.def=e,cG.ctrls=cG.REPO.ctrls.def},function(e,t){console.error(e,t.status),void 0===cG.REPO.ctrls?cG.REPO.ctrls={def:0}:cG.REPO.ctrls.def=0,cG.ctrls=cG.REPO.ctrls.def}),cG.comicID=comicID,cG.fBox=fuse;for(var t=0;t<disable.length;t++)cG.dis[disable[t]]=!0;e.src=mainsrc,document.body.appendChild(e);for(var n=0;n<loadng.length;n++)e=document.createElement("script"),e.src=loadng[n],document.body.appendChild(e);jqdep(),/*! humane.js: wavded.github.com/humane-js/ (MIT) (c) Marc Harter (@wavded)*/!function(e,t,n){"undefined"!=typeof module?module.exports=n(e,t):"function"==typeof define&&"object"==typeof define.amd?define(n):t[e]=n(e,t)}("humane",this,function(){var e=window,t=document,n={on:function(t,n,r){"addEventListener"in e?t.addEventListener(n,r,!1):t.attachEvent("on"+n,r)},off:function(t,n,r){"removeEventListener"in e?t.removeEventListener(n,r,!1):t.detachEvent("on"+n,r)},bind:function(e,t){return function(){e.apply(t,arguments)}},isArray:Array.isArray||function(e){return"[object Array]"===Object.prototype.toString.call(e)},config:function(e,t){return null!=e?e:t},transSupport:!1,useFilter:/msie [678]/i.test(navigator.userAgent),_checkTransition:function(){var e=t.createElement("div"),n={webkit:"webkit",Moz:"",O:"o",ms:"MS"};for(var r in n)r+"Transition"in e.style&&(this.vendorPrefix=n[r],this.transSupport=!0)}};n._checkTransition();var r=function(t){t||(t={}),this.queue=[],this.baseCls=t.baseCls||"humane",this.addnCls=t.addnCls||"",this.timeout="timeout"in t?t.timeout:2500,this.waitForMove=t.waitForMove||!1,this.clickToClose=t.clickToClose||!1,this.timeoutAfterMove=t.timeoutAfterMove||!1,this.container=t.container;try{this._setupEl()}catch(r){n.on(e,"load",n.bind(this._setupEl,this))}};return r.prototype={constructor:r,_setupEl:function(){var e=t.createElement("div");if(e.style.display="none",!this.container){if(!t.body)throw"document.body is null";this.container=t.body}this.container.appendChild(e),this.el=e,this.removeEvent=n.bind(function(){var e=n.config(this.currentMsg.timeoutAfterMove,this.timeoutAfterMove);e?setTimeout(n.bind(this.remove,this),e):this.remove()},this),this.transEvent=n.bind(this._afterAnimation,this),this._run()},_afterTimeout:function(){n.config(this.currentMsg.waitForMove,this.waitForMove)?this.removeEventsSet||(n.on(t.body,"mousemove",this.removeEvent),n.on(t.body,"click",this.removeEvent),n.on(t.body,"keypress",this.removeEvent),n.on(t.body,"touchstart",this.removeEvent),this.removeEventsSet=!0):this.remove()},_run:function(){if(!this._animating&&this.queue.length&&this.el){this._animating=!0,this.currentTimer&&(clearTimeout(this.currentTimer),this.currentTimer=null);var e=this.queue.shift(),t=n.config(e.clickToClose,this.clickToClose);t&&(n.on(this.el,"click",this.removeEvent),n.on(this.el,"touchstart",this.removeEvent));var r=n.config(e.timeout,this.timeout);r>0&&(this.currentTimer=setTimeout(n.bind(this._afterTimeout,this),r)),n.isArray(e.html)&&(e.html="<ul><li>"+e.html.join("<li>")+"</ul>"),this.el.innerHTML=e.html,this.currentMsg=e,this.el.className=this.baseCls,n.transSupport?(this.el.style.display="block",setTimeout(n.bind(this._showMsg,this),50)):this._showMsg()}},_setOpacity:function(e){if(n.useFilter)try{this.el.filters.item("DXImageTransform.Microsoft.Alpha").Opacity=100*e}catch(t){}else this.el.style.opacity=e+""},_showMsg:function(){var e=n.config(this.currentMsg.addnCls,this.addnCls);if(n.transSupport)this.el.className=this.baseCls+" "+e+" "+this.baseCls+"-animate";else{var t=0;this.el.className=this.baseCls+" "+e+" "+this.baseCls+"-js-animate",this._setOpacity(0),this.el.style.display="block";var r=this,i=setInterval(function(){1>t?(t+=.1,t>1&&(t=1),r._setOpacity(t)):clearInterval(i)},30)}},_hideMsg:function(){var e=n.config(this.currentMsg.addnCls,this.addnCls);if(n.transSupport)this.el.className=this.baseCls+" "+e,n.on(this.el,n.vendorPrefix?n.vendorPrefix+"TransitionEnd":"transitionend",this.transEvent);else var t=1,r=this,i=setInterval(function(){t>0?(t-=.1,0>t&&(t=0),r._setOpacity(t)):(r.el.className=r.baseCls+" "+e,clearInterval(i),r._afterAnimation())},30)},_afterAnimation:function(){n.transSupport&&n.off(this.el,n.vendorPrefix?n.vendorPrefix+"TransitionEnd":"transitionend",this.transEvent),this.currentMsg.cb&&this.currentMsg.cb(),this.el.style.display="none",this._animating=!1,this._run()},remove:function(e){var r="function"==typeof e?e:null;n.off(t.body,"mousemove",this.removeEvent),n.off(t.body,"click",this.removeEvent),n.off(t.body,"keypress",this.removeEvent),n.off(t.body,"touchstart",this.removeEvent),n.off(this.el,"click",this.removeEvent),n.off(this.el,"touchstart",this.removeEvent),this.removeEventsSet=!1,r&&this.currentMsg&&(this.currentMsg.cb=r),this._animating?this._hideMsg():r&&r()},log:function(e,t,n,r){var i={};if(r)for(var s in r)i[s]=r[s];if("function"==typeof t)n=t;else if(t)for(var s in t)i[s]=t[s];return i.html=e,n&&(i.cb=n),this.queue.push(i),this._run(),this},spawn:function(e){var t=this;return function(n,r,i){return t.log.call(t,n,r,i,e),t}},create:function(e){return new r(e)}},new r})},jqdep=function(){if(void 0===window.jQuery)return setTimeout(jqdep,300);var e;/*! jquery-spoiler v1.3.0: (MIT) (c)2014 Triangle717 (http://le717.github.io) and Jarred Ballard (http://jarred.io/)*/!function(e){"use strict";"function"==typeof define&&define.amd?define(["jquery"],e):"object"==typeof exports?module.exports=e:e(jQuery)}(function(e){"use strict";e.fn.spoiler=function(t){var n=e.extend({contentClass:"spoiler-content",paddingValue:6,triggerEvents:!1,includePadding:!0,buttonActiveClass:"spoiler-active",spoilerVisibleClass:"spoiler-content-visible"},t),r="."+n.contentClass,i={};return e(r).each(function(){var t=e(this);t.css("overflow","hidden");var r=t.prop("scrollHeight");r=n.includePadding?r+parseInt(n.paddingValue,10):r;var s=t.attr("data-spoiler-link");i[s]=r+"px",t.css("height","0")}),e(this).on("click",function(){var t=e(this),s=t.attr("data-spoiler-link"),c=e(r+"[data-spoiler-link="+s+"]"),o={height:i[s]},a={height:"0"},d=c.hasClass(n.spoilerVisibleClass);c.css(d?a:o),n.triggerEvents&&t.trigger(d?"jq-spoiler-hidden":"jq-spoiler-visible"),c.toggleClass(n.spoilerVisibleClass),t.toggleClass(n.buttonActiveClass)}),this}});for(var t=0;t<aftjq.length;t++)e=document.createElement("script"),e.src=aftjq[t],document.body.appendChild(e);workhorse()};
 
     !function() {
         return defer ? void(window.addEventListener ? window.addEventListener("load", dfr, !1) : window.attachEvent ? window.attachEvent("onload", dfr) : window.onload = dfr) : dfr()
