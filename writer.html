@@ -154,7 +154,7 @@
                         </td>
                         <td>
                             <h4 id="PGEHEAD">Pages</h4>
-                            <input id="conductor" type="file" multiple>
+                            <button id="add3">+</button><input id="conductor" type="file" multiple>
                         </td>
                     <tr>
                         <td style="vertical-align:top">
@@ -293,6 +293,30 @@
             /*
         $(".spoiler-content").show();
         $("#design_contain").show();*/
+            $("#add3").click(function() {
+                if ($("#sorted").hasClass("empty")) {
+                    $("#sorted").removeClass("empty");
+                }
+                var yun = ($("#nav-select").val()=="list")?'':"<img style='max-width:64px;max-height:64px;'>";
+                var i = $("#sorted").childElementCount;
+                $("#sorted").append("<li id=s" + i + ">" + yun + " <button onClick=settingsP('#s" + i + "');>&#x2731</button><button onClick=remveP('#s" + i + "')>X</button></li>").sortable({
+                        scroll: true
+                    });
+                    $("#s" + i).data({
+                        open: false,
+                        body: {
+                            alt: "",
+                            hover: "",
+                            title: "",
+                            url: [],
+                            release: 0,
+                            note: "",
+                            perm: false,
+                            anim8: false,
+                            special: "",
+                        }
+                    }).addClass("page");
+            });
             $("#add2").click(function() {
                 if ($("#Csort").hasClass("empty")) {
                     $("#Csort").removeClass("empty");
@@ -331,8 +355,10 @@
                 }
                 console.log(this.files);
                 /*$("#sorted").innerHTML ="";*/
+                var yun;
                 for (i = 0; i < this.files.length; i++) {
-                    $("#sorted").append("<li id=s" + i + ">" + this.files[i].name + " <button onClick=settingsP('#s" + i + "');>&#x2731</button><button onClick=remveP('#s" + i + "')>X</button></li>").sortable({
+                    yun = ($("#nav-select").val()=="list")?this.files[i].name:"<img style='max-width:64px;max-height:64px;' src='" + this.files[i].name + "'>";
+                    $("#sorted").append("<li id=s" + i + ">" + yun + " <button onClick=settingsP('#s" + i + "');>&#x2731</button><button onClick=remveP('#s" + i + "')>X</button></li>").sortable({
                         scroll: true
                     });
                     $("#s" + i).data({
