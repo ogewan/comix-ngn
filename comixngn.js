@@ -161,8 +161,8 @@ b==e.length-1?1:0:-1,e[b].loaded=!1;for(b=0;b<d.config.imgprebuffer;b++)u.push(n
     var get;//still undefined
     if(typeof(Storage) !== "undefined") {
         get = parseInt(localStorage.getItem(cG.comicID+"|"+name+"|curPage"),10);
-        if(cG.avx[0]>0&&cG.avx[1]>0) cG.verbose(1,cG.comicID+"|"+name+"|curPage",":",get);
-        else console.log(cG.comicID+"|"+name+"|curPage",":",get);
+        /*if(cG.avx[0]>0&&cG.avx[1]>0) */cG.verbose(1,cG.comicID+"|"+name+"|curPage",":",get);
+        /*else console.log(cG.comicID+"|"+name+"|curPage",":",get);*/
     }
     if(cG.comix===void 0&&cG.prePage>=0) get = cG.prePage;//prepage, which is from router, overwrites localStorage if over -1, only works on comix
     var main = new direction(scriptt,anchor,get);
@@ -684,7 +684,8 @@ cG.stageInjection = function(SPECIFIC){
             //console.log(sbvenue,nstpost)
             //if(cG.avx[0]>1&&cG.avx[1]>0){}
             //console.log(stages[iD])
-            if(stages[iD].getAttribute("id")==cG.comix.name) stages[iD].setAttribute("comix",1);
+            if(!cG.fBox.protect) stages[iD].setAttribute("comix",-1);//comix protection disabled, all stages are comix
+            else if(stages[iD].getAttribute("id")==cG.comix.name) stages[iD].setAttribute("comix",1);
             var chl = stages[iD].children;
             for(var t = 1;t<chl.length;t++){
                 if(chl[t]==anchorto) continue;
