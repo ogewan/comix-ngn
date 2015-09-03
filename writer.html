@@ -113,6 +113,10 @@
                         <td title="Background color of webcomic">
                             <label for="back_total">Background: </label>
                             <input id="back_color" style="visibility: hidden;"></td>
+                        <td title="Order of navigation button: Left to Right or Right to Left">
+                            <label for="rdr_0">Reading Direction</label>
+                            <input type="radio" id="rdr_0" name="rdi" checked>L -> R&nbsp;
+                            <input type="radio" id="rdr_1" name="rdi">R -> L</td>
                     </tr>
                     <tr>
                         <td colspan="8">
@@ -441,6 +445,7 @@
                     alert("Settings Configured!");*/
                 setOBJ.config.dir = $("#dir").val();
                     setOBJ.config.pagestartnum = document.getElementById("psn_1").checked;
+                    setOBJ.config.readdir = document.getElementById("rdr_1").checked;
                     setOBJ.config.chapterstartnum = document.getElementById("csn_1").checked;
                 setOBJ.config.startpage = parseInt($("#strp").val(),10);/*document.getElementById("strp_1").checked;*/
                 setOBJ.config.imgprebuffer = parseInt($("#prb").val(),10);
@@ -472,8 +477,8 @@
                 }
                 console.log(setOBJ);
                 $('.setlink').remove();
-                var refh = "<a onClick=$('.setlink').remove() class='setlink' href='data: text/json;charset=utf-8," + JSON.stringify(setOBJ, ["parent","offset","config", "pyr", "loading", "pages", "chapters", "dir", "startpage", "pagestartnum", "chapterstartnum", "imgprebuffer", "imgpostbuffer", "back", "appendmismatch", "appendorder", "appendorderdir", "alt", "hover", "title","perm","anim8","special", "url", "release", "note", "description", "start", "end", "title", "diameter","lines","rate","xpos","ypos","back","color"]) + "' download='config.json' autofocus>config.json<br></a>",
-                    formref = "<a onClick=$('.setlink').remove() class='setlink' href='data: text/json;charset=utf-8," + JSON.stringify(setOBJ, ["parent","offset","config", "pyr", "loading", "pages", "chapters", "dir", "startpage", "pagestartnum", "chapterstartnum", "imgprebuffer", "imgpostbuffer", "back", "appendmismatch", "appendorder", "appendorderdir", "alt", "hover", "title","perm","anim8","special", "url", "release", "note", "description", "start", "end", "title", "diameter","lines","rate","xpos","ypos","back","color"],4) + "' download='config.json' autofocus>config.json<br></a>";
+                var refh = "<a onClick=$('.setlink').remove() class='setlink' href='data: text/json;charset=utf-8," + JSON.stringify(setOBJ, ["parent","offset","config", "pyr", "loading", "pages", "chapters", "dir", "startpage", "pagestartnum", "readdir", "chapterstartnum", "imgprebuffer", "imgpostbuffer", "back", "appendmismatch", "appendorder", "appendorderdir", "alt", "hover", "title","perm","anim8","special", "url", "release", "note", "description", "start", "end", "title", "diameter","lines","rate","xpos","ypos","back","color"]) + "' download='config.json' autofocus>config.json<br></a>",
+                    formref = "<a onClick=$('.setlink').remove() class='setlink' href='data: text/json;charset=utf-8," + JSON.stringify(setOBJ, ["parent","offset","config", "pyr", "loading", "pages", "chapters", "dir", "startpage", "pagestartnum", "readdir", "chapterstartnum", "imgprebuffer", "imgpostbuffer", "back", "appendmismatch", "appendorder", "appendorderdir", "alt", "hover", "title","perm","anim8","special", "url", "release", "note", "description", "start", "end", "title", "diameter","lines","rate","xpos","ypos","back","color"],4) + "' download='config.json' autofocus>config.json<br></a>";
                 console.log(formref);
                 $(refh).appendTo("#MHEAD");
                 $(refh).appendTo("#MHEADCL");
@@ -591,6 +596,8 @@
                 console.log(conf);
                 document.getElementById("psn_0").checked = false;
                 document.getElementById("psn_1").checked = false;
+                document.getElementById("rdr_0").checked = false;
+                document.getElementById("rdr_1").checked = false;
                 document.getElementById("csn_0").checked = false;
                 document.getElementById("csn_1").checked = false;
                 /*document.getElementById("strp_0").checked = false;
@@ -610,6 +617,7 @@
                     $("#prb").val("5");
                     $("#strp").val("0");
                     $.data($("#back_color"),"color","#fff"); 
+                    document.getElementById("rdr_1").checked = true; 
                     document.getElementById("psn_1").checked = true;
                     document.getElementById("csn_1").checked = true;
                 } else {
@@ -629,6 +637,8 @@
                     }
                     if (conf.config.pagestartnum) document.getElementById("psn_1").checked = true;
                     else document.getElementById("psn_0").checked = true;
+                    if (conf.config.readdir) document.getElementById("rdr_1").checked = true;
+                    else document.getElementById("rdr_0").checked = true;
                     if (conf.config.chapterstartnum) document.getElementById("csn_1").checked = true;
                     else document.getElementById("csn_0").checked = true;
                 }
