@@ -560,12 +560,14 @@ cG.controlInjection = function(SPECIFIC){
     }
 }
 cG.stageInjection = function(SPECIFIC){
+    console.log("Init-Inject");
     if(cG.script === '' || cG.decor === ''|| cG.ctrls === '') {//although we don't need decor, if there is a template, we prioritize it
         /*if are stuff isn't ready yet we are going to wait for it*/
         setTimeout(cG.stageInjection, 300,SPECIFIC); 
         return cG.cPanel;
     }
     if(!cG.script) return console.error("No script.JSON found. script.JSON is REQUIRED to create any stage. Please create a script.JSON or move it to the directory specified in the script tag for comix-ngn or bellerophon if it is added.");
+    console.log("Begin-Inject");
     var stages = [],
         errr = "stageInjection can only operate on elements or arrays of elements";
     if(void 0 === SPECIFIC) stages = document.getElementsByClassName("venue");/*get all entry points*/
@@ -721,6 +723,7 @@ cG.stageInjection = function(SPECIFIC){
     cG.cPanel=final_res;
     cG.controlInjection();
     return final_res;
+    console.log("End-Inject");
 };
 /*end STAGE creation*/
 /*ROUTING*/
