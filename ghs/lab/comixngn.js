@@ -9,7 +9,7 @@ cG.N =function(){return 0};/*null function*/
 if(void 0===cG.$GPC){cG.$GPC=0;}/*Global Plugin Counter (no longer global)*/
 cG.root = '';/*current default settings of cng, overwritten by plugins*/
 cG.cPanel = cG.cPanel||{};/*cG control panel, all stages are stored here*/
-cG.fBox = cG.fBox||{fstrun: true, pgepsh: true, pgesve: true, rtepge: true, protect: true};/*cG fuse box, toggles various options
+cG.fBox = cG.fBox||{fstrun: true, pgepsh: true, pgesve: true, rtepge: true, protect: true, noverwrite: true};/*cG fuse box, toggles various options
 * fstrun - toggles automatic stage injection on document ready
 * pgepsh - toggles page url push to urlbar and history
 * pgesve - toggles page saving in localstorage
@@ -615,6 +615,7 @@ cG.stageInjection = function(SPECIFIC){
                 use_attr = stages[iD].getAttribute("use"),
                 config_attr = stages[iD].getAttribute("config");
             /*////attribute processing */
+            //cgcij tells cG that a stage has already been injectted on this element, and you should skip it normally
             stages[iD].setAttribute("cgcij",1);
             if(id_attr==""||void 0===id_attr||id_attr===null){/*if no ID, make one*/
                 var name = "STG"+iD;
@@ -673,7 +674,7 @@ cG.stageInjection = function(SPECIFIC){
                     transcriptCH=transcriptCH+'<li onclick="cG.cPanel['+"'"/*+'def_'*/+id_attr+"'"+'].ch_go('+x+');this.parentElement.parentElement.style.display='+"'none'"+';document.getElementById('+"'"+id_attr+"_location'"+').style.display='+"'block'"+';" style="display:block;">'+(x+chpapp)+'</li>';
                     transcriptBH=transcriptBH+'<li onclick="cG.cPanel['+"'"/*+'def_'*/+id_attr+"'"+'].ch_go('+x+');this.parentElement.parentElement.style.display='+"'none'"+';document.getElementById('+"'"+id_attr+"_location'"+').style.display='+"'block'"+';" style="display:block;">'+(x+chpapp)+'<ul>';
                     for(var u=myScript.chapters[x].start;u<myScript.chapters[x].end+1;u++){
-                        transcriptBH=transcriptBH+'<li onclick="cG.cPanel['+"'"/*+'def_'*/+id_attr+"'"+'].go('+u+');this.parentElement.parentElement.parentElement.style.display='+"'none'"+';document.getElementById('+"'"+id_attr+"_location'"+').style.display='+"'block'"+';" style="display:block;">'+(u+pagapp)+'</li>';
+                        transcriptBH=transcriptBH+'<li onclick="cG.cPanel['+"'"/*+'def_'*/+id_attr+"'"+'].go('+u+');this.parentElement.parentElement.parentElement.style.display='+"'none'"+';document.getElementById('+"'"+id_attr+"_location'     "+').style.display='+"'block'"+';" style="display:block;">'+(u+pagapp)+'</li>';
                     }
                     transcriptBH=transcriptBH+'</ul></li>';
                 }
@@ -720,7 +721,7 @@ cG.stageInjection = function(SPECIFIC){
                 var frspr = cG.HELPERS.stick(final_res[srch].pg[r],final_res[srch].pg,final_res[srch],r);
             }
         };
-    for (var i = 0; i < stages.length; i++) if(!stages[i].getAttribute("cgcij")==true) request(i);
+    for (var i = 0; i < stages.length; i++) if(!stages[i].getAttribute("cgcij")==true||!cG.fBox.noverwrite) request(i);
     cG.cPanel=final_res;
     cG.controlInjection();
     console.log("End-Inject");
