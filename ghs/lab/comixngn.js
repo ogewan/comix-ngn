@@ -715,7 +715,7 @@ cG.addRender = function(addme){//name of caller
         //this overwrites cG.script, if it it changed by something other than def
         cG.script = cG.REPO.script.def;
     }
-    if(void 0===target||target===null){
+    if(void 0===addme||addme===null){
         cG.REPO.scReq.getAdd = cG.agent(cG.REPO.scReq.address+'additive.json');
         cG.REPO.scReq.getAdd.then(
             function(data, xhr) {
