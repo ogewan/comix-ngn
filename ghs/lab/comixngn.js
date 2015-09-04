@@ -702,28 +702,33 @@ cG.queue.stageChange.controller=function(target){
         }
     }
 };
-cG.addRender = function(target){//name of caller
-    if(void 0===target||target===null) target = ""
-    else target = target + "_";
-        cG.REPO.scReq.getAdd = cG.agent(cG.REPO.scReq.address+target+'additive.json');
+cG.addRender = function(addme){//name of caller
+    var pushonpages = function(tget){
+        //convert data to page array
+        for(var i =0;i<tget.count;i++){
+            if(Array.isArray(tget[i])){
+                cG.REPO.script.def.pages.push({alt:"",hover:"",title:"",url:tget[i],release:0,note:"",perm:!1,anim8:!1});
+            } else {
+                cG.REPO.script.def.pages.push({alt:"",hover:"",title:"",url:[tget[i]],release:0,note:"",perm:!1,anim8:!1});
+            }
+        }
+        //this overwrites cG.script, if it it changed by something other than def
+        cG.script = cG.REPO.script.def;
+    }
+    if(void 0===target||target===null){
+        cG.REPO.scReq.getAdd = cG.agent(cG.REPO.scReq.address+'additive.json');
         cG.REPO.scReq.getAdd.then(
             function(data, xhr) {
-                //convert data to page array
-                for(var i =0;i<data.p;i++){
-                    if(Array.isArray(data.p[i])){
-                        cG.REPO.script.def.pages.push({alt:"",hover:"",title:"",url:data.p[i],release:0,note:"",perm:!1,anim8:!1});
-                    } else {
-                        cG.REPO.script.def.pages.push({alt:"",hover:"",title:"",url:[data.p[i]],release:0,note:"",perm:!1,anim8:!1});
-                    }
-                }
-                //this overwrites cG.script, if it it changed by something other than def
-                cG.script = cG.REPO.script.def;
+                pushonpages(data);
             },
             function(data, xhr) {
                 console.error(data, xhr.status);
                 console.log("addRender has failed")
                 //cG.script = cG.REPO.script.def = 0;
             });
+    } else {
+        pushonpages(addme);
+    }
 };
 cG.controlInjection = function(SPECIFIC){
     var stages = [],
