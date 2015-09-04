@@ -724,7 +724,6 @@ cG.addRender = function(target){//name of caller
                 console.log("addRender has failed")
                 //cG.script = cG.REPO.script.def = 0;
             });
-    }
 };
 cG.controlInjection = function(SPECIFIC){
     var stages = [],
