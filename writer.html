@@ -399,9 +399,11 @@
                     this.files = {};
                     return;
                 }
-                console.log(this.files);
+                //console.log(this.files);
                 if (!this.files.length) return;
-
+                
+                $("#sorted").html("");
+                $("#Csort").html("");
                 /*if (!this.files[0].type.match()) {
                     throw "File Type must be an image";
                 }*/
@@ -410,9 +412,15 @@
                 var reader = new FileReader();
                 reader.onload = function(e) {
                     var result = JSON.parse(e.target.result);
-                    console.log(result);
+                    if(result.p===void 0||result.p===null) return -1;
+                    if(!result.p.length) return -1;
+                    if(!cG.script.pages[0].url.length){
+                        //removes empty pages before add render
+                        cG.REPO.script.def.pages.splice(0, 1);
+                        cG.script = cG.REPO.script.def;
+                    }
                     cG.addRender(result);
-                    console.log(cG.script);
+                    //console.log(cG.script);
                     report(cG.script);
                     //console.log(cG.script);
                     $(".venue").stageInjection();
@@ -431,8 +439,9 @@
                 console.log(this.files);
                 if (!this.files.length) return;
                 /*$("#sorted").innerHTML ="";*/
-                $("#sorted").textContent = "";
-                $("#Csort").textContent = "";
+                //console.log("INSIDE",$("#sorted"),$("#sorted").html());
+                $("#sorted").html("");
+                $("#Csort").html("");
 
                 /*if (!this.files[0].type.match()) {
                     throw "File Type must be an image";
@@ -441,7 +450,10 @@
                 // Using FileReader to display the image content
                 var reader = new FileReader();
                 reader.onload = function(e) {
-                    cG.script = JSON.parse(e.target.result);
+                    var result = JSON.parse(e.target.result);
+                    if(result.config===void 0||result.config===null)
+                        return -1;
+                    cG.script = cG.REPO.script.def = result;
                     report(cG.script);
                     //console.log(cG.script);
                     $(".venue").stageInjection();
@@ -634,7 +646,7 @@
                 $(ele).remove(); cG.comix.internals.chapters.splice(ele.substring(2), 1);
             };
             report = function(conf) {
-                console.log(conf);
+                //console.log(conf);
                 document.getElementById("psn_0").checked = false;
                 document.getElementById("psn_1").checked = false;
                 document.getElementById("rdr_0").checked = false;
