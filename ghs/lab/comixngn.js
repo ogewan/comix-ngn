@@ -604,6 +604,7 @@ cG.HELPERS = {};
     tir=tir||"";
     if(cG.root=="") cG.root="def";
     if(void 0===cG.REPO.scReq.getScript){/*create script.json promise if not already created*/
+        cG.REPO.scReq.address = dir;
         cG.REPO.scReq.getScript = cG.agent(dir+'script.json');
         cG.REPO.scReq.getScript.then(
             function(data, xhr) {
@@ -699,6 +700,30 @@ cG.queue.stageChange.controller=function(target){
                 if(!key) b.setAttribute("style","display:inline;");
             }
         }
+    }
+};
+cG.addRender = function(target){//name of caller
+    if(void 0===target||target===null) target = ""
+    else target = target + "_";
+        cG.REPO.scReq.getAdd = cG.agent(cG.REPO.scReq.address+target+'additive.json');
+        cG.REPO.scReq.getAdd.then(
+            function(data, xhr) {
+                //convert data to page array
+                for(var i =0;i<data.p;i++){
+                    if(Array.isArray(data.p[i])){
+                        cG.REPO.script.def.pages.push({alt:"",hover:"",title:"",url:data.p[i],release:0,note:"",perm:!1,anim8:!1});
+                    } else {
+                        cG.REPO.script.def.pages.push({alt:"",hover:"",title:"",url:[data.p[i]],release:0,note:"",perm:!1,anim8:!1});
+                    }
+                }
+                //this overwrites cG.script, if it it changed by something other than def
+                cG.script = cG.REPO.script.def;
+            },
+            function(data, xhr) {
+                console.error(data, xhr.status);
+                console.log("addRender has failed")
+                //cG.script = cG.REPO.script.def = 0;
+            });
     }
 };
 cG.controlInjection = function(SPECIFIC){
@@ -856,6 +881,7 @@ cG.stageInjection = function(SPECIFIC){
         if(void 0 === SPECIFIC.nodeName) return console.error(errr);
         stages.push(SPECIFIC);/*if not array and not undefined, assume it is a Element*/
     }
+    if(!void 0 === cG.recyclebin.dir||!cG.recyclebin.dir===null)  cG.REPO.scReq.address = cG.recyclebin.dir;
     if(cG.recyclebin.air!=""&&cG.recyclebin.air!==void 0&&cG.recyclebin.air!==null) cG.script.config.dir=cG.recyclebin.air;
     for(var p in cG.recyclebin)
         if(cG.recyclebin.hasOwnProperty(p)&&p!==null)
