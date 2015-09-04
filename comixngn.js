@@ -9,7 +9,7 @@ cG.N =function(){return 0};/*null function*/
 if(void 0===cG.$GPC){cG.$GPC=0;}/*Global Plugin Counter (no longer global)*/
 cG.root = '';/*current default settings of cng, overwritten by plugins*/
 cG.cPanel = cG.cPanel||{};/*cG control panel, all stages are stored here*/
-cG.fBox = cG.fBox||{fstrun: true, pgepsh: true, pgesve: true, rtepge: true, protect: true};/*cG fuse box, toggles various options
+cG.fBox = cG.fBox||{fstrun: true, pgepsh: true, pgesve: true, rtepge: true, protect: true, noverwrite: true};/*cG fuse box, toggles various options
 * fstrun - toggles automatic stage injection on document ready
 * pgepsh - toggles page url push to urlbar and history
 * pgesve - toggles page saving in localstorage
@@ -868,6 +868,7 @@ cG.stageInjection = function(SPECIFIC){
             /*initial setup*/
             /*////get attributes */
             /*////////async request the script if it is specified, else use default*/
+            if(!cG.fBox.noverwrite) stages[iD].innerHTML = "";
             var myScript;
             if(source===null||source===void 0){
                 var script_attr = stages[iD].getAttribute("script");
@@ -891,6 +892,7 @@ cG.stageInjection = function(SPECIFIC){
                 use_attr = stages[iD].getAttribute("use"),
                 config_attr = stages[iD].getAttribute("config");
             /*////attribute processing */
+            //cgcij tells cG that a stage has already been injectted on this element, and you should skip it normally
             stages[iD].setAttribute("cgcij",1);
             if(id_attr==""||void 0===id_attr||id_attr===null){/*if no ID, make one*/
                 var name = "STG"+iD;
@@ -996,7 +998,7 @@ cG.stageInjection = function(SPECIFIC){
                 var frspr = cG.HELPERS.stick(final_res[srch].pg[r],final_res[srch].pg,final_res[srch],r);
             }
         };
-    for (var i = 0; i < stages.length; i++) if(!stages[i].getAttribute("cgcij")==true) request(i);
+    for (var i = 0; i < stages.length; i++) if(!stages[i].getAttribute("cgcij")==true||!cG.fBox.noverwrite) request(i);
     cG.cPanel=final_res;
     cG.controlInjection();
     return final_res;
