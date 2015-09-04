@@ -604,7 +604,6 @@ cG.HELPERS = {};
     tir=tir||"";
     if(cG.root=="") cG.root="def";
     if(void 0===cG.REPO.scReq.getScript){/*create script.json promise if not already created*/
-        cG.REPO.scReq.address = dir;
         cG.REPO.scReq.getScript = cG.agent(dir+'script.json');
         cG.REPO.scReq.getScript.then(
             function(data, xhr) {
@@ -702,7 +701,7 @@ cG.queue.stageChange.controller=function(target){
         }
     }
 };
-cG.addRender = function(addme){//name of caller
+cG.addRender = function(addme,name){//name of caller
     var pushonpages = function(tget){
         //convert data to page array
         for(var i =0;i<tget.length;i++){
@@ -716,7 +715,8 @@ cG.addRender = function(addme){//name of caller
         cG.script = cG.REPO.script.def;
     }
     if(void 0===addme||addme===null){
-        cG.REPO.scReq.getAdd = cG.agent(cG.REPO.scReq.address+'additive.json');
+        if(void 0===name||name===null) name = "additive";
+        cG.REPO.scReq.getAdd = cG.agent(cG.REPO.scReq.address+name+'.json');
         cG.REPO.scReq.getAdd.then(
             function(data, xhr) {
                 pushonpages(data.p);
@@ -726,9 +726,7 @@ cG.addRender = function(addme){//name of caller
                 console.log("addRender has failed")
                 //cG.script = cG.REPO.script.def = 0;
             });
-    } else {
-        pushonpages(addme.p);
-    }
+    } else pushonpages(addme.p);
 };
 cG.controlInjection = function(SPECIFIC){
     var stages = [],
@@ -874,6 +872,10 @@ cG.stageInjection = function(SPECIFIC){
         return cG.cPanel;
     }
     if(!cG.script) return console.error("No script.JSON found. script.JSON is REQUIRED to create any stage. Please create a script.JSON or move it to the directory specified in the script tag for comix-ngn or bellerophon if it is added.");
+    if(cG.script.config.additive){
+        cG.script.config.additive = false;
+        cG.addRender();
+    }
     var stages = [],
         errr = "stageInjection can only operate on elements or arrays of elements";
     if(void 0 === SPECIFIC) stages = document.getElementsByClassName("venue");/*get all entry points*/
@@ -885,7 +887,6 @@ cG.stageInjection = function(SPECIFIC){
         if(void 0 === SPECIFIC.nodeName) return console.error(errr);
         stages.push(SPECIFIC);/*if not array and not undefined, assume it is a Element*/
     }
-    if(!void 0 === cG.recyclebin.dir||!cG.recyclebin.dir===null)  cG.REPO.scReq.address = cG.recyclebin.dir;
     if(cG.recyclebin.air!=""&&cG.recyclebin.air!==void 0&&cG.recyclebin.air!==null) cG.script.config.dir=cG.recyclebin.air;
     for(var p in cG.recyclebin)
         if(cG.recyclebin.hasOwnProperty(p)&&p!==null)
