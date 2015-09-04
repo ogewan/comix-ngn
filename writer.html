@@ -409,7 +409,10 @@
                 // Using FileReader to display the image content
                 var reader = new FileReader();
                 reader.onload = function(e) {
-                    cG.addRender(JSON.parse(e.target.result));
+                    var result = JSON.parse(e.target.result);
+                    console.log(result);
+                    cG.addRender(result);
+                    console.log(cG.script);
                     report(cG.script);
                     //console.log(cG.script);
                     $(".venue").stageInjection();

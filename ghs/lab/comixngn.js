@@ -719,7 +719,7 @@ cG.addRender = function(addme){//name of caller
         cG.REPO.scReq.getAdd = cG.agent(cG.REPO.scReq.address+'additive.json');
         cG.REPO.scReq.getAdd.then(
             function(data, xhr) {
-                pushonpages(data);
+                pushonpages(data.p);
             },
             function(data, xhr) {
                 console.error(data, xhr.status);
@@ -727,7 +727,7 @@ cG.addRender = function(addme){//name of caller
                 //cG.script = cG.REPO.script.def = 0;
             });
     } else {
-        pushonpages(addme);
+        pushonpages(addme.p);
     }
 };
 cG.controlInjection = function(SPECIFIC){
