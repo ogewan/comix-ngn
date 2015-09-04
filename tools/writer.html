@@ -2,17 +2,17 @@
 <title id="$COMICNGWRITER$$$">Writer</title>
 <script>
     var defer = !0,
-        mainsrc = /*"http://comixngn.js.org/ghs/1.1.1*/"../comixngn.min.js",
+        mainsrc = "http://comixngn.js.org/ghs/lab/comixngn.js",
         loadng = ["http://comixngn.js.org/ghs/1.1.1/plugins/comixngn.jq.js","http://code.jquery.com/jquery-2.1.4.min.js", "https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"],
         aftjq = ["http://code.jquery.com/ui/1.11.4/jquery-ui.min.js", "https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.7.0/spectrum.min.js"],
-        fuse = {fstrun: true, pgepsh: true, pgesve: true, rtepge: true},
+        fuse = {fstrun: true, pgepsh: false, pgesve: false, rtepge: false, protect: false, noverwrite: false},
         plugin = "",
         disable = ["rollbar"],
         comicID="CNGwriter",
-        dir = "",
-        tir = "",
+        dir = "http://comixngn.js.org/",
+        tir = "http://comixngn.js.org/",
         $GPC = $GPC + 1 || 1,
-        cG={agent:function(e,t){return t=new XMLHttpRequest,t.open("GET",e),e=[],t.onreadystatechange=t.then=function(n,s,a){if(n&&n.call&&(e=[,n,s]),4==t.readyState&&(a=e[0|t.status/200]))try{a(JSON.parse(t.responseText),t)}catch(c){a(t.responseText,t)}},t.send(),t},REPO:{scReq:{}},dis:{}};
+        cG={agent:function(e,t){return t=new XMLHttpRequest,t.open("GET",e),e=[],t.onreadystatechange=t.then=function(n,s,a){if(n&&n.call&&(e=[,n,s]),4==t.readyState&&(a=e[0|t.status/200]))try{a(JSON.parse(t.responseText),t)}catch(c){a(t.responseText,t)}},t.send(),t},REPO:{scReq:{address: "http://comixngn.js.org/"}},dis:{}};
 </script>
 <base href="/comic-ng/">
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.6.1/spectrum.min.css">
@@ -90,6 +90,16 @@
                         </td>
                     </tr>
                     <tr>
+                        <td title="An additive json is a file that allows pages to be added by url alone">
+                            <label for="add_0">Additive pages</label>
+                            <input type="radio" id="add_0" name="aad" checked>Disabled&nbsp;
+                            <input type="radio" id="add_1" name="aad">Enabled</td>
+                        <td title="Merge these additive into pages of the script">
+                            <label for="mergeadd">Additive Merge</label>
+                            <input id="mergeadd" type="file" accept=".json" style="display: inline;">
+                        </td>
+                    </tr>
+                    <tr>
                         <td style="vertical-align:top" title="If there are more images in the directory than in +the configuration file, attempt to automatically add them">
                             <label for="pyr_0">Append on Page Mismatch</label>
                             <input type="radio" id="pyr_0" name="pyrt" checked>On&nbsp;
@@ -113,6 +123,10 @@
                         <td title="Background color of webcomic">
                             <label for="back_total">Background: </label>
                             <input id="back_color" style="visibility: hidden;"></td>
+                        <td title="Order of navigation button: Left to Right or Right to Left">
+                            <label for="rdr_0">Reading Direction</label>
+                            <input type="radio" id="rdr_0" name="rdi" checked>L -> R&nbsp;
+                            <input type="radio" id="rdr_1" name="rdi">R -> L</td>
                     </tr>
                     <tr>
                         <td colspan="8">
@@ -154,7 +168,7 @@
                         </td>
                         <td>
                             <h4 id="PGEHEAD">Pages</h4>
-                            <input id="conductor" type="file" multiple>
+                            <button id="add3">+</button><input id="conductor" type="file" multiple>
                         </td>
                     <tr>
                         <td style="vertical-align:top">
@@ -293,6 +307,32 @@
             /*
         $(".spoiler-content").show();
         $("#design_contain").show();*/
+            $("#add3").click(function() {
+                if ($("#sorted").hasClass("empty")) {
+                    $("#sorted").removeClass("empty");
+                }
+                cG.comix.internals.pages.push({alt:"",hover:"",title:"",url:[],release:0,note:"",perm:!1,anim8:!1});
+                var yun = ($("#nav-select").val()=="list")?'':"<img style='max-width:64px;max-height:64px;'>";
+                var i = $("#sorted").get(0).childElementCount;
+                //console.log(i);
+                $("#sorted").append("<li id=s" + i + "><span class=page_icon id=name_s" + i + ">" + yun + "</span>" + " <button onClick=settingsP('#s" + i + "');>&#x2731</button><button onClick=remveP('#s" + i + "')>X</button></li>").sortable({
+                        scroll: true
+                    });
+                    $("#s" + i).data({
+                        open: false,
+                        body: {
+                            alt: "",
+                            hover: "",
+                            title: "",
+                            url: [],
+                            release: 0,
+                            note: "",
+                            perm: false,
+                            anim8: false,
+                            special: "",
+                        }
+                    }).addClass("page");
+            });
             $("#add2").click(function() {
                 if ($("#Csort").hasClass("empty")) {
                     $("#Csort").removeClass("empty");
@@ -321,7 +361,7 @@
                     }
                 } else {
                     for(var i=0;i<src.length;i++){
-                        $("#"+ico[i].id).html("<img style='max-width:32px;max-height:32px;' src='"+$("#"+src[i].id).data().body.url+"'>");
+                        $("#"+ico[i].id).html("<img style='max-width:64px;max-height:64px;' src='"+cG.script.config.dir+$("#"+src[i].id).data().body.url+"'>");
                     }
                 }
             });
@@ -331,8 +371,10 @@
                 }
                 console.log(this.files);
                 /*$("#sorted").innerHTML ="";*/
-                for (i = 0; i < this.files.length; i++) {
-                    $("#sorted").append("<li id=s" + i + ">" + this.files[i].name + " <button onClick=settingsP('#s" + i + "');>&#x2731</button><button onClick=remveP('#s" + i + "')>X</button></li>").sortable({
+                var yun;
+                for (var i = 0; i < this.files.length; i++) {
+                    yun = ($("#nav-select").val()=="list")?this.files[i].name:"<img style='max-width:64px;max-height:64px;' src='" + this.files[i].name + "'>";
+                    $("#sorted").append("<li id=s" + i + "><span class=page_icon id=name_s" + i + ">" + yun + "</span>" + " <button onClick=settingsP('#s" + i + "');>&#x2731</button><button onClick=remveP('#s" + i + "')>X</button></li>").sortable({
                         scroll: true
                     });
                     $("#s" + i).data({
@@ -351,6 +393,43 @@
                     }).addClass("page");
                 }
             });
+            $("#mergeadd").change(function() {
+                delete window.confirm;
+                if ((!$("#Csort").hasClass("empty") || !$("#sorted").hasClass("empty")) && !confirm("This will add pages, are you sure?")) {
+                    this.files = {};
+                    return;
+                }
+                //console.log(this.files);
+                if (!this.files.length) return;
+                
+                $("#sorted").html("");
+                $("#Csort").html("");
+                /*if (!this.files[0].type.match()) {
+                    throw "File Type must be an image";
+                }*/
+
+                // Using FileReader to display the image content
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    var result = JSON.parse(e.target.result);
+                    if(result.p===void 0||result.p===null) return -1;
+                    if(!result.p.length) return -1;
+                    if(!cG.script.pages[0].url.length){
+                        //removes empty pages before add render
+                        cG.REPO.script.def.pages.splice(0, 1);
+                        cG.script = cG.REPO.script.def;
+                    }
+                    cG.addRender(result);
+                    //console.log(cG.script);
+                    report(cG.script);
+                    //console.log(cG.script);
+                    $(".venue").stageInjection();
+                };
+                reader.readAsText(this.files[0]);
+                /*$.getJSON(this.files[0].name, function(conf) {
+                    report(conf);
+                });*/
+            });
             $("#historian").change(function() {
                 delete window.confirm;
                 if ((!$("#Csort").hasClass("empty") || !$("#sorted").hasClass("empty")) && !confirm("This will overwrite your current configuration, are you sure?")) {
@@ -360,8 +439,9 @@
                 console.log(this.files);
                 if (!this.files.length) return;
                 /*$("#sorted").innerHTML ="";*/
-                $("#sorted").textContent = "";
-                $("#Csort").textContent = "";
+                //console.log("INSIDE",$("#sorted"),$("#sorted").html());
+                $("#sorted").html("");
+                $("#Csort").html("");
 
                 /*if (!this.files[0].type.match()) {
                     throw "File Type must be an image";
@@ -370,8 +450,12 @@
                 // Using FileReader to display the image content
                 var reader = new FileReader();
                 reader.onload = function(e) {
-                    cG.script = JSON.parse(e.target.result);
+                    var result = JSON.parse(e.target.result);
+                    if(result.config===void 0||result.config===null)
+                        return -1;
+                    cG.script = cG.REPO.script.def = result;
                     report(cG.script);
+                    //console.log(cG.script);
                     $(".venue").stageInjection();
                 };
                 reader.readAsText(this.files[0]);
@@ -413,6 +497,8 @@
                     alert("Settings Configured!");*/
                 setOBJ.config.dir = $("#dir").val();
                     setOBJ.config.pagestartnum = document.getElementById("psn_1").checked;
+                    setOBJ.config.readdir = document.getElementById("rdr_1").checked;
+                    setOBJ.config.additive = document.getElementById("add_1").checked;
                     setOBJ.config.chapterstartnum = document.getElementById("csn_1").checked;
                 setOBJ.config.startpage = parseInt($("#strp").val(),10);/*document.getElementById("strp_1").checked;*/
                 setOBJ.config.imgprebuffer = parseInt($("#prb").val(),10);
@@ -440,12 +526,12 @@
                     setOBJ.chapters.push($(".class,li").eq(j).data().body);
                 }
                 for (j = 0; j < document.getElementById("sorted").childElementCount; j++) {
-                    setOBJ.pages.push($(".page,li").eq(j).data().body);
+                    setOBJ.pages.push($(".page"/*,li"*/).eq(j).data().body);
                 }
                 console.log(setOBJ);
                 $('.setlink').remove();
-                var refh = "<a onClick=$('.setlink').remove() class='setlink' href='data: text/json;charset=utf-8," + JSON.stringify(setOBJ, ["parent","offset","config", "pyr", "loading", "pages", "chapters", "dir", "startpage", "pagestartnum", "chapterstartnum", "imgprebuffer", "imgpostbuffer", "back", "appendmismatch", "appendorder", "appendorderdir", "alt", "hover", "title","perm","anim8","special", "url", "release", "note", "description", "start", "end", "title", "diameter","lines","rate","xpos","ypos","back","color"]) + "' download='config.json' autofocus>config.json<br></a>",
-                    formref = "<a onClick=$('.setlink').remove() class='setlink' href='data: text/json;charset=utf-8," + JSON.stringify(setOBJ, ["parent","offset","config", "pyr", "loading", "pages", "chapters", "dir", "startpage", "pagestartnum", "chapterstartnum", "imgprebuffer", "imgpostbuffer", "back", "appendmismatch", "appendorder", "appendorderdir", "alt", "hover", "title","perm","anim8","special", "url", "release", "note", "description", "start", "end", "title", "diameter","lines","rate","xpos","ypos","back","color"],4) + "' download='config.json' autofocus>config.json<br></a>";
+                var refh = "<a onClick=$('.setlink').remove() class='setlink' href='data: text/json;charset=utf-8," + JSON.stringify(setOBJ, ["parent","offset","config", "pyr", "loading", "pages", "chapters", "dir", "startpage", "pagestartnum", "readdir" , "additive", "chapterstartnum", "imgprebuffer", "imgpostbuffer", "back", "appendmismatch", "appendorder", "appendorderdir", "alt", "hover", "title","perm","anim8","special", "url", "release", "note", "description", "start", "end", "title", "diameter","lines","rate","xpos","ypos","back","color"]) + "' download='config.json' autofocus>config.json<br></a>",
+                    formref = "<a onClick=$('.setlink').remove() class='setlink' href='data: text/json;charset=utf-8," + JSON.stringify(setOBJ, ["parent","offset","config", "pyr", "loading", "pages", "chapters", "dir", "startpage", "pagestartnum", "readdir", "additive", "chapterstartnum", "imgprebuffer", "imgpostbuffer", "back", "appendmismatch", "appendorder", "appendorderdir", "alt", "hover", "title","perm","anim8","special", "url", "release", "note", "description", "start", "end", "title", "diameter","lines","rate","xpos","ypos","back","color"],4) + "' download='config.json' autofocus>config.json<br></a>";
                 console.log(formref);
                 $(refh).appendTo("#MHEAD");
                 $(refh).appendTo("#MHEADCL");
@@ -470,7 +556,7 @@
                     $(ele).data().body.perm = false;
                 }
                 if ($(ele).data().open) {
-                    /*console.log("deleting");*/
+                    console.log("deleting");
                     $(ele).data().body.title = $("#TEMP_title" + lee).val();
                     $(ele).data().body.hover = $("#TEMP_hover" + lee).val();
                     $(ele).data().body.note = $("#TEMP_note" + lee).val();
@@ -478,11 +564,12 @@
                     $(ele).data().body.release = $("#TEMP_release" + lee).val();
                     var ent = $("#TEMP_url" + lee).val();
                     $(ele).data().body.url = ent;
-                    $("#name_" + lee).html(($("#nav-select").val()=="list")?ent:"<img style='max-width:32px;max-height:32px;' src='"+ent+"'>");
+                    $("#name_" + lee).html(($("#nav-select").val()=="list")?ent:"<img style='max-width:64px;max-height:64px;' src='"+cG.script.config.dir+ent+"'>");
                     $(ele).data().body.perm = document.getElementById("TEMP_perm" + lee).checked;
                     $(ele).data().body.anim8 = document.getElementById("TEMP_anim8" + lee).checked;
                     $(ele).data().body.special = $("#TEMP_special" + lee).val();
                     //virtual changes
+                    console.log(ele,$(ele).data());
                     var vrt = parseInt(ele.substring(2),10);
                     cG.comix.internals.pages[vrt].title=$(ele).data().body.title;
                     cG.comix.internals.pages[vrt].hover=$(ele).data().body.hover;
@@ -504,7 +591,7 @@
                             cG.comix.internals.pages[vrt].desig=0;
                     }
                     cG.comix.internals.pages[vrt].loaded = false;
-                    //
+                    console.log(lee);
                     $("#TEMPFORM_" + lee).remove();
                     /*document.getElementById(ele.substring(1)).removeChild(document.getElementById("TEMPFORM_"+ele));fallback*/
                     $(ele).focus();
@@ -559,9 +646,13 @@
                 $(ele).remove(); cG.comix.internals.chapters.splice(ele.substring(2), 1);
             };
             report = function(conf) {
-                console.log(conf);
+                //console.log(conf);
                 document.getElementById("psn_0").checked = false;
                 document.getElementById("psn_1").checked = false;
+                document.getElementById("rdr_0").checked = false;
+                document.getElementById("rdr_1").checked = false;
+                document.getElementById("add_0").checked = false;
+                document.getElementById("add_1").checked = false;
                 document.getElementById("csn_0").checked = false;
                 document.getElementById("csn_1").checked = false;
                 /*document.getElementById("strp_0").checked = false;
@@ -581,6 +672,8 @@
                     $("#prb").val("5");
                     $("#strp").val("0");
                     $.data($("#back_color"),"color","#fff"); 
+                    document.getElementById("rdr_1").checked = true; 
+                    document.getElementById("add_1").checked = true; 
                     document.getElementById("psn_1").checked = true;
                     document.getElementById("csn_1").checked = true;
                 } else {
@@ -600,6 +693,10 @@
                     }
                     if (conf.config.pagestartnum) document.getElementById("psn_1").checked = true;
                     else document.getElementById("psn_0").checked = true;
+                    if (conf.config.readdir) document.getElementById("rdr_1").checked = true;
+                    else document.getElementById("rdr_0").checked = true;
+                    if (conf.config.additive) document.getElementById("add_1").checked = true;
+                    else document.getElementById("add_0").checked = true;
                     if (conf.config.chapterstartnum) document.getElementById("csn_1").checked = true;
                     else document.getElementById("csn_0").checked = true;
                 }
@@ -649,7 +746,7 @@
                 }
                 var fillin;
                 for (var i = 0; i < conf.pages.length; i++) {
-                    fillin = ($("#nav-select").val()=="list")?conf.pages[i].url:"<img style='max-width:32px;max-height:32px;' src='" + conf.pages[i].url + "'>";
+                    fillin = ($("#nav-select").val()=="list")?conf.pages[i].url:"<img style='max-width:64px;max-height:64px;' src='" + cG.script.config.dir+conf.pages[i].url + "'>";
                     $("#sorted").append("<li id=s" + i + "><span class=page_icon id=name_s" + i + ">" + fillin + "</span> <button onClick=settingsP('#s" + i + "');>&#x2731</button><button onClick=remveP('#s" + i + "')>X</button></li>").sortable({
                         scroll: true
                     });
@@ -707,7 +804,7 @@
      *
      * @author Georg Tavonius a.k.a. Calamari (http://github.com/Calamari)
      * @homepage http://github.com/Calamari/shunting-yard.js
-     */!function(){"use strict";var e=window.jaz||{};e.resolveRPN=function(t){function n(t){return e.Operators[t]||e.Functions[t]}var r,i,s,c=[];for(r=0,i=t.length;i>r;++r)s=n(t[r]),c.push(s?s.method.apply(this,c.splice(-s.params)):parseFloat(t[r]));return c[0]},window.jaz=e}();var e=document.createElement("script");cG.REPO.scReq.getScript=cG.agent("./"+dir+"script.json"),cG.REPO.scReq.getDecor=cG.agent("./"+tir+"decor.html"),cG.REPO.scReq.getCtrls=cG.agent("./"+tir+"ctrls.html"),cG.REPO.scReq.getScript.then(function(e){void 0===cG.REPO.script?cG.REPO.script={def:e}:cG.REPO.script.def=e,cG.script=cG.REPO.script.def},function(e,t){console.error(e,t.status),void 0===cG.REPO.script?cG.REPO.script={def:0}:cG.REPO.script.def=e,cG.script=cG.REPO.script.def}),cG.REPO.scReq.getDecor.then(function(e){void 0===cG.REPO.decor?cG.REPO.decor={def:e}:cG.REPO.decor.def=e,cG.decor=cG.REPO.decor.def},function(e,t){console.error(e,t.status),void 0===cG.REPO.decor?cG.REPO.decor={def:0}:cG.REPO.decor.def=0,cG.decor=cG.REPO.decor.def}),cG.REPO.scReq.getCtrls.then(function(e){void 0===cG.REPO.ctrls?cG.REPO.ctrls={def:e}:cG.REPO.ctrls.def=e,cG.ctrls=cG.REPO.ctrls.def},function(e,t){console.error(e,t.status),void 0===cG.REPO.ctrls?cG.REPO.ctrls={def:0}:cG.REPO.ctrls.def=0,cG.ctrls=cG.REPO.ctrls.def}),cG.comicID=comicID,cG.fBox=fuse;for(var t=0;t<disable.length;t++)cG.dis[disable[t]]=!0;e.src=mainsrc,document.body.appendChild(e);for(var n=0;n<loadng.length;n++)e=document.createElement("script"),e.src=loadng[n],document.body.appendChild(e);jqdep(),/*! humane.js: wavded.github.com/humane-js/ (MIT) (c) Marc Harter (@wavded)*/!function(e,t,n){"undefined"!=typeof module?module.exports=n(e,t):"function"==typeof define&&"object"==typeof define.amd?define(n):t[e]=n(e,t)}("humane",this,function(){var e=window,t=document,n={on:function(t,n,r){"addEventListener"in e?t.addEventListener(n,r,!1):t.attachEvent("on"+n,r)},off:function(t,n,r){"removeEventListener"in e?t.removeEventListener(n,r,!1):t.detachEvent("on"+n,r)},bind:function(e,t){return function(){e.apply(t,arguments)}},isArray:Array.isArray||function(e){return"[object Array]"===Object.prototype.toString.call(e)},config:function(e,t){return null!=e?e:t},transSupport:!1,useFilter:/msie [678]/i.test(navigator.userAgent),_checkTransition:function(){var e=t.createElement("div"),n={webkit:"webkit",Moz:"",O:"o",ms:"MS"};for(var r in n)r+"Transition"in e.style&&(this.vendorPrefix=n[r],this.transSupport=!0)}};n._checkTransition();var r=function(t){t||(t={}),this.queue=[],this.baseCls=t.baseCls||"humane",this.addnCls=t.addnCls||"",this.timeout="timeout"in t?t.timeout:2500,this.waitForMove=t.waitForMove||!1,this.clickToClose=t.clickToClose||!1,this.timeoutAfterMove=t.timeoutAfterMove||!1,this.container=t.container;try{this._setupEl()}catch(r){n.on(e,"load",n.bind(this._setupEl,this))}};return r.prototype={constructor:r,_setupEl:function(){var e=t.createElement("div");if(e.style.display="none",!this.container){if(!t.body)throw"document.body is null";this.container=t.body}this.container.appendChild(e),this.el=e,this.removeEvent=n.bind(function(){var e=n.config(this.currentMsg.timeoutAfterMove,this.timeoutAfterMove);e?setTimeout(n.bind(this.remove,this),e):this.remove()},this),this.transEvent=n.bind(this._afterAnimation,this),this._run()},_afterTimeout:function(){n.config(this.currentMsg.waitForMove,this.waitForMove)?this.removeEventsSet||(n.on(t.body,"mousemove",this.removeEvent),n.on(t.body,"click",this.removeEvent),n.on(t.body,"keypress",this.removeEvent),n.on(t.body,"touchstart",this.removeEvent),this.removeEventsSet=!0):this.remove()},_run:function(){if(!this._animating&&this.queue.length&&this.el){this._animating=!0,this.currentTimer&&(clearTimeout(this.currentTimer),this.currentTimer=null);var e=this.queue.shift(),t=n.config(e.clickToClose,this.clickToClose);t&&(n.on(this.el,"click",this.removeEvent),n.on(this.el,"touchstart",this.removeEvent));var r=n.config(e.timeout,this.timeout);r>0&&(this.currentTimer=setTimeout(n.bind(this._afterTimeout,this),r)),n.isArray(e.html)&&(e.html="<ul><li>"+e.html.join("<li>")+"</ul>"),this.el.innerHTML=e.html,this.currentMsg=e,this.el.className=this.baseCls,n.transSupport?(this.el.style.display="block",setTimeout(n.bind(this._showMsg,this),50)):this._showMsg()}},_setOpacity:function(e){if(n.useFilter)try{this.el.filters.item("DXImageTransform.Microsoft.Alpha").Opacity=100*e}catch(t){}else this.el.style.opacity=e+""},_showMsg:function(){var e=n.config(this.currentMsg.addnCls,this.addnCls);if(n.transSupport)this.el.className=this.baseCls+" "+e+" "+this.baseCls+"-animate";else{var t=0;this.el.className=this.baseCls+" "+e+" "+this.baseCls+"-js-animate",this._setOpacity(0),this.el.style.display="block";var r=this,i=setInterval(function(){1>t?(t+=.1,t>1&&(t=1),r._setOpacity(t)):clearInterval(i)},30)}},_hideMsg:function(){var e=n.config(this.currentMsg.addnCls,this.addnCls);if(n.transSupport)this.el.className=this.baseCls+" "+e,n.on(this.el,n.vendorPrefix?n.vendorPrefix+"TransitionEnd":"transitionend",this.transEvent);else var t=1,r=this,i=setInterval(function(){t>0?(t-=.1,0>t&&(t=0),r._setOpacity(t)):(r.el.className=r.baseCls+" "+e,clearInterval(i),r._afterAnimation())},30)},_afterAnimation:function(){n.transSupport&&n.off(this.el,n.vendorPrefix?n.vendorPrefix+"TransitionEnd":"transitionend",this.transEvent),this.currentMsg.cb&&this.currentMsg.cb(),this.el.style.display="none",this._animating=!1,this._run()},remove:function(e){var r="function"==typeof e?e:null;n.off(t.body,"mousemove",this.removeEvent),n.off(t.body,"click",this.removeEvent),n.off(t.body,"keypress",this.removeEvent),n.off(t.body,"touchstart",this.removeEvent),n.off(this.el,"click",this.removeEvent),n.off(this.el,"touchstart",this.removeEvent),this.removeEventsSet=!1,r&&this.currentMsg&&(this.currentMsg.cb=r),this._animating?this._hideMsg():r&&r()},log:function(e,t,n,r){var i={};if(r)for(var s in r)i[s]=r[s];if("function"==typeof t)n=t;else if(t)for(var s in t)i[s]=t[s];return i.html=e,n&&(i.cb=n),this.queue.push(i),this._run(),this},spawn:function(e){var t=this;return function(n,r,i){return t.log.call(t,n,r,i,e),t}},create:function(e){return new r(e)}},new r})},jqdep=function(){if(void 0===window.jQuery)return setTimeout(jqdep,300);var e;/*! jquery-spoiler v1.3.0: (MIT) (c)2014 Triangle717 (http://le717.github.io) and Jarred Ballard (http://jarred.io/)*/!function(e){"use strict";"function"==typeof define&&define.amd?define(["jquery"],e):"object"==typeof exports?module.exports=e:e(jQuery)}(function(e){"use strict";e.fn.spoiler=function(t){var n=e.extend({contentClass:"spoiler-content",paddingValue:6,triggerEvents:!1,includePadding:!0,buttonActiveClass:"spoiler-active",spoilerVisibleClass:"spoiler-content-visible"},t),r="."+n.contentClass,i={};return e(r).each(function(){var t=e(this);t.css("overflow","hidden");var r=t.prop("scrollHeight");r=n.includePadding?r+parseInt(n.paddingValue,10):r;var s=t.attr("data-spoiler-link");i[s]=r+"px",t.css("height","0")}),e(this).on("click",function(){var t=e(this),s=t.attr("data-spoiler-link"),c=e(r+"[data-spoiler-link="+s+"]"),o={height:i[s]},a={height:"0"},d=c.hasClass(n.spoilerVisibleClass);c.css(d?a:o),n.triggerEvents&&t.trigger(d?"jq-spoiler-hidden":"jq-spoiler-visible"),c.toggleClass(n.spoilerVisibleClass),t.toggleClass(n.buttonActiveClass)}),this}});for(var t=0;t<aftjq.length;t++)e=document.createElement("script"),e.src=aftjq[t],document.body.appendChild(e);workhorse()};
+     */!function(){"use strict";var e=window.jaz||{};e.resolveRPN=function(t){function n(t){return e.Operators[t]||e.Functions[t]}var r,i,s,c=[];for(r=0,i=t.length;i>r;++r)s=n(t[r]),c.push(s?s.method.apply(this,c.splice(-s.params)):parseFloat(t[r]));return c[0]},window.jaz=e}();var e=document.createElement("script");cG.REPO.scReq.getScript=cG.agent(dir+"script.json"),cG.REPO.scReq.getDecor=cG.agent(tir+"decor.html"),cG.REPO.scReq.getCtrls=cG.agent(tir+"ctrls.html"),cG.REPO.scReq.getScript.then(function(e){void 0===cG.REPO.script?cG.REPO.script={def:e}:cG.REPO.script.def=e,cG.script=cG.REPO.script.def},function(e,t){console.error(e,t.status),void 0===cG.REPO.script?cG.REPO.script={def:0}:cG.REPO.script.def=e,cG.script=cG.REPO.script.def}),cG.REPO.scReq.getDecor.then(function(e){void 0===cG.REPO.decor?cG.REPO.decor={def:e}:cG.REPO.decor.def=e,cG.decor=cG.REPO.decor.def},function(e,t){console.error(e,t.status),void 0===cG.REPO.decor?cG.REPO.decor={def:0}:cG.REPO.decor.def=0,cG.decor=cG.REPO.decor.def}),cG.REPO.scReq.getCtrls.then(function(e){void 0===cG.REPO.ctrls?cG.REPO.ctrls={def:e}:cG.REPO.ctrls.def=e,cG.ctrls=cG.REPO.ctrls.def},function(e,t){console.error(e,t.status),void 0===cG.REPO.ctrls?cG.REPO.ctrls={def:0}:cG.REPO.ctrls.def=0,cG.ctrls=cG.REPO.ctrls.def}),cG.comicID=comicID,cG.fBox=fuse;for(var t=0;t<disable.length;t++)cG.dis[disable[t]]=!0;e.src=mainsrc,document.body.appendChild(e);for(var n=0;n<loadng.length;n++)e=document.createElement("script"),e.src=loadng[n],document.body.appendChild(e);jqdep(),/*! humane.js: wavded.github.com/humane-js/ (MIT) (c) Marc Harter (@wavded)*/!function(e,t,n){"undefined"!=typeof module?module.exports=n(e,t):"function"==typeof define&&"object"==typeof define.amd?define(n):t[e]=n(e,t)}("humane",this,function(){var e=window,t=document,n={on:function(t,n,r){"addEventListener"in e?t.addEventListener(n,r,!1):t.attachEvent("on"+n,r)},off:function(t,n,r){"removeEventListener"in e?t.removeEventListener(n,r,!1):t.detachEvent("on"+n,r)},bind:function(e,t){return function(){e.apply(t,arguments)}},isArray:Array.isArray||function(e){return"[object Array]"===Object.prototype.toString.call(e)},config:function(e,t){return null!=e?e:t},transSupport:!1,useFilter:/msie [678]/i.test(navigator.userAgent),_checkTransition:function(){var e=t.createElement("div"),n={webkit:"webkit",Moz:"",O:"o",ms:"MS"};for(var r in n)r+"Transition"in e.style&&(this.vendorPrefix=n[r],this.transSupport=!0)}};n._checkTransition();var r=function(t){t||(t={}),this.queue=[],this.baseCls=t.baseCls||"humane",this.addnCls=t.addnCls||"",this.timeout="timeout"in t?t.timeout:2500,this.waitForMove=t.waitForMove||!1,this.clickToClose=t.clickToClose||!1,this.timeoutAfterMove=t.timeoutAfterMove||!1,this.container=t.container;try{this._setupEl()}catch(r){n.on(e,"load",n.bind(this._setupEl,this))}};return r.prototype={constructor:r,_setupEl:function(){var e=t.createElement("div");if(e.style.display="none",!this.container){if(!t.body)throw"document.body is null";this.container=t.body}this.container.appendChild(e),this.el=e,this.removeEvent=n.bind(function(){var e=n.config(this.currentMsg.timeoutAfterMove,this.timeoutAfterMove);e?setTimeout(n.bind(this.remove,this),e):this.remove()},this),this.transEvent=n.bind(this._afterAnimation,this),this._run()},_afterTimeout:function(){n.config(this.currentMsg.waitForMove,this.waitForMove)?this.removeEventsSet||(n.on(t.body,"mousemove",this.removeEvent),n.on(t.body,"click",this.removeEvent),n.on(t.body,"keypress",this.removeEvent),n.on(t.body,"touchstart",this.removeEvent),this.removeEventsSet=!0):this.remove()},_run:function(){if(!this._animating&&this.queue.length&&this.el){this._animating=!0,this.currentTimer&&(clearTimeout(this.currentTimer),this.currentTimer=null);var e=this.queue.shift(),t=n.config(e.clickToClose,this.clickToClose);t&&(n.on(this.el,"click",this.removeEvent),n.on(this.el,"touchstart",this.removeEvent));var r=n.config(e.timeout,this.timeout);r>0&&(this.currentTimer=setTimeout(n.bind(this._afterTimeout,this),r)),n.isArray(e.html)&&(e.html="<ul><li>"+e.html.join("<li>")+"</ul>"),this.el.innerHTML=e.html,this.currentMsg=e,this.el.className=this.baseCls,n.transSupport?(this.el.style.display="block",setTimeout(n.bind(this._showMsg,this),50)):this._showMsg()}},_setOpacity:function(e){if(n.useFilter)try{this.el.filters.item("DXImageTransform.Microsoft.Alpha").Opacity=100*e}catch(t){}else this.el.style.opacity=e+""},_showMsg:function(){var e=n.config(this.currentMsg.addnCls,this.addnCls);if(n.transSupport)this.el.className=this.baseCls+" "+e+" "+this.baseCls+"-animate";else{var t=0;this.el.className=this.baseCls+" "+e+" "+this.baseCls+"-js-animate",this._setOpacity(0),this.el.style.display="block";var r=this,i=setInterval(function(){1>t?(t+=.1,t>1&&(t=1),r._setOpacity(t)):clearInterval(i)},30)}},_hideMsg:function(){var e=n.config(this.currentMsg.addnCls,this.addnCls);if(n.transSupport)this.el.className=this.baseCls+" "+e,n.on(this.el,n.vendorPrefix?n.vendorPrefix+"TransitionEnd":"transitionend",this.transEvent);else var t=1,r=this,i=setInterval(function(){t>0?(t-=.1,0>t&&(t=0),r._setOpacity(t)):(r.el.className=r.baseCls+" "+e,clearInterval(i),r._afterAnimation())},30)},_afterAnimation:function(){n.transSupport&&n.off(this.el,n.vendorPrefix?n.vendorPrefix+"TransitionEnd":"transitionend",this.transEvent),this.currentMsg.cb&&this.currentMsg.cb(),this.el.style.display="none",this._animating=!1,this._run()},remove:function(e){var r="function"==typeof e?e:null;n.off(t.body,"mousemove",this.removeEvent),n.off(t.body,"click",this.removeEvent),n.off(t.body,"keypress",this.removeEvent),n.off(t.body,"touchstart",this.removeEvent),n.off(this.el,"click",this.removeEvent),n.off(this.el,"touchstart",this.removeEvent),this.removeEventsSet=!1,r&&this.currentMsg&&(this.currentMsg.cb=r),this._animating?this._hideMsg():r&&r()},log:function(e,t,n,r){var i={};if(r)for(var s in r)i[s]=r[s];if("function"==typeof t)n=t;else if(t)for(var s in t)i[s]=t[s];return i.html=e,n&&(i.cb=n),this.queue.push(i),this._run(),this},spawn:function(e){var t=this;return function(n,r,i){return t.log.call(t,n,r,i,e),t}},create:function(e){return new r(e)}},new r})},jqdep=function(){if(void 0===window.jQuery)return setTimeout(jqdep,300);var e;/*! jquery-spoiler v1.3.0: (MIT) (c)2014 Triangle717 (http://le717.github.io) and Jarred Ballard (http://jarred.io/)*/!function(e){"use strict";"function"==typeof define&&define.amd?define(["jquery"],e):"object"==typeof exports?module.exports=e:e(jQuery)}(function(e){"use strict";e.fn.spoiler=function(t){var n=e.extend({contentClass:"spoiler-content",paddingValue:6,triggerEvents:!1,includePadding:!0,buttonActiveClass:"spoiler-active",spoilerVisibleClass:"spoiler-content-visible"},t),r="."+n.contentClass,i={};return e(r).each(function(){var t=e(this);t.css("overflow","hidden");var r=t.prop("scrollHeight");r=n.includePadding?r+parseInt(n.paddingValue,10):r;var s=t.attr("data-spoiler-link");i[s]=r+"px",t.css("height","0")}),e(this).on("click",function(){var t=e(this),s=t.attr("data-spoiler-link"),c=e(r+"[data-spoiler-link="+s+"]"),o={height:i[s]},a={height:"0"},d=c.hasClass(n.spoilerVisibleClass);c.css(d?a:o),n.triggerEvents&&t.trigger(d?"jq-spoiler-hidden":"jq-spoiler-visible"),c.toggleClass(n.spoilerVisibleClass),t.toggleClass(n.buttonActiveClass)}),this}});for(var t=0;t<aftjq.length;t++)e=document.createElement("script"),e.src=aftjq[t],document.body.appendChild(e);workhorse()};
 
     !function() {
         return defer ? void(window.addEventListener ? window.addEventListener("load", dfr, !1) : window.attachEvent ? window.attachEvent("onload", dfr) : window.onload = dfr) : dfr()

@@ -701,6 +701,33 @@ cG.queue.stageChange.controller=function(target){
         }
     }
 };
+cG.addRender = function(addme,name){//name of caller
+    var pushonpages = function(tget){
+        //convert data to page array
+        for(var i =0;i<tget.length;i++){
+            if(Array.isArray(tget[i])){
+                cG.REPO.script.def.pages.push({alt:"",hover:"",title:"",url:tget[i],release:0,note:"",perm:!1,anim8:!1});
+            } else {
+                cG.REPO.script.def.pages.push({alt:"",hover:"",title:"",url:[tget[i]],release:0,note:"",perm:!1,anim8:!1});
+            }
+        }
+        //this overwrites cG.script, if it it changed by something other than def
+        cG.script = cG.REPO.script.def;
+    }
+    if(void 0===addme||addme===null){
+        if(void 0===name||name===null) name = "additive";
+        cG.REPO.scReq.getAdd = cG.agent(cG.REPO.scReq.address+name+'.json');
+        cG.REPO.scReq.getAdd.then(
+            function(data, xhr) {
+                pushonpages(data.p);
+            },
+            function(data, xhr) {
+                console.error(data, xhr.status);
+                console.log("addRender has failed")
+                //cG.script = cG.REPO.script.def = 0;
+            });
+    } else pushonpages(addme.p);
+};
 cG.controlInjection = function(SPECIFIC){
     var stages = [],
         ctrls = (cG.ctrls)?cG.ctrls:'<ul><li style="display: inline;"><button class="frst" >|&lt;</button></li><li style="display: inline;"><button class="prev" rel="prev" accesskey="p">&lt; Prev</button></li><li style="display: inline;"><button class="rand" >Random</button></li><li style="display: inline;"><button class="next" rel="next" accesskey="n">Next &gt;</button></li><li style="display: inline;"><button class="last" >&gt;|</button></li></ul>',
@@ -845,6 +872,10 @@ cG.stageInjection = function(SPECIFIC){
         return cG.cPanel;
     }
     if(!cG.script) return console.error("No script.JSON found. script.JSON is REQUIRED to create any stage. Please create a script.JSON or move it to the directory specified in the script tag for comix-ngn or bellerophon if it is added.");
+    if(cG.script.config.additive){
+        cG.script.config.additive = false;
+        cG.addRender();
+    }
     var stages = [],
         errr = "stageInjection can only operate on elements or arrays of elements";
     if(void 0 === SPECIFIC) stages = document.getElementsByClassName("venue");/*get all entry points*/
