@@ -596,6 +596,7 @@ cG.stageInjection = function(SPECIFIC){
                 var script_attr = stages[iD].getAttribute("script");
                 if(script_attr==""||script_attr=="script.json"||void 0===script_attr||script_attr===null){/*if no script, use the default*/
                     myScript = cG.script;
+                    console.log(myScript);
                 } else {
                     reqQueue.push(cG.agent(script_attr).then(
                         function(data, xhr) {
@@ -722,8 +723,8 @@ cG.stageInjection = function(SPECIFIC){
     for (var i = 0; i < stages.length; i++) if(!stages[i].getAttribute("cgcij")==true) request(i);
     cG.cPanel=final_res;
     cG.controlInjection();
-    return final_res;
     console.log("End-Inject");
+    return final_res;
 };
 /*end STAGE creation*/
 /*ROUTING*/

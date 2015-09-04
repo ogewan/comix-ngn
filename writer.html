@@ -404,6 +404,7 @@
                 reader.onload = function(e) {
                     cG.script = JSON.parse(e.target.result);
                     report(cG.script);
+                    //console.log(cG.script);
                     $(".venue").stageInjection();
                 };
                 reader.readAsText(this.files[0]);
