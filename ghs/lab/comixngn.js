@@ -591,6 +591,7 @@ cG.stageInjection = function(SPECIFIC){
             /*initial setup*/
             /*////get attributes */
             /*////////async request the script if it is specified, else use default*/
+            if(!cG.fBox.noverwrite) stages[iD].innerHTML = "";
             var myScript;
             if(source===null||source===void 0){
                 var script_attr = stages[iD].getAttribute("script");
