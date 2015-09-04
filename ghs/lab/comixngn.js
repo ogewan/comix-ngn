@@ -705,7 +705,7 @@ cG.queue.stageChange.controller=function(target){
 cG.addRender = function(addme){//name of caller
     var pushonpages = function(tget){
         //convert data to page array
-        for(var i =0;i<tget.count;i++){
+        for(var i =0;i<tget.length;i++){
             if(Array.isArray(tget[i])){
                 cG.REPO.script.def.pages.push({alt:"",hover:"",title:"",url:tget[i],release:0,note:"",perm:!1,anim8:!1});
             } else {
