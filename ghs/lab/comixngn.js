@@ -702,7 +702,6 @@ cG.stageInjection = function(SPECIFIC){
             }
             //console.log(sbvenue,nstpost);
             for(var z = 0;z<sbvenue.length;z++){
-                if(!cG.fBox.noverwrite) stages[iD].innerHTML = ""; //Kill everything
                 var sia = sbvenue[z].getAttribute("id"),
                     sua = sbvenue[z].getAttribute("use"),
                     sca = sbvenue[z].getAttribute("config");
