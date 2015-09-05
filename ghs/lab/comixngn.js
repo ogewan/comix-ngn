@@ -1,4 +1,4 @@
-/** @preserve comix-ngn v1.1.2 | (c) 2015 Oluwaseun Ogedengbe| ogewan.github.io/comix-ngn/ |License: MIT|
+/** @preserve comix-ngn v1.2.0 | (c) 2015 Oluwaseun Ogedengbe| ogewan.github.io/comix-ngn/ |License: MIT|
 embeds domReady: github.com/ded/domready (MIT) (c) 2013 Dustin Diaz, pegasus: typicode.github.io/pegasus (MIT) (c) 2014 typicode, pathjs (MIT) (c) 2011 Mike Trpcic, direction.js*/
 /*The namespace of comix-ngn
 all variables should be properties of this to prevent global namespace pollution*/
@@ -15,7 +15,7 @@ cG.fBox = cG.fBox||{fstrun: true, pgepsh: true, pgesve: true, rtepge: true, prot
 * pgesve - toggles page saving in localstorage
 * rtepge - toggles routing
 * protect - toggles comix settings*/
-cG.info = {vix: "1.1.2",vwr: "0.8.0",vpr: "0.1.0"};/*version settings*/
+cG.info = {vix: "1.2.0.",vwr: "1.0.0",vpr: "0.1.0"};/*version settings*/
 cG.dis = cG.dis||{};//disables statistic and error reporting
 cG.recyclebin = cG.recyclebin||{};//variables that are used in initialization, disposed at stage injection
 cG.queue = cG.queue||{};//stores functions that are called incertain events
@@ -701,32 +701,43 @@ cG.queue.stageChange.controller=function(target){
         }
     }
 };
-cG.addRender = function(addme,name){//name of caller
+cG.addRender = function(addme,dest,name){
+    //dest = script obj
     var pushonpages = function(tget){
         //convert data to page array
+        var work;
         for(var i =0;i<tget.length;i++){
-            if(Array.isArray(tget[i])){
-                cG.REPO.script.def.pages.push({alt:"",hover:"",title:"",url:tget[i],release:0,note:"",perm:!1,anim8:!1});
-            } else {
-                cG.REPO.script.def.pages.push({alt:"",hover:"",title:"",url:[tget[i]],release:0,note:"",perm:!1,anim8:!1});
-            }
+            if(Array.isArray(tget[i]))
+                work = {alt:"",hover:"",title:"",url:tget[i],release:0,note:"",perm:!1,anim8:!1};
+            else
+                work = {alt:"",hover:"",title:"",url:[tget[i]],release:0,note:"",perm:!1,anim8:!1};
+            if(dest!==void 0&&dest!==null)
+                dest.pages.push(work);
+            else
+                cG.REPO.script.def.pages.push(work);
         }
         //this overwrites cG.script, if it it changed by something other than def
-        cG.script = cG.REPO.script.def;
+        if(dest===void 0||dest===null)
+            cG.script = cG.REPO.script.def;
+        else
+            return dest;
+        return cG.script;
     }
     if(void 0===addme||addme===null){
         if(void 0===name||name===null) name = "additive";
-        cG.REPO.scReq.getAdd = cG.agent(cG.REPO.scReq.address+name+'.json');
+        var data = syncJSON(cG.REPO.scReq.address+name+'.json');
+        return pushonpages(data.p);
+        /*cG.REPO.scReq.getAdd = cG.agent(cG.REPO.scReq.address+name+'.json');
         cG.REPO.scReq.getAdd.then(
             function(data, xhr) {
-                pushonpages(data.p);
+                return pushonpages(data.p);
             },
             function(data, xhr) {
                 console.error(data, xhr.status);
                 console.log("addRender has failed")
                 //cG.script = cG.REPO.script.def = 0;
-            });
-    } else pushonpages(addme.p);
+            });*/
+    } else return pushonpages(addme.p);
 };
 cG.controlInjection = function(SPECIFIC){
     var stages = [],
@@ -872,10 +883,6 @@ cG.stageInjection = function(SPECIFIC){
         return cG.cPanel;
     }
     if(!cG.script) return console.error("No script.JSON found. script.JSON is REQUIRED to create any stage. Please create a script.JSON or move it to the directory specified in the script tag for comix-ngn or bellerophon if it is added.");
-    if(cG.script.config.additive){
-        cG.script.config.additive = false;
-        cG.addRender();
-    }
     var stages = [],
         errr = "stageInjection can only operate on elements or arrays of elements";
     if(void 0 === SPECIFIC) stages = document.getElementsByClassName("venue");/*get all entry points*/
@@ -888,6 +895,7 @@ cG.stageInjection = function(SPECIFIC){
         stages.push(SPECIFIC);/*if not array and not undefined, assume it is a Element*/
     }
     if(cG.recyclebin.air!=""&&cG.recyclebin.air!==void 0&&cG.recyclebin.air!==null) cG.script.config.dir=cG.recyclebin.air;
+    cG.REPO.scReq.address = cG.REPO.scReq.address||cG.recyclebin.dir;
     for(var p in cG.recyclebin)
         if(cG.recyclebin.hasOwnProperty(p)&&p!==null)
             cG.recyclebin[p] = null;
@@ -918,12 +926,25 @@ cG.stageInjection = function(SPECIFIC){
                 }
             } else if(source=="") myScript=cG.script;
             else myScript=source;
+            if(myScript.config.additive){
+                myScript.config.additive = false;
+                cG.addRender();
+            }
             /*////////get the rest of the attributes*/
             var id_attr = stages[iD].getAttribute("id"),
                 use_attr = stages[iD].getAttribute("use"),
-                config_attr = stages[iD].getAttribute("config");
+                config_attr = stages[iD].getAttribute("config"),
+                add_attr = stages[iD].getAttribute("additive");
             /*////attribute processing */
             //cgcij tells cG that a stage has already been injectted on this element, and you should skip it normally
+            if(add_attr!=""&&void 0!==add_attr&&add_attr!==null){
+                if(source===null||source===void 0){
+                    myScript = cG.addRender(null,null,add_attr);
+                    stages[iD].removeAttribute("additive");
+                } else {
+                    myScript = cG.addRender(null,source,add_attr)
+                }
+            }
             stages[iD].setAttribute("cgcij",1);
             if(id_attr==""||void 0===id_attr||id_attr===null){/*if no ID, make one*/
                 var name = "STG"+iD;
