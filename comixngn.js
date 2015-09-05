@@ -742,6 +742,7 @@ cG.addRender = function(addme,dest,name){
 cG.controlInjection = function(SPECIFIC){
     var stages = [],
         ctrls = (cG.ctrls)?cG.ctrls:'<ul><li style="display: inline;"><button class="frst" >|&lt;</button></li><li style="display: inline;"><button class="prev" rel="prev" accesskey="p">&lt; Prev</button></li><li style="display: inline;"><button class="rand" >Random</button></li><li style="display: inline;"><button class="next" rel="next" accesskey="n">Next &gt;</button></li><li style="display: inline;"><button class="last" >&gt;|</button></li></ul>',
+        antictrl = '<ul><li style="display: inline;"><button class="last" >&lt;|</button></li><li style="display: inline;"><button class="next" rel="next" accesskey="n">Next &lt;</button></li><li style="display: inline;"><button class="rand" >Random</button></li><li style="display: inline;"><button class="prev" rel="prev" accesskey="p">&gt; Prev</button></li><li style="display: inline;"><button class="frst" >|&gt;</button></li></ul>',
         pod,podling,
         errr = "controlInjection can only operate on elements or arrays of elements",
         eventer=function(par,chd){
@@ -863,7 +864,7 @@ cG.controlInjection = function(SPECIFIC){
     for(var u=0;u<stages.length;u++){
         if(!stages[u].getAttribute("mind")){//add event handlers
             pod = document.createElement("DIV");
-            pod.innerHTML=ctrls;
+            pod.innerHTML=((stages[u].getAttribute("readdir")||cG.script.config.readdir)&&!cG.ctrls)?antictrl:ctrls;
             podling = pod.children[0];
             if(!stages[u].getAttribute("comix")) podling.setAttribute("style","display:none;");
             else podling.setAttribute("style","display:block;");
