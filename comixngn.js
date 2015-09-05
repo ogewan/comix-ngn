@@ -1,4 +1,4 @@
-/** @preserve comix-ngn v1.1.2 | (c) 2015 Oluwaseun Ogedengbe| ogewan.github.io/comix-ngn/ |License: MIT|
+/** @preserve comix-ngn v1.2.0 | (c) 2015 Oluwaseun Ogedengbe| ogewan.github.io/comix-ngn/ |License: MIT|
 embeds domReady: github.com/ded/domready (MIT) (c) 2013 Dustin Diaz, pegasus: typicode.github.io/pegasus (MIT) (c) 2014 typicode, pathjs (MIT) (c) 2011 Mike Trpcic, direction.js*/
 /*The namespace of comix-ngn
 all variables should be properties of this to prevent global namespace pollution*/
@@ -15,7 +15,7 @@ cG.fBox = cG.fBox||{fstrun: true, pgepsh: true, pgesve: true, rtepge: true, prot
 * pgesve - toggles page saving in localstorage
 * rtepge - toggles routing
 * protect - toggles comix settings*/
-cG.info = {vix: "1.1.2",vwr: "0.8.0",vpr: "0.1.0"};/*version settings*/
+cG.info = {vix: "1.2.0.",vwr: "1.0.0",vpr: "0.1.0"};/*version settings*/
 cG.dis = cG.dis||{};//disables statistic and error reporting
 cG.recyclebin = cG.recyclebin||{};//variables that are used in initialization, disposed at stage injection
 cG.queue = cG.queue||{};//stores functions that are called incertain events
