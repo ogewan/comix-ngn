@@ -65,6 +65,9 @@ cG.controllers = cG.controllers||{};//stores all nav bars that control stages he
         if(selfScript.getAttribute("air") !== void 0&&selfScript.getAttribute("air")!==null){
             cG.recyclebin.air=selfScript.getAttribute("air");//asset path override
         }
+        if(selfScript.getAttribute("fBox") !== void 0&&selfScript.getAttribute("fBox")!==null){
+            cG.fBox = JSON.parse(selfScript.getAttribute("fBox"));//asset path override
+        }
     }
 }()
 

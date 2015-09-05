@@ -51,8 +51,9 @@ For more fine-grain control, use the following additional attributes or class pr
   * __cgtitle__ - This sets the elements [innerHTML](https://developer.mozilla.org/en-US/docs/Web/API/Element/innerHTML) or inner text to the title of Stage page.
 * __CORE__ - These attributes customizes settings and performance of comix-ngn.
   * __fBox__ - fBox functions as a sort of fusebox that globally toggles many options:
+(*Note: fBox requires the following format "{'option': true/false}"*)
 
-   ```<script src="comixngn.js" fBox="{}"></script>```
+   ```<script src="comixngn.js" fBox="{'fstrun':true}"></script>```
 
      * __fstrun__ (bool): toggles stageInjection on page load
      * __pgepsh__ (bool): toggles url change on slide change
