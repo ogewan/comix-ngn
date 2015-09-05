@@ -15,7 +15,7 @@
 
    ```<div cglink="cng"><button class="prev"></button><button class="next"></button></div>```, *Adding the attribute* **cglink** *turns any element into a controller. Note: cglink binds the controller to a* **[stage]**
 
-* :new: To update any element dynamically, add the **cg-hot** class. This updates the element and its children every time the page changes.
+* To update any element dynamically, add the **cg-hot** class. This updates the element and its children every time the page changes.
 
 * To add additional features, use a plug-in:
 
@@ -30,13 +30,38 @@
 
 ### Script
 If the Stage is the Body, and the Core is the Mind, then Scripts are the Soul. The Script is a JSON file that sets up the configuration options and adds images for each page. [This is how to do it.](https://github.com/ogewan/comix-ngn/wiki/How-to-Script)
+#### Additive 
+:new: an additive is a simplified JSON file that expedites the addition of comic pages.
+The following is the structure: 
+``` js
+  {"p":[
+    imageurl 1, imageurl 2, imageurl 3, etc...
+  ]}
+  ```
+To enable the additive feature:
+Add the **additive** attribute to selected venue
 
+or
+
+Add an address to the additive option in the config section of the Script.JSON
 ### Attributes
 For more fine-grain control, use the following additional attributes or class properties:
 * __SPECIAL__ - These classes change the properties of whatever they are set on.
   * __cgdate__ - This sets the elements [innerHTML](https://developer.mozilla.org/en-US/docs/Web/API/Element/innerHTML) or inner text to the release date of Stage page.
   * __cgtitle__ - This sets the elements [innerHTML](https://developer.mozilla.org/en-US/docs/Web/API/Element/innerHTML) or inner text to the title of Stage page.
 * __CORE__ - These attributes customizes settings and performance of comix-ngn.
+  * __fBox__ - fBox functions as a sort of fusebox that globally toggles many options:
+(*Note: fBox requires the following format "{'option': true/false}"*)
+
+   ```<script src="comixngn.js" fBox="{'fstrun':true}"></script>```
+
+     * __fstrun__ (bool): toggles stageInjection on page load
+     * __pgepsh__ (bool): toggles url change on slide change
+     * __pgesve__ (bool): toggles slide number saving in localStorage
+     * __protect__ (bool): by default, the comix(main comic) is set once, if protect is set to default, the comix is overwritten per stageInjection
+     * __noverwrite__ (bool): by default, stageInjection cannot overwrite already inserted comics, set to false to allow overwriting
+     * __arrow__ (bool): toggles arrow key navigation 
+
   * __comicID__ - This sets the ID of the comic which is allows the framework to save site specific settings to user's browsers, such as most recently viewed page. It will default to the website's host name if not given.
 
   ```<script src="comixngn.js" comixID="comixngn"></script>```

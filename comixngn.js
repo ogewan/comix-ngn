@@ -1,4 +1,4 @@
-/** @preserve comix-ngn v1.1.1 | (c) 2015 Oluwaseun Ogedengbe| ogewan.github.io/comix-ngn/ |License: MIT|
+/** @preserve comix-ngn v1.2.0 | (c) 2015 Oluwaseun Ogedengbe| ogewan.github.io/comix-ngn/ |License: MIT|
 embeds domReady: github.com/ded/domready (MIT) (c) 2013 Dustin Diaz, pegasus: typicode.github.io/pegasus (MIT) (c) 2014 typicode, pathjs (MIT) (c) 2011 Mike Trpcic, direction.js*/
 /*The namespace of comix-ngn
 all variables should be properties of this to prevent global namespace pollution*/
@@ -9,7 +9,15 @@ cG.N =function(){return 0};/*null function*/
 if(void 0===cG.$GPC){cG.$GPC=0;}/*Global Plugin Counter (no longer global)*/
 cG.root = '';/*current default settings of cng, overwritten by plugins*/
 cG.cPanel = cG.cPanel||{};/*cG control panel, all stages are stored here*/
-cG.info = {vix: "1.1.1",vwr: "0.5.0",vpr: "0.1.0"};/*version settings*/
+cG.fBox = cG.fBox||{fstrun: true, pgepsh: true, pgesve: true, rtepge: true, protect: true, noverwrite: true, arrow: true};/*cG fuse box, toggles various options
+* fstrun - toggles automatic stage injection on document ready
+* pgepsh - toggles page url push to urlbar and history
+* pgesve - toggles page saving in localstorage
+* rtepge - toggles routing
+* protect - toggles comix settings
+* noverwrite - by default, stageInjection cannot overwrite already inserted comics, set to false to allow overwriting
+* arrow - toggles arrow key navigation */
+cG.info = {vix: "1.2.0.",vwr: "1.0.0",vpr: "0.1.0"};/*version settings*/
 cG.dis = cG.dis||{};//disables statistic and error reporting
 cG.recyclebin = cG.recyclebin||{};//variables that are used in initialization, disposed at stage injection
 cG.queue = cG.queue||{};//stores functions that are called incertain events
@@ -56,6 +64,9 @@ cG.controllers = cG.controllers||{};//stores all nav bars that control stages he
         }
         if(selfScript.getAttribute("air") !== void 0&&selfScript.getAttribute("air")!==null){
             cG.recyclebin.air=selfScript.getAttribute("air");//asset path override
+        }
+        if(selfScript.getAttribute("fBox") !== void 0&&selfScript.getAttribute("fBox")!==null){
+            cG.fBox = JSON.parse(selfScript.getAttribute("fBox"));//asset path override
         }
     }
 }()
@@ -142,21 +153,300 @@ cG.REPO.producer = {"def":cG.N};
 
 ///////
 cG.REPO.stage = {"def":{id:"def",construct:function(name,scriptt,anchor,options){   
-    var direction=function(d,m,v,b){b=b||{};var l={parent:null,offset:0,loading:{lines:b.lines||16,rate:b.rate||1E3/30,diameter:b.diameter||250,back:b.loaderback||"#FFF",color:b.color||"#373737"},config:{dir:b.dir||"assets/",pagestartnum:!1,chapterstartnum:!1,imgprebuffer:b.imgprebuffer||5,imgpostbuffer:b.imgpostbuffer||5,startpage:0,back:b.back||"#FFF"},pages:[]};if(void 0===d)return-1;if("string"===typeof d)l.pages.push({alt:"",hover:"",title:"",url:[d],release:0,note:"",perm:!1,anim8:!1}),d=l;else if(Array.isArray(d)){for(b=
-0;b<d.length;b++)if(l.pages.push({alt:"",hover:"",title:"",url:[],release:0,note:"",perm:!1,anim8:!1}),Array.isArray(d[b]))for(var x=0;x<d[b].length;x++)l.pages[b].url.push(d[b][x]);else l.pages[b].url.push(d[b]);d=l}else if(void 0===d.pages[0].url)return-1;if(void 0===m||null==m)m=0;var e=d.pages,h=d.pages.length,y=!0,n=-1,p=d.loading,q=d.config,t=[],u=[],k=new Image,z=!0,c=[document.createElement("canvas"),document.createElement("canvas")],A=c[1].getContext("2d"),B=b=function(){return 0},w=b,D=
-b,E={context:c[0].getContext("2d"),color:p.color,start:Date.now(),lines:p.lines,diameter:p.diameter,rate:p.rate},F=function(a){c[0].style.paddingLeft=(c[1].width-300)/2+"px";var b=Math.floor((Date.now()-a.start)/1E3*a.lines)/a.lines,g=a.color.substr(1);a.context.save();a.context.clearRect(0,0,300,c[1].height);a.context.translate(150,c[1].height/2);a.context.rotate(2*Math.PI*b);3==g.length&&(g=g[0]+C[0]+g[1]+g[1]+g[2]+g[2]);for(var b=parseInt(g.substr(0,2),16).toString(),d=parseInt(g.substr(2,2),16).toString(),
-g=parseInt(g.substr(4,2),16).toString(),e=0;e<a.lines;e++)a.context.beginPath(),a.context.rotate(2*Math.PI/a.lines),a.context.moveTo(a.diameter/10,0),a.context.lineTo(a.diameter/4,0),a.context.lineWidth=a.diameter/30,a.context.strokeStyle="rgba("+b+","+d+","+g+","+e/a.lines+")",a.context.stroke();a.context.restore();y?window.setTimeout(F,a.rate,E):a.context.clearRect(0,0,300,c[1].height)},G=function(a,b){if(null===a||void 0===a)a={x:0,y:0};else if(isNaN(a)){if(null===a.y||void 0===a.y)a.y=0;if(null===
-a.x||void 0===a.x)a.x=0}else a={x:0,y:a};if(null===b||void 0===b||0>=b)b=400;0>a.y&&(a.y=window.innerHeight||document.documentElement.clientHeight||document.body.clientHeight);0>a.x&&(a.x=window.innerWidth||document.documentElement.clientWidth||document.body.clientWidth);var c={x:void 0!==window.pageXOffset?a.x-window.pageXOffset:a.x-document.documentElement.scrollLeft,y:void 0!==window.pageYOffset?a.y-window.pageYOffset:a.y-document.documentElement.scrollTop};if(c=={x:0,y:0})return c;var d=function(a,
-b,c){window.scrollBy(Math.floor(a.x)/b,Math.floor(a.y)/b);c+1<5*b&&window.setTimeout(d,5,a,b,c+1)};window.setTimeout(d,5,c,Math.floor(b/5),0);return c},l=function(){e[this.imaginaryID].loaded=!0},r=function(a,b){y=!0;window.setTimeout(F,p.rate,E);B();0>b&&(b=0);b>=h&&(b=h-1);e[b].loaded||A.clearRect(0,0,c[1].width,c[1].height);a.imaginaryID=b;a.src=q.dir+e[b].url[0];n=b;for(var d=0,f=b-1;f>b-q.imgprebuffer-1&&0<=f;f--)e[f].loaded||(u[d].imaginaryID=f,u[d].src=q.dir+e[f].url,d++);d=0;for(f=b+1;f<q.imgpostbuffer+
-b+1&&f<h;f++)e[f].loaded||(t[d].imaginaryID=f,t[d].src=q.dir+e[f].url,d++)};this.count=function(){return h};this.current=function(){return n};this.callback=function(a,b){if(null===a||void 0===a)return w;if(null===b||void 0===b)return a?0<a?D:B:w;a?0<a?D=b:B=b:w=b;return 1};this.go=function(a){a=null===a||void 0===a?0:parseInt(a,10);a=isNaN(a)?0:a;r(k,Math.floor(Math.max(0,Math.min(h-1,a))));return a};this.prev=function(){var a=n-1;0<=a&&r(k,a);return a};this.next=function(){var a=n+1;a<h&&r(k,a);
-return a};this.frst=function(){0<=n&&r(k,0);return 0};this.last=function(){r(k,h-1);return h-1};this.rand=function(){var a=Math.floor(Math.random()*(h-1));r(k,a);return a};this.data=function(a){a=null===a||void 0===a?n:parseInt(a,10);return isNaN(a)?e[n]:e[Math.floor(Math.max(0,Math.min(h-1,a)))]};this.scroll=function(a){return null===a||void 0===a?z:z=a};this.scrollTo=function(a,b){return G(a,b)};c[0].height=480;c[0].style.background=p.back;c[0].style.paddingLeft="170px";c[0].style.zIndex=0;c[0].style.position=
-"absolute";m?m.appendChild(c[0]):document.body.appendChild(c[0]);window.setTimeout(F,p.rate,E);k=new Image;k.imaginaryID=-1;k.addEventListener("load",function(){e[this.imaginaryID].loaded?A.clearRect(0,0,this.width,this.height):e[this.imaginaryID].loaded=!0;w();c[1].width=this.width;c[1].height=c[0].height=this.height;A.drawImage(this,0,0);y=0;z&&G();D()},!1);for(b=0;b<e.length;b++)e[b].desig=b?b==e.length-1?1:0:-1,e[b].loaded=!1;for(b=0;b<d.config.imgprebuffer;b++)u.push(new Image),u[b].imaginaryID=
--1,u[b].addEventListener("load",l,!1);for(b=0;b<d.config.imgpostbuffer;b++)t.push(new Image),t[b].imaginaryID=-1,t[b].addEventListener("load",l,!1);r(k,void 0===v||null===v||isNaN(v)?q.startpage:v);c[1].height=480;c[1].width=640;c[1].background=q.back;c[1].style.zIndex=1;c[1].style.position="relative";m?m.appendChild(c[1]):document.body.appendChild(c[1]);this.canvi=c;this.internals=d};/**/
+var     /** @preserve direction.js (c) 2015 Seun Ogedengbe, MIT*/
+    /**
+     * @suppress {globalThis}
+     */
+    direction = function(input,anchor,owrite,c){
+        //input - an object, list, or string
+        //anchor - the html object to append
+        //INITIAL SETUP - Ensures input is the correct format, or dies trying
+        c=c||{};
+        var holdr = {parent:null,offset:0,loading:{lines:c.lines||16,rate:c.rate||1000 / 30,diameter:c.diameter||250,/*xpos:1/2,ypos:1/2,*/back:c.loaderback||"#FFF",color:c.color||"#373737"/*back:"#000",color:"#3737FF"*/},config:{dir:c.dir||"assets/",pagestartnum:!1,chapterstartnum:!1,imgprebuffer:c.imgprebuffer||5,imgpostbuffer:c.imgpostbuffer||5,startpage:0,back:c.back||"#FFF"},pages:[]};
+        if(void 0===input){
+            return -1;
+        } else if(typeof input==='string'){
+            holdr.pages.push({alt:"",hover:"",title:"",url:[input],release:0,note:"",perm:!1,anim8:!1});
+            input = holdr;
+        } else if(Array.isArray(input)){
+            for(var q = 0;q<input.length;q++){
+                holdr.pages.push({alt:"",hover:"",title:"",url:[],release:0,note:"",perm:!1,anim8:!1});
+                if(Array.isArray(input[q])){
+                    for(var w = 0;w<input[q].length;w++){
+                        holdr.pages[q].url.push(input[q][w]);
+                    }
+                } else holdr.pages[q].url.push(input[q]);
+            }
+            input = holdr;
+        } else if(!input.pages.length) input.pages.push({alt:"",hover:"",title:"",url:[],release:0,note:"",perm:!1,anim8:!1});
+        else if(void 0 === input.pages[0].url) return -1;
+        if(void 0 === anchor||anchor == null) anchor = 0;
+        //PROPERTIES - private
+            //self = this,//we don't need self anymore because, the public methods that require it aren't utlized in private methods //that
+        var iimg = input.pages,
+            count= input.pages.length,  
+            //intervall,
+            spinning=true,//is the spinner spinning?
+            current= -1,//-1 for unset, corresponds to current page,
+            spinner = input.loading,
+            config = input.config,
+            parent = input.parent,
+            offset = input.offset,
+            pstload = [],
+            preload = [],
+            master = new Image(),
+            skroll = true,
+            //objref = {acW:300,acH:300},//the purpose of objref, is to allow dynamic canvas resizing in layer 0
+            layers = [document.createElement("canvas"), document.createElement("canvas")],//By default, we have the display layer and the loading layer
+            //console.log(this.layers[1]);
+            context = layers[1].getContext('2d'),//display context for drawing
+            //METHODS - private
+            n = function(){return 0},//this null fuction save us some bytes
+            slidestart=n,
+            sliding=n,
+            slidend=n,
+            object = {
+                context: layers[0].getContext('2d'),
+                color: spinner.color,
+                start: Date.now(),
+                lines: spinner.lines,
+                diameter: spinner.diameter,
+                //cwidth: layers[1].width, 300
+                //cheight: layers[1].height,// 480
+                rate: spinner.rate
+            },
+            spin = function(a) {
+                layers[0].style.paddingLeft=((layers[1].width-300)/2)+"px";
+                var rotation = Math.floor(((Date.now() - a.start) / 1000) * a.lines) / a.lines,
+                    c = a.color.substr(1);
+                a.context.save();
+                a.context.clearRect(0, 0, 300, layers[1].height);
+                a.context.translate(150, layers[1].height/2);
+                a.context.rotate(Math.PI * 2 * rotation);
+                if (c.length == 3) c = c[0] + C[0] + c[1] + c[1] + c[2] + c[2];
+                var red = parseInt(c.substr(0, 2), 16).toString(),
+                    green = parseInt(c.substr(2, 2), 16).toString(),
+                    blue = parseInt(c.substr(4, 2), 16).toString();
+                for (var i = 0; i < a.lines; i++) {
+                    a.context.beginPath();
+                    a.context.rotate(Math.PI * 2 / a.lines);
+                    a.context.moveTo(a.diameter / 10, 0);
+                    a.context.lineTo(a.diameter / 4, 0);
+                    a.context.lineWidth = a.diameter / 30;
+                    a.context.strokeStyle = "rgba(" + red + "," + green + "," + blue + "," + i / a.lines + ")";
+                    a.context.stroke();
+                }
+                a.context.restore();
+                if(spinning) window.setTimeout(spin, a.rate, object);
+                else a.context.clearRect(0, 0, 300, layers[1].height);
+            },
+            scrollit = function(to,time){
+                //format inputs
+                if(to===null||void 0===to) to={x:0,y:0};
+                else if (!isNaN(to)) to={x:0,y:to};//if to is num assume its y
+                else {
+                    if(to.y===null||void 0===to.y) to.y=0;
+                    if(to.x===null||void 0===to.x) to.x=0;
+                }
+                if(time===null||void 0===time||time<=0) time=400;//ignore given zero time
+                //if x or y is less than 0 then go to the bottom
+                if(to.y<0) to.y=window.innerHeight|| document.documentElement.clientHeight|| document.body.clientHeight;
+                if(to.x<0) to.x=window.innerWidth|| document.documentElement.clientWidth|| document.body.clientWidth;
+                //calculate distance needed to travel
+                var dis = {x:(window.pageXOffset!==void 0)?to.x-window.pageXOffset:to.x-document.documentElement.scrollLeft,y:(window.pageYOffset!==void 0)?to.y-window.pageYOffset:to.y-document.documentElement.scrollTop};
+                /*dis.x=(window.pageXOffset===void 0)?to.x-window.pageXOffset:to.x-document.documentElement.scrollLeft;
+                dis.y=(window.pageYOffset===void 0)?to.y-window.pageYOffset:to.y-document.documentElement.scrollTop;*/
+                //console.log("to",to,"dis",dis,"(x",window.pageXOffset,document.documentElement.scrollLeft,"| y",window.pageYOffset,document.documentElement.scrollTop,")",time,time/5);
+                if(dis=={x:0,y:0}) return dis;//if that distance is 0 on both x and y, no scrolling required
+                var clock = function(c,b,a){
+                    window.scrollBy(Math.floor(c.x)/b, Math.floor(c.y)/b);
+                    if(a+1<b*5) window.setTimeout(clock,5,c,b,a+1);
+                }
+                window.setTimeout(clock,5,dis,Math.floor(time/5),0);
+                //window.clearInterval(clock);
+                return dis;
+            },
+            preloadGeneric = function(){
+                iimg[this.imaginaryID].loaded = true;
+                /*possible implementation - Delete it when we are done, possibly saves memory, since its been cached?
+            this.imaginaryID=-1;
+            this.src="";*/
+            },
+            preloadMaster = function(){//actually a misnomer, master doesnt actually preload, it loads and draws
+                if(iimg[this.imaginaryID].loaded) context.clearRect(0, 0, this.width, this.height);
+                else iimg[this.imaginaryID].loaded = true;
+                sliding();
+                //conviently, this callback draws the image as soon as master's src is changed and image loaded
+                layers[1].width /*= layers[0].width = objref.acW */= this.width;
+                layers[1].height = layers[0].height /*= objref.acH*/ = this.height;
+                context.drawImage(this,0,0);
+                //current = this.imaginaryID;//do not wait on load for page change, do not change page on page load
+                /*console.log("killing",intervall);
+                window.clearInterval(intervall);
+                intervall=-1;*/
+                spinning=0;
+                if(skroll) scrollit();
+                slidend();
+            },
+            assign = function(imagething,idd){//assign helper, assigns an src and iid according to given id
+                //console.log("World");
+                /*console.log("dead",intervall);
+                if(intervall<0) intervall = window.setInterval(spin, spinner.rate, object);
+                console.log("started",intervall);*/
+                spinning=true;
+                window.setTimeout(spin, spinner.rate, object);
+                slidestart();
+                if(idd<0) idd=0;//if lower than zero set to zero
+                if(idd>=count) idd=count-1; //can not be equal to our higher than the amount of pages
+                if(!iimg[idd].loaded) context.clearRect(0, 0, layers[1].width, layers[1].height);
+                imagething.imaginaryID = idd;
+                console.log(config.dir+iimg[idd].url[0]);
+                imagething.src = config.dir+iimg[idd].url[0];
+                current = idd;//we change page as soon as it is assigned, so that page still changes even if it never loads
+                /*console.log("----");
+            for(var q = idd-1;q>idd-self.config.imgprebuffer-1&&q>=0;q--){
+                console.log(q);
+            }
+            console.log("//");
+            for(var q = idd+1;q<self.config.imgpostbuffer+idd+1&&q<self.count;q++){
+                console.log(q);
+             continue;
+
+            console.log("----");*/
+                var r = 0;
+                for(var q = idd-1;q>idd-config.imgprebuffer-1&&q>=0;q--){
+                    if(iimg[q].loaded) continue;
+                    preload[r].imaginaryID = q;
+                    preload[r].src = config.dir+iimg[q].url;
+                    r++;
+                }
+                r = 0;
+                for(var q = idd+1;q<config.imgpostbuffer+idd+1&&q<count;q++){
+                    if(iimg[q].loaded) continue;
+                    pstload[r].imaginaryID = q;
+                    pstload[r].src = config.dir+iimg[q].url;
+                    r++;
+                }
+            }/*,
+            jq = function(){
+                this.attempts = 0||this.attempts+1;
+                if(window.jQuery===void 0&&this.attempts<10) return window.setTimeout(jq,300);
+                jQuery.fn.direction = function(a,b,c) {
+                    return this.each( function() {
+                        direction(a,$(this),b,c);
+                    });
+                }
+            }
+        if(c.jq) jq();*/
+        //METHODS - public
+        this.count = function(){return count;}
+        this.current = function(){return current;}
+        this.callback = function(type,callback){
+            if(type===null||void 0===type) return sliding;
+            if(callback===null||void 0===callback) return (type)?(type>0)?slidend:slidestart:sliding;
+            if(type)
+                if(type>0) slidend = callback;
+                else slidestart = callback;
+            else sliding = callback;
+            return 1;
+        }
+        this.go = function(to){
+            var sre = (to===null||void 0===to)?0:parseInt(to,10);
+            //console.log(sre);
+            sre = (isNaN(sre))?0:sre;
+            assign(master,(Math.floor(Math.max(0,Math.min(count-1,sre)))));
+            return sre;
+        }
+        this.prev = function(){
+            var sre = current-1;//avoids possible race condition, assign loads in new image which can call preloadMaster which can change self.current before it gets to the return call. storing it premptively will preserve the value
+            if(sre>=0) assign(master,sre);
+            return sre;
+        }
+        this.next = function(){
+            //console.log("Hello");
+            var sre = current+1;
+            if(sre<count) assign(master,sre);
+            return sre;
+        }
+        this.frst = function(){
+            if(current>=0) assign(master,0);
+            return 0;
+        }
+        this.last = function(){
+            assign(master,count-1);
+            return count-1;
+        }
+        this.rand = function(){
+            var sre = Math.floor(Math.random() * (count-1));
+            //console.log(sre);
+            assign(master,sre);
+            return sre;
+        }
+        this.data = function(to){//returns info about slide
+            var sre = (to===null||void 0===to)?current:parseInt(to,10);
+            return (isNaN(sre))?iimg[current]:iimg[(Math.floor(Math.max(0,Math.min(count-1,sre))))];
+        }
+        this.scroll = function(bool){//toggles Auto Scrolling
+            if(bool===null||void 0===bool) return skroll;
+            return skroll=bool;
+        }
+        this.scrollTo = function(to,time){return scrollit(to,time);}//public wrapper for scrollit
+        //LOADER - setup
+        layers[0].height=480;
+        //layers[0].width=640;
+        layers[0].style.background=spinner.back;
+        layers[0].style.paddingLeft="170px";
+        layers[0].style.zIndex=0;
+        layers[0].style.position="absolute";
+
+        //objref = object;
+        //console.log(layers[1]);
+        if(anchor) anchor.appendChild(layers[0]);
+        else document.body.appendChild(layers[0]);
+        //console.log(object);
+        //intervall=window.setInterval(spin, spinner.rate, object);
+        window.setTimeout(spin, spinner.rate, object);
+        //DISPLAY - setup
+        master = new Image();
+        master.imaginaryID = -1;//unset to an imaginary image
+        master.addEventListener("load", preloadMaster, false);
+        //console.log(this.master);
+        for(var q = 0;q<iimg.length;q++){
+            //iimg[q].btog = 0; a holdover from the old html based canvas
+            iimg[q].desig = (q)?(q==iimg.length-1)?1:0:-1;//-1 means first, 0 means middle, 1 means last: true if endpoint, false if middle
+            iimg[q].loaded = false;
+        }
+        for(var q = 0;q<input.config.imgprebuffer;q++){
+            preload.push(new Image());
+            preload[q].imaginaryID = -1;//unset to an imaginary image
+            preload[q].addEventListener("load", preloadGeneric, false);
+        }
+        for(var q = 0;q<input.config.imgpostbuffer;q++){
+            pstload.push(new Image());
+            pstload[q].imaginaryID = -1;//unset to an imaginary image
+            pstload[q].addEventListener("load", preloadGeneric, false);
+        }
+        //preload[0].imaginaryID = 0;
+        //preload[0].src = input.pages[0].url;
+        //init
+        assign(master,(owrite===void 0||owrite===null||isNaN(owrite))?config.startpage:owrite);
+        //end init
+        layers[1].height=480;
+        layers[1].width=640;
+        layers[1].background = config.back;
+        layers[1].style.zIndex=1;
+        layers[1].style.position="relative";
+        //layers[1].style.visibility="hidden";
+        if(anchor) anchor.appendChild(layers[1]);
+        else document.body.appendChild(layers[1]);
+        this.canvi=layers;
+        this.internals = input;
+    }/**/
     var get;//still undefined
     if(typeof(Storage) !== "undefined") {
         get = parseInt(localStorage.getItem(cG.comicID+"|"+name+"|curPage"),10);
-        if(cG.avx[0]>0&&cG.avx[1]>0) cG.verbose(1,cG.comicID+"|"+name+"|curPage",":",get);
-        else console.log(cG.comicID+"|"+name+"|curPage",":",get);
+        /*if(cG.avx[0]>0&&cG.avx[1]>0) */cG.verbose(1,cG.comicID+"|"+name+"|curPage",":",get);
+        /*else console.log(cG.comicID+"|"+name+"|curPage",":",get);*/
     }
     if(cG.comix===void 0&&cG.prePage>=0) get = cG.prePage;//prepage, which is from router, overwrites localStorage if over -1, only works on comix
     var main = new direction(scriptt,anchor,get);
@@ -224,7 +514,7 @@ return a};this.frst=function(){0<=n&&r(k,0);return 0};this.last=function(){r(k,h
         return main.go(main.internals.chapters[main.ch_count()-1][g]);
     }
     var lscurrent = function(){
-        if(typeof(Storage) !== void 0) {
+        if(typeof(Storage) !== void 0&&cG.fBox.pgesve) {
             localStorage.setItem(cG.comicID+"|"+name+"|curPage",cG.cPanel[/*"def_"+*/name].current().toString());
         }
         if(cG.comix===cG.cPanel[/*"def_"+*/name]){//if comic is the comix, then push its state
@@ -253,7 +543,7 @@ return a};this.frst=function(){0<=n&&r(k,0);return 0};this.last=function(){r(k,h
             }
             //if(cG.avx[0]>0&&cG.avx[1]>0) 
             cG.verbose(1,name,"Pushing state:",result);
-            history.pushState({}, null, "#/"+result);
+            if(cG.fBox.pgepsh) history.pushState({}, null, "#/"+result);
         }
         if(cG.queue.stageChange!==void 0)
             for(var ftn in cG.queue.stageChange){
@@ -281,7 +571,9 @@ return a};this.frst=function(){0<=n&&r(k,0);return 0};this.last=function(){r(k,h
         }
     }
     main.callback(1,lscurrent);
-    cG.comix = cG.comix||main;//this should only set the comix on the first call
+    cG.comix = (cG.fBox.protect)?cG.comix||main:main;
+    //if protect is true - set the comix on the first call
+    //else always overwrite comix
     return main;
 }}};
 ///////
@@ -414,9 +706,58 @@ cG.queue.stageChange.controller=function(target){
         }
     }
 };
+cG.addRender = function(addme,dest,name){
+    //dest = script obj
+    var pushonpages = function(tget){
+        //convert data to page array
+        var work;
+        for(var i =0;i<tget.length;i++){
+            if(Array.isArray(tget[i]))
+                work = {alt:"",hover:"",title:"",url:tget[i],release:0,note:"",perm:!1,anim8:!1};
+            else
+                work = {alt:"",hover:"",title:"",url:[tget[i]],release:0,note:"",perm:!1,anim8:!1};
+            if(dest!==void 0&&dest!==null)
+                dest.pages.push(work);
+            else
+                cG.REPO.script.def.pages.push(work);
+        }
+        //this overwrites cG.script, if it it changed by something other than def
+        if(dest===void 0||dest===null)
+            cG.script = cG.REPO.script.def;
+        else
+            return dest;
+        return cG.script;
+    }
+    if(void 0===addme||addme===null){
+        if(void 0===name||name===null) name = "additive";
+        var data = syncJSON(cG.REPO.scReq.address+name+'.json');
+        return pushonpages(data.p);
+        /*cG.REPO.scReq.getAdd = cG.agent(cG.REPO.scReq.address+name+'.json');
+        cG.REPO.scReq.getAdd.then(
+            function(data, xhr) {
+                return pushonpages(data.p);
+            },
+            function(data, xhr) {
+                console.error(data, xhr.status);
+                console.log("addRender has failed")
+                //cG.script = cG.REPO.script.def = 0;
+            });*/
+    } else return pushonpages(addme.p);
+};
 cG.controlInjection = function(SPECIFIC){
+    if(!cG.documentcontrolkeyset&&cG.fBox.arrow){
+        cG.documentcontrolkeyset = true;
+        document.onkeyup = function(e){
+            //console.log("keydown");
+            e = e || window.event;
+            if (e.keyCode == '37') cG.comix.prev()
+            else if (e.keyCode == '39') cG.comix.next();
+            else if (e.keyCode == '82') cG.comix.rand();
+        }
+    }
     var stages = [],
         ctrls = (cG.ctrls)?cG.ctrls:'<ul><li style="display: inline;"><button class="frst" >|&lt;</button></li><li style="display: inline;"><button class="prev" rel="prev" accesskey="p">&lt; Prev</button></li><li style="display: inline;"><button class="rand" >Random</button></li><li style="display: inline;"><button class="next" rel="next" accesskey="n">Next &gt;</button></li><li style="display: inline;"><button class="last" >&gt;|</button></li></ul>',
+        antictrl = '<ul><li style="display: inline;"><button class="last" >&lt;|</button></li><li style="display: inline;"><button class="next" rel="next" accesskey="n">Next &lt;</button></li><li style="display: inline;"><button class="rand" >Random</button></li><li style="display: inline;"><button class="prev" rel="prev" accesskey="p">&gt; Prev</button></li><li style="display: inline;"><button class="frst" >|&gt;</button></li></ul>',
         pod,podling,
         errr = "controlInjection can only operate on elements or arrays of elements",
         eventer=function(par,chd){
@@ -451,7 +792,7 @@ cG.controlInjection = function(SPECIFIC){
                         working=new Date(cG.cPanel[par.id].data().release*1000);
                         classdate[eq].innerHTML = working.toDateString();
                     }
-                });
+                });                                                                
                 q[y].setAttribute("cgae","1");
             }
             for (var y = 0; y < w.length; y++){
@@ -466,7 +807,7 @@ cG.controlInjection = function(SPECIFIC){
                         working=new Date(cG.cPanel[par.id].data().release*1000);
                         classdate[eq].innerHTML = working.toDateString();
                     }
-                });
+                }); 
                 w[y].setAttribute("cgae","1");
             }
             for (var y = 0; y < e.length; y++){
@@ -538,7 +879,7 @@ cG.controlInjection = function(SPECIFIC){
     for(var u=0;u<stages.length;u++){
         if(!stages[u].getAttribute("mind")){//add event handlers
             pod = document.createElement("DIV");
-            pod.innerHTML=ctrls;
+            pod.innerHTML=((stages[u].getAttribute("readdir")||cG.script.config.readdir)&&!cG.ctrls)?antictrl:ctrls;
             podling = pod.children[0];
             if(!stages[u].getAttribute("comix")) podling.setAttribute("style","display:none;");
             else podling.setAttribute("style","display:block;");
@@ -570,6 +911,7 @@ cG.stageInjection = function(SPECIFIC){
         stages.push(SPECIFIC);/*if not array and not undefined, assume it is a Element*/
     }
     if(cG.recyclebin.air!=""&&cG.recyclebin.air!==void 0&&cG.recyclebin.air!==null) cG.script.config.dir=cG.recyclebin.air;
+    cG.REPO.scReq.address = cG.REPO.scReq.address||cG.recyclebin.dir;
     for(var p in cG.recyclebin)
         if(cG.recyclebin.hasOwnProperty(p)&&p!==null)
             cG.recyclebin[p] = null;
@@ -581,6 +923,7 @@ cG.stageInjection = function(SPECIFIC){
             /*initial setup*/
             /*////get attributes */
             /*////////async request the script if it is specified, else use default*/
+            if(!cG.fBox.noverwrite) stages[iD].innerHTML = "";
             var myScript;
             if(source===null||source===void 0){
                 var script_attr = stages[iD].getAttribute("script");
@@ -599,11 +942,25 @@ cG.stageInjection = function(SPECIFIC){
                 }
             } else if(source=="") myScript=cG.script;
             else myScript=source;
+            if(myScript.config.additive){
+                cG.addRender(null,null,myScript.config.additive);
+                myScript.config.additive = "";
+            }
             /*////////get the rest of the attributes*/
             var id_attr = stages[iD].getAttribute("id"),
                 use_attr = stages[iD].getAttribute("use"),
-                config_attr = stages[iD].getAttribute("config");
+                config_attr = stages[iD].getAttribute("config"),
+                add_attr = stages[iD].getAttribute("additive");
             /*////attribute processing */
+            //cgcij tells cG that a stage has already been injectted on this element, and you should skip it normally
+            if(add_attr!=""&&void 0!==add_attr&&add_attr!==null){
+                if(source===null||source===void 0){
+                    myScript = cG.addRender(null,null,add_attr);
+                    stages[iD].removeAttribute("additive");
+                } else {
+                    myScript = cG.addRender(null,source,add_attr)
+                }
+            }
             stages[iD].setAttribute("cgcij",1);
             if(id_attr==""||void 0===id_attr||id_attr===null){/*if no ID, make one*/
                 var name = "STG"+iD;
@@ -676,7 +1033,8 @@ cG.stageInjection = function(SPECIFIC){
             //console.log(sbvenue,nstpost)
             //if(cG.avx[0]>1&&cG.avx[1]>0){}
             //console.log(stages[iD])
-            if(stages[iD].getAttribute("id")==cG.comix.name) stages[iD].setAttribute("comix",1);
+            if(!cG.fBox.protect) stages[iD].setAttribute("comix",-1);//comix protection disabled, all stages are comix
+            else if(stages[iD].getAttribute("id")==cG.comix.name) stages[iD].setAttribute("comix",1);
             var chl = stages[iD].children;
             for(var t = 1;t<chl.length;t++){
                 if(chl[t]==anchorto) continue;
@@ -708,7 +1066,7 @@ cG.stageInjection = function(SPECIFIC){
                 var frspr = cG.HELPERS.stick(final_res[srch].pg[r],final_res[srch].pg,final_res[srch],r);
             }
         };
-    for (var i = 0; i < stages.length; i++) if(!stages[i].getAttribute("cgcij")==true) request(i);
+    for (var i = 0; i < stages.length; i++) if(!stages[i].getAttribute("cgcij")==true||!cG.fBox.noverwrite) request(i);
     cG.cPanel=final_res;
     cG.controlInjection();
     return final_res;
@@ -717,6 +1075,7 @@ cG.stageInjection = function(SPECIFIC){
 /*ROUTING*/
 cG.route2page = cG.route2page||function(orgvalue){
     //var com = cG.script.config.orderby,
+    if(!cG.fBox.rtepge) return 0;
     var value;
     if(orgvalue===null||orgvalue===void 0||!orgvalue){
         var z = 0;
@@ -990,7 +1349,7 @@ domReady(function(){
             break;
         };
     }
-    if(b||b==void 0||b==""){
+    if((b===null||b||b===void 0||b=="")&&cG.fBox.fstrun){
         //cG.HELPERS.jstagecreate();
         //cG.cPanel=cG.stageInjection();
         cG.stageInjection();
