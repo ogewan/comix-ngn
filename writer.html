@@ -91,9 +91,10 @@
                     </tr>
                     <tr>
                         <td title="An additive json is a file that allows pages to be added by url alone">
-                            <label for="add_0">Additive pages</label>
-                            <input type="radio" id="add_0" name="aad" checked>Disabled&nbsp;
-                            <input type="radio" id="add_1" name="aad">Enabled</td>
+                            <label for="add_">Additive pages</label>
+                            <input value="" id="add_" type="text">
+                            <!--<input type="radio" id="add_0" name="aad" checked>Disabled&nbsp;
+                            <input type="radio" id="add_1" name="aad">Enabled</td>-->
                         <td title="Merge these additive into pages of the script">
                             <label for="mergeadd">Additive Merge</label>
                             <input id="mergeadd" type="file" accept=".json" style="display: inline;">
@@ -498,7 +499,7 @@
                 setOBJ.config.dir = $("#dir").val();
                     setOBJ.config.pagestartnum = document.getElementById("psn_1").checked;
                     setOBJ.config.readdir = document.getElementById("rdr_1").checked;
-                    setOBJ.config.additive = document.getElementById("add_1").checked;
+                    setOBJ.config.additive = $("#add_").val();//document.getElementById("add_1").checked;
                     setOBJ.config.chapterstartnum = document.getElementById("csn_1").checked;
                 setOBJ.config.startpage = parseInt($("#strp").val(),10);/*document.getElementById("strp_1").checked;*/
                 setOBJ.config.imgprebuffer = parseInt($("#prb").val(),10);
@@ -651,8 +652,8 @@
                 document.getElementById("psn_1").checked = false;
                 document.getElementById("rdr_0").checked = false;
                 document.getElementById("rdr_1").checked = false;
-                document.getElementById("add_0").checked = false;
-                document.getElementById("add_1").checked = false;
+                //document.getElementById("add_0").checked = false;
+                //document.getElementById("add_1").checked = false;
                 document.getElementById("csn_0").checked = false;
                 document.getElementById("csn_1").checked = false;
                 /*document.getElementById("strp_0").checked = false;
@@ -669,11 +670,12 @@
                 if (typeof conf.config === 'undefined') { /*config module dependency*/
                     /*default settings*/
                     $("#dir").val("assets/");
+                    $("#add_").val("");
                     $("#prb").val("5");
                     $("#strp").val("0");
                     $.data($("#back_color"),"color","#fff"); 
                     document.getElementById("rdr_1").checked = true; 
-                    document.getElementById("add_1").checked = true; 
+                    //document.getElementById("add_1").checked = true; 
                     document.getElementById("psn_1").checked = true;
                     document.getElementById("csn_1").checked = true;
                 } else {
@@ -685,6 +687,11 @@
                     } else if (conf.config.startpage) {
                         $("#strp").val(conf.config.startpage);
                     }
+                    if (typeof conf.config.additive === void 0) {
+                        $("#add_").val("0");
+                    } else if (conf.config.additive) {
+                        $("#add_").val(conf.config.additive);
+                    }
                     if (typeof conf.config.back === 'undefined') {
                         $.data($("#back_color"),"color","#fff"); 
                     } else if (conf.config.back) {
@@ -695,8 +702,8 @@
                     else document.getElementById("psn_0").checked = true;
                     if (conf.config.readdir) document.getElementById("rdr_1").checked = true;
                     else document.getElementById("rdr_0").checked = true;
-                    if (conf.config.additive) document.getElementById("add_1").checked = true;
-                    else document.getElementById("add_0").checked = true;
+                    //if (conf.config.additive) document.getElementById("add_1").checked = true;
+                    //else document.getElementById("add_0").checked = true;
                     if (conf.config.chapterstartnum) document.getElementById("csn_1").checked = true;
                     else document.getElementById("csn_0").checked = true;
                 }
