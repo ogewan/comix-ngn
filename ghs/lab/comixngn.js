@@ -9,7 +9,7 @@ cG.N =function(){return 0};/*null function*/
 if(void 0===cG.$GPC){cG.$GPC=0;}/*Global Plugin Counter (no longer global)*/
 cG.root = '';/*current default settings of cng, overwritten by plugins*/
 cG.cPanel = cG.cPanel||{};/*cG control panel, all stages are stored here*/
-cG.fBox = cG.fBox||{fstrun: true, pgepsh: true, pgesve: true, rtepge: true, protect: true, noverwrite: true};/*cG fuse box, toggles various options
+cG.fBox = cG.fBox||{fstrun: true, pgepsh: true, pgesve: true, rtepge: true, protect: true, noverwrite: true, arrow: true};/*cG fuse box, toggles various options
 * fstrun - toggles automatic stage injection on document ready
 * pgepsh - toggles page url push to urlbar and history
 * pgesve - toggles page saving in localstorage
@@ -740,6 +740,16 @@ cG.addRender = function(addme,dest,name){
     } else return pushonpages(addme.p);
 };
 cG.controlInjection = function(SPECIFIC){
+    if(!cG.documentcontrolkeyset&&cG.fBox.arrow){
+        cG.documentcontrolkeyset = true;
+        document.onkeyup = function(e){
+            //console.log("keydown");
+            e = e || window.event;
+            if (e.keyCode == '37') cG.comix.prev()
+            else if (e.keyCode == '39') cG.comix.next();
+            else if (e.keyCode == '82') cG.comix.rand();
+        }
+    }
     var stages = [],
         ctrls = (cG.ctrls)?cG.ctrls:'<ul><li style="display: inline;"><button class="frst" >|&lt;</button></li><li style="display: inline;"><button class="prev" rel="prev" accesskey="p">&lt; Prev</button></li><li style="display: inline;"><button class="rand" >Random</button></li><li style="display: inline;"><button class="next" rel="next" accesskey="n">Next &gt;</button></li><li style="display: inline;"><button class="last" >&gt;|</button></li></ul>',
         antictrl = '<ul><li style="display: inline;"><button class="last" >&lt;|</button></li><li style="display: inline;"><button class="next" rel="next" accesskey="n">Next &lt;</button></li><li style="display: inline;"><button class="rand" >Random</button></li><li style="display: inline;"><button class="prev" rel="prev" accesskey="p">&gt; Prev</button></li><li style="display: inline;"><button class="frst" >|&gt;</button></li></ul>',
@@ -777,7 +787,7 @@ cG.controlInjection = function(SPECIFIC){
                         working=new Date(cG.cPanel[par.id].data().release*1000);
                         classdate[eq].innerHTML = working.toDateString();
                     }
-                });
+                });                                                                
                 q[y].setAttribute("cgae","1");
             }
             for (var y = 0; y < w.length; y++){
@@ -792,7 +802,7 @@ cG.controlInjection = function(SPECIFIC){
                         working=new Date(cG.cPanel[par.id].data().release*1000);
                         classdate[eq].innerHTML = working.toDateString();
                     }
-                });
+                }); 
                 w[y].setAttribute("cgae","1");
             }
             for (var y = 0; y < e.length; y++){
