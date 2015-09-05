@@ -1,0 +1,72 @@
+<script>
+    //Minify before use
+    var cG = {};
+    cG.recyclebin = {
+        defer : !0,
+        mainsrc : "comixngn.min.js",
+        loadcng : [],/*to load*/
+        plugin : "",
+        comicID : "",
+        disable : [],
+        /*! Bellerophon: Comix-Ngn plugin|pegasus: typicode.github.io/pegasus (MIT) (c) 2014 typicode*/
+        dir : "",
+        tir : "",
+        air : "",
+        fBox: {fstrun: true, pgepsh: true, pgesve: true, rtepge: true, protect: true, noverwrite: true, arrow: true},
+        dfr : function() {
+            var c = document.createElement("script");
+            cG.REPO.scReq.getScript = cG.agent("./" + cG.recyclebin.dir + "script.json");
+            cG.REPO.scReq.getDecor = cG.agent("./" + cG.recyclebin.tir + "decor.html");
+            cG.REPO.scReq.getCtrls = cG.agent(cG.recyclebin.tir+'ctrls.html');
+            cG.REPO.scReq.getScript.then(function(c) {
+                void 0 === cG.REPO.script ? cG.REPO.script = {
+                    def: c
+                } : cG.REPO.script.def = c, cG.script = cG.REPO.script.def
+            }, function(c, e) {
+                console.error(c, e.status), void 0 === cG.REPO.script ? cG.REPO.script = {
+                    def: 0
+                } : cG.REPO.script.def = c, cG.script = cG.REPO.script.def
+            }), cG.REPO.scReq.getDecor.then(function(c) {
+                void 0 === cG.REPO.decor ? cG.REPO.decor = {
+                    def: c
+                } : cG.REPO.decor.def = c, cG.decor = cG.REPO.decor.def
+            }, function(c, e) {
+                console.error(c, e.status), void 0 === cG.REPO.decor ? cG.REPO.decor = {
+                    def: 0
+                } : cG.REPO.decor.def = 0, cG.decor = cG.REPO.decor.def
+            }), cG.REPO.scReq.getCtrls.then(function(c) {
+                void 0 === cG.REPO.ctrls ? cG.REPO.ctrls = {
+                    def: c
+                } : cG.REPO.ctrls.def = c, cG.ctrls = cG.REPO.ctrls.def
+            }, function(c, e) {
+                console.error(c, e.status), void 0 === cG.REPO.ctrls ? cG.REPO.ctrls = {
+                    def: 0
+                } : cG.REPO.ctrls.def = 0, cG.ctrls = cG.REPO.ctrls.def
+            });
+            cG.comicID = cG.recyclebin.comicID;
+            for(var b=0;b<cG.recyclebin.disable.length;b++){
+                cG.dis[cG.recyclebin.disable[b]]=true;
+            }
+            c.src = cG.recyclebin.mainsrc, document.body.appendChild(c);
+            for(var a=0;a<cG.recyclebin.loadcng.length;a++){
+                c = document.createElement("script");
+                c.src = cG.recyclebin.loadcng[a], document.body.appendChild(c);
+            }
+        }
+    }
+    cG.agent = function(c, e) {
+        return e = new XMLHttpRequest, e.open("GET", c), c = [], e.onreadystatechange = e.then = function(t, r, o) {
+            if (t && t.call && (c = [, t, r]), 4 == e.readyState && (o = c[0 | e.status / 200])) try {
+                o(JSON.parse(e.responseText), e)
+            } catch (d) {
+                o(e.responseText, e)
+            }
+        }, e.send(), e
+    };
+    cG.REPO= {scReq:{}};
+    cG.dis= {};
+    cG.$GPC = cG.$GPC+1||1;
+    ! function() {
+        return cG.recyclebin.defer ? void(window.addEventListener ? window.addEventListener("load", cG.recyclebin.dfr, !1) : window.attachEvent ? window.attachEvent("onload", cG.recyclebin.dfr) : window.onload = cG.recyclebin.dfr) : cG.recyclebin.dfr()
+    }();
+</script>
