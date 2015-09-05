@@ -14,7 +14,9 @@ cG.fBox = cG.fBox||{fstrun: true, pgepsh: true, pgesve: true, rtepge: true, prot
 * pgepsh - toggles page url push to urlbar and history
 * pgesve - toggles page saving in localstorage
 * rtepge - toggles routing
-* protect - toggles comix settings*/
+* protect - toggles comix settings
+* noverwrite - by default, stageInjection cannot overwrite already inserted comics, set to false to allow overwriting
+* arrow - toggles arrow key navigation */
 cG.info = {vix: "1.2.0.",vwr: "1.0.0",vpr: "0.1.0"};/*version settings*/
 cG.dis = cG.dis||{};//disables statistic and error reporting
 cG.recyclebin = cG.recyclebin||{};//variables that are used in initialization, disposed at stage injection
@@ -938,8 +940,8 @@ cG.stageInjection = function(SPECIFIC){
             } else if(source=="") myScript=cG.script;
             else myScript=source;
             if(myScript.config.additive){
-                myScript.config.additive = false;
-                cG.addRender();
+                cG.addRender(null,null,myScript.config.additive);
+                myScript.config.additive = "";
             }
             /*////////get the rest of the attributes*/
             var id_attr = stages[iD].getAttribute("id"),
