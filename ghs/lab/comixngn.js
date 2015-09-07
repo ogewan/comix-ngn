@@ -9,7 +9,16 @@ cG.N =function(){return 0};/*null function*/
 if(void 0===cG.$GPC){cG.$GPC=0;}/*Global Plugin Counter (no longer global)*/
 cG.root = '';/*current default settings of cng, overwritten by plugins*/
 cG.cPanel = cG.cPanel||{};/*cG control panel, all stages are stored here*/
-cG.fBox = cG.fBox||{fstrun: true, pgepsh: true, pgesve: true, rtepge: true, protect: true, noverwrite: true, arrow: true, addme: true};/*cG fuse box, toggles various options
+(function(){//this function dynamically adds missing properties to fBox
+    var deft = {fstrun: true, pgepsh: true, pgesve: true, rtepge: true, protect: true, noverwrite: true, arrow: true, addme: true};
+    if(cG.fBox){
+        for(var u in deft){
+                if (!cG.fBox.hasOwnProperty(u)) cG.fBox[u] = deft[u];
+        }
+    } else {
+        cG.fBox = deft;
+    }
+})();/*cG fuse box, toggles various options
 * fstrun - toggles automatic stage injection on document ready
 * pgepsh - toggles page url push to urlbar and history
 * pgesve - toggles page saving in localstorage
