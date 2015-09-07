@@ -1,4 +1,4 @@
-/** @preserve comix-ngn v1.2.0 | (c) 2015 Oluwaseun Ogedengbe| ogewan.github.io/comix-ngn/ |License: MIT|
+/** @preserve comix-ngn v1.2.1 | (c) 2015 Oluwaseun Ogedengbe| ogewan.github.io/comix-ngn/ |License: MIT|
 embeds domReady: github.com/ded/domready (MIT) (c) 2013 Dustin Diaz, pegasus: typicode.github.io/pegasus (MIT) (c) 2014 typicode, pathjs (MIT) (c) 2011 Mike Trpcic, direction.js*/
 /*The namespace of comix-ngn
 all variables should be properties of this to prevent global namespace pollution*/
@@ -9,7 +9,16 @@ cG.N =function(){return 0};/*null function*/
 if(void 0===cG.$GPC){cG.$GPC=0;}/*Global Plugin Counter (no longer global)*/
 cG.root = '';/*current default settings of cng, overwritten by plugins*/
 cG.cPanel = cG.cPanel||{};/*cG control panel, all stages are stored here*/
-cG.fBox = cG.fBox||{fstrun: true, pgepsh: true, pgesve: true, rtepge: true, protect: true, noverwrite: true, arrow: true};/*cG fuse box, toggles various options
+(function(){//this function dynamically adds missing properties to fBox
+    var deft = {fstrun: true, pgepsh: true, pgesve: true, rtepge: true, protect: true, noverwrite: true, arrow: true, addme: true};
+    if(cG.fBox){
+        for(var u in deft){
+                if (!cG.fBox.hasOwnProperty(u)) cG.fBox[u] = deft[u];
+        }
+    } else {
+        cG.fBox = deft;
+    }
+})();/*cG fuse box, toggles various options
 * fstrun - toggles automatic stage injection on document ready
 * pgepsh - toggles page url push to urlbar and history
 * pgesve - toggles page saving in localstorage
@@ -17,7 +26,7 @@ cG.fBox = cG.fBox||{fstrun: true, pgepsh: true, pgesve: true, rtepge: true, prot
 * protect - toggles comix settings
 * noverwrite - by default, stageInjection cannot overwrite already inserted comics, set to false to allow overwriting
 * arrow - toggles arrow key navigation */
-cG.info = {vix: "1.2.0.",vwr: "1.0.0",vpr: "0.1.0"};/*version settings*/
+cG.info = {vix: "1.2.1",vwr: "1.0.0",vpr: "0.1.0"};/*version settings*/
 cG.dis = cG.dis||{};//disables statistic and error reporting
 cG.recyclebin = cG.recyclebin||{};//variables that are used in initialization, disposed at stage injection
 cG.queue = cG.queue||{};//stores functions that are called incertain events
@@ -942,7 +951,7 @@ cG.stageInjection = function(SPECIFIC){
                 }
             } else if(source=="") myScript=cG.script;
             else myScript=source;
-            if(myScript.config.additive){
+            if(myScript.config.additive&&cG.fBox.addme){
                 cG.addRender(null,null,myScript.config.additive);
                 myScript.config.additive = "";
             }
@@ -953,7 +962,7 @@ cG.stageInjection = function(SPECIFIC){
                 add_attr = stages[iD].getAttribute("additive");
             /*////attribute processing */
             //cgcij tells cG that a stage has already been injectted on this element, and you should skip it normally
-            if(add_attr!=""&&void 0!==add_attr&&add_attr!==null){
+            if(add_attr!=""&&void 0!==add_attr&&add_attr!==null&&cG.fBox.addme){
                 if(source===null||source===void 0){
                     myScript = cG.addRender(null,null,add_attr);
                     stages[iD].removeAttribute("additive");

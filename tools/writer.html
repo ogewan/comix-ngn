@@ -5,7 +5,7 @@
         mainsrc = "http://comixngn.js.org/ghs/lab/comixngn.js",
         loadng = ["http://comixngn.js.org/ghs/1.1.1/plugins/comixngn.jq.js","http://code.jquery.com/jquery-2.1.4.min.js", "https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"],
         aftjq = ["http://code.jquery.com/ui/1.11.4/jquery-ui.min.js", "https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.7.0/spectrum.min.js"],
-        fuse = {fstrun: true, pgepsh: false, pgesve: false, rtepge: false, protect: false, noverwrite: false},
+        fuse = {fstrun: true, pgepsh: false, pgesve: false, rtepge: false, protect: false, noverwrite: false, arrow: true, addme: false},
         plugin = "",
         disable = ["rollbar"],
         comicID="CNGwriter",
@@ -20,7 +20,8 @@
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/humane-js/3.2.2/themes/flatty.min.css" />
 
 <body style="margin:4px; padding:4px">
-    <h1>Writer</h1>
+    <a href="../../" style="position:fixed;width:42px;height:42px;top:20px;left:10px;"><img src="../../assets/images/normal_glow.svg" style="position:absolute;top:0;left:0;width:90%;"/></a>
+    <h1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Writer</h1>
     <span id=MHEAD></span>
     <style>
         #nav-toolbar li {
@@ -564,7 +565,7 @@
                     $(ele).data().body.alt = $("#TEMP_alt" + lee).val();
                     $(ele).data().body.release = $("#TEMP_release" + lee).val();
                     var ent = $("#TEMP_url" + lee).val();
-                    $(ele).data().body.url = ent;
+                    $(ele).data().body.url = [ent];
                     $("#name_" + lee).html(($("#nav-select").val()=="list")?ent:"<img style='max-width:64px;max-height:64px;' src='"+cG.script.config.dir+ent+"'>");
                     $(ele).data().body.perm = document.getElementById("TEMP_perm" + lee).checked;
                     $(ele).data().body.anim8 = document.getElementById("TEMP_anim8" + lee).checked;
