@@ -1,4 +1,4 @@
-/** @preserve comix-ngn v1.2.0 | (c) 2015 Oluwaseun Ogedengbe| ogewan.github.io/comix-ngn/ |License: MIT|
+/** @preserve comix-ngn v1.2.1 | (c) 2015 Oluwaseun Ogedengbe| ogewan.github.io/comix-ngn/ |License: MIT|
 embeds domReady: github.com/ded/domready (MIT) (c) 2013 Dustin Diaz, pegasus: typicode.github.io/pegasus (MIT) (c) 2014 typicode, pathjs (MIT) (c) 2011 Mike Trpcic, direction.js*/
 /*The namespace of comix-ngn
 all variables should be properties of this to prevent global namespace pollution*/
@@ -9,7 +9,16 @@ cG.N =function(){return 0};/*null function*/
 if(void 0===cG.$GPC){cG.$GPC=0;}/*Global Plugin Counter (no longer global)*/
 cG.root = '';/*current default settings of cng, overwritten by plugins*/
 cG.cPanel = cG.cPanel||{};/*cG control panel, all stages are stored here*/
-cG.fBox = cG.fBox||{fstrun: true, pgepsh: true, pgesve: true, rtepge: true, protect: true, noverwrite: true, arrow: true};/*cG fuse box, toggles various options
+(function(){//this function dynamically adds missing properties to fBox
+    var deft = {fstrun: true, pgepsh: true, pgesve: true, rtepge: true, protect: true, noverwrite: true, arrow: true, addme: true};
+    if(cG.fBox){
+        for(var u in deft){
+                if (!cG.fBox.hasOwnProperty(u)) cG.fBox[u] = deft[u];
+        }
+    } else {
+        cG.fBox = deft;
+    }
+})();/*cG fuse box, toggles various options
 * fstrun - toggles automatic stage injection on document ready
 * pgepsh - toggles page url push to urlbar and history
 * pgesve - toggles page saving in localstorage
@@ -17,7 +26,7 @@ cG.fBox = cG.fBox||{fstrun: true, pgepsh: true, pgesve: true, rtepge: true, prot
 * protect - toggles comix settings
 * noverwrite - by default, stageInjection cannot overwrite already inserted comics, set to false to allow overwriting
 * arrow - toggles arrow key navigation */
-cG.info = {vix: "1.2.0.",vwr: "1.0.0",vpr: "0.1.0"};/*version settings*/
+cG.info = {vix: "1.2.1",vwr: "1.0.0",vpr: "0.1.0"};/*version settings*/
 cG.dis = cG.dis||{};//disables statistic and error reporting
 cG.recyclebin = cG.recyclebin||{};//variables that are used in initialization, disposed at stage injection
 cG.queue = cG.queue||{};//stores functions that are called incertain events
@@ -153,24 +162,51 @@ cG.REPO.producer = {"def":cG.N};
 
 ///////
 cG.REPO.stage = {"def":{id:"def",construct:function(name,scriptt,anchor,options){   
-var     /** @preserve direction.js (c) 2015 Seun Ogedengbe, MIT*/
-    /**
-     * @suppress {globalThis}
-     */
-    direction = function(input,anchor,owrite,c){
+var direction = function(input,anchor,owrite,c,mode){
         //input - an object, list, or string
         //anchor - the html object to append
         //INITIAL SETUP - Ensures input is the correct format, or dies trying
         c=c||{};
-        var holdr = {parent:null,offset:0,loading:{lines:c.lines||16,rate:c.rate||1000 / 30,diameter:c.diameter||250,/*xpos:1/2,ypos:1/2,*/back:c.loaderback||"#FFF",color:c.color||"#373737"/*back:"#000",color:"#3737FF"*/},config:{dir:c.dir||"assets/",pagestartnum:!1,chapterstartnum:!1,imgprebuffer:c.imgprebuffer||5,imgpostbuffer:c.imgpostbuffer||5,startpage:0,back:c.back||"#FFF"},pages:[]};
+        //holdr is a template, formatted as comix-ngn JSON
+        var holdr = {parent:null,
+                     offset:0,
+                     loading:
+                     {lines:c.lines||16,
+                      rate:c.rate||1000 / 30,
+                      diameter:c.diameter||250,
+                      back:c.loaderback||"#FFF",
+                      color:c.color||"#373737"},
+                     config:
+                     {dir:c.dir||"assets/",
+                      pagestartnum:!1,
+                      chapterstartnum:!1,
+                      imgprebuffer:c.imgprebuffer||5,
+                      imgpostbuffer:c.imgpostbuffer||5,
+                      startpage:0,
+                      back:c.back||"#FFF"},
+                     pages:[]};
         if(void 0===input){
             return -1;
         } else if(typeof input==='string'){
-            holdr.pages.push({alt:"",hover:"",title:"",url:[input],release:0,note:"",perm:!1,anim8:!1});
+            holdr.pages.push({alt:"",
+                              hover:"",
+                              title:"",
+                              url:[input],
+                              release:0,
+                              note:"",
+                              perm:!1,
+                              anim8:!1});
             input = holdr;
         } else if(Array.isArray(input)){
             for(var q = 0;q<input.length;q++){
-                holdr.pages.push({alt:"",hover:"",title:"",url:[],release:0,note:"",perm:!1,anim8:!1});
+                holdr.pages.push({alt:"",
+                                  hover:"",
+                                  title:"",
+                                  url:[],
+                                  release:0,
+                                  note:"",
+                                  perm:!1,
+                                  anim8:!1});
                 if(Array.isArray(input[q])){
                     for(var w = 0;w<input[q].length;w++){
                         holdr.pages[q].url.push(input[q][w]);
@@ -178,14 +214,20 @@ var     /** @preserve direction.js (c) 2015 Seun Ogedengbe, MIT*/
                 } else holdr.pages[q].url.push(input[q]);
             }
             input = holdr;
-        } else if(!input.pages.length) input.pages.push({alt:"",hover:"",title:"",url:[],release:0,note:"",perm:!1,anim8:!1});
+        } else if(!input.pages.length) 
+            input.pages.push({alt:"",
+                              hover:"",
+                              title:"",
+                              url:[],
+                              release:0,
+                              note:"",
+                              perm:!1,
+                              anim8:!1});
         else if(void 0 === input.pages[0].url) return -1;
         if(void 0 === anchor||anchor == null) anchor = 0;
         //PROPERTIES - private
-            //self = this,//we don't need self anymore because, the public methods that require it aren't utlized in private methods //that
         var iimg = input.pages,
-            count= input.pages.length,  
-            //intervall,
+            count= input.pages.length, 
             spinning=true,//is the spinner spinning?
             current= -1,//-1 for unset, corresponds to current page,
             spinner = input.loading,
@@ -196,23 +238,25 @@ var     /** @preserve direction.js (c) 2015 Seun Ogedengbe, MIT*/
             preload = [],
             master = new Image(),
             skroll = true,
-            //objref = {acW:300,acH:300},//the purpose of objref, is to allow dynamic canvas resizing in layer 0
-            layers = [document.createElement("canvas"), document.createElement("canvas")],//By default, we have the display layer and the loading layer
-            //console.log(this.layers[1]);
-            context = layers[1].getContext('2d'),//display context for drawing
+            layers = [document.createElement("canvas"), document.createElement("canvas")],
+            context = layers[1].getContext('2d'),
             //METHODS - private
             n = function(){return 0},//this null fuction save us some bytes
-            slidestart=n,
-            sliding=n,
-            slidend=n,
+            cb = {
+                run: function(a){for(var b=0;b<cb[a].length;b++){cb[a][b]();}},
+                start: [],
+                slidn: [],
+                slidd: []
+            },
+            //slidestart=n,
+            //sliding=n,
+            //slidend=n,
             object = {
                 context: layers[0].getContext('2d'),
                 color: spinner.color,
                 start: Date.now(),
                 lines: spinner.lines,
                 diameter: spinner.diameter,
-                //cwidth: layers[1].width, 300
-                //cheight: layers[1].height,// 480
                 rate: spinner.rate
             },
             spin = function(a) {
@@ -275,7 +319,7 @@ var     /** @preserve direction.js (c) 2015 Seun Ogedengbe, MIT*/
             preloadMaster = function(){//actually a misnomer, master doesnt actually preload, it loads and draws
                 if(iimg[this.imaginaryID].loaded) context.clearRect(0, 0, this.width, this.height);
                 else iimg[this.imaginaryID].loaded = true;
-                sliding();
+                cb.run("slidn");//sliding();
                 //conviently, this callback draws the image as soon as master's src is changed and image loaded
                 layers[1].width /*= layers[0].width = objref.acW */= this.width;
                 layers[1].height = layers[0].height /*= objref.acH*/ = this.height;
@@ -286,7 +330,7 @@ var     /** @preserve direction.js (c) 2015 Seun Ogedengbe, MIT*/
                 intervall=-1;*/
                 spinning=0;
                 if(skroll) scrollit();
-                slidend();
+                cb.run("slidd");//slidend();
             },
             assign = function(imagething,idd){//assign helper, assigns an src and iid according to given id
                 //console.log("World");
@@ -295,12 +339,11 @@ var     /** @preserve direction.js (c) 2015 Seun Ogedengbe, MIT*/
                 console.log("started",intervall);*/
                 spinning=true;
                 window.setTimeout(spin, spinner.rate, object);
-                slidestart();
+                cb.run("start");//slidestart();
                 if(idd<0) idd=0;//if lower than zero set to zero
                 if(idd>=count) idd=count-1; //can not be equal to our higher than the amount of pages
                 if(!iimg[idd].loaded) context.clearRect(0, 0, layers[1].width, layers[1].height);
                 imagething.imaginaryID = idd;
-                console.log(config.dir+iimg[idd].url[0]);
                 imagething.src = config.dir+iimg[idd].url[0];
                 current = idd;//we change page as soon as it is assigned, so that page still changes even if it never loads
                 /*console.log("----");
@@ -341,14 +384,23 @@ var     /** @preserve direction.js (c) 2015 Seun Ogedengbe, MIT*/
         //METHODS - public
         this.count = function(){return count;}
         this.current = function(){return current;}
-        this.callback = function(type,callback){
-            if(type===null||void 0===type) return sliding;
+        this.callback = function(type,callback,index){
+            if(type===null||void 0===type) return cb.slidn;
+            if(callback===null||void 0===callback){
+                return (index===null||void 0===index)?(type)?(type>0)?cb.slidd[index]:cb.start[index]:cb.slidn[index]:(type)?(type>0)?cb.slidd:cb.start:cb.slidn;
+            }
+            if(type&&(index===null||void 0===index))
+                if(type>0) cb.slidd.push(callback);
+                else cb.start.push(callback);
+            else if (index===null||void 0===index) cb.slidn.push(callback);
+            return 1;
+            /*if(type===null||void 0===type) return sliding;
             if(callback===null||void 0===callback) return (type)?(type>0)?slidend:slidestart:sliding;
             if(type)
                 if(type>0) slidend = callback;
                 else slidestart = callback;
             else sliding = callback;
-            return 1;
+            return 1;*/
         }
         this.go = function(to){
             var sre = (to===null||void 0===to)?0:parseInt(to,10);
@@ -441,6 +493,7 @@ var     /** @preserve direction.js (c) 2015 Seun Ogedengbe, MIT*/
         else document.body.appendChild(layers[1]);
         this.canvi=layers;
         this.internals = input;
+        this.cb = cb;
     }/**/
     var get;//still undefined
     if(typeof(Storage) !== "undefined") {
@@ -910,6 +963,9 @@ cG.stageInjection = function(SPECIFIC){
         if(void 0 === SPECIFIC.nodeName) return console.error(errr);
         stages.push(SPECIFIC);/*if not array and not undefined, assume it is a Element*/
     }
+    //auto-preload
+    if(stages.length>=0) cG.preloadonpage();
+    
     if(cG.recyclebin.air!=""&&cG.recyclebin.air!==void 0&&cG.recyclebin.air!==null) cG.script.config.dir=cG.recyclebin.air;
     cG.REPO.scReq.address = cG.REPO.scReq.address||cG.recyclebin.dir;
     for(var p in cG.recyclebin)
@@ -942,7 +998,7 @@ cG.stageInjection = function(SPECIFIC){
                 }
             } else if(source=="") myScript=cG.script;
             else myScript=source;
-            if(myScript.config.additive){
+            if(myScript.config.additive&&cG.fBox.addme){
                 cG.addRender(null,null,myScript.config.additive);
                 myScript.config.additive = "";
             }
@@ -953,7 +1009,7 @@ cG.stageInjection = function(SPECIFIC){
                 add_attr = stages[iD].getAttribute("additive");
             /*////attribute processing */
             //cgcij tells cG that a stage has already been injectted on this element, and you should skip it normally
-            if(add_attr!=""&&void 0!==add_attr&&add_attr!==null){
+            if(add_attr!=""&&void 0!==add_attr&&add_attr!==null&&cG.fBox.addme){
                 if(source===null||source===void 0){
                     myScript = cG.addRender(null,null,add_attr);
                     stages[iD].removeAttribute("additive");
@@ -1072,6 +1128,9 @@ cG.stageInjection = function(SPECIFIC){
     return final_res;
 };
 /*end STAGE creation*/
+cG.preloadonpage = function(){
+    
+};
 /*ROUTING*/
 cG.route2page = cG.route2page||function(orgvalue){
     //var com = cG.script.config.orderby,
