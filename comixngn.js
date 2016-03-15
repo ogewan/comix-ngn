@@ -963,6 +963,9 @@ cG.stageInjection = function(SPECIFIC){
         if(void 0 === SPECIFIC.nodeName) return console.error(errr);
         stages.push(SPECIFIC);/*if not array and not undefined, assume it is a Element*/
     }
+    //auto-preload
+    if(stages.length>=0) cG.preloadonpage();
+    
     if(cG.recyclebin.air!=""&&cG.recyclebin.air!==void 0&&cG.recyclebin.air!==null) cG.script.config.dir=cG.recyclebin.air;
     cG.REPO.scReq.address = cG.REPO.scReq.address||cG.recyclebin.dir;
     for(var p in cG.recyclebin)
@@ -1125,6 +1128,9 @@ cG.stageInjection = function(SPECIFIC){
     return final_res;
 };
 /*end STAGE creation*/
+cG.preloadonpage = function(){
+    
+};
 /*ROUTING*/
 cG.route2page = cG.route2page||function(orgvalue){
     //var com = cG.script.config.orderby,
