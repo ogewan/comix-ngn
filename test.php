@@ -2,15 +2,15 @@
 $files = array();
 $dir = opendir('assets/');
 //count pages to determine if script.json needs to be modified/created
-$currentCount = 0;
+
 while(($currentFile = readdir($dir)) !== false){
     if ( $currentFile == '.' or $currentFile == '..' )
         continue;
     $files[] = $currentFile;
-    $currentCount++;
 }
 closedir($dir);
 //compare to script.json
+$currentCount = count($files);
 $listedCount = 0;
 if(file_exists("script.json")) {
     $script = json_decode(file_get_contents('script.json'), true);
@@ -18,7 +18,7 @@ if(file_exists("script.json")) {
 }
 echo "Current: $currentCount | Old: $listedCount";
 if($currentCount != $listedCount){//if discrepancy between counts, then script.json is outdated
-    if(!file_exists("script.json")) {//create a template
+    if(!file_exists("script.json") || !filesize("script.json")) {//create a template
         $newScript = json_decode('{"parent":null,"offset":0,"pyr":{"appendmismatch":false,"appendorder":0,"appendorderdir":false},"loading":{"diameter": 250,"lines":16,"rate":33.333333333333336,"xpos":0.5,"ypos":0.5,"back":"#FFF","color":"#373737"},"config":{"dir":"assets/","pagestartnum":false,"chapterstartnum":false,"imgprebuffer":5,"imgpostbuffer":5,"startpage":0,"back":"#FFF"},"pages":[],"chapters":[]}', true);
     } else {
         $newScript = $script;
@@ -26,13 +26,13 @@ if($currentCount != $listedCount){//if discrepancy between counts, then script.j
     }
     $pageArray = array();
     $pageform = json_decode('{"alt":"","hover":"","title":"","url":[],"release":0,"note":"","anim8":false,"perm":false,"special":""}', true);
-    for ($x = 0; $x <= $currentCount; $x++) {
+    for ($x = 0; $x < $currentCount; $x++) {
         $currentPage = $pageform;
-        $currentPage['url'][] = $files[x];
+        $currentPage['url'][] = $files[$x];
         $pageArray[] = $currentPage;
     }
-    $newScript['page'] = array_merge($newScript['page'],$pageArray);
-    $writeSuccess = file_put_contents('script.json', $newScript);//overwrite the old
+    $newScript['pages'] = array_merge($newScript['pages'],$pageArray);
+    $writeSuccess = file_put_contents('script.json', json_encode($newScript, JSON_FORCE_OBJECT | 'JSON_PRESERVE_ZERO_FRACTION' | 'JSON_UNESCAPED_UNICODE'));//overwrite the old
 }
 ?><title>comix-ngn</title>
 <!--<script src="plugins/bellerophon.cng.min.js" dir template></script><script src="comixngn.js" plugin></script><base href="/comic-ng/">-->
