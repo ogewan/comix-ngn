@@ -1,40 +1,4 @@
-<!DOCTYPE html><?php
-$files = array();
-$dir = opendir('assets/');
-//count pages to determine if script.json needs to be modified/created
-
-while(($currentFile = readdir($dir)) !== false){
-    if ( $currentFile == '.' or $currentFile == '..' )
-        continue;
-    $files[] = $currentFile;
-}
-closedir($dir);
-//compare to script.json
-$currentCount = count($files);
-$listedCount = 0;
-if(file_exists("script.json")) {
-    $script = json_decode(file_get_contents('script.json'), true);
-    $listedCount = count($script['pages']);
-}
-echo "Current: $currentCount | Old: $listedCount";
-if($currentCount != $listedCount){//if discrepancy between counts, then script.json is outdated
-    if(!file_exists("script.json") || !filesize("script.json")) {//create a template
-        $newScript = json_decode('{"parent":null,"offset":0,"pyr":{"appendmismatch":false,"appendorder":0,"appendorderdir":false},"loading":{"diameter": 250,"lines":16,"rate":33.333333333333336,"xpos":0.5,"ypos":0.5,"back":"#FFF","color":"#373737"},"config":{"dir":"assets/","pagestartnum":false,"chapterstartnum":false,"imgprebuffer":5,"imgpostbuffer":5,"startpage":0,"back":"#FFF"},"pages":[],"chapters":[]}', true);
-    } else {
-        $newScript = $script;
-        //$newScript['page'] = array();//clear the old page array
-    }
-    $pageArray = array();
-    $pageform = json_decode('{"alt":"","hover":"","title":"","url":[],"release":0,"note":"","anim8":false,"perm":false,"special":""}', true);
-    for ($x = 0; $x < $currentCount; $x++) {
-        $currentPage = $pageform;
-        $currentPage['url'][] = $files[$x];
-        $pageArray[] = $currentPage;
-    }
-    $newScript['pages'] = array_merge($newScript['pages'],$pageArray);
-    $writeSuccess = file_put_contents('script.json', json_encode($newScript, JSON_FORCE_OBJECT | 'JSON_PRESERVE_ZERO_FRACTION' | 'JSON_UNESCAPED_UNICODE'));//overwrite the old
-}
-?><title>comix-ngn</title>
+<!DOCTYPE html><?php require 'autoscript.php';autoScript();?><title>comix-ngn</title>
 <!--<script src="plugins/bellerophon.cng.min.js" dir template></script><script src="comixngn.js" plugin></script><base href="/comic-ng/">-->
 <script>var cG={};cG.recyclebin={defer:!0,mainsrc:"comixngn.js",loadcng:[],plugin:"",comicID:"",disable:[],dir:"",tir:"",air:"",dfr:function(){var e=document.createElement("script");cG.REPO.scReq.getScript=cG.agent("./"+cG.recyclebin.dir+"config.json"),cG.REPO.scReq.getDecor=cG.agent("./"+cG.recyclebin.tir+"decor.html"),cG.REPO.scReq.getCtrls=cG.agent(cG.recyclebin.tir+"ctrls.html"),cG.REPO.scReq.getScript.then(function(e){void 0===cG.REPO.script?cG.REPO.script={def:e}:cG.REPO.script.def=e,cG.script=cG.REPO.script.def},function(e,c){console.error(e,c.status),void 0===cG.REPO.script?cG.REPO.script={def:0}:cG.REPO.script.def=e,cG.script=cG.REPO.script.def}),cG.REPO.scReq.getDecor.then(function(e){void 0===cG.REPO.decor?cG.REPO.decor={def:e}:cG.REPO.decor.def=e,cG.decor=cG.REPO.decor.def},function(e,c){console.error(e,c.status),void 0===cG.REPO.decor?cG.REPO.decor={def:0}:cG.REPO.decor.def=0,cG.decor=cG.REPO.decor.def}),cG.REPO.scReq.getCtrls.then(function(e){void 0===cG.REPO.ctrls?cG.REPO.ctrls={def:e}:cG.REPO.ctrls.def=e,cG.ctrls=cG.REPO.ctrls.def},function(e,c){console.error(e,c.status),void 0===cG.REPO.ctrls?cG.REPO.ctrls={def:0}:cG.REPO.ctrls.def=0,cG.ctrls=cG.REPO.ctrls.def}),cG.comicID=cG.recyclebin.comicID;for(var c=0;c<cG.recyclebin.disable.length;c++)cG.dis[cG.recyclebin.disable[c]]=!0;e.src=cG.recyclebin.mainsrc,document.body.appendChild(e);for(var t=0;t<cG.recyclebin.loadcng.length;t++)e=document.createElement("script"),e.src=cG.recyclebin.loadcng[t],document.body.appendChild(e)}},cG.agent=function(e,c){return c=new XMLHttpRequest,c.open("GET",e),e=[],c.onreadystatechange=c.then=function(t,r,o){if(t&&t.call&&(e=[,t,r]),4==c.readyState&&(o=e[0|c.status/200]))try{o(JSON.parse(c.responseText),c)}catch(n){o(c.responseText,c)}},c.send(),c},cG.REPO={scReq:{}},cG.dis={},cG.$GPC=cG.$GPC+1||1,!function(){return cG.recyclebin.defer?void(window.addEventListener?window.addEventListener("load",cG.recyclebin.dfr,!1):window.attachEvent?window.attachEvent("onload",cG.recyclebin.dfr):window.onload=cG.recyclebin.dfr):cG.recyclebin.dfr()}();</script>
 <!--
