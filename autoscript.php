@@ -6,7 +6,9 @@ function autoScript(){
     $files = array();
     $dir = opendir('assets/');//count pages to determine if script.json needs to be modified/created
     while(($currentFile = readdir($dir)) !== false){
-        if ( $currentFile == '.' or $currentFile == '..' )//needs to select for images
+        $ext = strrchr($currentFile, ".");
+        //echo "$ext <br>";
+        if ( $currentFile == '.' || $currentFile == '..' || !($ext == '.jpeg'|| $ext == '.jpg'|| $ext == '.png'|| $ext == '.gif'|| $ext == '.bmp'))//needs to select for images
             continue;
         $files[] = $currentFile;
     }
@@ -54,6 +56,7 @@ function autoScript(){
             $currentPage->url[] = $files[$x];
             //this automatically removes duplicates and preserves order at the cost of running o(n^2)
             for ($z = 0; $z < $listedCount; $z++) {
+                if($listedCount == 0 ||count($newScript->pages) < 1) break;
                 if($newScript->pages[$z]->url[0]==$currentPage->url[0]){//duplicate found
                     $duplicate = true;
                     //echo "<br>start dup ";
