@@ -184,9 +184,7 @@ var direction = function(input,anchor,owrite,c,mode){
                       imgpostbuffer:c.imgpostbuffer||5,
                       startpage:0,
                       back:c.back||"#FFF"},
-                     pages:[],
-                     chapters:[]
-                    };
+                     pages:[]};
         if(void 0===input){
             return -1;
         } else if(typeof input==='string'){
@@ -671,7 +669,7 @@ cG.HELPERS = {};
             },
             function(data, xhr) {
                 if(cG.info.vrb>=4) console.error(data, xhr.status);
-                else if(cG.info.vrb>=1) cG  .verbose(1,dir+'script.json not found')
+                else if(cG.info.vrb>=1) cG.verbose(1,dir+'script.json not found')
                 cG.script = cG.REPO.script.def = 0;
             });
     }

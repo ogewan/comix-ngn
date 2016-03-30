@@ -5,16 +5,21 @@
         mainsrc = "http://comixngn.js.org/ghs/lab/comixngn.js",
         loadng = ["http://comixngn.js.org/ghs/1.1.1/plugins/comixngn.jq.js","http://code.jquery.com/jquery-2.1.4.min.js", "https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"],
         aftjq = ["http://code.jquery.com/ui/1.11.4/jquery-ui.min.js", "https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.7.0/spectrum.min.js"],
-        fuse = {fstrun: true, pgepsh: false, pgesve: false, rtepge: false, protect: false, noverwrite: false, arrow: true, addme: false},
+        fuse = {fstrun: false, pgepsh: false, pgesve: false, rtepge: false, protect: false, noverwrite: false, arrow: true, addme: false},
         plugin = "",
         disable = ["rollbar"],
         comicID="CNGwriter",
-        dir = "http://comixngn.js.org/",
-        tir = "http://comixngn.js.org/",
+        dir = "",
+        tir = "",
         $GPC = $GPC + 1 || 1,
         cG={agent:function(e,t){return t=new XMLHttpRequest,t.open("GET",e),e=[],t.onreadystatechange=t.then=function(n,s,a){if(n&&n.call&&(e=[,n,s]),4==t.readyState&&(a=e[0|t.status/200]))try{a(JSON.parse(t.responseText),t)}catch(c){a(t.responseText,t)}},t.send(),t},REPO:{scReq:{address: "http://comixngn.js.org/"}},dis:{}};
 </script>
-<base href="/comic-ng/">
+<style>
+    .glyphicon, .icon{
+        cursor: pointer;
+    }
+</style>
+<!--<base href="/comix-ngn/">-->
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.6.1/spectrum.min.css">
 <link rel="stylesheet" type="text/css" href="https://bootswatch.com/simplex/bootstrap.min.css" />
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/humane-js/3.2.2/themes/flatty.min.css" />
@@ -132,7 +137,7 @@
                     </tr>
                     <tr>
                         <td colspan="8">
-                            <div class="spoiler" data-spoiler-link="1">Loading Spinner</div>
+                            <div class="spoiler" data-spoiler-link="1"><button>Loading Spinner</button></div>
                             <div class="spoiler-content" data-spoiler-link="1">
                                 <table>
                                     <tr>
@@ -163,7 +168,7 @@
                                 </table></div>
                         </td>
                     </tr>
-                    <tr>
+                    <!-- <tr>
                         <td>
                             <h4 id="CHPHEAD">Chapters</h4>
                             <button id="add2">+</button>
@@ -172,12 +177,41 @@
                             <h4 id="PGEHEAD">Pages</h4>
                             <button id="add3">+</button><input id="conductor" type="file" multiple>
                         </td>
+                    </tr>
                     <tr>
                         <td style="vertical-align:top">
                             <ol id="Csort" class="empty"></ol>
                         </td>
                         <td style="vertical-align:top">
                             <ol id="sorted" class="empty"></ol>
+                        </td>
+                    </tr> -->
+                    <tr><!--FilePaneToolbar-->
+                        <td colspan=2 style="border: 4px solid #E2E2E2;background-color:#E2E2E2;width:100%;padding:5px">
+                            <button id="AChp">Add Chapter</button>
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            <button id="APge">Add Page</button>
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            <button id="">Top Directory</button>
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            <button id="">Up Directory</button>
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            <input style="display: inline" id="conductor" type="file" multiple>
+                        </td>
+                    </tr>
+                    <tr><!--FilePane-->
+                        <td style="border: 4px solid #E2E2E2;width=20%;vertical-align:top">
+                            <!--FilePaneTree-->
+                            <!--glyphicon glyphicon-folder-open
+                            glyphicon glyphicon-file-->
+                            <ul id="Tsort" class="empty">
+                            </ul>
+                        </td>
+                        <td style="border: 4px solid #E2E2E2;width=80%;vertical-align:top">
+                            <!--FilePaneGrid/List-->
+                            <span id=""></span>
+                            <ul id="Dsort" class="empty">
+                            </ul>
                         </td>
                     </tr>
                 </table>
@@ -196,18 +230,152 @@
 </body>
 
 <script>
+    var rootCHP = [];
+    var explorer = function(map,pg,cp){
+        var tree = '',
+            TFoT = '<li><span class="glyphicon glyphicon-folder-open">',
+            TFiT = '<li><span class="glyphicon glyphicon-file">',
+            TClo = '</span></li>';
+        for (var name in map) {
+            if (map.hasOwnProperty(name)) {
+                if(name=='-1'){
+                    continue;
+                } else{
+                    //print chapter
+                    //console.log(name);
+                    tree += TFoT+" "+cp[name].title+" | pages: "+cp[name].start+" - "+cp[name].end+"<ul>"+explorer(map[name])+"</ul>"+TClo;
+                }
+            }
+        }
+        var namP;
+        for(var page in map[-1]){
+            if(pg[page].url.length>0){
+                namP = pg[page].url[0].split(".")[0].split("/");
+                namP = namP[namP.length-1];
+            } else
+                namP='';
+            tree += TFiT+" "+namP+" | urls: "+pg[page].url.length+TClo;
+        }
+        return tree;
+    }
+    var render= function(attempts) {
+        if (attempts === void 0 || attempts === null) attempts = 0;
+        else if (attempts>20){
+            console.error("render has timed out");
+        }
+        if(cG.comix==void 0){
+            if(cG.stageInjection==void 0){
+                setTimeout(render, 200,++attempts);
+                return;
+            }
+            cG.stageInjection();
+        }
+        var p = cG.comix.internals.pages;
+        var c = cG.comix.internals.chapters;
+        if (p.length+c.length < 1) {
+            $("#Tsort").removeClass("empty");
+            $("#Dsort").removeClass("empty");
+        } else{
+            $("#Tsort").addClass("empty");
+            $("#Dsort").addClass("empty");
+        }
+        //console.log(p);
+        //console.log(c);
+        var tree = '',
+            grid = '',
+            DFoT = "<img class='icon' style='width:72px;height:72px;' src='folder_icon.png'>",
+            DFiT = "<img class='icon' style='width:72px;height:72px;' src='",
+            DClo = "'>",
+            chhr = {'-1':[]},
+            wido,
+            queue = [],
+            namP;
+        queue[p.length-1]=1;
+        queue.fill(1, 0, p.length);
+        for(var a=0;a<c.length;a++){//iterate through chapters
+            if(c[a].parent<0){
+                wido = chhr[a] = {'-1':[]};
+            } else {
+                //console.log(a,c[a].parent);
+                if(c[a].parent==a||c[c[a].parent].parent==a){//sanity check
+                    //I am my parent
+                    if(c[a].parent==a) console.error("Rendering Error: Parent is Self");
+                    //I am the parent of my parent 
+                    if(c[c[a].parent].parent==a) console.error("Rendering Error: Parent is a Child");
+                    return;
+                }
+                wido = chhr[c[a].parent][a] = {'-1':[]};
+            }
+            if(c[a].start>=0&&c[a].end>=0){
+                for(var b=0;b<=(c[a].end-c[a].start);b++){
+                    if(queue[c[a].start+b]){
+                        wido[-1].push(c[a].start+b);
+                        queue[c[a].start+b]=0;
+                    }
+                }
+            }
+        }
+        if(p.length!=queue.length) console.log("MISMATCH",p.length,queue.length,queue);
+        for(var d=0;d<p.length;d++){
+            if(!queue[d]) continue;
+            chhr[-1].push(d);
+        }
+        //console.log(chhr);
+        if(!rootCHP.length){//top level
+            for (var name in chhr) {
+                if (chhr.hasOwnProperty(name)) {
+                    if(name=='-1'){
+                        continue;
+                    } else{
+                        //console.log("chapter "+name);
+                        grid += (c[name].thumb!=""||c[name].thumb!=void 0)?DFoT: DFiT+c[name].thumb+"'id='c"+name+"' onclick='settingsC(c" + name + ")>'";
+                    }
+                }
+            }
+            for(var page in chhr[-1]){
+                grid += DFiT+p[page].url[0]+"'id='s"+page+"' onclick='settingsP(s" + page + ")'>";
+            }
+        } else{
+            var ship=chhr;
+            for(var path in rootCHP)
+                ship=ship[path];
+            for (var name in ship) {
+                if (ship.hasOwnProperty(name)) {
+                    if(name=='-1'){
+                        continue;
+                    } else{
+                        grid += (c[name].thumb!=""||c[name].thumb!=void 0)?DFoT: DFiT+c[name].thumb+"'id='c"+name+"' onclick='settingsC(c" + name + ")'>";
+                    }
+                }
+            }
+            for(var page in ship[-1]){
+                grid += DFiT+p[page].url[0]+"'id='s"+page+"' onclick='settingsP(s" + page + ")'>";
+            }
+        }
+        tree=explorer(chhr,p,c);
+        //console.log(tree);
+        $("#Tsort").html(tree);
+        $("#Dsort").html(grid);
+    };
     var expfunct,
         settingsC,
         settingsP,
         remveC,
         remveP,
         report,
+        setup = function(){
+            cG.script = {parent:null,offset:0,pyr:{appendmismatch:false,appendorder:0,appendorderdir:false},loading:{diameter: 250,lines:16,rate:33.333333333333336,xpos:0.5,ypos:0.5,back:"#FFF",color:"#373737"},config:{dir:"assets/",pagestartnum:false,chapterstartnum:false,imgprebuffer:5,imgpostbuffer:5,startpage:0,back:"#FFF"},pages:[],chapters:[]};
+            render();
+            /*return void(window.addEventListener ? window.addEventListener("load", render, !1) : window.attachEvent ? window.attachEvent("onload", render) : window.onload = render)*/
+        },
         workhorse = function() {
             if (settingsC,
         settingsP,void 0 === window.jQuery || void 0 === window.jQuery.ui || void 0 === humane)
                 return setTimeout(workhorse, 300);
             /*var jQ = jQuery.noConflict();*/
             console.log("%c %c %c comix-ngn Writer v" + cG.info.vwr + " %c \u262F %c \u00A9 2015 Oluwaseun Ogedengbe %c ", "color:white; background:#B5B5B5", "background:purple", "color:black; background:#E2E2E2", 'color:red; background:black', "color:black; background:#B5B5B5", "background:purple");
+            var Virtual = cG.comix.internals;
+            //Loading Spinner GFX INIT
             var spin = {
                 start: Date.now(),
                 lines: 16,
@@ -246,7 +414,9 @@
                     /*console.log(spin.rate)*/
                     window.setTimeout(fspin, spin.rate);
                 }
-            $("#CHPHEAD").data({});
+            //
+            //$("#CHPHEAD").data({});
+            //Writer GUI Options
             $("#confhead").click(function() {
                 if ($("#bodtab").attr("border") == "1") {
                     $("#bodtab").attr("border", "0");
@@ -270,6 +440,7 @@
                           $( this ).accordion( "refresh" );
                         }
                       });*/
+            //Loader spinner GFX color settings
             $.data($("#back_color"),"color","#fff");
             $("#back_color").spectrum({
                 color: "#fff",
@@ -309,7 +480,15 @@
             /*
         $(".spoiler-content").show();
         $("#design_contain").show();*/
-            $("#add3").click(function() {
+            $("#AChp").click(function() {
+                Virtual.chapters.push({description:"",end: -1,start: -1,title: "Chapter",thumb: "", parent:-1});
+                render();
+            });
+            $("#APge").click(function() {
+                Virtual.pages.push({alt:"",hover:"",title:"",url:[],release:0,note:"",perm:!1,anim8:!1, absolute:false});
+                render();
+            });
+            /*$("#add3").click(function() {
                 if ($("#sorted").hasClass("empty")) {
                     $("#sorted").removeClass("empty");
                 }
@@ -334,11 +513,13 @@
                             special: "",
                         }
                     }).addClass("page");
+                render();
             });
             $("#add2").click(function() {
                 if ($("#Csort").hasClass("empty")) {
                     $("#Csort").removeClass("empty");
                 }
+                cG.comix.internals.chapters.push({description:"",end: 0,start: 0,title: "Chapter",thumb: ""});
                 var oper = $("#Csort").childElementCount;
                 $("#Csort").append("<li id=c" + oper + ">" + "Chapter" + " <button onClick=settingsC('#c" + oper + "')>&#x2731</button><button onClick=remveC('#c" + oper + "')>X</button> </li>").sortable({
                     scroll: true
@@ -352,12 +533,13 @@
                         title: "Chapter",
                     }
                 }).addClass("chap");
-            });
+                render();
+            });*/
             $("#nav-select").change(function() {
                 var src = $(".page");
                 var ico = $(".page_icon");
                 //console.log($("#"+src[0].id).data().body.title);
-                if($("#nav-select").val()=="list"){
+                /*if($("#nav-select").val()=="list"){
                     for(var i=0;i<src.length;i++){
                         $("#"+ico[i].id).html($("#"+src[i].id).data().body.url);
                     }
@@ -365,7 +547,7 @@
                     for(var i=0;i<src.length;i++){
                         $("#"+ico[i].id).html("<img style='max-width:64px;max-height:64px;' src='"+cG.script.config.dir+$("#"+src[i].id).data().body.url+"'>");
                     }
-                }
+                }*/
             });
             $("#conductor").change(function() {
                 if ($("#sorted").hasClass("empty")) {
@@ -379,7 +561,8 @@
                     $("#sorted").append("<li id=s" + i + "><span class=page_icon id=name_s" + i + ">" + yun + "</span>" + " <button onClick=settingsP('#s" + i + "');>&#x2731</button><button onClick=remveP('#s" + i + "')>X</button></li>").sortable({
                         scroll: true
                     });
-                    $("#s" + i).data({
+                    $("#s" + i).addClass("page");
+                    /*$("#s" + i).data({
                         open: false,
                         body: {
                             alt: "",
@@ -392,7 +575,7 @@
                             anim8: false,
                             special: "",
                         }
-                    }).addClass("page");
+                    }).addClass("page");*/
                 }
             });
             $("#mergeadd").change(function() {
@@ -486,77 +669,56 @@
             $("#ExBtn").click(function(){return expfunct()});
             $("#ExBtnCL").click(function(){return expfunct()});
             expfunct = function() {
-                var setOBJ = {
-                    parent: null,
-                    offset: 0,
-                    config: {},
-                    pyr: {},
-                    loading: {},
-                    chapters: [],
-                    pages: []
-                };
                 /*delete window.alert;
                     alert("Settings Configured!");*/
-                setOBJ.config.dir = $("#dir").val();
-                    setOBJ.config.pagestartnum = document.getElementById("psn_1").checked;
-                    setOBJ.config.readdir = document.getElementById("rdr_1").checked;
-                    setOBJ.config.additive = $("#add_").val();//document.getElementById("add_1").checked;
-                    setOBJ.config.chapterstartnum = document.getElementById("csn_1").checked;
-                setOBJ.config.startpage = parseInt($("#strp").val(),10);/*document.getElementById("strp_1").checked;*/
-                setOBJ.config.imgprebuffer = parseInt($("#prb").val(),10);
-                setOBJ.config.imgpostbuffer = parseInt($("#ptb").val(),10);
-                setOBJ.config.back = $.data($("#ptb"),"color");
-                setOBJ.pyr.appendmismatch = document.getElementById("pyr_0").checked;
+                var inclusion = ["parent","offset","config", "pyr", "loading", "pages", "chapters", "dir", "startpage", "pagestartnum", "readdir" , "additive", "chapterstartnum", "imgprebuffer", "imgpostbuffer", "back", "appendmismatch", "appendorder", "appendorderdir", "alt", "hover", "title","perm","anim8","special", "url", "release", "note", "absolute", "description", "start", "end", "title", "thumb", "diameter","lines","rate","xpos","ypos","back","color"];
+                Virtual.config.dir = $("#dir").val();
+                    Virtual.config.pagestartnum = document.getElementById("psn_1").checked;
+                    Virtual.config.readdir = document.getElementById("rdr_1").checked;
+                    Virtual.config.additive = $("#add_").val();//document.getElementById("add_1").checked;
+                    Virtual.config.chapterstartnum = document.getElementById("csn_1").checked;
+                Virtual.config.startpage = parseInt($("#strp").val(),10);/*document.getElementById("strp_1").checked;*/
+                Virtual.config.imgprebuffer = parseInt($("#prb").val(),10);
+                Virtual.config.imgpostbuffer = parseInt($("#ptb").val(),10);
+                Virtual.config.back = $.data($("#ptb"),"color");
+                Virtual.pyr.appendmismatch = document.getElementById("pyr_0").checked;
                 if (document.getElementById("spyr_0").checked) {
-                    setOBJ.pyr.appendorder = 0;
+                    Virtual.pyr.appendorder = 0;
                 } else if (document.getElementById("spyr_1").checked) {
-                    setOBJ.pyr.appendorder = 1;
+                    Virtual.pyr.appendorder = 1;
                 } else if (document.getElementById("spyr_2").checked) {
-                    setOBJ.pyr.appendorder = 2;
+                    Virtual.pyr.appendorder = 2;
                 } else if (document.getElementById("spyr_3").checked) {
-                    setOBJ.pyr.appendorder = 3;
+                    Virtual.pyr.appendorder = 3;
                 }
-                setOBJ.pyr.appendorderdir = document.getElementById("spyro_0").checked;
-                setOBJ.loading.diameter = spin.diameter;
-                setOBJ.loading.lines = spin.lines;
-                setOBJ.loading.rate = spin.rate;
-                setOBJ.loading.xpos = spin.xpos;
-                setOBJ.loading.ypos = spin.ypos;
-                setOBJ.loading.back = spin.back;
-                setOBJ.loading.color = spin.color;
-                for (j = 0; j < document.getElementById("Csort").childElementCount; j++) {
-                    setOBJ.chapters.push($(".class,li").eq(j).data().body);
-                }
-                for (j = 0; j < document.getElementById("sorted").childElementCount; j++) {
-                    setOBJ.pages.push($(".page"/*,li"*/).eq(j).data().body);
-                }
-                console.log(setOBJ);
+                Virtual.pyr.appendorderdir = document.getElementById("spyro_0").checked;
+                Virtual.loading = spin;
+                
                 $('.setlink').remove();
-                var refh = "<a onClick=$('.setlink').remove() class='setlink' href='data: text/json;charset=utf-8," + JSON.stringify(setOBJ, ["parent","offset","config", "pyr", "loading", "pages", "chapters", "dir", "startpage", "pagestartnum", "readdir" , "additive", "chapterstartnum", "imgprebuffer", "imgpostbuffer", "back", "appendmismatch", "appendorder", "appendorderdir", "alt", "hover", "title","perm","anim8","special", "url", "release", "note", "description", "start", "end", "title", "diameter","lines","rate","xpos","ypos","back","color"]) + "' download='config.json' autofocus>config.json<br></a>",
-                    formref = "<a onClick=$('.setlink').remove() class='setlink' href='data: text/json;charset=utf-8," + JSON.stringify(setOBJ, ["parent","offset","config", "pyr", "loading", "pages", "chapters", "dir", "startpage", "pagestartnum", "readdir", "additive", "chapterstartnum", "imgprebuffer", "imgpostbuffer", "back", "appendmismatch", "appendorder", "appendorderdir", "alt", "hover", "title","perm","anim8","special", "url", "release", "note", "description", "start", "end", "title", "diameter","lines","rate","xpos","ypos","back","color"],4) + "' download='config.json' autofocus>config.json<br></a>";
+                var refh = "<a onClick=$('.setlink').remove() class='setlink' href='data: text/json;charset=utf-8," + JSON.stringify(Virtual, inclusion) + "' download='config.json' autofocus>config.json<br></a>",
+                    formref = "<a onClick=$('.setlink').remove() class='setlink' href='data: text/json;charset=utf-8," + JSON.stringify(Virtual,inclusion,4) + "' download='config.json' autofocus>config.json<br></a>";
                 console.log(formref);
                 $(refh).appendTo("#MHEAD");
                 $(refh).appendTo("#MHEADCL");
             };
-            $("#InBtn").click(function() {
+            /*$("#InBtn").click(function() {
                 $('#indlink').remove();
                 var refh = "";
                 console.log(refh);
                 $(refh).appendTo("#MHEAD");
             });
             $("#DsBtn").click(function() {
-                $('#deslink').remove(); /*temporary, using predefined scene*/
+                $('#deslink').remove(); temporary, using predefined scene
                 var refh = "OUTDATED";
                 console.log(refh);
                 $(refh).appendTo("#MHEAD");
-            });
+            });*/
             settingsP = function(ele) {
-                var lee = ele.substring(1);
-                console.log(ele);
-                console.log($(ele).data().open);
-                if (typeof $(ele).data().body.perm === 'undefined') {
-                    $(ele).data().body.perm = false;
-                }
+                var key = ele.id;
+                var lee = key.substring(1);
+                console.log(key,lee);
+                /*
+                
                 if ($(ele).data().open) {
                     console.log("deleting");
                     $(ele).data().body.title = $("#TEMP_title" + lee).val();
@@ -595,8 +757,8 @@
                     cG.comix.internals.pages[vrt].loaded = false;
                     console.log(lee);
                     $("#TEMPFORM_" + lee).remove();
-                    /*document.getElementById(ele.substring(1)).removeChild(document.getElementById("TEMPFORM_"+ele));fallback*/
-                    $(ele).focus();
+                   */ /*document.getElementById(ele.substring(1)).removeChild(document.getElementById("TEMPFORM_"+ele));fallback*/
+                    /*$(ele).focus();
                     $(ele).data().open = false;
                     console.log($(ele).data());
                 } else {
@@ -608,12 +770,12 @@
                     $(ele).focus();
                     $(ele).data().open = true;
                 }
-                return true;
+                return true;*/
             };
             settingsC = function(ele) {
                 var lee = ele.substring(1);
-                console.log(ele);
-                console.log($(ele).data().open);
+                console.log(ele,lee);
+                /*console.log($(ele).data().open);
                 if ($(ele).data().open) {
                     $(ele).data().body.description = $("#TEMP_description" + lee).val();
                     $(ele).data().body.end = $("#TEMP_end" + lee).val();
@@ -638,7 +800,7 @@
                     $(ele).focus();
                     $(ele).data().open = true;
                 }
-                return true;
+                return true;*/
             };
             remveP = function(ele) {
                 $(ele).remove();
@@ -793,7 +955,8 @@
                 }
             };
         },
-        dfr=function(){/*!
+        dfr=function(){
+            /*!
      * Implementation of the Shunting yard algorithm
      * look it up: http://en.wikipedia.org/wiki/Shunting-yard_algorithm
      *
@@ -812,7 +975,8 @@
      *
      * @author Georg Tavonius a.k.a. Calamari (http://github.com/Calamari)
      * @homepage http://github.com/Calamari/shunting-yard.js
-     */!function(){"use strict";var e=window.jaz||{};e.resolveRPN=function(t){function n(t){return e.Operators[t]||e.Functions[t]}var r,i,s,c=[];for(r=0,i=t.length;i>r;++r)s=n(t[r]),c.push(s?s.method.apply(this,c.splice(-s.params)):parseFloat(t[r]));return c[0]},window.jaz=e}();var e=document.createElement("script");cG.REPO.scReq.getScript=cG.agent(dir+"script.json"),cG.REPO.scReq.getDecor=cG.agent(tir+"decor.html"),cG.REPO.scReq.getCtrls=cG.agent(tir+"ctrls.html"),cG.REPO.scReq.getScript.then(function(e){void 0===cG.REPO.script?cG.REPO.script={def:e}:cG.REPO.script.def=e,cG.script=cG.REPO.script.def},function(e,t){console.error(e,t.status),void 0===cG.REPO.script?cG.REPO.script={def:0}:cG.REPO.script.def=e,cG.script=cG.REPO.script.def}),cG.REPO.scReq.getDecor.then(function(e){void 0===cG.REPO.decor?cG.REPO.decor={def:e}:cG.REPO.decor.def=e,cG.decor=cG.REPO.decor.def},function(e,t){console.error(e,t.status),void 0===cG.REPO.decor?cG.REPO.decor={def:0}:cG.REPO.decor.def=0,cG.decor=cG.REPO.decor.def}),cG.REPO.scReq.getCtrls.then(function(e){void 0===cG.REPO.ctrls?cG.REPO.ctrls={def:e}:cG.REPO.ctrls.def=e,cG.ctrls=cG.REPO.ctrls.def},function(e,t){console.error(e,t.status),void 0===cG.REPO.ctrls?cG.REPO.ctrls={def:0}:cG.REPO.ctrls.def=0,cG.ctrls=cG.REPO.ctrls.def}),cG.comicID=comicID,cG.fBox=fuse;for(var t=0;t<disable.length;t++)cG.dis[disable[t]]=!0;e.src=mainsrc,document.body.appendChild(e);for(var n=0;n<loadng.length;n++)e=document.createElement("script"),e.src=loadng[n],document.body.appendChild(e);jqdep(),/*! humane.js: wavded.github.com/humane-js/ (MIT) (c) Marc Harter (@wavded)*/!function(e,t,n){"undefined"!=typeof module?module.exports=n(e,t):"function"==typeof define&&"object"==typeof define.amd?define(n):t[e]=n(e,t)}("humane",this,function(){var e=window,t=document,n={on:function(t,n,r){"addEventListener"in e?t.addEventListener(n,r,!1):t.attachEvent("on"+n,r)},off:function(t,n,r){"removeEventListener"in e?t.removeEventListener(n,r,!1):t.detachEvent("on"+n,r)},bind:function(e,t){return function(){e.apply(t,arguments)}},isArray:Array.isArray||function(e){return"[object Array]"===Object.prototype.toString.call(e)},config:function(e,t){return null!=e?e:t},transSupport:!1,useFilter:/msie [678]/i.test(navigator.userAgent),_checkTransition:function(){var e=t.createElement("div"),n={webkit:"webkit",Moz:"",O:"o",ms:"MS"};for(var r in n)r+"Transition"in e.style&&(this.vendorPrefix=n[r],this.transSupport=!0)}};n._checkTransition();var r=function(t){t||(t={}),this.queue=[],this.baseCls=t.baseCls||"humane",this.addnCls=t.addnCls||"",this.timeout="timeout"in t?t.timeout:2500,this.waitForMove=t.waitForMove||!1,this.clickToClose=t.clickToClose||!1,this.timeoutAfterMove=t.timeoutAfterMove||!1,this.container=t.container;try{this._setupEl()}catch(r){n.on(e,"load",n.bind(this._setupEl,this))}};return r.prototype={constructor:r,_setupEl:function(){var e=t.createElement("div");if(e.style.display="none",!this.container){if(!t.body)throw"document.body is null";this.container=t.body}this.container.appendChild(e),this.el=e,this.removeEvent=n.bind(function(){var e=n.config(this.currentMsg.timeoutAfterMove,this.timeoutAfterMove);e?setTimeout(n.bind(this.remove,this),e):this.remove()},this),this.transEvent=n.bind(this._afterAnimation,this),this._run()},_afterTimeout:function(){n.config(this.currentMsg.waitForMove,this.waitForMove)?this.removeEventsSet||(n.on(t.body,"mousemove",this.removeEvent),n.on(t.body,"click",this.removeEvent),n.on(t.body,"keypress",this.removeEvent),n.on(t.body,"touchstart",this.removeEvent),this.removeEventsSet=!0):this.remove()},_run:function(){if(!this._animating&&this.queue.length&&this.el){this._animating=!0,this.currentTimer&&(clearTimeout(this.currentTimer),this.currentTimer=null);var e=this.queue.shift(),t=n.config(e.clickToClose,this.clickToClose);t&&(n.on(this.el,"click",this.removeEvent),n.on(this.el,"touchstart",this.removeEvent));var r=n.config(e.timeout,this.timeout);r>0&&(this.currentTimer=setTimeout(n.bind(this._afterTimeout,this),r)),n.isArray(e.html)&&(e.html="<ul><li>"+e.html.join("<li>")+"</ul>"),this.el.innerHTML=e.html,this.currentMsg=e,this.el.className=this.baseCls,n.transSupport?(this.el.style.display="block",setTimeout(n.bind(this._showMsg,this),50)):this._showMsg()}},_setOpacity:function(e){if(n.useFilter)try{this.el.filters.item("DXImageTransform.Microsoft.Alpha").Opacity=100*e}catch(t){}else this.el.style.opacity=e+""},_showMsg:function(){var e=n.config(this.currentMsg.addnCls,this.addnCls);if(n.transSupport)this.el.className=this.baseCls+" "+e+" "+this.baseCls+"-animate";else{var t=0;this.el.className=this.baseCls+" "+e+" "+this.baseCls+"-js-animate",this._setOpacity(0),this.el.style.display="block";var r=this,i=setInterval(function(){1>t?(t+=.1,t>1&&(t=1),r._setOpacity(t)):clearInterval(i)},30)}},_hideMsg:function(){var e=n.config(this.currentMsg.addnCls,this.addnCls);if(n.transSupport)this.el.className=this.baseCls+" "+e,n.on(this.el,n.vendorPrefix?n.vendorPrefix+"TransitionEnd":"transitionend",this.transEvent);else var t=1,r=this,i=setInterval(function(){t>0?(t-=.1,0>t&&(t=0),r._setOpacity(t)):(r.el.className=r.baseCls+" "+e,clearInterval(i),r._afterAnimation())},30)},_afterAnimation:function(){n.transSupport&&n.off(this.el,n.vendorPrefix?n.vendorPrefix+"TransitionEnd":"transitionend",this.transEvent),this.currentMsg.cb&&this.currentMsg.cb(),this.el.style.display="none",this._animating=!1,this._run()},remove:function(e){var r="function"==typeof e?e:null;n.off(t.body,"mousemove",this.removeEvent),n.off(t.body,"click",this.removeEvent),n.off(t.body,"keypress",this.removeEvent),n.off(t.body,"touchstart",this.removeEvent),n.off(this.el,"click",this.removeEvent),n.off(this.el,"touchstart",this.removeEvent),this.removeEventsSet=!1,r&&this.currentMsg&&(this.currentMsg.cb=r),this._animating?this._hideMsg():r&&r()},log:function(e,t,n,r){var i={};if(r)for(var s in r)i[s]=r[s];if("function"==typeof t)n=t;else if(t)for(var s in t)i[s]=t[s];return i.html=e,n&&(i.cb=n),this.queue.push(i),this._run(),this},spawn:function(e){var t=this;return function(n,r,i){return t.log.call(t,n,r,i,e),t}},create:function(e){return new r(e)}},new r})},jqdep=function(){if(void 0===window.jQuery)return setTimeout(jqdep,300);var e;/*! jquery-spoiler v1.3.0: (MIT) (c)2014 Triangle717 (http://le717.github.io) and Jarred Ballard (http://jarred.io/)*/!function(e){"use strict";"function"==typeof define&&define.amd?define(["jquery"],e):"object"==typeof exports?module.exports=e:e(jQuery)}(function(e){"use strict";e.fn.spoiler=function(t){var n=e.extend({contentClass:"spoiler-content",paddingValue:6,triggerEvents:!1,includePadding:!0,buttonActiveClass:"spoiler-active",spoilerVisibleClass:"spoiler-content-visible"},t),r="."+n.contentClass,i={};return e(r).each(function(){var t=e(this);t.css("overflow","hidden");var r=t.prop("scrollHeight");r=n.includePadding?r+parseInt(n.paddingValue,10):r;var s=t.attr("data-spoiler-link");i[s]=r+"px",t.css("height","0")}),e(this).on("click",function(){var t=e(this),s=t.attr("data-spoiler-link"),c=e(r+"[data-spoiler-link="+s+"]"),o={height:i[s]},a={height:"0"},d=c.hasClass(n.spoilerVisibleClass);c.css(d?a:o),n.triggerEvents&&t.trigger(d?"jq-spoiler-hidden":"jq-spoiler-visible"),c.toggleClass(n.spoilerVisibleClass),t.toggleClass(n.buttonActiveClass)}),this}});for(var t=0;t<aftjq.length;t++)e=document.createElement("script"),e.src=aftjq[t],document.body.appendChild(e);workhorse()};
+     */!function(){"use strict";var e=window.jaz||{};e.resolveRPN=function(t){function n(t){return e.Operators[t]||e.Functions[t]}var r,i,s,c=[];for(r=0,i=t.length;i>r;++r)s=n(t[r]),c.push(s?s.method.apply(this,c.splice(-s.params)):parseFloat(t[r]));return c[0]},window.jaz=e}();var e=document.createElement("script");cG.REPO.scReq.getScript=cG.agent(dir+"script.json"),cG.REPO.scReq.getDecor=cG.agent(tir+"decor.html"),cG.REPO.scReq.getCtrls=cG.agent(tir+"ctrls.html"),cG.REPO.scReq.getScript.then(function(e){void 0===cG.REPO.script?cG.REPO.script={def:e}:cG.REPO.script.def=e,cG.script=cG.REPO.script.def},function(e,t){console.error(e,t.status),void 0===cG.REPO.script?cG.REPO.script={def:0}:cG.REPO.script.def=e,cG.script=cG.REPO.script.def}),cG.REPO.scReq.getDecor.then(function(e){void 0===cG.REPO.decor?cG.REPO.decor={def:e}:cG.REPO.decor.def=e,cG.decor=cG.REPO.decor.def},function(e,t){console.error(e,t.status),void 0===cG.REPO.decor?cG.REPO.decor={def:0}:cG.REPO.decor.def=0,cG.decor=cG.REPO.decor.def}),cG.REPO.scReq.getCtrls.then(function(e){void 0===cG.REPO.ctrls?cG.REPO.ctrls={def:e}:cG.REPO.ctrls.def=e,cG.ctrls=cG.REPO.ctrls.def},function(e,t){console.error(e,t.status),void 0===cG.REPO.ctrls?cG.REPO.ctrls={def:0}:cG.REPO.ctrls.def=0,cG.ctrls=cG.REPO.ctrls.def}),cG.comicID=comicID,cG.fBox=fuse;for(var t=0;t<disable.length;t++)cG.dis[disable[t]]=!0;e.src=mainsrc,document.body.appendChild(e);for(var n=0;n<loadng.length;n++)e=document.createElement("script"),e.src=loadng[n],document.body.appendChild(e);jqdep(),/*! humane.js: wavded.github.com/humane-js/ (MIT) (c) Marc Harter (@wavded)*/!function(e,t,n){"undefined"!=typeof module?module.exports=n(e,t):"function"==typeof define&&"object"==typeof define.amd?define(n):t[e]=n(e,t)}("humane",this,function(){var e=window,t=document,n={on:function(t,n,r){"addEventListener"in e?t.addEventListener(n,r,!1):t.attachEvent("on"+n,r)},off:function(t,n,r){"removeEventListener"in e?t.removeEventListener(n,r,!1):t.detachEvent("on"+n,r)},bind:function(e,t){return function(){e.apply(t,arguments)}},isArray:Array.isArray||function(e){return"[object Array]"===Object.prototype.toString.call(e)},config:function(e,t){return null!=e?e:t},transSupport:!1,useFilter:/msie [678]/i.test(navigator.userAgent),_checkTransition:function(){var e=t.createElement("div"),n={webkit:"webkit",Moz:"",O:"o",ms:"MS"};for(var r in n)r+"Transition"in e.style&&(this.vendorPrefix=n[r],this.transSupport=!0)}};n._checkTransition();var r=function(t){t||(t={}),this.queue=[],this.baseCls=t.baseCls||"humane",this.addnCls=t.addnCls||"",this.timeout="timeout"in t?t.timeout:2500,this.waitForMove=t.waitForMove||!1,this.clickToClose=t.clickToClose||!1,this.timeoutAfterMove=t.timeoutAfterMove||!1,this.container=t.container;try{this._setupEl()}catch(r){n.on(e,"load",n.bind(this._setupEl,this))}};return r.prototype={constructor:r,_setupEl:function(){var e=t.createElement("div");if(e.style.display="none",!this.container){if(!t.body)throw"document.body is null";this.container=t.body}this.container.appendChild(e),this.el=e,this.removeEvent=n.bind(function(){var e=n.config(this.currentMsg.timeoutAfterMove,this.timeoutAfterMove);e?setTimeout(n.bind(this.remove,this),e):this.remove()},this),this.transEvent=n.bind(this._afterAnimation,this),this._run()},_afterTimeout:function(){n.config(this.currentMsg.waitForMove,this.waitForMove)?this.removeEventsSet||(n.on(t.body,"mousemove",this.removeEvent),n.on(t.body,"click",this.removeEvent),n.on(t.body,"keypress",this.removeEvent),n.on(t.body,"touchstart",this.removeEvent),this.removeEventsSet=!0):this.remove()},_run:function(){if(!this._animating&&this.queue.length&&this.el){this._animating=!0,this.currentTimer&&(clearTimeout(this.currentTimer),this.currentTimer=null);var e=this.queue.shift(),t=n.config(e.clickToClose,this.clickToClose);t&&(n.on(this.el,"click",this.removeEvent),n.on(this.el,"touchstart",this.removeEvent));var r=n.config(e.timeout,this.timeout);r>0&&(this.currentTimer=setTimeout(n.bind(this._afterTimeout,this),r)),n.isArray(e.html)&&(e.html="<ul><li>"+e.html.join("<li>")+"</ul>"),this.el.innerHTML=e.html,this.currentMsg=e,this.el.className=this.baseCls,n.transSupport?(this.el.style.display="block",setTimeout(n.bind(this._showMsg,this),50)):this._showMsg()}},_setOpacity:function(e){if(n.useFilter)try{this.el.filters.item("DXImageTransform.Microsoft.Alpha").Opacity=100*e}catch(t){}else this.el.style.opacity=e+""},_showMsg:function(){var e=n.config(this.currentMsg.addnCls,this.addnCls);if(n.transSupport)this.el.className=this.baseCls+" "+e+" "+this.baseCls+"-animate";else{var t=0;this.el.className=this.baseCls+" "+e+" "+this.baseCls+"-js-animate",this._setOpacity(0),this.el.style.display="block";var r=this,i=setInterval(function(){1>t?(t+=.1,t>1&&(t=1),r._setOpacity(t)):clearInterval(i)},30)}},_hideMsg:function(){var e=n.config(this.currentMsg.addnCls,this.addnCls);if(n.transSupport)this.el.className=this.baseCls+" "+e,n.on(this.el,n.vendorPrefix?n.vendorPrefix+"TransitionEnd":"transitionend",this.transEvent);else var t=1,r=this,i=setInterval(function(){t>0?(t-=.1,0>t&&(t=0),r._setOpacity(t)):(r.el.className=r.baseCls+" "+e,clearInterval(i),r._afterAnimation())},30)},_afterAnimation:function(){n.transSupport&&n.off(this.el,n.vendorPrefix?n.vendorPrefix+"TransitionEnd":"transitionend",this.transEvent),this.currentMsg.cb&&this.currentMsg.cb(),this.el.style.display="none",this._animating=!1,this._run()},remove:function(e){var r="function"==typeof e?e:null;n.off(t.body,"mousemove",this.removeEvent),n.off(t.body,"click",this.removeEvent),n.off(t.body,"keypress",this.removeEvent),n.off(t.body,"touchstart",this.removeEvent),n.off(this.el,"click",this.removeEvent),n.off(this.el,"touchstart",this.removeEvent),this.removeEventsSet=!1,r&&this.currentMsg&&(this.currentMsg.cb=r),this._animating?this._hideMsg():r&&r()},log:function(e,t,n,r){var i={};if(r)for(var s in r)i[s]=r[s];if("function"==typeof t)n=t;else if(t)for(var s in t)i[s]=t[s];return i.html=e,n&&(i.cb=n),this.queue.push(i),this._run(),this},spawn:function(e){var t=this;return function(n,r,i){return t.log.call(t,n,r,i,e),t}},create:function(e){return new r(e)}},new r})},
+        jqdep=function(){if(void 0===window.jQuery)return setTimeout(jqdep,300);var e;/*! jquery-spoiler v1.3.0: (MIT) (c)2014 Triangle717 (http://le717.github.io) and Jarred Ballard (http://jarred.io/)*/!function(e){"use strict";"function"==typeof define&&define.amd?define(["jquery"],e):"object"==typeof exports?module.exports=e:e(jQuery)}(function(e){"use strict";e.fn.spoiler=function(t){var n=e.extend({contentClass:"spoiler-content",paddingValue:6,triggerEvents:!1,includePadding:!0,buttonActiveClass:"spoiler-active",spoilerVisibleClass:"spoiler-content-visible"},t),r="."+n.contentClass,i={};return e(r).each(function(){var t=e(this);t.css("overflow","hidden");var r=t.prop("scrollHeight");r=n.includePadding?r+parseInt(n.paddingValue,10):r;var s=t.attr("data-spoiler-link");i[s]=r+"px",t.css("height","0")}),e(this).on("click",function(){var t=e(this),s=t.attr("data-spoiler-link"),c=e(r+"[data-spoiler-link="+s+"]"),o={height:i[s]},a={height:"0"},d=c.hasClass(n.spoilerVisibleClass);c.css(d?a:o),n.triggerEvents&&t.trigger(d?"jq-spoiler-hidden":"jq-spoiler-visible"),c.toggleClass(n.spoilerVisibleClass),t.toggleClass(n.buttonActiveClass)}),this}});for(var t=0;t<aftjq.length;t++)e=document.createElement("script"),e.src=aftjq[t],document.body.appendChild(e);setup();workhorse()};
 
     !function() {
         return defer ? void(window.addEventListener ? window.addEventListener("load", dfr, !1) : window.attachEvent ? window.attachEvent("onload", dfr) : window.onload = dfr) : dfr()
