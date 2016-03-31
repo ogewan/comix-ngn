@@ -5,7 +5,7 @@
         mainsrc = "http://comixngn.js.org/ghs/lab/comixngn.js",
         loadng = ["http://comixngn.js.org/ghs/1.1.1/plugins/comixngn.jq.js","http://code.jquery.com/jquery-2.1.4.min.js", "https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"],
         aftjq = ["http://code.jquery.com/ui/1.11.4/jquery-ui.min.js", "https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.7.0/spectrum.min.js"],
-        fuse = {fstrun: false, pgepsh: false, pgesve: false, rtepge: false, protect: false, noverwrite: false, arrow: true, addme: false},
+        fuse = {fstrun: false, pgepsh: false, pgesve: false, rtepge: false, protect: false, noverwrite: false, arrow: true, addme: false, embed: true},
         plugin = "",
         disable = ["rollbar"],
         comicID="CNGwriter",
@@ -19,7 +19,7 @@
         cursor: pointer;
     }
 </style>
-<!--<base href="/comix-ngn/">-->
+<base href="/comix-ngn/">
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.6.1/spectrum.min.css">
 <link rel="stylesheet" type="text/css" href="https://bootswatch.com/simplex/bootstrap.min.css" />
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/humane-js/3.2.2/themes/flatty.min.css" />
@@ -35,6 +35,15 @@
             margin: 0px;
             padding: 0px;
         }
+        .tile {
+            margin-left: 10px;
+            margin-top: 10px;
+        }
+        .modify {
+            -webkit-box-shadow: 0px 0px 10px 10px rgba(72,53,212,1);
+            -moz-box-shadow: 0px 0px 10px 10px rgba(72,53,212,1);
+            box-shadow: 0px 0px 10px 10px rgba(72,53,212,1);
+        }
     </style>
     <div id="nav-toolbar" style="border: 2px groove; position: fixed; left: 50%; z-index: 9;">
         <ul style="padding: 0px; margin: 0px; top: 50%;">
@@ -42,12 +51,10 @@
             <!--<li><button id="nav-undo"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true" style="z-index:999;"></span></button></li>
             <li><button id="nav-redo"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true" style="z-index:999;"></span></button></li>-->
             <li>
-                <select id="nav-select" data-mini="true" data-inline="true">
+                <!--<select id="nav-select" data-mini="true" data-inline="true">
                     <option value="list">List</option>
                     <option value="thum">Thumbnail</option>
-                    <!--<option value="express">Express: next day</option>
-<option value="overnight">Overnight</option>-->
-                </select>
+                </select>-->
             </li>
             <li><button id="_set">* Settings</button></li>
             <li><button id="ExBtnCL" title="Save Settings">Export</button></li>
@@ -168,35 +175,21 @@
                                 </table></div>
                         </td>
                     </tr>
-                    <!-- <tr>
-                        <td>
-                            <h4 id="CHPHEAD">Chapters</h4>
-                            <button id="add2">+</button>
-                        </td>
-                        <td>
-                            <h4 id="PGEHEAD">Pages</h4>
-                            <button id="add3">+</button><input id="conductor" type="file" multiple>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="vertical-align:top">
-                            <ol id="Csort" class="empty"></ol>
-                        </td>
-                        <td style="vertical-align:top">
-                            <ol id="sorted" class="empty"></ol>
-                        </td>
-                    </tr> -->
                     <tr><!--FilePaneToolbar-->
                         <td colspan=2 style="border: 4px solid #E2E2E2;background-color:#E2E2E2;width:100%;padding:5px">
                             <button id="AChp">Add Chapter</button>
                             &nbsp;&nbsp;&nbsp;&nbsp;
                             <button id="APge">Add Page</button>
                             &nbsp;&nbsp;&nbsp;&nbsp;
-                            <button id="">Top Directory</button>
+                            <button id="TpDir">Top Directory</button>
                             &nbsp;&nbsp;&nbsp;&nbsp;
-                            <button id="">Up Directory</button>
+                            <button id="UpDir">Up Directory</button>
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            <label for='Multi'>Select Multiple&nbsp;</label><input id='Multi' type='checkbox'>
                             &nbsp;&nbsp;&nbsp;&nbsp;
                             <input style="display: inline" id="conductor" type="file" multiple>
+                            <input type="radio" id="fm_0" name="fm" checked>Page&nbsp;
+                            <input type="radio" id="fm_1" name="fm">Chapter</td>
                         </td>
                     </tr>
                     <tr><!--FilePane-->
@@ -209,7 +202,7 @@
                         </td>
                         <td style="border: 4px solid #E2E2E2;width=80%;vertical-align:top">
                             <!--FilePaneGrid/List-->
-                            <span id=""></span>
+                            <span id="edit"></span>
                             <ul id="Dsort" class="empty">
                             </ul>
                         </td>
@@ -230,6 +223,9 @@
 </body>
 
 <script>
+    var setup = function(){
+        render();
+    };
     var rootCHP = [];
     var explorer = function(map,pg,cp){
         var tree = '',
@@ -250,8 +246,9 @@
         var namP;
         for(var page in map[-1]){
             if(pg[page].url.length>0){
-                namP = pg[page].url[0].split(".")[0].split("/");
+                namP = pg[page].url[0].split("/");
                 namP = namP[namP.length-1];
+                namP = namP.split(".")[0];
             } else
                 namP='';
             tree += TFiT+" "+namP+" | urls: "+pg[page].url.length+TClo;
@@ -262,12 +259,14 @@
         if (attempts === void 0 || attempts === null) attempts = 0;
         else if (attempts>20){
             console.error("render has timed out");
+            return;
         }
-        if(cG.comix==void 0){
-            if(cG.stageInjection==void 0){
+        if(cG.comix===void 0){
+            if(cG.stageInjection===void 0){
                 setTimeout(render, 200,++attempts);
                 return;
             }
+            cG.script = {parent:null,offset:0,pyr:{appendmismatch:false,appendorder:0,appendorderdir:false},loading:{diameter: 250,lines:16,rate:33.333333333333336,xpos:0.5,ypos:0.5,back:"#FFF",color:"#373737"},config:{dir:"assets/",pagestartnum:false,chapterstartnum:false,imgprebuffer:5,imgpostbuffer:5,startpage:0,back:"#FFF"},pages:[],chapters:[]};
             cG.stageInjection();
         }
         var p = cG.comix.internals.pages;
@@ -283,8 +282,8 @@
         //console.log(c);
         var tree = '',
             grid = '',
-            DFoT = "<img class='icon' style='width:72px;height:72px;' src='folder_icon.png'>",
-            DFiT = "<img class='icon' style='width:72px;height:72px;' src='",
+            DFoT = "<img class='icon tile' style='width:72px;height:72px;' src='"+ficon+"'",
+            DFiT = "<img class='icon tile' style='width:72px;height:72px;' src='",
             DClo = "'>",
             chhr = {'-1':[]},
             wido,
@@ -327,13 +326,29 @@
                     if(name=='-1'){
                         continue;
                     } else{
-                        //console.log("chapter "+name);
-                        grid += (c[name].thumb!=""||c[name].thumb!=void 0)?DFoT: DFiT+c[name].thumb+"'id='c"+name+"' onclick='settingsC(c" + name + ")>'";
+                        if(c[name].thumb==""||c[name].thumb===void 0){
+                            if((editfile.id==name)&&editfile.type)
+                                grid += "<img class='icon tile modify' style='width:72px;height:72px;' src='folder_icon.png'";
+                            else
+                                grid += DFoT;
+                        }
+                        else{
+                            if((editfile.id==name)&&editfile.type)
+                                grid += "<img class='icon tile modify' style='width:72px;height:72px;' src='"+cG.comix.internals.config.dir+c[name].thumb+"'";
+                            else
+                                grid += DFiT+cG.comix.internals.config.dir+c[name].thumb+"'";
+                        }
+                        grid += "id='c"+name+"' onclick='settings(c" + name + ")'>";
                     }
                 }
             }
             for(var page in chhr[-1]){
-                grid += DFiT+p[page].url[0]+"'id='s"+page+"' onclick='settingsP(s" + page + ")'>";
+                if((editfile.id==page)&&!editfile.type)
+                    grid += "<img class='icon tile modify' style='width:72px;height:72px;' src='";
+                else
+                    grid += DFiT;
+                if (!p[page].absolute) grid += cG.comix.internals.config.dir;
+                grid += p[page].url[0]+"'id='s"+page+"' onclick='settings(s" + page + ")'>";
             }
         } else{
             var ship=chhr;
@@ -344,12 +359,29 @@
                     if(name=='-1'){
                         continue;
                     } else{
-                        grid += (c[name].thumb!=""||c[name].thumb!=void 0)?DFoT: DFiT+c[name].thumb+"'id='c"+name+"' onclick='settingsC(c" + name + ")'>";
+                        if(c[name].thumb==""||c[name].thumb===void 0){
+                            if((editfile.id==name)&&editfile.type)
+                                grid += "<img class='icon tile modify' style='width:72px;height:72px;' src='folder_icon.png'";
+                            else
+                                grid += DFoT;
+                        }
+                        else{
+                            if((editfile.id==name)&&editfile.type)
+                                grid += "<img class='icon tile modify' style='width:72px;height:72px;' src='"+cG.comix.internals.config.dir+c[name].thumb+"'";
+                            else
+                                grid += DFiT+cG.comix.internals.config.dir+c[name].thumb+"'";
+                        }
+                        grid += "id='c"+name+"' onclick='settings(c" + name + ")'>";
                     }
                 }
             }
             for(var page in ship[-1]){
-                grid += DFiT+p[page].url[0]+"'id='s"+page+"' onclick='settingsP(s" + page + ")'>";
+                if((editfile.id==page)&&!editfile.type)
+                    grid = "<img class='icon tile modify' style='width:72px;height:72px;' src='";
+                return
+                    grid += DFiT
+                if (!p[page].absolute) grid += cG.comix.internals.config.dir;
+                grid += p[page].url[0]+"'id='s"+page+"' onclick='settings(s" + page + ")'>";
             }
         }
         tree=explorer(chhr,p,c);
@@ -357,20 +389,15 @@
         $("#Tsort").html(tree);
         $("#Dsort").html(grid);
     };
-    var expfunct,
-        settingsC,
-        settingsP,
+    var editfile = {id: [-1], type: 0, dirty: false, multi: false},
+        //id corresponds with index in page/chapter array, type is 0 = page or 1 = chapter, dirty is whether or not changes need to be saved
+        expfunct,
+        settings,
         remveC,
         remveP,
         report,
-        setup = function(){
-            cG.script = {parent:null,offset:0,pyr:{appendmismatch:false,appendorder:0,appendorderdir:false},loading:{diameter: 250,lines:16,rate:33.333333333333336,xpos:0.5,ypos:0.5,back:"#FFF",color:"#373737"},config:{dir:"assets/",pagestartnum:false,chapterstartnum:false,imgprebuffer:5,imgpostbuffer:5,startpage:0,back:"#FFF"},pages:[],chapters:[]};
-            render();
-            /*return void(window.addEventListener ? window.addEventListener("load", render, !1) : window.attachEvent ? window.attachEvent("onload", render) : window.onload = render)*/
-        },
         workhorse = function() {
-            if (settingsC,
-        settingsP,void 0 === window.jQuery || void 0 === window.jQuery.ui || void 0 === humane)
+            if (settings,void 0 === window.jQuery || void 0 === window.jQuery.ui || void 0 === humane||void 0 === cG.comix)
                 return setTimeout(workhorse, 300);
             /*var jQ = jQuery.noConflict();*/
             console.log("%c %c %c comix-ngn Writer v" + cG.info.vwr + " %c \u262F %c \u00A9 2015 Oluwaseun Ogedengbe %c ", "color:white; background:#B5B5B5", "background:purple", "color:black; background:#E2E2E2", 'color:red; background:black', "color:black; background:#B5B5B5", "background:purple");
@@ -480,102 +507,37 @@
             /*
         $(".spoiler-content").show();
         $("#design_contain").show();*/
-            $("#AChp").click(function() {
-                Virtual.chapters.push({description:"",end: -1,start: -1,title: "Chapter",thumb: "", parent:-1});
+            var addthing = function(page, source) {
+                if(source===void 0)
+                    source = {image: ''};
+                if(page)
+                    Virtual.pages.push({alt:"",hover:"",title:"",url:[source.image],release:0,note:"",perm:!1,anim8:!1, absolute:false});
+                else
+                    Virtual.chapters.push({description:"",end: -1,start: -1,title: "Chapter",thumb: source.image, parent:-1});
                 render();
+            }
+            $("#AChp").click(function() {
+                addthing(false);
             });
             $("#APge").click(function() {
-                Virtual.pages.push({alt:"",hover:"",title:"",url:[],release:0,note:"",perm:!1,anim8:!1, absolute:false});
-                render();
+                addthing(true);
             });
-            /*$("#add3").click(function() {
-                if ($("#sorted").hasClass("empty")) {
-                    $("#sorted").removeClass("empty");
-                }
-                cG.comix.internals.pages.push({alt:"",hover:"",title:"",url:[],release:0,note:"",perm:!1,anim8:!1});
-                var yun = ($("#nav-select").val()=="list")?'':"<img style='max-width:64px;max-height:64px;'>";
-                var i = $("#sorted").get(0).childElementCount;
-                //console.log(i);
-                $("#sorted").append("<li id=s" + i + "><span class=page_icon id=name_s" + i + ">" + yun + "</span>" + " <button onClick=settingsP('#s" + i + "');>&#x2731</button><button onClick=remveP('#s" + i + "')>X</button></li>").sortable({
-                        scroll: true
-                    });
-                    $("#s" + i).data({
-                        open: false,
-                        body: {
-                            alt: "",
-                            hover: "",
-                            title: "",
-                            url: [],
-                            release: 0,
-                            note: "",
-                            perm: false,
-                            anim8: false,
-                            special: "",
-                        }
-                    }).addClass("page");
-                render();
+            $("#TpDir").click(function() {
+                rootCHP = [];
             });
-            $("#add2").click(function() {
-                if ($("#Csort").hasClass("empty")) {
-                    $("#Csort").removeClass("empty");
-                }
-                cG.comix.internals.chapters.push({description:"",end: 0,start: 0,title: "Chapter",thumb: ""});
-                var oper = $("#Csort").childElementCount;
-                $("#Csort").append("<li id=c" + oper + ">" + "Chapter" + " <button onClick=settingsC('#c" + oper + "')>&#x2731</button><button onClick=remveC('#c" + oper + "')>X</button> </li>").sortable({
-                    scroll: true
-                });
-                $("#c" + oper).data({
-                    open: false,
-                    body: {
-                        description: "",
-                        end: 0,
-                        start: 0,
-                        title: "Chapter",
-                    }
-                }).addClass("chap");
-                render();
-            });*/
-            $("#nav-select").change(function() {
-                var src = $(".page");
-                var ico = $(".page_icon");
-                //console.log($("#"+src[0].id).data().body.title);
-                /*if($("#nav-select").val()=="list"){
-                    for(var i=0;i<src.length;i++){
-                        $("#"+ico[i].id).html($("#"+src[i].id).data().body.url);
-                    }
-                } else {
-                    for(var i=0;i<src.length;i++){
-                        $("#"+ico[i].id).html("<img style='max-width:64px;max-height:64px;' src='"+cG.script.config.dir+$("#"+src[i].id).data().body.url+"'>");
-                    }
-                }*/
+            $("#UpDir").click(function() {
+                rootCHP.pop();
+            });
+            $("#Multi").change(function() {
+                editfile.multi = document.getElementById('Multi').checked;
             });
             $("#conductor").change(function() {
                 if ($("#sorted").hasClass("empty")) {
                     $("#sorted").removeClass("empty");
                 }
                 console.log(this.files);
-                /*$("#sorted").innerHTML ="";*/
-                var yun;
                 for (var i = 0; i < this.files.length; i++) {
-                    yun = ($("#nav-select").val()=="list")?this.files[i].name:"<img style='max-width:64px;max-height:64px;' src='" + this.files[i].name + "'>";
-                    $("#sorted").append("<li id=s" + i + "><span class=page_icon id=name_s" + i + ">" + yun + "</span>" + " <button onClick=settingsP('#s" + i + "');>&#x2731</button><button onClick=remveP('#s" + i + "')>X</button></li>").sortable({
-                        scroll: true
-                    });
-                    $("#s" + i).addClass("page");
-                    /*$("#s" + i).data({
-                        open: false,
-                        body: {
-                            alt: "",
-                            hover: "",
-                            title: "",
-                            url: [this.files[i].name],
-                            release: 0,
-                            note: "",
-                            perm: false,
-                            anim8: false,
-                            special: "",
-                        }
-                    }).addClass("page");*/
+                    addthing(document.getElementById('fm_0').checked,{image:this.files[i].name});
                 }
             });
             $("#mergeadd").change(function() {
@@ -611,12 +573,9 @@
                     $(".venue").stageInjection();
                 };
                 reader.readAsText(this.files[0]);
-                /*$.getJSON(this.files[0].name, function(conf) {
-                    report(conf);
-                });*/
             });
             $("#historian").change(function() {
-                delete window.confirm;
+                //delete window.confirm;
                 if ((!$("#Csort").hasClass("empty") || !$("#sorted").hasClass("empty")) && !confirm("This will overwrite your current configuration, are you sure?")) {
                     this.files = {};
                     return;
@@ -625,8 +584,8 @@
                 if (!this.files.length) return;
                 /*$("#sorted").innerHTML ="";*/
                 //console.log("INSIDE",$("#sorted"),$("#sorted").html());
-                $("#sorted").html("");
-                $("#Csort").html("");
+                $("#Dsort").empty();
+                $("#Tsort").empty();
 
                 /*if (!this.files[0].type.match()) {
                     throw "File Type must be an image";
@@ -640,13 +599,11 @@
                         return -1;
                     cG.script = cG.REPO.script.def = result;
                     report(cG.script);
-                    //console.log(cG.script);
                     $(".venue").stageInjection();
+                    Virtual = cG.comix.internals;
+                    render();
                 };
                 reader.readAsText(this.files[0]);
-                /*$.getJSON(this.files[0].name, function(conf) {
-                    report(conf);
-                });*/
             });
             movingtoolbar=false;
             $(document.body).mousemove(function() {
@@ -713,102 +670,87 @@
                 console.log(refh);
                 $(refh).appendTo("#MHEAD");
             });*/
-            settingsP = function(ele) {
+            confaction = function(op) {
+                if(!editfile.type&&op>=0){
+                    if(op){
+                        Virtual.pages[editfile.id[0]].title=$("#TEMP_title").val();
+                        Virtual.pages[editfile.id[0]].hover=$("#TEMP_hover").val();
+                        Virtual.pages[editfile.id[0]].note=$("#TEMP_note").val();
+                        Virtual.pages[editfile.id[0]].alt=$("#TEMP_alt").val();
+                        Virtual.pages[editfile.id[0]].release=$("#TEMP_release").val();
+                        Virtual.pages[editfile.id[0]].url=[$("#TEMP_url").val()];
+                        Virtual.pages[editfile.id[0]].perm=document.getElementById("TEMP_perm").checked;
+                        Virtual.pages[editfile.id[0]].anim8=document.getElementById("TEMP_anim8").checked;
+                        Virtual.pages[editfile.id[0]].special=$("#TEMP_special").val();
+                        Virtual.pages[editfile.id[0]].absolute=document.getElementById("TEMP_abs").checked;
+                        switch(editfile.id[0]) {
+                            case 0:
+                                Virtual.pages[editfile.id[0]].desig=-1
+                                break;
+                            case Virtual.pages.length-1:
+                                Virtual.pages[editfile.id[0]].desig=1;
+                                break;
+                            default:
+                                Virtual.pages[editfile.id[0]].desig=0;
+                        }
+                        Virtual.pages[editfile.id[0]].loaded = false;
+                    }
+                    else
+                        Virtual.pages.splice(editfile.id[0], 1);
+                }
+                else if (op>=0){
+                    if(op){
+                        Virtual.chapters[editfile.id[0]].title=$("#TEMP_title").val();
+                        Virtual.chapters[editfile.id[0]].thumb=$("#TEMP_thumb").val();
+                        Virtual.chapters[editfile.id[0]].description=$("#TEMP_description").val();
+                        Virtual.chapters[editfile.id[0]].start=$("#TEMP_start").val();
+                        Virtual.chapters[editfile.id[0]].end=$("#TEMP_end").val();
+                        Virtual.chapters[editfile.id[0]].parent=$("#TEMP_par").val();
+                    }
+                    else
+                        Virtual.pages.splice(editfile.id[0], 1);
+                }
+                $('#edit').empty();
+                editfile.id=[-1];
+                editfile.dirty=false;
+                editfile.type=0;
+                editfile.multi=false;
+                //if (op>=0)
+                render();
+            }
+            settings = function(ele) {
                 var key = ele.id;
                 var lee = key.substring(1);
-                console.log(key,lee);
-                /*
-                
-                if ($(ele).data().open) {
-                    console.log("deleting");
-                    $(ele).data().body.title = $("#TEMP_title" + lee).val();
-                    $(ele).data().body.hover = $("#TEMP_hover" + lee).val();
-                    $(ele).data().body.note = $("#TEMP_note" + lee).val();
-                    $(ele).data().body.alt = $("#TEMP_alt" + lee).val();
-                    $(ele).data().body.release = $("#TEMP_release" + lee).val();
-                    var ent = $("#TEMP_url" + lee).val();
-                    $(ele).data().body.url = [ent];
-                    $("#name_" + lee).html(($("#nav-select").val()=="list")?ent:"<img style='max-width:64px;max-height:64px;' src='"+cG.script.config.dir+ent+"'>");
-                    $(ele).data().body.perm = document.getElementById("TEMP_perm" + lee).checked;
-                    $(ele).data().body.anim8 = document.getElementById("TEMP_anim8" + lee).checked;
-                    $(ele).data().body.special = $("#TEMP_special" + lee).val();
-                    //virtual changes
-                    console.log(ele,$(ele).data());
-                    var vrt = parseInt(ele.substring(2),10);
-                    cG.comix.internals.pages[vrt].title=$(ele).data().body.title;
-                    cG.comix.internals.pages[vrt].hover=$(ele).data().body.hover;
-                    cG.comix.internals.pages[vrt].note=$(ele).data().body.note;
-                    cG.comix.internals.pages[vrt].alt=$(ele).data().body.alt;
-                    cG.comix.internals.pages[vrt].release=$(ele).data().body.release;
-                    cG.comix.internals.pages[vrt].url=$(ele).data().body.url;
-                    cG.comix.internals.pages[vrt].perm=$(ele).data().body.perm;
-                    cG.comix.internals.pages[vrt].anim8=$(ele).data().body.anim8;
-                    cG.comix.internals.pages[vrt].special=$(ele).data().body.special;
-                    switch(vrt) {
-                        case 0:
-                            cG.comix.internals.pages[vrt].desig=-1
-                            break;
-                        case cG.comix.internals.pages.length-1:
-                            cG.comix.internals.pages[vrt].desig=1;
-                            break;
-                        default:
-                            cG.comix.internals.pages[vrt].desig=0;
+                var res = '';
+                var p;
+                var base;
+                var end = "<button id='sveset' onclick='confaction(1)'>Save</button>&nbsp;<button id='canset' onclick='confaction(-1)'>Cancel</button>&nbsp;<button id='delset' style='color:red;' onclick='confaction(0)'>Delete</button>";
+                if(key[0]=='s'){
+                    p = Virtual.pages;
+                    editfile.type = 0;
+                    base = "<form id='TEMPFORM' autofocus><label for='TEMP_title'>Title&nbsp</label><input value='" + p[lee].title + "' id='TEMP_title' type='text' autofocus><br><label for='TEMP_hover'>Hover&nbsp</label><input value='" + p[lee].hover + "' id='TEMP_hover' type='text' title='Text on Mouse Over'><br><label for='TEMP_note'>Image Info&nbsp</label><input value='" + p[lee].note + "' id='TEMP_note' type='text'><br><label for='TEMP_alt'>Alt Text&nbsp</label><input value='" + p[lee].alt + "' id='TEMP_alt' type='text' title='If the image fails to load this text is loaded instead'><br><label for='TEMP_release'>Release Date&nbsp </label><input value='" + p[lee].release + "' id='TEMP_release' type='number' title='When should this slide be avaliable'><br><label for='TEMP_url'>URL&nbsp</label><input value='" + p[lee].url + "' id='TEMP_url' type='text' title='Filename of the image'><br><label for='TEMP_perm'>Permanent&nbsp</label><input " + p[lee].perm + " id='TEMP_perm' type='checkbox' title='Whether the image should always be loaded'><br><label for='TEMP_anim8'>Animate&nbsp</label><input " + p[lee].anim8 + " id='TEMP_anim8' type='checkbox' title='Whether the image/slide is animated'><br><label for='TEMP_abs'>Absolute&nbsp</label><input " + p[lee].absolute + " id='TEMP_abs' type='checkbox' title='The path is absolute(ignores asset path)'><br><label for='TEMP_special'>Special Code:&nbsp</label><textarea rows='4' cols='50' id='TEMP_perm'title='If the slide is not a static image, video/object/embed, put the code to render it here'></textarea><br></form>";
+                }
+                else{
+                    p = Virtual.chapters;
+                    editfile.type = 1;
+                    base = "<form id='TEMPFORM' autofocus><label for='TEMP_title'>Title&nbsp</label><input value='" + p[lee].title + "' id='TEMP_title' type='text' autofocus><br><label for='TEMP_thumb'>Thumbnail&nbsp</label><input value='" + p[lee].thumb + "' id='TEMP_thumb' type='text'><br><label for='TEMP_description'>Description&nbsp</label><input value='" + p[lee].description + "' id='TEMP_description' type='text' title='Chapter description'><br><label for='TEMP_start'>Start&nbsp</label><input value='" + p[lee].start + "' id='TEMP_start' type='number' min='-1' title='Starting page ID value, use -1 if the chapter contains no starting page'>&nbsp;&nbsp;<label for='TEMP_end'>End&nbsp</label><input value='" + p[lee].end + "' id='TEMP_end' type='number' min='-1' title='Ending page ID value, use -1 if the chapter contains no ending page'><br><label for='TEMP_par'>Parent ID&nbsp</label><input value='" + p[lee].parent + "' id='TEMP_par' type= 'number' min='-1' title='Parent Chapter ID, use -1 if the chapter has no parent'><br></form>";
+                } 
+                if(!editfile.dirty && !editfile.multi){
+                    $('#'+key).addClass('modify');
+                    editfile.id[0]=parseInt(lee);
+                    $('#edit').empty();
+                    $('#edit').append(base+end);
+                    $('#edit').focus();
+                    render();
+                } else if(editfile.dirty && !editfile.multi){
+                    if (!confirm("You have unsaved settings, Overwrite?")) {
+                        editfile.dirty = false;
+                        $('#edit').empty();
+                        $('#edit').append(base+end);
+                        $('#edit').focus();
                     }
-                    cG.comix.internals.pages[vrt].loaded = false;
-                    console.log(lee);
-                    $("#TEMPFORM_" + lee).remove();
-                   */ /*document.getElementById(ele.substring(1)).removeChild(document.getElementById("TEMPFORM_"+ele));fallback*/
-                    /*$(ele).focus();
-                    $(ele).data().open = false;
-                    console.log($(ele).data());
-                } else {
-                    var ischek = "",
-                        ischex = "";
-                    if ($(ele).data().body.perm) ischek = "checked";
-                    if ($(ele).data().body.anim8) ischex = "checked";
-                    $(ele).append("<form id='TEMPFORM_" + lee + "' autofocus><label for='TEMP_title" + lee + "'>Title&nbsp</label><input value='" + $(ele).data().body.title + "' id='TEMP_title" + lee + "' type='text' autofocus><br><label for='TEMP_hover" + lee + "'>Hover&nbsp</label><input value='" + $(ele).data().body.hover + "' id='TEMP_hover" + lee + "' type='text' title='Text on Mouse Over'><br><label for='TEMP_note" + lee + "'>Image Info&nbsp</label><input value='" + $(ele).data().body.note + "' id='TEMP_note" + lee + "' type='text'><br><label for='TEMP_alt" + lee + "'>Alt Text&nbsp</label><input value='" + $(ele).data().body.alt + "' id='TEMP_alt" + lee + "' type='text' title='If the image fails to load this text is loaded instead'><br><label for='TEMP_release" + lee + "'>Release Date&nbsp </label><input value='" + $(ele).data().body.release + "' id='TEMP_release" + lee + "' type='number' title='When should this slide be avaliable'><br><label for='TEMP_url" + lee + "'>URL&nbsp</label><input value='" + $(ele).data().body.url + "' id='TEMP_url" + lee + "' type='text' title='Filename of the image'><br><label for='TEMP_perm" + lee + "'>Permanent&nbsp</label><input " + ischek + " id='TEMP_perm" + lee + "' type='checkbox' title='Whether the image should always be loaded'><br><label for='TEMP_anim8" + lee + "'>Animate&nbsp</label><input " + ischex + " id='TEMP_anim8" + lee + "' type='checkbox' title='Whether the image/slide is animated'><br><label for='TEMP_special" + lee + "'>Special Code:&nbsp</label><textarea rows='4' cols='50' id='TEMP_perm" + lee + "'title='If the slide is not a static image, video/object/embed, put the code to render it here'></textarea><br></form>");
-                    $(ele).focus();
-                    $(ele).data().open = true;
                 }
-                return true;*/
-            };
-            settingsC = function(ele) {
-                var lee = ele.substring(1);
-                console.log(ele,lee);
-                /*console.log($(ele).data().open);
-                if ($(ele).data().open) {
-                    $(ele).data().body.description = $("#TEMP_description" + lee).val();
-                    $(ele).data().body.end = $("#TEMP_end" + lee).val();
-                    $(ele).data().body.start = $("#TEMP_start" + lee).val();
-                    var ent = $("#TEMP_title" + lee).val()
-                    $(ele).data().body.title = ent;
-                    $("#name_" + lee).html(ent);
-                    //virtual changes
-                    var vrt = parseInt(ele.substring(2),10);
-                    cG.comix.internals.chapters[vrt].title=$(ele).data().body.title;
-                    cG.comix.internals.chapters[vrt].description=$(ele).data().body.description;
-                    cG.comix.internals.chapters[vrt].end=$(ele).data().body.end;
-                    cG.comix.internals.chapters[vrt].start=$(ele).data().body.start;
-                    //
-                    $("#TEMPFORM_" + lee).remove();
-
-                    $(ele).focus();
-                    $(ele).data().open = false;
-                    console.log($(ele).data());
-                } else {
-                    $(ele).append("<form id='TEMPFORM_" + lee + "' autofocus><label for='TEMP_title" + lee + "'>Title&nbsp</label><input value='" + $(ele).data().body.title + "' id='TEMP_title" + lee + "' type='text' autofocus><br><label for='TEMP_description" + lee + "'>Description&nbsp</label><input value='" + $(ele).data().body.description + "' id='TEMP_description" + lee + "' type='text' title='Chapter description'><br><label for='TEMP_start" + lee + "'>Start&nbsp</label><input value='" + $(ele).data().body.start + "' id='TEMP_start" + lee + "' type='text' title='Starting page ID value'><br><label for='TEMP_end" + lee + "'>End&nbsp</label><input value='" + $(ele).data().body.end + "' id='TEMP_end" + lee + "' type='text' title='Ending page ID value'><br></form>");
-                    $(ele).focus();
-                    $(ele).data().open = true;
-                }
-                return true;*/
-            };
-            remveP = function(ele) {
-                $(ele).remove();
-                cG.comix.internals.pages.splice(ele.substring(2), 1);
-            };
-            remveC = function(ele) {
-                $(ele).remove(); cG.comix.internals.chapters.splice(ele.substring(2), 1);
-            };
+            }
             report = function(conf) {
                 //console.log(conf);
                 document.getElementById("psn_0").checked = false;
@@ -830,8 +772,8 @@
                 document.getElementById("spyro_0").checked = false;
                 document.getElementById("spyro_1").checked = false;
 
-                if (typeof conf.config === 'undefined') { /*config module dependency*/
-                    /*default settings*/
+                if (typeof conf.config === 'undefined') { //config module dependency
+                    //default settings
                     $("#dir").val("assets/");
                     $("#add_").val("");
                     $("#prb").val("5");
@@ -859,7 +801,7 @@
                         $.data($("#back_color"),"color","#fff"); 
                     } else if (conf.config.back) {
                         $.data($("#back_color"),"color","#fff");
-                        $("#back_color").spectrum.color = conf.config.back;/*I DONT EVEN KNOW IF THIS WILL WORK, BUT FCK IT*/
+                        $("#back_color").spectrum.color = conf.config.back;//I DONT EVEN KNOW IF THIS WILL WORK, BUT FCK IT
                     }
                     if (conf.config.pagestartnum) document.getElementById("psn_1").checked = true;
                     else document.getElementById("psn_0").checked = true;
@@ -870,8 +812,8 @@
                     if (conf.config.chapterstartnum) document.getElementById("csn_1").checked = true;
                     else document.getElementById("csn_0").checked = true;
                 }
-                if (typeof conf.pyr === 'undefined') { /*pyr module dependency*/
-                    /*default settings*/
+                if (typeof conf.pyr === 'undefined') { //pyr module dependency
+                    //default settings
                     document.getElementById("pyr_0").checked = true;
                     document.getElementById("spyr_0").checked = true;
                     document.getElementById("spyro_0").checked = true;
@@ -914,47 +856,8 @@
                     $("#back_load").spectrum.color=conf.loading.back;
                     $("#color_load").spectrum.color=conf.loading.color;
                 }
-                var fillin;
-                for (var i = 0; i < conf.pages.length; i++) {
-                    fillin = ($("#nav-select").val()=="list")?conf.pages[i].url:"<img style='max-width:64px;max-height:64px;' src='" + cG.script.config.dir+conf.pages[i].url + "'>";
-                    $("#sorted").append("<li id=s" + i + "><span class=page_icon id=name_s" + i + ">" + fillin + "</span> <button onClick=settingsP('#s" + i + "');>&#x2731</button><button onClick=remveP('#s" + i + "')>X</button></li>").sortable({
-                        scroll: true
-                    });
-                    if (typeof conf.pages[i].perm === 'undefined') {
-                        conf.pages[i].perm = false;
-                    }
-                    $("#s" + i).data({
-                        open: false,
-                        body: {
-                            alt: conf.pages[i].alt,
-                            hover: conf.pages[i].hover,
-                            title: conf.pages[i].title,
-                            url: (Array.isArray(conf.pages[i].url))?conf.pages[i].url:[conf.pages[i].url],
-                            release: conf.pages[i].release,
-                            note: conf.pages[i].note,
-                            perm: conf.pages[i].perm,
-                            anim8: (conf.pages[i].anim8===void 0)?false:conf.pages[i].anim8,
-                            special: (conf.pages[i].special===void 0)?"":conf.pages[i].special
-                        }
-                    }).addClass("page");
-                }
-                for (var oper = 0; oper < conf.chapters.length; oper++) {
-                    //console.log(i);
-                    $("#Csort").append("<li id=c" + oper + "><span id=name_c" + oper + ">" + conf.chapters[oper].title + "</span> <button onClick=settingsC('#c" + oper + "')>&#x2731</button><button onClick=remveC('#c" + oper + "')>X</button> </li>").sortable({
-                        scroll: true
-                    });
-                    $("#c" + oper).data({
-                        open: false,
-                        body: {
-                            description: conf.chapters[oper].description,
-                            end: conf.chapters[oper].end,
-                            start: conf.chapters[oper].start,
-                            title: conf.chapters[oper].title,
-                        }
-                    }).addClass("chap");
-                }
-            };
-        },
+            }
+        }
         dfr=function(){
             /*!
      * Implementation of the Shunting yard algorithm
@@ -981,4 +884,5 @@
     !function() {
         return defer ? void(window.addEventListener ? window.addEventListener("load", dfr, !1) : window.attachEvent ? window.attachEvent("onload", dfr) : window.onload = dfr) : dfr()
     }();
+    var ficon = "data:image/png;base64,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"
 </script>

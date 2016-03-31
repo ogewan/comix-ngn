@@ -10,7 +10,7 @@ if(void 0===cG.$GPC){cG.$GPC=0;}/*Global Plugin Counter (no longer global)*/
 cG.root = '';/*current default settings of cng, overwritten by plugins*/
 cG.cPanel = cG.cPanel||{};/*cG control panel, all stages are stored here*/
 (function(){//this function dynamically adds missing properties to fBox
-    var deft = {fstrun: true, pgepsh: true, pgesve: true, rtepge: true, protect: true, noverwrite: true, arrow: true, addme: true, vscript: false};
+    var deft = {fstrun: true, pgepsh: true, pgesve: true, rtepge: true, protect: true, noverwrite: true, arrow: true, addme: true, vscript: false, click: true};
     if(cG.fBox){
         for(var u in deft){
                 if (!cG.fBox.hasOwnProperty(u)) cG.fBox[u] = deft[u];
@@ -25,7 +25,8 @@ cG.cPanel = cG.cPanel||{};/*cG control panel, all stages are stored here*/
 * rtepge - toggles routing
 * protect - toggles comix settings
 * noverwrite - by default, stageInjection cannot overwrite already inserted comics, set to false to allow overwriting
-* arrow - toggles arrow key navigation */
+* arrow - toggles arrow key navigation
+* click - toggles click navigation */
 cG.info = {vix: "1.2.1",vwr: "1.0.0",vpr: "0.1.0"};/*version settings*/
 cG.dis = cG.dis||{};//disables statistic and error reporting
 cG.recyclebin = cG.recyclebin||{};//variables that are used in initialization, disposed at stage injection
@@ -346,7 +347,10 @@ var direction = function(input,anchor,owrite,c,mode){
                 if(idd>=count) idd=count-1; //can not be equal to our higher than the amount of pages
                 if(!iimg[idd].loaded) context.clearRect(0, 0, layers[1].width, layers[1].height);
                 imagething.imaginaryID = idd;
-                imagething.src = config.dir+iimg[idd].url[0];
+                if (!iimg[idd].absolute&&!(iimg[idd].url[0].substr('https://')||iimg[idd].url[0].substr('http://')))
+                    imagething.src = config.dir+iimg[idd].url[0];
+                else
+                    imagething.src = iimg[idd].url[0];
                 current = idd;//we change page as soon as it is assigned, so that page still changes even if it never loads
                 /*console.log("----");
             for(var q = idd-1;q>idd-self.config.imgprebuffer-1&&q>=0;q--){
@@ -362,14 +366,20 @@ var direction = function(input,anchor,owrite,c,mode){
                 for(var q = idd-1;q>idd-config.imgprebuffer-1&&q>=0;q--){
                     if(iimg[q].loaded) continue;
                     preload[r].imaginaryID = q;
-                    preload[r].src = config.dir+iimg[q].url;
+                    if (!iimg[idd].absolute&&!(iimg[idd].url[0].substr('https://')||iimg[idd].url[0].substr('http://')))
+                        preload[r].src = config.dir+iimg[idd].url[0];
+                    else
+                        preload[r].src = iimg[idd].url[0];
                     r++;
                 }
                 r = 0;
                 for(var q = idd+1;q<config.imgpostbuffer+idd+1&&q<count;q++){
                     if(iimg[q].loaded) continue;
                     pstload[r].imaginaryID = q;
-                    pstload[r].src = config.dir+iimg[q].url;
+                    if (!iimg[idd].absolute&&!(iimg[idd].url[0].substr('https://')||iimg[idd].url[0].substr('http://')))
+                        pstload.src = config.dir+iimg[idd].url[0];
+                    else
+                        pstload.src = iimg[idd].url[0];
                     r++;
                 }
             }/*,
@@ -942,6 +952,10 @@ cG.controlInjection = function(SPECIFIC){
             podling.setAttribute("cglink",stages[u].id);
             stages[u].parentNode.insertBefore(podling, stages[u].nextSibling);
             //console.log(stages[u],stages[u].nextSibling)
+            if(cG.fBox.click){
+                cG.cPanel[stages[u].id].canvi[1].style.cursor= 'pointer';
+                cG.cPanel[stages[u].id].canvi[1].addEventListener("click", cG.cPanel[stages[u].id].next);
+            }
             cG.cPanel[stages[u].id].brains = cG.cPanel[stages[u].id].brains || [];
             cG.cPanel[stages[u].id].brains.push(podling);
             eventer(stages[u],podling);
