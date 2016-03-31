@@ -26,7 +26,8 @@ cG.cPanel = cG.cPanel||{};/*cG control panel, all stages are stored here*/
 * protect - toggles comix settings
 * noverwrite - by default, stageInjection cannot overwrite already inserted comics, set to false to allow overwriting
 * arrow - toggles arrow key navigation
-* click - toggles click navigation */
+* click - toggles click navigation
+* addme = supports additive jsons*/
 cG.info = {vix: "1.2.1",vwr: "1.0.0",vpr: "0.1.0"};/*version settings*/
 cG.dis = cG.dis||{};//disables statistic and error reporting
 cG.recyclebin = cG.recyclebin||{};//variables that are used in initialization, disposed at stage injection

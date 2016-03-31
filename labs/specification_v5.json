@@ -44,11 +44,12 @@
     ],
     "chapters": [//Array of chapters, pages will be grouped into these chapters, false if child(has a parent)
         {
+            "parent": -1,//
             "description": "",//chapter description
-            "start": 0,//index of starting page of chapter
-            "end": 0,//index of last page of chapter
+            "start": -1,//index of starting page of chapter, set to -1 if no start page
+            "end": -1,//index of last page of chapter, set to -1 if no end page
             "title": "",//chapter title
-            "thumb": ""//the thumbnail of the chapter
+            "thumb": "",//the thumbnail of the chapter
         }
     ]
 }

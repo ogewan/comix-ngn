@@ -1,10 +1,10 @@
 <?php
-include 'phpprofilesimple.php';
+include '../labs/phpprofilesimple.php';
 function autoScript(){
     $append = true;
     $badFormat = false;
     $files = array();
-    $dir = opendir('assets/');//count pages to determine if script.json needs to be modified/created
+    $dir = opendir('../assets/');//count pages to determine if script.json needs to be modified/created
     while(($currentFile = readdir($dir)) !== false){
         $ext = strrchr($currentFile, ".");
         //echo "$ext <br>";
