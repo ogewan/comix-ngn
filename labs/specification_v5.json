@@ -39,12 +39,13 @@
             "release": 0,//release date
             "note": [],//additional notes to append to the page
             "perm": false,//is this page permanent? It will be preloaded first
-            "anim8": false//is this page animated? Only works with gif and video(not implemented)
+            "anim8": false,//is this page animated? Only works with gif and video(not implemented)
+            "absolute": false//Are the urls absolute paths?
         }
     ],
     "chapters": [//Array of chapters, pages will be grouped into these chapters, false if child(has a parent)
         {
-            "parent": -1,//
+            "parent": -1,//The parent chapter of this chapter, -1 if no parent
             "description": "",//chapter description
             "start": -1,//index of starting page of chapter, set to -1 if no start page
             "end": -1,//index of last page of chapter, set to -1 if no end page
