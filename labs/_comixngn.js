@@ -1,13 +1,14 @@
 /*_comixngn is a development only JavaScript file that compiles the seperate modules in factory into a single core file.
 It is only for testing purposes to ensure the modules work together as intended.
 Suggested order:
-1. intialize - initializes the name space and commonly used objects
-2. rollbar_dev - sets up the rollbar environment(Development ONLY), when building use rollbar.js
-3. retrieval - retrieves external resources such as script.JSON and other templates
-4. def_stage - defines the default stage creation function (using Direction.js)
-5. def_stagechange - defines the experimental stage change functions
-6. methods - defines commonly used cG methods
-7. def_libs - defines global libraries that cannot be included in the cG namespace, Path, DomReady
+1. def_libs - defines global libraries that cannot be included in the cG namespace, Path, DomReady
+2. initialize - initializes the name space and commonly used objects
+3. rollbar_dev - sets up the rollbar environment(Development ONLY), when building use rollbar.js
+4. retrieval - retrieves external resources such as script.JSON and other templates
+5. def_stage - defines the default stage creation function (using Direction.js)
+6. def_stagechange - defines the experimental stage change functions
+7. methods - defines commonly used cG methods
+7. start - initializes domready and path start functions
 8. helpers - defines special cG helper methods in the helpers repository*/
 !function(){
    var sLoad = function(imp,fnt){

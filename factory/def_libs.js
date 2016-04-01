@@ -4,3 +4,30 @@ var Path={version:"0.8.4",map:function(a){if(Path.routes.defined.hasOwnProperty(
 
 /*domReady.js*/!function(e,t){typeof module!="undefined"?module.exports=t():typeof define=="function"&&typeof define.amd=="object"?define(t):this[e]=t()}("domReady",function(e){function p(e){h=1;while(e=t.shift())e()}var t=[],n,r=!1,i=document,s=i.documentElement,o=s.doScroll,u="DOMContentLoaded",a="addEventListener",f="onreadystatechange",l="readyState",c=o?/^loaded|^c/:/^loaded|c/,h=c.test(i[l]);return i[a]&&i[a](u,n=function(){i.removeEventListener(u,n,r),p()},r),o&&i.attachEvent(f,n=function(){/^c/.test(i[l])&&(i.detachEvent(f,n),p())}),e=o?function(n){self!=top?h?n():t.push(n):function(){try{s.doScroll("left")}catch(t){return setTimeout(function(){e(n)},50)}n()}()}:function(e){h?e():t.push(e)}});
 /*domready cannot be embedded into the cG object, which means it is not replacable via plugin*/
+
+function syncJSON(filePath) {/*! http://stackoverflow.com/a/4117299*/
+    // Load json file;
+    var json = loadTextFileAjaxSync(filePath, "application/json");
+    // Parse json
+    return (json)?JSON.parse(json):0;
+}   
+
+// Load text with Ajax synchronously: takes path to file and optional MIME type
+function loadTextFileAjaxSync(filePath, mimeType){
+    var xmlhttp=new XMLHttpRequest();
+    xmlhttp.open("GET",filePath,false);
+    if (mimeType != null) {
+        if (xmlhttp.overrideMimeType) {
+            xmlhttp.overrideMimeType(mimeType);
+        }
+    }
+    xmlhttp.send();
+    if (xmlhttp.status>=200&&xmlhttp.status<=304)
+    {
+        return xmlhttp.responseText;
+    }
+    else {
+        // TODO Throw exception
+        return null;
+    }
+}
