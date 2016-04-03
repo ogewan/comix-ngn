@@ -200,7 +200,7 @@ cG.stageInjection = function(SPECIFIC,attempts){
         return cG.cPanel;
     }
     if(!cG.script&&!cG.fBox.vscript) return console.error("No script.JSON found. script.JSON is REQUIRED to create any stage. Please create a script.JSON or move it to the directory specified in the script tag for comix-ngn or bellerophon if it is added.");
-    else if (cG.fBox.vscript){
+    else if (!cG.script&&cG.fBox.vscript){
         cG.script = '';
         cG.fBox.vscript = false;
         setTimeout(cG.stageInjection, 300,SPECIFIC,++attempts); 

@@ -2,6 +2,7 @@
 cG.REPO.stage = {"def":{id:"def",construct:function(name,scriptt,anchor,options){
     var chek = function(truth,fals,iimg){
 //console.log((iimg.absolute||iimg.url[0].indexOf('https://')+1||iimg.url[0].indexOf('http://')+1),iimg.absolute,iimg.url[0].indexOf('https://')+1,iimg.url[0].indexOf('http://')+1);
+        if (iimg.url[0]===void 0) return '';
         if (iimg.absolute||iimg.url[0].indexOf('https://')+1||iimg.url[0].indexOf('http://')+1){
             return truth;
         } else

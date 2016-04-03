@@ -3,7 +3,7 @@
 Plugin Name: Comix-ngn
 Plugin URI:  http://URI_Of_Page_Describing_Plugin_and_Updates
 Description: This describes my plugin in a short sentence
-Version:     0.2
+Version:     0.4
 Author:      Oluwaseun Ogedengbe
 Author URI:  http://URI_Of_The_Plugin_Author
 License:     MIT
@@ -11,9 +11,9 @@ License URI: https://github.com/ogewan/comix-ngn/blob/master/LICENSE.md
 */
 function comixngn_init() {
     wp_register_script( 'comix-ngn',
-        plugins_url( '/js/comixngn.js', __FILE__ ),
+        plugins_url( '/js/comixngn.min.js', __FILE__ ),
         array( 'cngn-setup' ),
-        "1.2.1"
+        "1.3.0"
     );
     wp_register_script( 'cngn-patroller',
         plugins_url( '/js/cngnptrl.js', __FILE__ ),
@@ -22,6 +22,20 @@ function comixngn_init() {
     );
     wp_enqueue_script('comix-ngn');
     wp_enqueue_script('cngn-patroller');
+}
+
+function comixngn_admin() { 
+    wp_enqueue_script( 'cngn-setup',
+            plugins_url( '/js/cngnsetp.js', __FILE__ ),
+            false,
+            "0.1"              
+        );
+    wp_register_script( 'comix-ngn',
+        plugins_url( '/js/comixngn.min.js', __FILE__ ),
+        array( 'cngn-setup' ),
+        "1.3.0"
+    );
+    wp_enqueue_script('comix-ngn');
 }
 
 function cset() {  
@@ -79,4 +93,5 @@ function cset() {
 }
 add_action( 'wp_enqueue_scripts', 'cset' );
 add_action( 'wp_enqueue_scripts', 'comixngn_init');
-include 'core_options.php';
+add_action( 'admin_enqueue_scripts', 'comixngn_admin' );
+include 'php/core_options.php';
