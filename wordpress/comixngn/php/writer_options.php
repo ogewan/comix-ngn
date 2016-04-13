@@ -1,4 +1,5 @@
-<?php function writer_settings(){?>
+<?php 
+function writer_settings(){?>
 <script>
     var pageD = <?php $screen = get_current_screen();$pID =substr(strrchr($screen->id,"_"),1);echo $pID;?>;
     var defer = !0;/*,
@@ -24,44 +25,51 @@
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/humane-js/3.2.2/themes/flatty.min.css" />
 <div class="wrap">
 <h2 id="$COMICNGWRITER$$$">Writer</h2>
+            <div id="nav-toolbar" style="border: 2px groove; position: fixed; left: 50%; z-index: 9;">
+                <ul style="padding: 0px; margin: 0px; top: 50%;">
+                    <li>
+                        <span id="nav-move" class="button glyphicon glyphicon-move" aria-hidden="true" style="z-index:999;"></span>
+                    </li>
+                    <!--<li><button id="nav-undo"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true" style="z-index:999;"></span></button></li>
+            <li><button id="nav-redo"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true" style="z-index:999;"></span></button></li>-->
+                    <li>
+                        <!--<select id="nav-select" data-mini="true" data-inline="true">
+                    <option value="list">List</option>
+                    <option value="thum">Thumbnail</option>
+                </select>-->
+                    </li>
+                    <li>
+                        <span id="_set" class="button">* Settings</span>
+                    </li>
+                    <li>
+                        <span id="ExBtnCL" title="Save Settings" class="button">Export</span>
+                    </li>
+                    <li><span id=MHEADCL></span>
+                    </li>
+                    <li>
+                        <span id="_des" class="button">* Design</span>
+                    </li>
+                </ul>
+            </div>
 <div id="accordion">
     <h3 class="button" role="button">* Settings</h3>
     <div id="settings_contain">
         <form method="post" action="options.php">
-            <?php settings_fields( 'my-cool-plugin-settings-group' ); ?>
-            <?php do_settings_sections( 'my-cool-plugin-settings-group' ); ?>
-            <table class="form-table">
-                <tr valign="top">
-                    <th scope="row">New Option Name</th>
-                    <td>
-                        <input type="text" name="new_option_name" value="<?php echo esc_attr( get_option('new_option_name') ); ?>" />
-                    </td>
-                </tr>
-
-                <tr valign="top">
-                    <th scope="row">Some Other Option</th>
-                    <td>
-                        <input type="text" name="some_other_option" value="<?php echo esc_attr( get_option('some_other_option') ); ?>" />
-                    </td>
-                </tr>
-
-                <tr valign="top">
-                    <th scope="row">Options, Etc.</th>
-                    <td>
-                        <input type="text" name="option_etc" value="<?php echo esc_attr( get_option('option_etc') ); ?>" />
-                    </td>
-                </tr>
-            </table>
-            <table id="bodtab" border="0" style="width:100%">
+            <?php settings_fields("writer-group"); ?>
+            <?php do_settings_sections( "writer-group" );?>
+            <table class="form-table" id="bodtab" border="0" style="width:100%">
                 <tr>
-                    <td colspan="2">
+                    <td><input id="data" style="visibility:hidden;position:absolute" type="text" name="data_<?php $screen = get_current_screen();$pID =substr(strrchr($screen->id,"_"),1);echo $pID;?>" value="<?= esc_attr( get_option("data_$pid") ); ?>" pid="<?="data_$pid"?>"/>
                         <h4 id="confhead" title="Click to toggle border">Configuration</h4>
                     </td>
+                    <td title="Script name">
+                        <input name="nam" value="Default" type="text">
+                    </td>
                 </tr>
-                <tr>
+                <tr> 
                     <td title="Image directory">
                         <label for="dir">Directory</label>
-                        <input value="assets/" id="dir" type="text">
+                        <input name="dir" value="assets/" id="dir" type="text">
                     </td>
                     <td title="Select this if you want to continue from a previous configuration.">
                         <label for="historian">Config File</label>
@@ -81,18 +89,18 @@
                 <tr>
                     <td title="How far behind images are preloaded">
                         <label for="prb">Pre-Buffer</label>
-                        <input type="number" value=5 id="prb" min="1" max="100">
+                        <input type="number" name="prb" value=5 id="prb" min="1" max="100">
                     </td>
                     <td title="How far ahead images are preloaded">
                         <label for="ptb">Post-Buffer</label>
-                        <input type="number" value=5 id="ptb" min="1" max="100">
+                        <input type="number" name="ptb" value=5 id="ptb" min="1" max="100">
                     </td>
                 </tr>
                 <?php if($pID != '-1')
                 echo '<tr>
                     <td title="An additive json is a file that allows pages to be added by url alone">
                         <label for="add_">Additive pages</label>
-                        <input value="" id="add_" type="text">
+                        <input name="add_" value="" id="add_" type="text">
                         <!--<input type="radio" id="add_0" name="aad" checked>Disabled&nbsp;
                 <input type="radio" id="add_1" name="aad">Enabled</td>-->
                         <td title="Merge these additive into pages of the script">
@@ -124,8 +132,8 @@
                 </tr>
                 <tr>
                     <td title="Background color of webcomic">
-                        <label for="back_total">Background: </label>
-                        <input id="back_color" style="visibility: hidden;">
+                        <label for="back_color">Background: </label>
+                        <input name="back_color" id="back_color" style="visibility: hidden;">
                     </td>
                     <td title="Order of navigation button: Left to Right or Right to Left">
                         <label for="rdr_0">Reading Direction</label>
@@ -135,14 +143,14 @@
                 <tr>
                     <td colspan="8">
                         <div class="spoiler" data-spoiler-link="1">
-                            <button>Loading Spinner</button>
+                            <span class="button">Loading Spinner</span>
                         </div>
                         <div class="spoiler-content" data-spoiler-link="1">
                             <table>
                                 <tr>
                                     <td>
                                         <label for="dia">Diameter</label>
-                                        <input style="width:100px;" type="number" value=250 id="dia" min="1">
+                                        <input style="width:100px;" type="number" name"dia" value=250 id="dia" min="1">
                                     </td>
                                     <td rowspan="8">
                                         <canvas id="custom_spin" class="center"></canvas>
@@ -150,26 +158,26 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        <label for="wid">Lines: </label>
-                                        <input style="width:35px;" type="number" value=16 id="lin" min="1">
+                                        <label for="lin">Lines: </label>
+                                        <input style="width:35px;" type="number" name="lin" value=16 id="lin" min="1">
                                         <label for="rat">Rate(ms): </label>
-                                        <input style="width:65px;" step="any" value=33.333333333333336 id="rat" min="1">
+                                        <input style="width:65px;" step="any" name="rat" value=33.333333333333336 id="rat" min="1">
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
                                         <label for="xpose">X-pos</label>
-                                        <input style="width:50px;" type="number" step="0.01" value=0.5 id="xpose" min="0" max="1">
+                                        <input style="width:50px;" type="number" step="0.01" name="xpose" value=0.5 id="xpose" min="0" max="1">
                                         <label for="ypose">Y-pos</label>
-                                        <input style="width:50px;" type="number" step="0.01" value=0.5 id="ypose" min="0" max="1">
+                                        <input style="width:50px;" type="number" step="0.01" name="ypose" value=0.5 id="ypose" min="0" max="1">
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
                                         <label for="back_load">Background: </label>
-                                        <input id="back_load">
+                                        <input name="back_load" id="back_load">
                                         <label for="color_load">Color: </label>
-                                        <input id="color_load">
+                                        <input name="color_load" id="color_load">
                                     </td>
                                 </tr>
                             </table>
@@ -180,13 +188,13 @@
                 echo '<tr>
                     <!--FilePaneToolbar-->
                     <td colspan=2 style="border: 4px solid #E2E2E2;background-color:#E2E2E2;width:100%;padding:5px">
-                        <button id="AChp">Add Chapter</button>
+                        <span id="AChp" class="button">Add Chapter</span>
                         &nbsp;&nbsp;&nbsp;&nbsp;
-                        <button id="APge">Add Page</button>
+                        <span id="APge" class="button">Add Page</span>
                         &nbsp;&nbsp;&nbsp;&nbsp;
-                        <button id="TpDir">Top Directory</button>
+                        <span id="TpDir" class="button">Top Directory</span>
                         &nbsp;&nbsp;&nbsp;&nbsp;
-                        <button id="UpDir">Up Directory</button>
+                        <span id="UpDir" class="button">Up Directory</span>
                         &nbsp;&nbsp;&nbsp;&nbsp;
                         <label for='."Multi".'>Select Multiple&nbsp;</label>
                         <input id='."Multi".' type='."checkbox".'> &nbsp;&nbsp;&nbsp;&nbsp;
@@ -212,37 +220,10 @@
                     </td>
                 </tr>' ?>
             </table>
-            <input id="ExBtn" type="submit" value="Export" title="Save Settings">
+            <span class="button" id="ExBtn" title="Export Settings">Export</span>
 
             <!--<a href="../../" style="position:fixed;width:42px;height:42px;top:20px;left:10px;"><img src="../../assets/images/normal_glow.svg" style="position:absolute;top:0;left:0;width:90%;"/></a>-->
             <span id=MHEAD></span>
-            <div id="nav-toolbar" style="border: 2px groove; position: fixed; left: 50%; z-index: 9;">
-                <ul style="padding: 0px; margin: 0px; top: 50%;">
-                    <li>
-                        <button id="nav-move"><span class="glyphicon glyphicon-move" aria-hidden="true" style="z-index:999;"></span>
-                        </button>
-                    </li>
-                    <!--<li><button id="nav-undo"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true" style="z-index:999;"></span></button></li>
-            <li><button id="nav-redo"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true" style="z-index:999;"></span></button></li>-->
-                    <li>
-                        <!--<select id="nav-select" data-mini="true" data-inline="true">
-                    <option value="list">List</option>
-                    <option value="thum">Thumbnail</option>
-                </select>-->
-                    </li>
-                    <li>
-                        <button id="_set">* Settings</button>
-                    </li>
-                    <li>
-                        <button id="ExBtnCL" title="Save Settings">Export</button>
-                    </li>
-                    <li><span id=MHEADCL></span>
-                    </li>
-                    <li>
-                        <button id="_des">* Design</button>
-                    </li>
-                </ul>
-            </div>
 <script>
     var setup = function(){
         render();
@@ -287,7 +268,17 @@
                 setTimeout(render, 200,++attempts);
                 return;
             }
-            cG.script = {parent:null,offset:0,pyr:{appendmismatch:false,appendorder:0,appendorderdir:false},loading:{diameter: 250,lines:16,rate:33.333333333333336,xpos:0.5,ypos:0.5,back:"#FFF",color:"#373737"},config:{dir:"assets/",pagestartnum:false,chapterstartnum:false,imgprebuffer:5,imgpostbuffer:5,startpage:0,back:"#FFF"},pages:[],chapters:[]};
+            if(<?php echo (get_option("writer-group-data_$pID")[0])?'true' : 'false';?>)
+                cG.script = JSON.parse(<?php echo esc_attr( get_option("writer-group-data_$pID")[1]);?>);
+            else {
+                //pull from settings
+                if(pageD<0){
+                    cG.script = {parent:null,offset:0,pyr:{appendmismatch:false,appendorder:0,appendorderdir:false},loading:{diameter: 250,lines:16,rate:33.333333333333336,xpos:0.5,ypos:0.5,back:"#FFF",color:"#373737"},config:{dir:"assets/",pagestartnum:false,chapterstartnum:false,imgprebuffer:5,imgpostbuffer:5,startpage:0,back:"#FFF"},pages:[],chapters:[]};
+                } else {
+                    //pull from default
+                    cG.script = JSON.parse('<?php echo file_get_contents(plugins_url( '../json/default.djson', __FILE__ ));?>');
+                }
+            }
             cG.stageInjection();
         }
         var p = cG.comix.internals.pages;
@@ -399,7 +390,7 @@
             for(var page in ship[-1]){
                 if((editfile.id==page)&&!editfile.type)
                     grid = "<img class='icon tile modify' style='width:72px;height:72px;' src='";
-                return
+                else
                     grid += DFiT
                 if (!p[page].absolute) grid += cG.comix.internals.config.dir;
                 grid += p[page].url[0]+"'id='s"+page+"' onclick='settings(s" + page + ")'>";
@@ -604,8 +595,9 @@
                 if (!this.files.length) return;
                 /*jQuery("#sorted").innerHTML ="";*/
                 //console.log("INSIDE",jQuery("#sorted"),jQuery("#sorted").html());
+                <?php if($pID != '-1') echo '
                 jQuery("#Dsort").empty();
-                jQuery("#Tsort").empty();
+                jQuery("#Tsort").empty();'?>
 
                 /*if (!this.files[0].type.match()) {
                     throw "File Type must be an image";
@@ -621,7 +613,7 @@
                     report(cG.script);
                     jQuery(".venue").stageInjection();
                     Virtual = cG.comix.internals;
-                    render();
+                    <?php if($pID != '-1') echo 'render();'?>
                 };
                 reader.readAsText(this.files[0]);
             });
@@ -645,7 +637,10 @@
             });
             jQuery("#ExBtn").click(function(){return expfunct()});
             jQuery("#ExBtnCL").click(function(){return expfunct()});
-            expfunct = function() {
+            jQuery("#submit").hover(function(){
+                return expfunct(true);
+            },null);
+            expfunct = function(php) {
                 /*delete window.alert;
                     alert("Settings Configured!");*/
                 var inclusion = ["parent","offset","config", "pyr", "loading", "pages", "chapters", "dir", "startpage", "pagestartnum", "readdir" , "additive", "chapterstartnum", "imgprebuffer", "imgpostbuffer", "back", "appendmismatch", "appendorder", "appendorderdir", "alt", "hover", "title","perm","anim8","special", "url", "release", "note", "absolute", "description", "start", "end", "title", "thumb", "diameter","lines","rate","xpos","ypos","back","color"];
@@ -670,13 +665,18 @@
                 }
                 Virtual.pyr.appendorderdir = document.getElementById("spyro_0").checked;
                 Virtual.loading = spin;
-                
                 jQuery('.setlink').remove();
-                var refh = "<a onClick=jQuery('.setlink').remove() class='setlink' href='data: text/json;charset=utf-8," + JSON.stringify(Virtual, inclusion) + "' download='config.json' autofocus>config.json<br></a>",
-                    formref = "<a onClick=jQuery('.setlink').remove() class='setlink' href='data: text/json;charset=utf-8," + JSON.stringify(Virtual,inclusion,4) + "' download='config.json' autofocus>config.json<br></a>";
-                console.log(formref);
-                jQuery(refh).appendTo("#MHEAD");
-                jQuery(refh).appendTo("#MHEADCL");
+                if(!php||php===void 0){
+                    var refh = "<a onClick=jQuery('.setlink').remove() class='setlink' href='data: text/json;charset=utf-8," + JSON.stringify(Virtual, inclusion) + "' download='config.json' autofocus>config.json<br></a>",
+                        formref = "<a onClick=jQuery('.setlink').remove() class='setlink' href='data: text/json;charset=utf-8," + JSON.stringify(Virtual,inclusion,4) + "' download='config.json' autofocus>config.json<br></a>";
+                    console.log(formref);
+                    jQuery(refh).appendTo("#MHEAD");
+                    jQuery(refh).appendTo("#MHEADCL");
+                } else {
+                    var dat = JSON.stringify({set:true,data:JSON.stringify(Virtual, inclusion)});
+                   console.log("PHP is "+php+", printing "+dat); jQuery("#data").val(dat);
+                    //jQuery("#set").val(true);
+                }
             };
             /*jQuery("#InBtn").click(function() {
                 jQuery('#indlink').remove();

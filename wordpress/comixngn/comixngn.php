@@ -3,7 +3,7 @@
 Plugin Name: Comix-ngn
 Plugin URI:  http://URI_Of_Page_Describing_Plugin_and_Updates
 Description: This describes my plugin in a short sentence
-Version:     0.4
+Version:     0.5
 Author:      Oluwaseun Ogedengbe
 Author URI:  http://URI_Of_The_Plugin_Author
 License:     MIT
@@ -37,15 +37,24 @@ function comixngn_admin() {
     );
     wp_enqueue_script('comix-ngn');
 }
-
+function deactivation() {
+    $dir = scandir(dirname(__FILE__). '/json');
+    unregister_setting('core-group', 'some_other_option');
+        delete_option('some_other_option');
+    for ($i = -1; $i < count($dir); $i++) {
+        if(!stristr($dir[$i], ".json")) continue;
+        delete_option( "data_$i");
+        unregister_setting( 'writer-group', "data_$i");
+    }
+}
 function cset() {  
     $ident = '[cngn';
     $post_id = get_the_ID();
     $pmain = get_post( $post_id )->post_content;
     $self_pos = strpos($pmain,$ident);
     if($self_pos !== false){
-        echo "current: $post_id\n";
-        echo "cngn found";
+        //echo "current: $post_id\n";
+        //echo "cngn found";
         $self_end = strpos($pmain,']',$self_pos);
         $searchstr = substr($pmain, $self_pos+strlen($ident)+1, $self_end-1-($self_pos+strlen($ident)));
         //echo "\n$searchstr";
@@ -94,4 +103,5 @@ function cset() {
 add_action( 'wp_enqueue_scripts', 'cset' );
 add_action( 'wp_enqueue_scripts', 'comixngn_init');
 add_action( 'admin_enqueue_scripts', 'comixngn_admin' );
+register_deactivation_hook( __FILE__, 'deactivation' );
 include 'php/core_options.php';

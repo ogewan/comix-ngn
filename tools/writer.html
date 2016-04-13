@@ -115,7 +115,7 @@
                     </tr>
                     <tr>
                         <td title="Background color of webcomic">
-                            <label for="back_total">Background: </label>
+                            <label for="back_color">Background: </label>
                             <input id="back_color" style="visibility: hidden;"></td>
                         <td title="Order of navigation button: Left to Right or Right to Left">
                             <label for="rdr_0">Reading Direction</label>
@@ -134,7 +134,7 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            <label for="wid">Lines: </label> <input style="width:35px;" type="number" value=16 id="lin" min="1">
+                                            <label for="lin">Lines: </label> <input style="width:35px;" type="number" value=16 id="lin" min="1">
                                             <label for="rat">Rate(ms): </label> <input style="width:65px;" step="any" value=33.333333333333336 id="rat" min="1">
                                         </td>
                                     </tr>
@@ -358,7 +358,7 @@
             for(var page in ship[-1]){
                 if((editfile.id==page)&&!editfile.type)
                     grid = "<img class='icon tile modify' style='width:72px;height:72px;' src='";
-                return
+                else
                     grid += DFiT
                 if (!p[page].absolute) grid += cG.comix.internals.config.dir;
                 grid += p[page].url[0]+"'id='s"+page+"' onclick='settings(s" + page + ")'>";
