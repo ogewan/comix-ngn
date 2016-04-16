@@ -280,6 +280,7 @@ var direction = function(input,anchor,owrite,c,mode){
     }
     this.rand = function(){
         var sre = Math.floor(Math.random() * (count-1));
+        if(sre==current) sre+=Math.floor(Math.random() * (count-2))+1;
         //console.log(sre);
         assign(master,sre);
         return sre;

@@ -273,7 +273,7 @@ function writer_settings(){?>
             else {
                 //pull from settings
                 if(pageD<0){
-                    cG.script = {parent:null,offset:0,pyr:{appendmismatch:false,appendorder:0,appendorderdir:false},loading:{diameter: 250,lines:16,rate:33.333333333333336,xpos:0.5,ypos:0.5,back:"#FFF",color:"#373737"},config:{dir:"assets/",pagestartnum:false,chapterstartnum:false,imgprebuffer:5,imgpostbuffer:5,startpage:0,back:"#FFF"},pages:[],chapters:[]};
+                    cG.fBox.vscript = {parent:null,offset:0,pyr:{appendmismatch:false,appendorder:0,appendorderdir:false},loading:{diameter: 250,lines:16,rate:33.333333333333336,xpos:0.5,ypos:0.5,back:"#FFF",color:"#373737"},config:{dir:"assets/",pagestartnum:false,chapterstartnum:false,imgprebuffer:5,imgpostbuffer:5,startpage:0,back:"#FFF"},pages:[],chapters:[]};
                 } else {
                     //pull from default
                     cG.script = JSON.parse('<?php echo file_get_contents(plugins_url( '../json/default.djson', __FILE__ ));?>');

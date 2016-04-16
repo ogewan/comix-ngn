@@ -150,7 +150,7 @@ cG.controlInjection = function(SPECIFIC){
         };
     if(void 0 === SPECIFIC) stages = document.getElementsByClassName("venue");/*get all entry points*/
     else if(Array.isArray(SPECIFIC)){
-        if(SPECIFIC.length>0) if(void 0 ===SPECIFIC[0].nodeName) return console.error(errr);
+        if(SPECIFIC.length<=0) if(void 0 ===SPECIFIC[0].nodeName) return console.error(errr);
             else return console.error(errr);
         stages = stages.concat(SPECIFIC);
     } else{
@@ -201,16 +201,16 @@ cG.stageInjection = function(SPECIFIC,attempts){
     }
     if(!cG.script&&!cG.fBox.vscript) return console.error("No script.JSON found. script.JSON is REQUIRED to create any stage. Please create a script.JSON or move it to the directory specified in the script tag for comix-ngn or bellerophon if it is added.");
     else if (!cG.script&&cG.fBox.vscript){
-        cG.script = '';
-        cG.fBox.vscript = false;
-        setTimeout(cG.stageInjection, 300,SPECIFIC,++attempts); 
+        cG.script = cG.fBox.vscript;//'';
+        //cG.fBox.vscript = false;
+        setTimeout(cG.stageInjection, 300,SPECIFIC,0); //reset attempts
         return cG.cPanel;
     }
     var stages = [],
         errr = "stageInjection can only operate on elements or arrays of elements";
     if(void 0 === SPECIFIC) stages = document.getElementsByClassName("venue");/*get all entry points*/
     else if(Array.isArray(SPECIFIC)){
-        if(SPECIFIC.length>0) if(void 0 ===SPECIFIC[0].nodeName) return console.error(errr);
+        if(SPECIFIC.length<=0) if(void 0 ===SPECIFIC[0].nodeName) return console.error(errr);
             else return console.error(errr);
         stages = stages.concat(SPECIFIC);
     } else{
@@ -379,7 +379,7 @@ cG.stageInjection = function(SPECIFIC,attempts){
         };
     for (var i = 0; i < stages.length; i++) if(!stages[i].getAttribute("cgcij")==true||!cG.fBox.noverwrite) request(i);
     cG.cPanel=final_res;
-    cG.controlInjection();
+    cG.controlInjection(SPECIFIC);
     return final_res;
 };
 /*end STAGE creation*/
