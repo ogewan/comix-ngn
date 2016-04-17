@@ -59,7 +59,7 @@ function writer_settings(){?>
             <?php do_settings_sections( "writer-group" );?>
             <table class="form-table" id="bodtab" border="0" style="width:100%">
                 <tr>
-                    <td><input id="data" style="visibility:hidden;position:absolute" type="text" name="data_<?php $screen = get_current_screen();$pID =substr(strrchr($screen->id,"_"),1);echo $pID;?>" value="<?= esc_attr( get_option("data_$pid") ); ?>" pid="<?="data_$pid"?>"/>
+                    <td><input id="data" style="visibility:hidden;position:absolute" type="text" name="data_<?php $screen = get_current_screen();$pID =substr(strrchr($screen->id,"_"),1);echo $pID;?>" value="<?= get_option("data_$pID"); ?>" pid="<?="data_$pID"?>"/>
                         <h4 id="confhead" title="Click to toggle border">Configuration</h4>
                     </td>
                     <td title="Script name">
@@ -268,18 +268,26 @@ function writer_settings(){?>
                 setTimeout(render, 200,++attempts);
                 return;
             }
-            if(<?php echo (get_option("writer-group-data_$pID")[0])?'true' : 'false';?>)
-                cG.script = JSON.parse(<?php echo esc_attr( get_option("writer-group-data_$pID")[1]);?>);
+            var setit;
+            try {
+                setit = JSON.parse('<?= get_option("data_$pID");?>');
+            } catch(err) {
+                setit = {set: false};
+            }
+            if(setit.set)
+                cG.fBox.vscript = setit.data;
             else {
                 //pull from settings
                 if(pageD<0){
                     cG.fBox.vscript = {parent:null,offset:0,pyr:{appendmismatch:false,appendorder:0,appendorderdir:false},loading:{diameter: 250,lines:16,rate:33.333333333333336,xpos:0.5,ypos:0.5,back:"#FFF",color:"#373737"},config:{dir:"assets/",pagestartnum:false,chapterstartnum:false,imgprebuffer:5,imgpostbuffer:5,startpage:0,back:"#FFF"},pages:[],chapters:[]};
                 } else {
                     //pull from default
-                    cG.script = JSON.parse('<?php echo file_get_contents(plugins_url( '../json/default.djson', __FILE__ ));?>');
+                    cG.fBox.vscript = JSON.parse('<?php echo file_get_contents(plugins_url( '../json/default.djson', __FILE__ ));?>');
                 }
             }
             cG.stageInjection();
+            setTimeout(render, 200,++attempts);
+            return;
         }
         var p = cG.comix.internals.pages;
         var c = cG.comix.internals.chapters;
@@ -673,7 +681,9 @@ function writer_settings(){?>
                     jQuery(refh).appendTo("#MHEAD");
                     jQuery(refh).appendTo("#MHEADCL");
                 } else {
-                    var dat = JSON.stringify({set:true,data:JSON.stringify(Virtual, inclusion)});
+                    inclusion.push('set');
+                    inclusion.push('data');
+                    var dat = JSON.stringify({set:true,data:Virtual}, inclusion);
                    console.log("PHP is "+php+", printing "+dat); jQuery("#data").val(dat);
                     //jQuery("#set").val(true);
                 }
@@ -689,7 +699,7 @@ function writer_settings(){?>
                 var refh = "OUTDATED";
                 console.log(refh);
                 jQuery(refh).appendTo("#MHEAD");
-            });*/
+            });*/ 
             confaction = function(op) {
                 if(!editfile.type&&op>=0){
                     if(op){

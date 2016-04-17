@@ -1,5 +1,5 @@
 <?php
-include '../labs/phpprofilesimple.php';
+//include '../labs/phpprofilesimple.php';
 function autoScript(){
     $append = true;
     $badFormat = false;
