@@ -87,6 +87,7 @@ var direction = function(input,anchor,owrite,c,mode){
         preload = [],
         master = new Image(),
         skroll = true,
+        skrlln = false,
         layers = [document.createElement("canvas"), document.createElement("canvas")],
         context = layers[1].getContext('2d'),
         //METHODS - private
@@ -134,6 +135,15 @@ var direction = function(input,anchor,owrite,c,mode){
             else a.context.clearRect(0, 0, 300, layers[1].height);
         },
         scrollit = function(to,time){
+            //set up scrolling watch
+            skrlln = true;
+            var deactive = function(){
+                skrlln = false;
+                document.removeEventListener('mousedown', deactive);
+                document.removeEventListener('keydown', deactive);    
+            }
+            document.addEventListener('mousedown', deactive);
+            document.addEventListener('keydown', deactive);
             //format inputs
             if(to===null||void 0===to) to={x:0,y:0};
             else if (!isNaN(to)) to={x:0,y:to};//if to is num assume its y
@@ -152,8 +162,11 @@ var direction = function(input,anchor,owrite,c,mode){
             //console.log("to",to,"dis",dis,"(x",window.pageXOffset,document.documentElement.scrollLeft,"| y",window.pageYOffset,document.documentElement.scrollTop,")",time,time/5);
             if(dis=={x:0,y:0}) return dis;//if that distance is 0 on both x and y, no scrolling required
             var clock = function(c,b,a){
-                window.scrollBy(Math.floor(c.x)/b, Math.floor(c.y)/b);
-                if(a+1<b*5) window.setTimeout(clock,5,c,b,a+1);
+                if(skrlln){
+                    window.scrollBy(Math.floor(c.x)/b, Math.floor(c.y)/b);
+                    if(a+1<b*5) window.setTimeout(clock,5,c,b,a+1);
+                    else deactive();
+                }
             }
             window.setTimeout(clock,5,dis,Math.floor(time/5),0);
             //window.clearInterval(clock);
