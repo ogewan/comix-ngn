@@ -1,11 +1,11 @@
 <?php
 /*
-Plugin Name: Comix-ngn
-Plugin URI:  http://URI_Of_Page_Describing_Plugin_and_Updates
-Description: This describes my plugin in a short sentence
-Version:     0.5
-Author:      Oluwaseun Ogedengbe
-Author URI:  http://URI_Of_The_Plugin_Author
+Plugin Name: Comix-ngn (Beta)
+Plugin URI:  https://github.com/ogewan/comix-ngn/wiki/WordPress-Plugin
+Description: A WordPress plugin that embeds comix-ngn into a WordPress site.
+Version:     0.8
+Author:      Ogewan
+Author URI: https://github.com/ogewan
 License:     MIT
 License URI: https://github.com/ogewan/comix-ngn/blob/master/LICENSE.md
 */
