@@ -2,6 +2,5 @@
 *.old
 _site/
 .DS_Store
-*.jar
 *.bat
 swatches.html
