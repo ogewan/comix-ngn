@@ -1,0 +1,13 @@
+{
+  "name": "cngn_node",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "author": "ogewan",
+  "license": "ISC",
+  "dependencies": {
+    "get": "^1.4.0",
+    "install": "^0.10.4",
+    "jsdom": "^11.6.2"
+  }
+}
