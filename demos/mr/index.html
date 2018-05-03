@@ -1,739 +1,916 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0027)./ -->
-<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en" xml:lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en" xml:lang="en">
 
-<meta name="description" content="Read your favorite manga scans and scanlations online at Manga Reader. Read Manga Online, Absolutely Free and Updated Daily">
-<meta name="keywords" content="manga,read manga,read manga online,manga online,online manga,manga reader">
-<title>Read Manga Online for Free. Online Manga Reader</title>
-<!--[if lte IE 7]>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+  <meta name="description" content="Read your favorite manga scans and scanlations online at Manga Reader. Read Manga Online, Absolutely Free and Updated Daily">
+  <meta name="keywords" content="manga,read manga,read manga online,manga online,online manga,manga reader">
+  <title>Read Manga Online for Free. Online Manga Reader</title>
+  <!--[if lte IE 7]>
         <link rel="stylesheet" type="text/css" href="/styles/ie.css">
 <![endif]-->
-<link rel="shortcut icon" href="http://s4.mangareader.net/favicon.ico">
-<link href="./index_files/1347525063_bb5523a0985aa0897f2b32eb8ba90920.css" rel="stylesheet" type="text/css">
-<style type="text/css">
-#popularlist .icon {background-image: url('http://s5.mangareader.net/combined/2619074146_0_40.jpg'); }</style>
-<style type="text/css">
+  <link rel="shortcut icon" href="http://s4.mangareader.net/favicon.ico">
+  <link href="./index_files/1347525063_bb5523a0985aa0897f2b32eb8ba90920.css" rel="stylesheet" type="text/css">
+  <style type="text/css">
+    #popularlist .icon {
+      background-image: url('http://s5.mangareader.net/combined/2619074146_0_40.jpg');
+    }
+  </style>
+  <style type="text/css">
+    #wrapper_header,
+    #wrapper_body,
+    #adfooter,
+    #wrapper_footer {
+      position: relative;
+      z-index: 99;
+    }
+  </style>
+  <!---->
+  <script>
+  document.addEventListener("DOMContentLoaded", function(event) {
+    //building the script
+    var temp = { parent: null, offset: 0, 
+      pyr: { appendmismatch: false, appendorder: 0, appendorderdir: false }, 
+      loading: { diameter: 250, lines: 16, rate: 33.333333333333336, xpos: 0.5, ypos: 0.5, back: "#FFF", color: "#373737" }, 
+      config: { dir: "assets/", pagestartnum: false, chapterstartnum: false, imgprebuffer: 5, imgpostbuffer: 5, startpage: 0, back: "#FFF" }, 
+      pages: [], chapters: [] 
+    };
+    var key = "#imgholder > a";
+    var set = 1;
+    while (set) {
+        temp.pages.push({ alt: "", hover: "", title: "", 
+        url: [PJSON[p].Content.split('"')[3]], 
+        release: 0, note: "", perm: !1, anim8: !1, absolute: false });
+      }
+  });
 
-#wrapper_header,
-#wrapper_body,
-#adfooter,
-#wrapper_footer
-{
-    position: relative;
-    z-index: 99;
-}
-</style>
-<script async="" src="./index_files/analytics.js"></script><script type="text/javascript" async="" src="./index_files/1347525063_1bfdb14cd72c57324171a1b75ddf78b7.js"></script><script type="text/javascript">
-(function() {
-var s = document.createElement('script'); s.type = 'text/javascript'; s.async = true;
-s.src = 'http://s3.mangareader.net/sup/js/1347525063_1bfdb14cd72c57324171a1b75ddf78b7.js';
-var x = document.getElementsByTagName('script')[0];
-x.parentNode.insertBefore(s, x);
-})();
-</script>
-<script type="text/javascript">
+  </script>
+  <!---->
+  <script async="" src="./index_files/analytics.js"></script>
+  <script type="text/javascript" async="" src="./index_files/1347525063_1bfdb14cd72c57324171a1b75ddf78b7.js"></script>
+  <script type="text/javascript">
+    (function () {
+      var s = document.createElement('script'); s.type = 'text/javascript'; s.async = true;
+      s.src = 'http://s3.mangareader.net/sup/js/1347525063_1bfdb14cd72c57324171a1b75ddf78b7.js';
+      var x = document.getElementsByTagName('script')[0];
+      x.parentNode.insertBefore(s, x);
+    })();
 
-(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-ga('create', 'UA-89877325-1', 'auto');
-ga('send', 'pageview');
-</script>
-<link id="_shutUp" rel="stylesheet" type="text/css" href="data:text/css;base64,LyogCiAqIHNodXR1cC5jc3MKICogd2ViIC0gcGVhbnV0IGdhbGxlcnkgPSBibGlzcwogKgogKiBieSBTdGV2ZW4gRnJhbmsgPHN0ZXZlbmZAcGFuaWMuY29tPiBhbmQgY29udHJpYnV0b3JzCiAqIDxodHRwczovL3N0ZXZlbmYuY29tL3NodXR1cGNzcy8+CiAqCiAqIFBsZWFzZSBkbyBub3QgdXNlIHNodXR1cC5jc3MgaW4gZGVyaXZhdGl2ZSB3b3JrcyAoc3VjaCBhcyBpT1MgCiAqIENvbnRlbnQgQmxvY2tlcnMgb3IgYnJvd3NlciBleHRlbnNpb25zKSB3aXRob3V0IHBlcm1pc3Npb24uCiAqIAogKiBOb3RlczoKICoKICogMS4gSWYgeW91IHdhbnQgdG8gUkUtRU5BQkxFIGNvbW1lbnRzIGZvciBhIHNwZWNpZmljIHNpdGUsIGFkZCBhbgogKiBvdmVycmlkZSBhZnRlciBpbXBvcnRpbmcgdGhpcyBmaWxlLiAgRm9yIGV4YW1wbGUsIHRvIHJlLWVuYWJsZQogKiBqdXN0IFNsYXNoZG90IGNvbW1lbnRzOgogKiAgCiAqIEBpbXBvcnQgdXJsKCJodHRwczovL3N0ZXZlbmYuY29tL3NodXR1cC9zaHV0dXAtbGF0ZXN0LmNzcyIpOwogKiAKICogI2NvbW1lbnRsaXN0aW5nIHsKICogICAgIGRpc3BsYXk6IGluaGVyaXQgIWltcG9ydGFudDsKICogfQogKgogKiBCZSBhd2FyZSB0aGF0IHNvbWUgc2l0ZXMgbWF5IGJlIGFmZmVjdGVkIGJ5IG1vcmUgdGhhbiBvbmUgcnVsZS4KICoKICogMi4gSWYgeW91J2QgbGlrZSB0byBqdXN0IGZhZGUgY29tbWVudHMgb3V0IHJhdGhlciB0aGFuIGNvbXBsZXRlbHkgCiAqIHJlbW92ZSB0aGVtIGZyb20gdGhlIHBhZ2U6CiAqIAogKiBSZXBsYWNlOgogKiAgICAgZGlzcGxheTogbm9uZSAhaW1wb3J0YW50OwogKgogKiBXaXRoIHNvbWV0aGluZyBsaWtlOgogKiAgICAgb3BhY2l0eTogMC4xOwogKgogKi8KCi8qIFlvdVR1YmUgKHN0YW5kYXJkIGFuZCBGZWF0aGVyIGludGVyZmFjZXMpICovCgojd2F0Y2gtY29tbWVudC1wYW5lbCwKI2NtLAojd2F0Y2gtY29tbWVudHMtY29yZSwKI3dhdGNoLWRpc2N1c3Npb24sCgovKiBZb3VUdWJlIChsYXRlIDIwMTMsIEcrIGludGVncmF0aW9uKSAqLwoKI2NvbW1lbnRzLXRlc3QtaWZyYW1lLAoKLyogCiAqIERpZ2cgYW5kIG90aGVyIHNpdGVzIHRoYXQgdXNlICJjb21tZW50cyIgZGl2cwogKiAoTWFrZSBhbiBleGNlcHRpb24gZm9yIDxjb2RlPiBlbGVtZW50cywgd2hvc2UgImNvbW1lbnRzIiBhcmUKICogYSBkaWZmZXJlbnQgYW5pbWFsKSAKKi8KCi5jb21tZW50czpub3QoY29kZSksCi5Db21tZW50czpub3QoY29kZSksCiNjb21tZW50czpub3QoY29kZSksCiNDb21tZW50czpub3QoY29kZSksCiNjb21tZW50c19jb250YWluZXIsCgovKiBDTk4gYW5kIG90aGVyIHNpdGVzIHRoYXQgdXNlIERpc3F1cyAqLwoKI2Rpc3F1c190aHJlYWQsCiNkc3EtY29udGVudCwKCi8qIEFpbid0IEl0IENvb2wgTmV3cyAqLwoKLmJsb2NrLXRhbGtiYWNrX3N0b3J5LAoKLyogVmVyc2lvblRyYWNrZXIgKi8KCiNwcm9kUmV2aWV3cywKCi8qIE1hY1VwZGF0ZSAqLwoKLnJldmNvbnRlbnQsCgovKiBXb3JkUHJlc3MgZGVmYXVsdCBLdWJyaWNrIHRoZW1lIGFuZCBkZXNjZW5kZW50cyAqLwoKLmNvbW1lbnRsaXN0LAoKLyogU2xhc2hkb3QgKi8KCiNjb21tZW50bGlzdGluZywKCi8qIENCQyBOZXdzICovCgojc29jaWFsY29tbWVudHMsCiNjb21tZW50d3JhcHBlciwKCi8qIEN8TmV0IE5ld3MuY29tICovCgouY29tbWVudHdyYXBwZXIsCgovKiBSZWRkaXQgKi8KCi5jb21tZW50YXJlYSwKCi8qIE9yZWdvbkxpdmUgYW5kIGdlbmVyaWMgImNvbW1lbnQiIGNsYXNzICovCgouY29tbWVudCwKCi8qIEtBVFUgKi8KCiNjb21tZW50Zm9ybSwKCi8qIFdhc2hpbmd0b24gUG9zdCBhbmQgb3RoZXIgc2l0ZXMgdGhhdCB1c2UgImNvbW1lbnRUZXh0IiBkaXZzICovCgouY29tbWVudFRleHQsCgovKiBHYW5uZXR0IG5ld3NwYXBlcnMgYW5kIG90aGVyIHNpdGVzIHRoYXQgdXNlIFBsdWNrICovCgpkaXYjcGx1Y2tjb21tZW50cywKCi8qIExhc3QuZm0gc2hvdXRib3ggKi8KCmRpdiNwYWdlIGRpdiNjb250ZW50IGgyI3Nob3V0Ym94LCBkaXYjcGFnZSBkaXYjY29udGVudCBkaXYjc2hvdXRib3hDb250YWluZXIsCgovKiBUaGUgR2xvYmUgYW5kIE1haWwgKi8KCiNsYXRlc3QtY29tbWVudHMsCgovKiBFVyAqLwoKLmNvbW1lbnRIb2xkZXIsCgovKiBVbmtub3duICovCgouY29tbWVudHMtbGlzdCwKI2Jsb2dDb21tZW50cywKI2NvbW1lbnRzX3BhbmUsCiNjb21tZW50Y29udGFpbmVyLAojY29tbWVudHNEaXYsCgovKiBCb3hlZSAqLwoKLmNvbW1lbnQtY29udGFpbmVyLCAKI2NvbW1lbnQtY29udGFpbmVyLAoKLyogTUxCICovCgojY29tbWVudF9jb250YWluZXIsCgovKiBDTk4gKi8KCiNjb21tZW50YmxvYiwKI2NubkNvbW1lbnRzLAoKLyogVGhlIFN0cmFuZ2VyICovCgojQnJvd3NlQ29tbWVudHMsCgovKiBZYWhvbyBOZXdzICovCgoubXdwcGh1LWNvbW1lbnRzLAoudWdjY210LWNvbW1lbnRzLAoKLyogQ29kaW5nIEhvcnJvciAqLwoKLmNvbW1lbnRzLWJvZHksCgovKiBzZWVuIG9uIFJldXRlcnMgKi8KCi5hcnRpY2xlQ29tbWVudHMsCgovKiBuYXRpb25hbHBvc3QuY29tIChQbHVjaykgKi8KCi5wbHVjay1jb21tLAoKLyogS0FUVSAqLwoKLnBhZ2UtY29tbWVudHMsCgovKiBEZXZpYW50QXJ0ICovCgojZ21pLUNDb21tZW50TWFzdGVyLAoKLyogU29tZSBibG9ncyAqLwoKLmNvbW1lbnRzLWNvbnRhaW5lciwKCi8qIE9wcmFoICovCgojbWVkaWFfY29tbWVudHMsCgovKiA5dG81bWFjICovCgojaWRjLWNvbnRhaW5lci1wYXJlbnQsCgovKiBMaXZlZnlyZSAqLwoKI2xpdmVmeXJlX2NvbW1lbnRfc3RyZWFtLAojbGl2ZWZ5cmUtYm9keSwKI2xpdmVmeXJlLAouZnlyZSwKCi8qIFBDIFdvcmxkICovCgojYXJ0aWNsZUNvbW1lbnRzLAoKLyogU2xhdGUgKi8KCi5qcy1Db21tZW50c0FyZWEsCgovKiBOWVRpbWVzIEJsb2dzICovCgojcmVhZGVyQ29tbWVudHMsCi5yZWFkZXJDb21tZW50cywKI2NvbW1lbnRzQ29udGFpbmVyLAouY29tbWVudHNDb250YWluZXIsCi5jb21tZW50c01vZHVsZSwKCi8qIG55dGltZXMuY29tICovCgpzcGFuLnBvc3RNZXRhSGVhZGVyQ29tbWVudENvdW50LmNvbW1lbnRDb3VudCwKYnV0dG9uLmNvbW1lbnRzLWJ1dHRvbiwKYS5jb21tZW50Q291bnRMaW5rLApwLnRoZW1lLWNvbW1lbnRzLAoKLyogQkJDIE5ld3MgKi8KCi5kbmEtY29tbWVudCwKCi8qIFpETmV0ICovCgoudmlldy02LCAKLnNwYWNlLV81LAoKLyogR2FtYXN1dHJhICovCgouYWxsX2NvbW1lbnRzLAoKLyogZHZpY2UuY29tICovCgojZGlzcGxheV9jb21tZW50cywKCi8qIGhwLmNvbSAqLwoKLmFydGljbGUtY29tbWVudHMsCgovKiB1bmlvbmxlYWRlci5jb20gKi8KCiNjb21tZW50c2NvbnRhaW5lciwKCi8qIGlmYy5jb20gKi8KCi5lY2hvLXN0cmVhbS1jb250YWluZXIsCgovKiBjcmVhdGl2ZXJldmlldy5jby51ayAqLwoKI2ZlZWRiYWNrLAoKLyogdGhlbmV4dHdlYi5jb20gKi8KCiNsZl9jb21tZW50cywKI2xmX3R3aXR0ZXJfY29tbWVudHMsCiNsZl9mYWNlYm9va19jb21tZW50cywKI2xmX2NvbW1lbnRfc3RyZWFtLAoKLyogTWFjV29ybGQgKi8KCiNjb21tZW50TGlzdCwKCi8qIGZ0LmNvbSAqLwoKI2luZmVybm8tY29tbWVudHMsCgovKiB0aWRiaXRzLmNvbSAqLwoKLmNiX2Jsb2NrLAoKLyogZGlsYmVydC5jb20gKi8KCi5DTVRfQ29tbWVudExpc3QsCgovKiBDcmFja2VkICovCiAKI2NvbW1lbnRzX3NlY3Rpb24sCgovKiBGYWNlYm9vayBmZWVkYmFjayAqLwoKLmZiLWNvbW1lbnRzLAouVUZJQ29tbWVudCwKCi8qIGJ1enpmZWVkICovCgojcmVzcG9uc2VzLAojZmFjZWJvb2tfcmVzcG9uc2VzLAojZmFjZWJvb2tfY29udmVyc2F0aW9ucywKI2ZiX2NvbW1lbnRzX3dyYXBwZXIsCiNmYl9jb21tZW50c19jb250cm9sLAojcmVzcG9uZCwKI2JhZGdlX3ZvdGluZywKCi8qIHNwaWVnZWwuZGUgKi8KCi5zcENvbW1lbnRzQm94Qm9keSwKCi8qIGF1dG8tbW90b3ItdW5kLXNwb3J0LmRlICovCgoua29tbWVudGFyZV91ZWJlcnNpY2h0LAoKLyogY29ycmllcmUuaXQgKi8KCiNib2R5X2RsdCwKI2NvbW1lbnRfYm94X2FydGljbGUsCgovKiByZXB1YmJsaWNhLml0ICovCgojdWdjLWNvbnRhaW5lciwKI2dzLXNvY2lhbC1jb21tZW50cywKLmdpZy1jb21tZW50cy1jb250YWluZXIsCgovKiBmYXoubmV0ICovCgouQXJ0aWtlbEtvbW1lbnRpZXJlbiwKCi8qIEdpYW50IEJvbWIgYXZhdGFycyAqLwoKLmNvbW1lbnQtYXZhdGFyLXdyYXAsCgovKiBobG50di5jb20gKi8KCi5mYkZlZWRiYWNrQ29udGVudCwKCi8qIG1pcnJvci5jby51ayAqLwoKLnBsdWNrLXdyYXAsCgovKiBUd2l0UGljICovCgojbWVkaWEtY29tbWVudHMsCgovKiBHdWFyZGlhbiAqLwoKI2QyLXJvb3QsCgovKiBFISBPbmxpbmUgKi8KCi50aHltZS1jb21tZW50LWxpc3QsCgovKiBTb3VuZENsb3VkICovCgouY29tbWVudHNMaXN0X19pdGVtIC5jb21tZW50SXRlbSwKLmNvbW1lbnRQb3BvdmVyLAoKLyogUGVubnkgQXJjYWRlIHJlcG9ydCAqLwoKI3ZhbmlsbGEtY29tbWVudHMsCgovKiBNb3RoZXIgTmF0dXJlIE5ldHdvcmsgKi8KCi5yZXBsaWVzLXdyYXBwZXIgPiAucmVwbGllcywKLnZpZXctY29tbWVudC1saXN0LAoKLyogTmV3IEphbG9wbmlrIChhbmQgR2F3a2VyPykgKi8KCi5qc19yZXBsaWVzLAoKLyogVFNOLmNhICovCgojdHNuWW91ckNhbGxTdG9yeSwKCi8qIEhTLmZpICovCgoja29tbWVudGl0LAoKLyogTmV3c0JsdXIgKi8KCi5OQi1mZWVkLXN0b3J5LWNvbW1lbnRzLAoKLyogUnVzc2lhIFRvZGF5ICovCi5iLWNvbW1lbnRzX3BhZ2UsCgovKiBIZWFyc3Qgc2l0ZXMgKi8KLmhkbi1jb21tZW50cywKCi8qIENveCBNZWRpYSBzaXRlcyAqLwojY21Db21tZW50cywKCi8qIGNsZXZlbGFuZC5jb20gKi8KLnJ0Yi1hcHBzLWNvbW1lbnRzLWNvbnRhaW5lciwKCi8qIGRlcnN0YW5kYXJkLmF0ICovCi5jb21tdW5pdHlDYW52YXMsCgovKiBwcmVzc2UuYXQgKi8KI2NvbW1lbnRib3gsCiNuZXdjb21tZW50Zm9ybSwKCi8qIGthLW5ld3MuZGUgKi8KI1F1aWNrUmVnQ29uLAoKLyogdGFnZXNzY2hhdS5kZSAqLwoubW9kQ29uLm1vZENvbkNvbW1lbnRzLAoKLyogdGF6LmRlICovCi5mdWxsLmNvbW11bml0eS5wYWdlLmxhc3QuZXZlbiwKCi8qIHNwaWVnZWwuZGUgKi8KLmNsZWFyZml4LmFydGljbGUtY29tbWVudHMtYm94Lm1vZHVsZS1ib3gsCgovKiBoYW5kZWxzYmxhdHQuY29tICovCi5oY2YtYXJ0aWNsZS5oY2YtY29udGVudC5oY2YtYXJ0aWNsZS10eXBlMiwKCi8qIGZyLW9ubGluZS5kZSAqLwojY29tbWVudHNSb290LAouQ29tbWVudCwKCi8qIGh1ZmZpbmd0b25wb3N0LmRlICovCiNjb252ZXJzYXRpb25zLWh1ZmZwb3N0LXdlYi1tYWluLAoKLyogdGFnZXNzcGllZ2VsLmRlKi8KI2hjZi1jb21tZW50LXdyYXBwZXIuaGNmLWNvbW1lbnRzLAojY29tbWVudElucHV0LmhjZi1jb21tZW50cy1pbnB1dCwKLmhjZi1jb21tZW50cywKCi8qIHdpd28uZGUgKi8KLmhjZi1kZXRhaWwuaGNmLWNvbW1lbnRzLWNvbnRhaW5lciwKCi8qIGFyc3RlY2huaWNhLmNvbSAqLwoKYXNpZGUuY29tbWVudHMtaG90bmVzcywKYS5jb21tZW50LWNvdW50LApkaXYuY29tbWVudHMtYmFyLAoKLyogdHJha3QudHYgKi8KCi5zdW1tYXJ5LWNvbW1lbnRzLAoKLyogS290YWt1ICovCi5wb3N0LWNvbnRlbnQgLmFubm90YXRpb24tZm9vdG5vdGUtd3JhcHBlciwKLnBvc3QtY29udGVudCAuYW5ub3RhdGVCdXR0b24sCgovKiBpbWd1ciAqLwojY29tbWVudHMtY29udGFpbmVyLAoKLyogQ3VyYmVkICovCi5wb3N0LWNvbW1lbnRzLW1vZHVsZSwKI2NvbW1lbnRzLWNvdW50LAouY29tbWVudHMtYm9keS1jb250YWluZXIsCgovKiBQb2x5Z29uICovCi5tLWhlcm9fX2NvbW1lbnQtY291bnQsCi5jb21tZW50X2NvdW50LAoKLyogU0IgTmF0aW9uICovCi5tLWNvbW1lbnQtY291bnRfX2J1YmJsZSwKLm0tc3RyZWFtX19ub2RlLWxpc3RfX2NvbW1lbnRzLAoKLyogVGhlIFZlcmdlICovCltkYXRhLXVpPWNvbW1lbnRdLAoKLyogbGVtb25kZS5mciAqLwoubGlzdGVfcmVhY3Rpb25zLAoKLyogbGVmaWdhcm8uZnIgKi8KI3JlYWdpciwKCi8qIHJ1ZTg5Lm5vdXZlbG9icy5jb20gKi8KI2NvbW1lbnRhaXJlcywKCi8qIG51bWVyYW1hLmNvbSAqLwouY29tbWVudGFpcmVzLAoKLyogaHVmZmluZ3RvbnBvc3QuZnIgKi8KI2NvbnZlcnNhdGlvbnMtaHVmZnBvc3Qtd2ViLAoKLyogQ2l2aWwgQ29tbWVudHMgKi8KI2NpdmlsLWNvbW1lbnRzLAoKLyogOWdhZyAqLwoucG9zdC1jb21tZW50LAoKLyogRW5nYWRnZXQgKENvbmZhYikgKi8KLmNvbmZhYiwKCi8qIEdhbWFzdXRyYSAqLwojZHluYW1pY2NvbW1lbnRzLAoKLyogR2FtZVNwb3QgKi8KLmNvbW1lbnRzLWJsb2NrLAoKLyogTElORSBXZWJ0b29uICovCi5jb21tZW50X2FyZWEsCgovKiBOQVZFUiBOZXdzICovCiNjYm94X21vZHVsZSwKCi8qIERBVU0gTmV3cyAqLwouY210X25ld3MsCgovKiBSYWRpby1DYW5hZGEgKi8KLnZpYWZvdXJhLAoKLyogTWVkaXVtICovCi5yZXNwb25zZXNXcmFwcGVyLAoKLyogRzEgYW5kIEdsb2JvICovCiNib3hDb21lbnRhcmlvcywKCi8qIFVPTCAqLwojY29tZW50YXJpb3MsCgovKiBGb2xoYSAqLwojYXJ0aWNsZS1jb21tZW50cywKCi8qIFZlamEgKi8KLmFicmlsLWNvbWVudGFyaW9zLXdpZGdldCwKCi8qIFZLICovCi5yZXBsaWVzX3dyYXAgPiBkaXY6Zmlyc3QtY2hpbGQsCiNwdl9jb21tZW50cy53YWxsX21vZHVsZSwKI212X2NvbW1lbnRzLndhbGxfbW9kdWxlLAoKLyogRGFpbHltb3Rpb24gKi8KLnBsX3ZpZGVvX2NvbW1lbnRfcG9zdF9hbmRfY29tbWVudHMsCgovKiAKICogbnUubmwgYW5kIG90aGVyIER1dGNoIHdlYnNpdGVzIHRoYXQgdXNlIHRoZSAncmVhY3RpZXMnIGFuZCAncmVhY3RpZUNvbnRhaW5lcicgY2xhc3MKKi8KLnJlYWN0aWVzLCAvKiBudS5ubCAqLwoucmVhY3RpZUNvbnRhaW5lciwgLyogdHdlYWtlcnMubmV0ICovCgovKiBpbnZlc3Rvci5iZyBhbmQgcG9zc2libHkgb3RoZXJzICovCgouY29tbWVudHNfYXJ0aWNsZSwKI2NvbW1lbnRzLWZyYW1lLAoKLyogaHMuZmkgKi8KI2NvbW1lbnRpbmcsCgovKiBpbHRhc2Fub21hdC5maSAqLwouaXMtY29tbWVudHMtd2lkZ2V0LAoKLyogdGFsb3Vzc2Fub21hdC5maSAqLwoueGNDb250YWluZXIsCgovKiBNYWNSdW1vcnMgbW9iaWxlIHNpdGUgY29tbWVudHMgbGluayAqLwoudGVhc2VyIC50ZWFzZXJfZm9vdGVyID4gYSwKCi8qIFVTZ2FtZXIgcGFyYWdyYXBoIGNvbW1lbnQgYnV0dG9ucyAqLwphLmJ1dHRvbi5hbm5vdGF0aW9uLWNvdW50LAoKLyogLi4ubWlzYy4uLiAqLwoKI2NvbW1lbnRsaXN0LAouZGlzY3Vzc2lvbkNvbnRhaW5lciwKLmNvbW1lbnRCb3hTdHlsZSwKLnBhZ2Vjb21tZW50LAoucGFnZWNvbW1lbnRoZWFkZXIsCi5jb21fdGV4dCwKLmNvbW1lbnR0eHQsCi5wb3N0LWNvbW1lbnQsCi5wb3N0LWNvbW1lbnRzLAoucG9zdC1jb21tZW50LWxpc3QsCiNjbXRXcmFwcGVyCgp7CglkaXNwbGF5OiBub25lICFpbXBvcnRhbnQ7Cn0KCgovKiAqKiogV2hpdGVsaXN0IHJ1bGVzICoqKiAqLwoKLyogaGlnaGxpZ2h0LmpzICovCmNvZGUgc3Bhbi5jb21tZW50LAoKLyogV2lraXBlZGlhIHJldmlzaW9uIGhpc3RvcnkgKi8KI3BhZ2VoaXN0b3J5IC5jb21tZW50LAp0YWJsZS5kaWZmIC5jb21tZW50Cgp7CglkaXNwbGF5OiBpbml0aWFsICFpbXBvcnRhbnQ7Cn0K"></head>
-<body><div id="StayFocusd-infobar" style="display: none; top: 0px;">
+  </script>
+  <script type="text/javascript">
+    (function (i, s, o, g, r, a, m) {
+    i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+      (i[r].q = i[r].q || []).push(arguments)
+    }, i[r].l = 1 * new Date(); a = s.createElement(o),
+      m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+    ga('create', 'UA-89877325-1', 'auto');
+    ga('send', 'pageview');
+
+  </script>
+  <link id="_shutUp" rel="stylesheet" type="text/css" href="data:text/css;base64,LyogCiAqIHNodXR1cC5jc3MKICogd2ViIC0gcGVhbnV0IGdhbGxlcnkgPSBibGlzcwogKgogKiBieSBTdGV2ZW4gRnJhbmsgPHN0ZXZlbmZAcGFuaWMuY29tPiBhbmQgY29udHJpYnV0b3JzCiAqIDxodHRwczovL3N0ZXZlbmYuY29tL3NodXR1cGNzcy8+CiAqCiAqIFBsZWFzZSBkbyBub3QgdXNlIHNodXR1cC5jc3MgaW4gZGVyaXZhdGl2ZSB3b3JrcyAoc3VjaCBhcyBpT1MgCiAqIENvbnRlbnQgQmxvY2tlcnMgb3IgYnJvd3NlciBleHRlbnNpb25zKSB3aXRob3V0IHBlcm1pc3Npb24uCiAqIAogKiBOb3RlczoKICoKICogMS4gSWYgeW91IHdhbnQgdG8gUkUtRU5BQkxFIGNvbW1lbnRzIGZvciBhIHNwZWNpZmljIHNpdGUsIGFkZCBhbgogKiBvdmVycmlkZSBhZnRlciBpbXBvcnRpbmcgdGhpcyBmaWxlLiAgRm9yIGV4YW1wbGUsIHRvIHJlLWVuYWJsZQogKiBqdXN0IFNsYXNoZG90IGNvbW1lbnRzOgogKiAgCiAqIEBpbXBvcnQgdXJsKCJodHRwczovL3N0ZXZlbmYuY29tL3NodXR1cC9zaHV0dXAtbGF0ZXN0LmNzcyIpOwogKiAKICogI2NvbW1lbnRsaXN0aW5nIHsKICogICAgIGRpc3BsYXk6IGluaGVyaXQgIWltcG9ydGFudDsKICogfQogKgogKiBCZSBhd2FyZSB0aGF0IHNvbWUgc2l0ZXMgbWF5IGJlIGFmZmVjdGVkIGJ5IG1vcmUgdGhhbiBvbmUgcnVsZS4KICoKICogMi4gSWYgeW91J2QgbGlrZSB0byBqdXN0IGZhZGUgY29tbWVudHMgb3V0IHJhdGhlciB0aGFuIGNvbXBsZXRlbHkgCiAqIHJlbW92ZSB0aGVtIGZyb20gdGhlIHBhZ2U6CiAqIAogKiBSZXBsYWNlOgogKiAgICAgZGlzcGxheTogbm9uZSAhaW1wb3J0YW50OwogKgogKiBXaXRoIHNvbWV0aGluZyBsaWtlOgogKiAgICAgb3BhY2l0eTogMC4xOwogKgogKi8KCi8qIFlvdVR1YmUgKHN0YW5kYXJkIGFuZCBGZWF0aGVyIGludGVyZmFjZXMpICovCgojd2F0Y2gtY29tbWVudC1wYW5lbCwKI2NtLAojd2F0Y2gtY29tbWVudHMtY29yZSwKI3dhdGNoLWRpc2N1c3Npb24sCgovKiBZb3VUdWJlIChsYXRlIDIwMTMsIEcrIGludGVncmF0aW9uKSAqLwoKI2NvbW1lbnRzLXRlc3QtaWZyYW1lLAoKLyogCiAqIERpZ2cgYW5kIG90aGVyIHNpdGVzIHRoYXQgdXNlICJjb21tZW50cyIgZGl2cwogKiAoTWFrZSBhbiBleGNlcHRpb24gZm9yIDxjb2RlPiBlbGVtZW50cywgd2hvc2UgImNvbW1lbnRzIiBhcmUKICogYSBkaWZmZXJlbnQgYW5pbWFsKSAKKi8KCi5jb21tZW50czpub3QoY29kZSksCi5Db21tZW50czpub3QoY29kZSksCiNjb21tZW50czpub3QoY29kZSksCiNDb21tZW50czpub3QoY29kZSksCiNjb21tZW50c19jb250YWluZXIsCgovKiBDTk4gYW5kIG90aGVyIHNpdGVzIHRoYXQgdXNlIERpc3F1cyAqLwoKI2Rpc3F1c190aHJlYWQsCiNkc3EtY29udGVudCwKCi8qIEFpbid0IEl0IENvb2wgTmV3cyAqLwoKLmJsb2NrLXRhbGtiYWNrX3N0b3J5LAoKLyogVmVyc2lvblRyYWNrZXIgKi8KCiNwcm9kUmV2aWV3cywKCi8qIE1hY1VwZGF0ZSAqLwoKLnJldmNvbnRlbnQsCgovKiBXb3JkUHJlc3MgZGVmYXVsdCBLdWJyaWNrIHRoZW1lIGFuZCBkZXNjZW5kZW50cyAqLwoKLmNvbW1lbnRsaXN0LAoKLyogU2xhc2hkb3QgKi8KCiNjb21tZW50bGlzdGluZywKCi8qIENCQyBOZXdzICovCgojc29jaWFsY29tbWVudHMsCiNjb21tZW50d3JhcHBlciwKCi8qIEN8TmV0IE5ld3MuY29tICovCgouY29tbWVudHdyYXBwZXIsCgovKiBSZWRkaXQgKi8KCi5jb21tZW50YXJlYSwKCi8qIE9yZWdvbkxpdmUgYW5kIGdlbmVyaWMgImNvbW1lbnQiIGNsYXNzICovCgouY29tbWVudCwKCi8qIEtBVFUgKi8KCiNjb21tZW50Zm9ybSwKCi8qIFdhc2hpbmd0b24gUG9zdCBhbmQgb3RoZXIgc2l0ZXMgdGhhdCB1c2UgImNvbW1lbnRUZXh0IiBkaXZzICovCgouY29tbWVudFRleHQsCgovKiBHYW5uZXR0IG5ld3NwYXBlcnMgYW5kIG90aGVyIHNpdGVzIHRoYXQgdXNlIFBsdWNrICovCgpkaXYjcGx1Y2tjb21tZW50cywKCi8qIExhc3QuZm0gc2hvdXRib3ggKi8KCmRpdiNwYWdlIGRpdiNjb250ZW50IGgyI3Nob3V0Ym94LCBkaXYjcGFnZSBkaXYjY29udGVudCBkaXYjc2hvdXRib3hDb250YWluZXIsCgovKiBUaGUgR2xvYmUgYW5kIE1haWwgKi8KCiNsYXRlc3QtY29tbWVudHMsCgovKiBFVyAqLwoKLmNvbW1lbnRIb2xkZXIsCgovKiBVbmtub3duICovCgouY29tbWVudHMtbGlzdCwKI2Jsb2dDb21tZW50cywKI2NvbW1lbnRzX3BhbmUsCiNjb21tZW50Y29udGFpbmVyLAojY29tbWVudHNEaXYsCgovKiBCb3hlZSAqLwoKLmNvbW1lbnQtY29udGFpbmVyLCAKI2NvbW1lbnQtY29udGFpbmVyLAoKLyogTUxCICovCgojY29tbWVudF9jb250YWluZXIsCgovKiBDTk4gKi8KCiNjb21tZW50YmxvYiwKI2NubkNvbW1lbnRzLAoKLyogVGhlIFN0cmFuZ2VyICovCgojQnJvd3NlQ29tbWVudHMsCgovKiBZYWhvbyBOZXdzICovCgoubXdwcGh1LWNvbW1lbnRzLAoudWdjY210LWNvbW1lbnRzLAoKLyogQ29kaW5nIEhvcnJvciAqLwoKLmNvbW1lbnRzLWJvZHksCgovKiBzZWVuIG9uIFJldXRlcnMgKi8KCi5hcnRpY2xlQ29tbWVudHMsCgovKiBuYXRpb25hbHBvc3QuY29tIChQbHVjaykgKi8KCi5wbHVjay1jb21tLAoKLyogS0FUVSAqLwoKLnBhZ2UtY29tbWVudHMsCgovKiBEZXZpYW50QXJ0ICovCgojZ21pLUNDb21tZW50TWFzdGVyLAoKLyogU29tZSBibG9ncyAqLwoKLmNvbW1lbnRzLWNvbnRhaW5lciwKCi8qIE9wcmFoICovCgojbWVkaWFfY29tbWVudHMsCgovKiA5dG81bWFjICovCgojaWRjLWNvbnRhaW5lci1wYXJlbnQsCgovKiBMaXZlZnlyZSAqLwoKI2xpdmVmeXJlX2NvbW1lbnRfc3RyZWFtLAojbGl2ZWZ5cmUtYm9keSwKI2xpdmVmeXJlLAouZnlyZSwKCi8qIFBDIFdvcmxkICovCgojYXJ0aWNsZUNvbW1lbnRzLAoKLyogU2xhdGUgKi8KCi5qcy1Db21tZW50c0FyZWEsCgovKiBOWVRpbWVzIEJsb2dzICovCgojcmVhZGVyQ29tbWVudHMsCi5yZWFkZXJDb21tZW50cywKI2NvbW1lbnRzQ29udGFpbmVyLAouY29tbWVudHNDb250YWluZXIsCi5jb21tZW50c01vZHVsZSwKCi8qIG55dGltZXMuY29tICovCgpzcGFuLnBvc3RNZXRhSGVhZGVyQ29tbWVudENvdW50LmNvbW1lbnRDb3VudCwKYnV0dG9uLmNvbW1lbnRzLWJ1dHRvbiwKYS5jb21tZW50Q291bnRMaW5rLApwLnRoZW1lLWNvbW1lbnRzLAoKLyogQkJDIE5ld3MgKi8KCi5kbmEtY29tbWVudCwKCi8qIFpETmV0ICovCgoudmlldy02LCAKLnNwYWNlLV81LAoKLyogR2FtYXN1dHJhICovCgouYWxsX2NvbW1lbnRzLAoKLyogZHZpY2UuY29tICovCgojZGlzcGxheV9jb21tZW50cywKCi8qIGhwLmNvbSAqLwoKLmFydGljbGUtY29tbWVudHMsCgovKiB1bmlvbmxlYWRlci5jb20gKi8KCiNjb21tZW50c2NvbnRhaW5lciwKCi8qIGlmYy5jb20gKi8KCi5lY2hvLXN0cmVhbS1jb250YWluZXIsCgovKiBjcmVhdGl2ZXJldmlldy5jby51ayAqLwoKI2ZlZWRiYWNrLAoKLyogdGhlbmV4dHdlYi5jb20gKi8KCiNsZl9jb21tZW50cywKI2xmX3R3aXR0ZXJfY29tbWVudHMsCiNsZl9mYWNlYm9va19jb21tZW50cywKI2xmX2NvbW1lbnRfc3RyZWFtLAoKLyogTWFjV29ybGQgKi8KCiNjb21tZW50TGlzdCwKCi8qIGZ0LmNvbSAqLwoKI2luZmVybm8tY29tbWVudHMsCgovKiB0aWRiaXRzLmNvbSAqLwoKLmNiX2Jsb2NrLAoKLyogZGlsYmVydC5jb20gKi8KCi5DTVRfQ29tbWVudExpc3QsCgovKiBDcmFja2VkICovCiAKI2NvbW1lbnRzX3NlY3Rpb24sCgovKiBGYWNlYm9vayBmZWVkYmFjayAqLwoKLmZiLWNvbW1lbnRzLAouVUZJQ29tbWVudCwKCi8qIGJ1enpmZWVkICovCgojcmVzcG9uc2VzLAojZmFjZWJvb2tfcmVzcG9uc2VzLAojZmFjZWJvb2tfY29udmVyc2F0aW9ucywKI2ZiX2NvbW1lbnRzX3dyYXBwZXIsCiNmYl9jb21tZW50c19jb250cm9sLAojcmVzcG9uZCwKI2JhZGdlX3ZvdGluZywKCi8qIHNwaWVnZWwuZGUgKi8KCi5zcENvbW1lbnRzQm94Qm9keSwKCi8qIGF1dG8tbW90b3ItdW5kLXNwb3J0LmRlICovCgoua29tbWVudGFyZV91ZWJlcnNpY2h0LAoKLyogY29ycmllcmUuaXQgKi8KCiNib2R5X2RsdCwKI2NvbW1lbnRfYm94X2FydGljbGUsCgovKiByZXB1YmJsaWNhLml0ICovCgojdWdjLWNvbnRhaW5lciwKI2dzLXNvY2lhbC1jb21tZW50cywKLmdpZy1jb21tZW50cy1jb250YWluZXIsCgovKiBmYXoubmV0ICovCgouQXJ0aWtlbEtvbW1lbnRpZXJlbiwKCi8qIEdpYW50IEJvbWIgYXZhdGFycyAqLwoKLmNvbW1lbnQtYXZhdGFyLXdyYXAsCgovKiBobG50di5jb20gKi8KCi5mYkZlZWRiYWNrQ29udGVudCwKCi8qIG1pcnJvci5jby51ayAqLwoKLnBsdWNrLXdyYXAsCgovKiBUd2l0UGljICovCgojbWVkaWEtY29tbWVudHMsCgovKiBHdWFyZGlhbiAqLwoKI2QyLXJvb3QsCgovKiBFISBPbmxpbmUgKi8KCi50aHltZS1jb21tZW50LWxpc3QsCgovKiBTb3VuZENsb3VkICovCgouY29tbWVudHNMaXN0X19pdGVtIC5jb21tZW50SXRlbSwKLmNvbW1lbnRQb3BvdmVyLAoKLyogUGVubnkgQXJjYWRlIHJlcG9ydCAqLwoKI3ZhbmlsbGEtY29tbWVudHMsCgovKiBNb3RoZXIgTmF0dXJlIE5ldHdvcmsgKi8KCi5yZXBsaWVzLXdyYXBwZXIgPiAucmVwbGllcywKLnZpZXctY29tbWVudC1saXN0LAoKLyogTmV3IEphbG9wbmlrIChhbmQgR2F3a2VyPykgKi8KCi5qc19yZXBsaWVzLAoKLyogVFNOLmNhICovCgojdHNuWW91ckNhbGxTdG9yeSwKCi8qIEhTLmZpICovCgoja29tbWVudGl0LAoKLyogTmV3c0JsdXIgKi8KCi5OQi1mZWVkLXN0b3J5LWNvbW1lbnRzLAoKLyogUnVzc2lhIFRvZGF5ICovCi5iLWNvbW1lbnRzX3BhZ2UsCgovKiBIZWFyc3Qgc2l0ZXMgKi8KLmhkbi1jb21tZW50cywKCi8qIENveCBNZWRpYSBzaXRlcyAqLwojY21Db21tZW50cywKCi8qIGNsZXZlbGFuZC5jb20gKi8KLnJ0Yi1hcHBzLWNvbW1lbnRzLWNvbnRhaW5lciwKCi8qIGRlcnN0YW5kYXJkLmF0ICovCi5jb21tdW5pdHlDYW52YXMsCgovKiBwcmVzc2UuYXQgKi8KI2NvbW1lbnRib3gsCiNuZXdjb21tZW50Zm9ybSwKCi8qIGthLW5ld3MuZGUgKi8KI1F1aWNrUmVnQ29uLAoKLyogdGFnZXNzY2hhdS5kZSAqLwoubW9kQ29uLm1vZENvbkNvbW1lbnRzLAoKLyogdGF6LmRlICovCi5mdWxsLmNvbW11bml0eS5wYWdlLmxhc3QuZXZlbiwKCi8qIHNwaWVnZWwuZGUgKi8KLmNsZWFyZml4LmFydGljbGUtY29tbWVudHMtYm94Lm1vZHVsZS1ib3gsCgovKiBoYW5kZWxzYmxhdHQuY29tICovCi5oY2YtYXJ0aWNsZS5oY2YtY29udGVudC5oY2YtYXJ0aWNsZS10eXBlMiwKCi8qIGZyLW9ubGluZS5kZSAqLwojY29tbWVudHNSb290LAouQ29tbWVudCwKCi8qIGh1ZmZpbmd0b25wb3N0LmRlICovCiNjb252ZXJzYXRpb25zLWh1ZmZwb3N0LXdlYi1tYWluLAoKLyogdGFnZXNzcGllZ2VsLmRlKi8KI2hjZi1jb21tZW50LXdyYXBwZXIuaGNmLWNvbW1lbnRzLAojY29tbWVudElucHV0LmhjZi1jb21tZW50cy1pbnB1dCwKLmhjZi1jb21tZW50cywKCi8qIHdpd28uZGUgKi8KLmhjZi1kZXRhaWwuaGNmLWNvbW1lbnRzLWNvbnRhaW5lciwKCi8qIGFyc3RlY2huaWNhLmNvbSAqLwoKYXNpZGUuY29tbWVudHMtaG90bmVzcywKYS5jb21tZW50LWNvdW50LApkaXYuY29tbWVudHMtYmFyLAoKLyogdHJha3QudHYgKi8KCi5zdW1tYXJ5LWNvbW1lbnRzLAoKLyogS290YWt1ICovCi5wb3N0LWNvbnRlbnQgLmFubm90YXRpb24tZm9vdG5vdGUtd3JhcHBlciwKLnBvc3QtY29udGVudCAuYW5ub3RhdGVCdXR0b24sCgovKiBpbWd1ciAqLwojY29tbWVudHMtY29udGFpbmVyLAoKLyogQ3VyYmVkICovCi5wb3N0LWNvbW1lbnRzLW1vZHVsZSwKI2NvbW1lbnRzLWNvdW50LAouY29tbWVudHMtYm9keS1jb250YWluZXIsCgovKiBQb2x5Z29uICovCi5tLWhlcm9fX2NvbW1lbnQtY291bnQsCi5jb21tZW50X2NvdW50LAoKLyogU0IgTmF0aW9uICovCi5tLWNvbW1lbnQtY291bnRfX2J1YmJsZSwKLm0tc3RyZWFtX19ub2RlLWxpc3RfX2NvbW1lbnRzLAoKLyogVGhlIFZlcmdlICovCltkYXRhLXVpPWNvbW1lbnRdLAoKLyogbGVtb25kZS5mciAqLwoubGlzdGVfcmVhY3Rpb25zLAoKLyogbGVmaWdhcm8uZnIgKi8KI3JlYWdpciwKCi8qIHJ1ZTg5Lm5vdXZlbG9icy5jb20gKi8KI2NvbW1lbnRhaXJlcywKCi8qIG51bWVyYW1hLmNvbSAqLwouY29tbWVudGFpcmVzLAoKLyogaHVmZmluZ3RvbnBvc3QuZnIgKi8KI2NvbnZlcnNhdGlvbnMtaHVmZnBvc3Qtd2ViLAoKLyogQ2l2aWwgQ29tbWVudHMgKi8KI2NpdmlsLWNvbW1lbnRzLAoKLyogOWdhZyAqLwoucG9zdC1jb21tZW50LAoKLyogRW5nYWRnZXQgKENvbmZhYikgKi8KLmNvbmZhYiwKCi8qIEdhbWFzdXRyYSAqLwojZHluYW1pY2NvbW1lbnRzLAoKLyogR2FtZVNwb3QgKi8KLmNvbW1lbnRzLWJsb2NrLAoKLyogTElORSBXZWJ0b29uICovCi5jb21tZW50X2FyZWEsCgovKiBOQVZFUiBOZXdzICovCiNjYm94X21vZHVsZSwKCi8qIERBVU0gTmV3cyAqLwouY210X25ld3MsCgovKiBSYWRpby1DYW5hZGEgKi8KLnZpYWZvdXJhLAoKLyogTWVkaXVtICovCi5yZXNwb25zZXNXcmFwcGVyLAoKLyogRzEgYW5kIEdsb2JvICovCiNib3hDb21lbnRhcmlvcywKCi8qIFVPTCAqLwojY29tZW50YXJpb3MsCgovKiBGb2xoYSAqLwojYXJ0aWNsZS1jb21tZW50cywKCi8qIFZlamEgKi8KLmFicmlsLWNvbWVudGFyaW9zLXdpZGdldCwKCi8qIFZLICovCi5yZXBsaWVzX3dyYXAgPiBkaXY6Zmlyc3QtY2hpbGQsCiNwdl9jb21tZW50cy53YWxsX21vZHVsZSwKI212X2NvbW1lbnRzLndhbGxfbW9kdWxlLAoKLyogRGFpbHltb3Rpb24gKi8KLnBsX3ZpZGVvX2NvbW1lbnRfcG9zdF9hbmRfY29tbWVudHMsCgovKiAKICogbnUubmwgYW5kIG90aGVyIER1dGNoIHdlYnNpdGVzIHRoYXQgdXNlIHRoZSAncmVhY3RpZXMnIGFuZCAncmVhY3RpZUNvbnRhaW5lcicgY2xhc3MKKi8KLnJlYWN0aWVzLCAvKiBudS5ubCAqLwoucmVhY3RpZUNvbnRhaW5lciwgLyogdHdlYWtlcnMubmV0ICovCgovKiBpbnZlc3Rvci5iZyBhbmQgcG9zc2libHkgb3RoZXJzICovCgouY29tbWVudHNfYXJ0aWNsZSwKI2NvbW1lbnRzLWZyYW1lLAoKLyogaHMuZmkgKi8KI2NvbW1lbnRpbmcsCgovKiBpbHRhc2Fub21hdC5maSAqLwouaXMtY29tbWVudHMtd2lkZ2V0LAoKLyogdGFsb3Vzc2Fub21hdC5maSAqLwoueGNDb250YWluZXIsCgovKiBNYWNSdW1vcnMgbW9iaWxlIHNpdGUgY29tbWVudHMgbGluayAqLwoudGVhc2VyIC50ZWFzZXJfZm9vdGVyID4gYSwKCi8qIFVTZ2FtZXIgcGFyYWdyYXBoIGNvbW1lbnQgYnV0dG9ucyAqLwphLmJ1dHRvbi5hbm5vdGF0aW9uLWNvdW50LAoKLyogLi4ubWlzYy4uLiAqLwoKI2NvbW1lbnRsaXN0LAouZGlzY3Vzc2lvbkNvbnRhaW5lciwKLmNvbW1lbnRCb3hTdHlsZSwKLnBhZ2Vjb21tZW50LAoucGFnZWNvbW1lbnRoZWFkZXIsCi5jb21fdGV4dCwKLmNvbW1lbnR0eHQsCi5wb3N0LWNvbW1lbnQsCi5wb3N0LWNvbW1lbnRzLAoucG9zdC1jb21tZW50LWxpc3QsCiNjbXRXcmFwcGVyCgp7CglkaXNwbGF5OiBub25lICFpbXBvcnRhbnQ7Cn0KCgovKiAqKiogV2hpdGVsaXN0IHJ1bGVzICoqKiAqLwoKLyogaGlnaGxpZ2h0LmpzICovCmNvZGUgc3Bhbi5jb21tZW50LAoKLyogV2lraXBlZGlhIHJldmlzaW9uIGhpc3RvcnkgKi8KI3BhZ2VoaXN0b3J5IC5jb21tZW50LAp0YWJsZS5kaWZmIC5jb21tZW50Cgp7CglkaXNwbGF5OiBpbml0aWFsICFpbXBvcnRhbnQ7Cn0K">
+</head>
+
+<body>
+  <div id="StayFocusd-infobar" style="display: none; top: 0px;">
     <img src="chrome-extension://laankejkbhbdhmipfmgcngdelahlfoji/common/img/eye_19x19_red.png">
     <span id="StayFocusd-infobar-msg"></span>
     <span id="StayFocusd-infobar-links">
         <a id="StayFocusd-infobar-never-show">hide forever</a>&nbsp;&nbsp;|&nbsp;&nbsp;
         <a id="StayFocusd-infobar-hide">hide once</a>
     </span>
-</div>
-<div id="container">
-<div id="wrapper_header">
-<div class="top">
-<div class="logo"><a href="./"></a>
-<div id="logoimg"></div>
-</div>
-<div class="mobileMenuTrigger"></div>
-<div id="top_navigation">
-<ul>
-<li class="topnav-first topnav-current"><a href="./"><span>Home</span></a></li>
-<li><a href="./search"><span>Advanced Search</span></a></li>
-<li><a href="./popular"><span>Popular Manga</span></a></li>
-<li><a href="./alphabetical"><span>Manga List</span></a></li>
-<li class="topnav-last"><a href="./latest"><span>Latest Releases</span></a></li>
-</ul>
-</div>
-<div id="sec_navigation">
-<ul>
-<li class="secnav-first">
-<div id="fpage"><iframe src="./index_files/like.html" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:450px; height:21px;" allowtransparency="true"></iframe></div>
-</li>
-<li class="aftersearch"><input type="text" id="searchbox" autocomplete="off" class="ac_input"></li>
-<li class="secnav"><a rel="nofollow" href="./random">Surprise Me!</a></li>
-<li class="secnav"><a href="http://www.animefreak.tv/" target="_blank" title="Anime">Anime</a></li>
-<li class="secnav-last"><a href="mailto:info@mangareader.net" title="Contact">Contact Us</a></li>
-</ul>
-</div>
-</div>
-<div class="clear"></div>
-</div>
-<div id="wrapper_body">
-<div id="bodyust">
-<div id="onlinemanga">
-<h1>Read Manga Online</h1>
-<p><strong>Manga</strong> is the Japanese comics with a <em>unique story</em> line and style. In Japan people of all ages <strong>read manga</strong>, <strong>manga</strong> does not target younger audiences like american comics. The genre includes a broad range of subjects. Here you will find 1000s of free <strong>english translated manga</strong> scans to <em>read online</em>. Discover the world of otaku!</p>
-<div id="poolbox">
-<div id="surveyimg" onclick="window.open(&#39;https://spreadsheets.google.com/viewform?formkey=dG5YaFdhV2dkSFFpRUljV3FVS3FWR2c6MQ&#39;, &#39;_blank&#39;); return false;"></div>
-<div id="surveymsg"><strong>Are you happy with new mangareader.net ?</strong><br>
-<a class="c1" href="https://spreadsheets.google.com/viewform?formkey=dG5YaFdhV2dkSFFpRUljV3FVS3FWR2c6MQ" target="_blank">Join Our Poll</a></div>
-</div>
-</div>
-<div id="latesthot">
-<h2>Popular Manga Updates</h2>
-<div class="latesthotimages">
-<div class="imageinside"><a href="./fairy-tail/529"><img src="./index_files/fairy-tail-m0.jpg" width="122" height="191" alt="Fairy Tail 529"></a></div>
-<h3><a href="./fairy-tail/529">Fairy Tail 529</a></h3>
-</div>
-<div class="latesthotimages">
-<div class="imageinside"><a href="./gintama"><img src="./index_files/gintama-m0.jpg" width="122" height="184" alt="Gintama 629"></a></div>
-<h3><a href="./gintama">Gintama 629</a></h3>
-</div>
-<div class="latesthotimages">
-<div class="imageinside"><a href="./hayate-the-combat-butler/565"><img src="./index_files/hayate-the-combat-butler-m0.jpg" width="122" height="192" alt="Hayate the Combat Butler 565"></a></div>
-<h3><a href="./hayate-the-combat-butler/565">Hayate the Combat Butler 565</a></h3>
-</div>
-<div class="latesthotimages">
-<div class="imageinside"><a href="./shingeki-no-kyojin/92"><img src="./index_files/shingeki-no-kyojin-m0.jpg" width="122" height="183" alt="Shingeki no Kyojin 92"></a></div>
-<h3><a href="./shingeki-no-kyojin/92">Shingeki no Kyojin 92</a></h3>
-</div>
-</div>
-<div class="clear"></div>
-<div class="c4"><iframe width="728" height="90" scrolling="no" frameborder="0" id="admaintop" src="./index_files/hmtop4.html" class="c2" name="admaintop" style="display: none !important;"></iframe> <a href="http://www.animemobile.com/MangaApp/index.html" target="_blank" class="c3"></a></div>
-</div>
-<div id="bodyalt">
-<div id="latestchapters">
-<h2>Latest Manga Updates</h2>
-<h3>Today's Manga</h3>
-<table class="updates"><tbody><tr class="c6">
-<td class="manga_open"></td>
-<td><a class="chapter" href="./kurogane-no-linebarrel"><strong>Kurogane No LineBarrel</strong></a> <br>
-  <a class="chaptersrec" href="./kurogane-no-linebarrel/116">Kurogane No LineBarrel 116</a><br>
- </td>
-<td class="c5">Today</td>
-</tr>
-<tr class="c6">
-<td class="manga_open"></td>
-<td><a class="chapter" href="./secret"><strong>Secret</strong></a> <br>
-  <a class="chaptersrec" href="./secret/40">Secret 40</a><br>
- </td>
-<td class="c5">Today</td>
-</tr>
-<tr class="c6">
-<td class="manga_open"></td>
-<td><a class="chapter" href="./dr-stone"><strong>Dr. Stone</strong></a> <br>
-  <a class="chaptersrec" href="./dr-stone/6">Dr. Stone 6</a><br>
- </td>
-<td class="c5">Today</td>
-</tr>
-<tr class="c6">
-<td class="manga_open"></td>
-<td><a class="chapter" href="./dice-the-cube-that-changes-everything"><strong>DICE: The Cube that Changes Everything</strong></a> <br>
-  <a class="chaptersrec" href="./dice-the-cube-that-changes-everything/185">DICE: The Cube that Changes Everything 185</a><br>
- <a class="chaptersrec" href="./dice-the-cube-that-changes-everything/184">DICE: The Cube that Changes Everything 184</a><br>
- <a class="chaptersrec" href="./dice-the-cube-that-changes-everything/183">DICE: The Cube that Changes Everything 183</a><br>
- </td>
-<td class="c5">Today</td>
-</tr>
-<tr class="c6">
-<td class="manga_open"></td>
-<td><a class="chapter" href="./to-you-the-immortal"><strong>To You, The Immortal</strong></a> <br>
-  <a class="chaptersrec" href="./to-you-the-immortal/19">To You, The Immortal 19</a><br>
- <a class="chaptersrec" href="./to-you-the-immortal/18">To You, The Immortal 18</a><br>
- <a class="chaptersrec" href="./to-you-the-immortal/17">To You, The Immortal 17</a><br>
- </td>
-<td class="c5">Today</td>
-</tr>
-<tr class="c6">
-<td class="manga_open"></td>
-<td><a class="chapter" href="./accel-world"><strong>Accel World</strong></a> <br>
-  <a class="chaptersrec" href="./accel-world/40">Accel World 40</a><br>
- <a class="chaptersrec" href="./accel-world/39">Accel World 39</a><br>
- <a class="chaptersrec" href="./accel-world/38">Accel World 38</a><br>
- </td>
-<td class="c5">Today</td>
-</tr>
-</tbody></table>
-<h3>Yesterday's Manga</h3>
-<table class="updates"><tbody><tr class="c6">
-<td class="manga_open"></td>
-<td><a class="chapter" href="./diamond-no-ace-act-ii"><strong>Diamond no Ace Act II</strong></a> <br>
-  <a class="chaptersrec" href="./diamond-no-ace-act-ii/73">Diamond no Ace Act II 73</a><br>
- <a class="chaptersrec" href="./diamond-no-ace-act-ii/72">Diamond no Ace Act II 72</a><br>
- </td>
-<td class="c7">Yesterday</td>
-</tr>
-<tr class="c6">
-<td class="manga_open"></td>
-<td><a class="chapter" href="./jitsu-wa-watashi-wa"><strong>Jitsu wa Watashi wa</strong></a> <br>
-  <a class="chaptersrec" href="./jitsu-wa-watashi-wa/164">Jitsu wa Watashi wa 164</a><br>
- </td>
-<td class="c7">Yesterday</td>
-</tr>
-<tr class="c6">
-<td class="manga_open"></td>
-<td><a class="chapter" href="./combat-continent-ii"><strong>Combat Continent II</strong></a> <br>
-  <a class="chaptersrec" href="./combat-continent-ii/98">Combat Continent II 98</a><br>
- </td>
-<td class="c7">Yesterday</td>
-</tr>
-<tr class="c6">
-<td class="manga_open"></td>
-<td><a class="chapter" href="./spirit-blade-mountain"><strong>Spirit Blade Mountain</strong></a> <br>
-  <a class="chaptersrec" href="./spirit-blade-mountain/158">Spirit Blade Mountain 158</a><br>
- <a class="chaptersrec" href="./spirit-blade-mountain/157">Spirit Blade Mountain 157</a><br>
- </td>
-<td class="c7">Yesterday</td>
-</tr>
-<tr class="c6">
-<td class="manga_open"></td>
-<td><a class="chapter" href="./kono-oto-tomare"><strong>Kono Oto Tomare!</strong></a> <br>
-  <a class="chaptersrec" href="./kono-oto-tomare/54">Kono Oto Tomare! 54</a><br>
- </td>
-<td class="c7">Yesterday</td>
-</tr>
-<tr class="c6">
-<td class="manga_open"></td>
-<td><a class="chapter" href="./shingeki-no-kyojin"><strong>Shingeki no Kyojin</strong></a> <div class="hot"></div>
-<br>
-  <a class="chaptersrec" href="./shingeki-no-kyojin/92">Shingeki no Kyojin 92</a><br>
- </td>
-<td class="c7">Yesterday</td>
-</tr>
-<tr class="c6">
-<td class="manga_open"></td>
-<td><a class="chapter" href="./tohai"><strong>Tohai</strong></a> <br>
-  <a class="chaptersrec" href="./tohai/24">Tohai 24</a><br>
- </td>
-<td class="c7">Yesterday</td>
-</tr>
-<tr class="c6">
-<td class="manga_close"></td>
-<td><a class="chapter" href="./azumi"><strong>Azumi</strong></a> <br>
-  <a class="chaptersrec" href="./azumi/151">Azumi 151</a><br>
- </td>
-<td class="c7">Yesterday</td>
-</tr>
-<tr class="c6">
-<td class="manga_open"></td>
-<td><a class="chapter" href="./golden-kamui"><strong>Golden Kamui</strong></a> <br>
-  <a class="chaptersrec" href="./golden-kamui/90">Golden Kamui 90</a><br>
- </td>
-<td class="c7">Yesterday</td>
-</tr>
-<tr class="c6">
-<td class="manga_open"></td>
-<td><a class="chapter" href="./black-haze"><strong>Black Haze</strong></a> <br>
-  <a class="chaptersrec" href="./black-haze/205">Black Haze 205</a><br>
- </td>
-<td class="c7">Yesterday</td>
-</tr>
-<tr class="c6">
-<td class="manga_open"></td>
-<td><a class="chapter" href="./fukigen-na-mononokean"><strong>Fukigen na Mononokean</strong></a> <br>
-  <a class="chaptersrec" href="./fukigen-na-mononokean/43">Fukigen na Mononokean 43</a><br>
- </td>
-<td class="c7">Yesterday</td>
-</tr>
-<tr class="c6">
-<td class="manga_open"></td>
-<td><a class="chapter" href="./hatsukoi-zombie"><strong>Hatsukoi Zombie</strong></a> <br>
-  <a class="chaptersrec" href="./hatsukoi-zombie/72">Hatsukoi Zombie 72</a><br>
- </td>
-<td class="c7">Yesterday</td>
-</tr>
-<tr class="c6">
-<td class="manga_open"></td>
-<td><a class="chapter" href="./koibana-koiseyo-hanabi"><strong>Koibana! Koiseyo Hanabi</strong></a> <br>
-  <a class="chaptersrec" href="./koibana-koiseyo-hanabi/61">Koibana! Koiseyo Hanabi 61</a><br>
- <a class="chaptersrec" href="./koibana-koiseyo-hanabi/60">Koibana! Koiseyo Hanabi 60</a><br>
- </td>
-<td class="c7">Yesterday</td>
-</tr>
-<tr class="c6">
-<td class="manga_open"></td>
-<td><a class="chapter" href="./hayate-the-combat-butler"><strong>Hayate the Combat Butler</strong></a> <div class="hot"></div>
-<br>
-  <a class="chaptersrec" href="./hayate-the-combat-butler/565">Hayate the Combat Butler 565</a><br>
- </td>
-<td class="c7">Yesterday</td>
-</tr>
-<tr class="c6">
-<td class="manga_open"></td>
-<td><a class="chapter" href="./combat-continent"><strong>Combat Continent</strong></a> <br>
-  <a class="chaptersrec" href="./combat-continent/176">Combat Continent 176</a><br>
- <a class="chaptersrec" href="./combat-continent/175">Combat Continent 175</a><br>
- </td>
-<td class="c7">Yesterday</td>
-</tr>
-<tr class="c6">
-<td class="manga_open"></td>
-<td><a class="chapter" href="./tales-of-the-unusual"><strong>Tales of the Unusual</strong></a> <br>
-  <a class="chaptersrec" href="./tales-of-the-unusual/163">Tales of the Unusual 163</a><br>
- </td>
-<td class="c7">Yesterday</td>
-</tr>
-<tr class="c6">
-<td class="manga_open"></td>
-<td><a class="chapter" href="./star-martial-god-technique"><strong>Star Martial God Technique</strong></a> <br>
-  <a class="chaptersrec" href="./star-martial-god-technique/45">Star Martial God Technique 45</a><br>
- </td>
-<td class="c7">Yesterday</td>
-</tr>
-<tr class="c6">
-<td class="manga_open"></td>
-<td><a class="chapter" href="./shishunki-bitter-change"><strong>Shishunki Bitter Change</strong></a> <br>
-  <a class="chaptersrec" href="./shishunki-bitter-change/47">Shishunki Bitter Change 47</a><br>
- </td>
-<td class="c7">Yesterday</td>
-</tr>
-<tr class="c6">
-<td class="manga_open"></td>
-<td><a class="chapter" href="./saike-mata-shite-mo"><strong>Saike Mata Shite mo</strong></a> <br>
-  <a class="chaptersrec" href="./saike-mata-shite-mo/47">Saike Mata Shite mo 47</a><br>
- </td>
-<td class="c7">Yesterday</td>
-</tr>
-<tr class="c6">
-<td class="manga_open"></td>
-<td><a class="chapter" href="./winter-woods"><strong>Winter Woods</strong></a> <br>
-  <a class="chaptersrec" href="./winter-woods/119">Winter Woods 119</a><br>
- </td>
-<td class="c7">Yesterday</td>
-</tr>
-</tbody></table>
-<h3>Older Manga</h3>
-<table class="updates"><tbody><tr class="c6">
-<td class="manga_open"></td>
-<td><a class="chapter" href="./moyashimon"><strong>Moyashimon</strong></a> <br>
-  <a class="chaptersrec" href="./moyashimon/27">Moyashimon 27</a><br>
- <a class="chaptersrec" href="./moyashimon/26">Moyashimon 26</a><br>
- <a class="chaptersrec" href="./moyashimon/25">Moyashimon 25</a><br>
- </td>
-<td class="c7">05 Apr 2017</td>
-</tr>
-<tr class="c6">
-<td class="manga_open"></td>
-<td><a class="chapter" href="./saiki-kusuo-no-psi-nan"><strong>Saiki Kusuo no Psi Nan</strong></a> <br>
-  <a class="chaptersrec" href="./saiki-kusuo-no-psi-nan/96">Saiki Kusuo no Psi Nan 96</a><br>
- <a class="chaptersrec" href="./saiki-kusuo-no-psi-nan/95">Saiki Kusuo no Psi Nan 95</a><br>
- </td>
-<td class="c7">05 Apr 2017</td>
-</tr>
-<tr class="c6">
-<td class="manga_open"></td>
-<td><a class="chapter" href="./kingdom"><strong>Kingdom</strong></a> <br>
-  <a class="chaptersrec" href="./kingdom/512">Kingdom 512</a><br>
- <a class="chaptersrec" href="./kingdom/511">Kingdom 511</a><br>
- </td>
-<td class="c7">04 Apr 2017</td>
-</tr>
-<tr class="c6">
-<td class="manga_open"></td>
-<td><a class="chapter" href="./dagashi-kashi"><strong>Dagashi Kashi</strong></a> <br>
-  <a class="chaptersrec" href="./dagashi-kashi/49">Dagashi Kashi 49</a><br>
- <a class="chaptersrec" href="./dagashi-kashi/48">Dagashi Kashi 48</a><br>
- <a class="chaptersrec" href="./dagashi-kashi/47">Dagashi Kashi 47</a><br>
- </td>
-<td class="c7">04 Apr 2017</td>
-</tr>
-<tr class="c6">
-<td class="manga_open"></td>
-<td><a class="chapter" href="./hare-kon"><strong>Hare Kon.</strong></a> <br>
-  <a class="chaptersrec" href="./hare-kon/79">Hare Kon. 79</a><br>
- <a class="chaptersrec" href="./hare-kon/78">Hare Kon. 78</a><br>
- <a class="chaptersrec" href="./hare-kon/77">Hare Kon. 77</a><br>
- </td>
-<td class="c7">04 Apr 2017</td>
-</tr>
-<tr class="c6">
-<td class="manga_open"></td>
-<td><a class="chapter" href="./battle-through-the-heavens"><strong>Battle Through The Heavens</strong></a> <br>
-  <a class="chaptersrec" href="./battle-through-the-heavens/190">Battle Through The Heavens 190</a><br>
- </td>
-<td class="c7">04 Apr 2017</td>
-</tr>
-<tr class="c6">
-<td class="manga_open"></td>
-<td><a class="chapter" href="./autophagy-regulation"><strong>Autophagy Regulation</strong></a> <br>
-  <a class="chaptersrec" href="./autophagy-regulation/117">Autophagy Regulation 117</a><br>
- <a class="chaptersrec" href="./autophagy-regulation/116">Autophagy Regulation 116</a><br>
- <a class="chaptersrec" href="./autophagy-regulation/115">Autophagy Regulation 115</a><br>
- </td>
-<td class="c7">04 Apr 2017</td>
-</tr>
-<tr class="c6">
-<td class="manga_open"></td>
-<td><a class="chapter" href="./tal"><strong>TAL</strong></a> <br>
-  <a class="chaptersrec" href="./tal/192">TAL 192</a><br>
- <a class="chaptersrec" href="./tal/191">TAL 191</a><br>
- </td>
-<td class="c7">04 Apr 2017</td>
-</tr>
-<tr class="c6">
-<td class="manga_open"></td>
-<td><a class="chapter" href="./its-my-life"><strong>It's My Life</strong></a> <br>
-  <a class="chaptersrec" href="./its-my-life/16">It's My Life 16</a><br>
- </td>
-<td class="c7">04 Apr 2017</td>
-</tr>
-<tr class="c6">
-<td class="manga_open"></td>
-<td><a class="chapter" href="./ayashiya"><strong>Ayashiya</strong></a> <br>
-  <a class="chaptersrec" href="./ayashiya/7">Ayashiya 7</a><br>
- </td>
-<td class="c7">04 Apr 2017</td>
-</tr>
-<tr class="c6">
-<td class="manga_open"></td>
-<td><a class="chapter" href="./amatsuki"><strong>Amatsuki</strong></a> <br>
-  <a class="chaptersrec" href="./amatsuki/108">Amatsuki 108</a><br>
- <a class="chaptersrec" href="./amatsuki/107">Amatsuki 107</a><br>
- </td>
-<td class="c7">04 Apr 2017</td>
-</tr>
-<tr class="c6">
-<td class="manga_open"></td>
-<td><a class="chapter" href="./aku-no-kyouten"><strong>Aku no Kyouten</strong></a> <br>
-  <a class="chaptersrec" href="./aku-no-kyouten/9">Aku no Kyouten 9</a><br>
- </td>
-<td class="c7">04 Apr 2017</td>
-</tr>
-<tr class="c6">
-<td class="manga_open"></td>
-<td><a class="chapter" href="./gunka-no-baltzar"><strong>Gunka no Baltzar</strong></a> <br>
-  <a class="chaptersrec" href="./gunka-no-baltzar/43">Gunka no Baltzar 43</a><br>
- </td>
-<td class="c7">04 Apr 2017</td>
-</tr>
-<tr class="c6">
-<td class="manga_open"></td>
-<td><a class="chapter" href="./hajime-no-ippo"><strong>Hajime no Ippo</strong></a> <br>
-  <a class="chaptersrec" href="./hajime-no-ippo/1175">Hajime no Ippo 1175</a><br>
- <a class="chaptersrec" href="./hajime-no-ippo/1174">Hajime no Ippo 1174</a><br>
- <a class="chaptersrec" href="./hajime-no-ippo/1173">Hajime no Ippo 1173</a><br>
- </td>
-<td class="c7">04 Apr 2017</td>
-</tr>
-<tr class="c6">
-<td class="manga_close"></td>
-<td><a class="chapter" href="./dont-cry-bureum"><strong>Don't Cry Bureum</strong></a> <br>
-  <a class="chaptersrec" href="./dont-cry-bureum/23">Don't Cry Bureum 23</a><br>
- </td>
-<td class="c7">04 Apr 2017</td>
-</tr>
-<tr class="c6">
-<td class="manga_open"></td>
-<td><a class="chapter" href="./happy-if-you-died"><strong>Happy if You Died</strong></a> <br>
-  <a class="chaptersrec" href="./happy-if-you-died/18">Happy if You Died 18</a><br>
- </td>
-<td class="c7">04 Apr 2017</td>
-</tr>
-<tr class="c6">
-<td class="manga_open"></td>
-<td><a class="chapter" href="./kamisama-dolls"><strong>Kamisama Dolls</strong></a> <br>
-  <a class="chaptersrec" href="./kamisama-dolls/55">Kamisama Dolls 55</a><br>
- </td>
-<td class="c7">04 Apr 2017</td>
-</tr>
-<tr class="c6">
-<td class="manga_close"></td>
-<td><a class="chapter" href="./yongbi"><strong>Yongbi</strong></a> <br>
-  <a class="chaptersrec" href="./yongbi/130">Yongbi 130</a><br>
- </td>
-<td class="c7">04 Apr 2017</td>
-</tr>
-<tr class="c6">
-<td class="manga_close"></td>
-<td><a class="chapter" href="./shana-oh-yoshitsune"><strong>Shana oh Yoshitsune</strong></a> <br>
-  <a class="chaptersrec" href="./shana-oh-yoshitsune/66">Shana oh Yoshitsune 66</a><br>
- </td>
-<td class="c7">04 Apr 2017</td>
-</tr>
-<tr class="c6">
-<td class="manga_open"></td>
-<td><a class="chapter" href="./yamikin-ushijima-kun"><strong>Yamikin Ushijima-kun</strong></a> <br>
-  <a class="chaptersrec" href="./yamikin-ushijima-kun/51">Yamikin Ushijima-kun 51</a><br>
- <a class="chaptersrec" href="./yamikin-ushijima-kun/50">Yamikin Ushijima-kun 50</a><br>
- </td>
-<td class="c7">04 Apr 2017</td>
-</tr>
-<tr class="c6">
-<td class="manga_open"></td>
-<td><a class="chapter" href="./imori-201"><strong>Imori 201</strong></a> <br>
-  <a class="chaptersrec" href="./imori-201/30">Imori 201 30</a><br>
- </td>
-<td class="c7">03 Apr 2017</td>
-</tr>
-<tr class="c6">
-<td class="manga_open"></td>
-<td><a class="chapter" href="./niflheim"><strong>Niflheim</strong></a> <br>
-  <a class="chaptersrec" href="./niflheim/71">Niflheim 71</a><br>
- <a class="chaptersrec" href="./niflheim/70">Niflheim 70</a><br>
- <a class="chaptersrec" href="./niflheim/69">Niflheim 69</a><br>
- </td>
-<td class="c7">03 Apr 2017</td>
-</tr>
-<tr class="c6">
-<td class="manga_open"></td>
-<td><a class="chapter" href="./im-a-loser"><strong>I'm a Loser</strong></a> <br>
-  <a class="chaptersrec" href="./im-a-loser/56">I'm a Loser 56</a><br>
- <a class="chaptersrec" href="./im-a-loser/55">I'm a Loser 55</a><br>
- <a class="chaptersrec" href="./im-a-loser/54">I'm a Loser 54</a><br>
- </td>
-<td class="c7">03 Apr 2017</td>
-</tr>
-<tr class="c6">
-<td class="manga_open"></td>
-<td><a class="chapter" href="./the-legendary-moonlight-sculptor"><strong>The Legendary Moonlight Sculptor</strong></a> <br>
-  <a class="chaptersrec" href="./the-legendary-moonlight-sculptor/90">The Legendary Moonlight Sculptor 90</a><br>
- <a class="chaptersrec" href="./the-legendary-moonlight-sculptor/89">The Legendary Moonlight Sculptor 89</a><br>
- <a class="chaptersrec" href="./the-legendary-moonlight-sculptor/88">The Legendary Moonlight Sculptor 88</a><br>
- </td>
-<td class="c7">03 Apr 2017</td>
-</tr>
-<tr class="c6">
-<td class="manga_open"></td>
-<td><a class="chapter" href="./horimiya"><strong>Horimiya</strong></a> <br>
-  <a class="chaptersrec" href="./horimiya/76">Horimiya 76</a><br>
- </td>
-<td class="c7">03 Apr 2017</td>
-</tr>
-<tr class="c6">
-<td class="manga_open"></td>
-<td><a class="chapter" href="./white-epic"><strong>White Epic</strong></a> <br>
-  <a class="chaptersrec" href="./white-epic/69">White Epic 69</a><br>
- <a class="chaptersrec" href="./white-epic/68">White Epic 68</a><br>
- <a class="chaptersrec" href="./white-epic/67">White Epic 67</a><br>
- </td>
-<td class="c7">03 Apr 2017</td>
-</tr>
-<tr class="c6">
-<td class="manga_open"></td>
-<td><a class="chapter" href="./wind-breaker"><strong>Wind Breaker</strong></a> <br>
-  <a class="chaptersrec" href="./wind-breaker/119">Wind Breaker 119</a><br>
- <a class="chaptersrec" href="./wind-breaker/118">Wind Breaker 118</a><br>
- <a class="chaptersrec" href="./wind-breaker/117">Wind Breaker 117</a><br>
- </td>
-<td class="c7">03 Apr 2017</td>
-</tr>
-<tr class="c6">
-<td class="manga_open"></td>
-<td><a class="chapter" href="./heavenly-match"><strong>Heavenly Match</strong></a> <br>
-  <a class="chaptersrec" href="./heavenly-match/43">Heavenly Match 43</a><br>
- <a class="chaptersrec" href="./heavenly-match/42">Heavenly Match 42</a><br>
- </td>
-<td class="c7">03 Apr 2017</td>
-</tr>
-<tr class="c6">
-<td class="manga_open"></td>
-<td><a class="chapter" href="./hyougemono"><strong>Hyougemono</strong></a> <br>
-  <a class="chaptersrec" href="./hyougemono/66">Hyougemono 66</a><br>
- </td>
-<td class="c7">03 Apr 2017</td>
-</tr>
-<tr class="c6">
-<td class="manga_open"></td>
-<td><a class="chapter" href="./terra-formars"><strong>Terra Formars</strong></a> <br>
-  <a class="chaptersrec" href="./terra-formars/207">Terra Formars 207</a><br>
- </td>
-<td class="c7">03 Apr 2017</td>
-</tr>
-</tbody></table>
-<span class="c8"><a href="./latest">Click for Older Manga Updates..</a></span></div>
-<div id="popularmangas">
-<div id="tfollowme"><iframe allowtransparency="true" frameborder="0" scrolling="no" src="./index_files/follow_button.html" style="width:300px; height:20px;"></iframe></div>
-<div class="clear"></div>
-<div class="c9"><iframe width="300" height="250" scrolling="no" frameborder="0" id="adbottomright2" src="./index_files/rtop4.html" name="adbottomright2" style="display: none !important;"></iframe></div>
-<div id="popularcaption">
-<h2>Popular Manga</h2>
-</div>
-<div id="popularlist">
-<ol><li><div style="background-position: 0 0px;" class="icon"><div class="pop1"></div>
-</div><div class="manga"><b><a href="./naruto" class="popularitemcaption">Naruto</a></b><br>
-<span><a href="./naruto/700" class="chapters">Naruto 700</a></span></div>
-</li>
-<li><div style="background-position: 0 -50px;" class="icon"><div class="pop1"></div>
-</div><div class="manga"><b><a href="./naruto-gaiden-the-seventh-hokage" class="popularitemcaption">Naruto Gaiden: The Seventh Hokage</a></b><br>
-<span><a href="./naruto-gaiden-the-seventh-hokage/10" class="chapters">Naruto Gaiden: The Seventh Hokage 10</a></span></div>
-</li>
-<li><div style="background-position: 0 -100px;" class="icon"><div class="pop1"></div>
-</div><div class="manga"><b><a href="./bleach" class="popularitemcaption">Bleach</a></b><br>
-<span><a href="./bleach/686" class="chapters">Bleach 686</a></span></div>
-</li>
-<li><div style="background-position: 0 -150px;" class="icon"><div class="pop1"></div>
-</div><div class="manga"><b><a href="./fairy-tail" class="popularitemcaption">Fairy Tail</a></b><br>
-<span><a href="./fairy-tail/529" class="chapters">Fairy Tail 529</a></span></div>
-</li>
-<li><div style="background-position: 0 -200px;" class="icon"><div class="pop1"></div>
-</div><div class="manga"><b><a href="./one-piece" class="popularitemcaption">One Piece</a></b><br>
-<span><a href="./one-piece/861" class="chapters">One Piece 861</a></span></div>
-</li>
-<li><div style="background-position: 0 -250px;" class="icon"><div class="pop1"></div>
-</div><div class="manga"><b><a href="./shingeki-no-kyojin" class="popularitemcaption">Shingeki no Kyojin</a></b><br>
-<span><a href="./shingeki-no-kyojin/92" class="chapters">Shingeki no Kyojin 92</a></span></div>
-</li>
-<li><div style="background-position: 0 -300px;" class="icon"><div class="pop1"></div>
-</div><div class="manga"><b><a href="./dengeki-daisy" class="popularitemcaption">Dengeki Daisy</a></b><br>
-<span><a href="./dengeki-daisy/75" class="chapters">Dengeki Daisy 75</a></span></div>
-</li>
-<li><div style="background-position: 0 -350px;" class="icon"><div class="pop1"></div>
-</div><div class="manga"><b><a href="./hunter-x-hunter" class="popularitemcaption">Hunter X Hunter</a></b><br>
-<span><a href="./hunter-x-hunter/360" class="chapters">Hunter X Hunter 360</a></span></div>
-</li>
-<li><div style="background-position: 0 -400px;" class="icon"><div class="pop1"></div>
-</div><div class="manga"><b><a href="./the-breaker-new-waves" class="popularitemcaption">The Breaker: New Waves</a></b><br>
-<span><a href="./the-breaker-new-waves/201" class="chapters">The Breaker: New Waves 201</a></span></div>
-</li>
-<li><div style="background-position: 0 -450px;" class="icon"><div class="pop1"></div>
-</div><div class="manga"><b><a href="./toriko" class="popularitemcaption">Toriko</a></b><br>
-<span><a href="./toriko/396" class="chapters">Toriko 396</a></span></div>
-</li>
-<li><div style="background-position: 0 -500px;" class="icon"><div class="pop1"></div>
-</div><div class="manga"><b><a href="./fairy-tail-zero" class="popularitemcaption">Fairy Tail Zero</a></b><br>
-<span><a href="./fairy-tail-zero/13" class="chapters">Fairy Tail Zero 13</a></span></div>
-</li>
-<li><div style="background-position: 0 -550px;" class="icon"><div class="pop1"></div>
-</div><div class="manga"><b><a href="./nisekoi" class="popularitemcaption">Nisekoi</a></b><br>
-<span><a href="./nisekoi/229" class="chapters">Nisekoi 229</a></span></div>
-</li>
-<li><div style="background-position: 0 -600px;" class="icon"><div class="pop1"></div>
-</div><div class="manga"><b><a href="./ao-no-exorcist" class="popularitemcaption">Ao No Exorcist</a></b><br>
-<span><a href="./ao-no-exorcist/88" class="chapters">Ao No Exorcist 88</a></span></div>
-</li>
-<li><div style="background-position: 0 -650px;" class="icon"><div class="pop1"></div>
-</div><div class="manga"><b><a href="./nanatsu-no-taizai" class="popularitemcaption">Nanatsu no Taizai</a></b><br>
-<span><a href="./nanatsu-no-taizai/210" class="chapters">Nanatsu no Taizai 210</a></span></div>
-</li>
-<li><div style="background-position: 0 -700px;" class="icon"><div class="pop1"></div>
-</div><div class="manga"><b><a href="./akame-ga-kiru" class="popularitemcaption">Akame ga Kiru!</a></b><br>
-<span><a href="./akame-ga-kiru/78" class="chapters">Akame ga Kiru! 78</a></span></div>
-</li>
-<li><div style="background-position: 0 -750px;" class="icon"><div class="pop1"></div>
-</div><div class="manga"><b><a href="./freezing" class="popularitemcaption">Freezing</a></b><br>
-<span><a href="./freezing/207" class="chapters">Freezing 207</a></span></div>
-</li>
-<li><div style="background-position: 0 -800px;" class="icon"><div class="pop1"></div>
-</div><div class="manga"><b><a href="./gintama" class="popularitemcaption">Gintama</a></b><br>
-<span><a href="./gintama/629" class="chapters">Gintama 629</a></span></div>
-</li>
-<li><div style="background-position: 0 -850px;" class="icon"><div class="pop1"></div>
-</div><div class="manga"><b><a href="./assassination-classroom" class="popularitemcaption">Assassination Classroom</a></b><br>
-<span><a href="./assassination-classroom/184" class="chapters">Assassination Classroom 184</a></span></div>
-</li>
-<li><div style="background-position: 0 -900px;" class="icon"><div class="pop1"></div>
-</div><div class="manga"><b><a href="./world-trigger" class="popularitemcaption">World Trigger</a></b><br>
-<span><a href="./world-trigger/164" class="chapters">World Trigger 164</a></span></div>
-</li>
-<li><div style="background-position: 0 -950px;" class="icon"><div class="pop1"></div>
-</div><div class="manga"><b><a href="./tale-of-fairy-ice-trail-koori-no-kiseki" class="popularitemcaption">Tale of Fairy Ice Trail - Koori no Kiseki</a></b><br>
-<span><a href="./tale-of-fairy-ice-trail-koori-no-kiseki/13" class="chapters">Tale of Fairy Ice Trail - Koori no Kiseki 13</a></span></div>
-</li>
-<li><div style="background-position: 0 -1000px;" class="icon"><div class="pop1"></div>
-</div><div class="manga"><b><a href="./onepunch-man" class="popularitemcaption">Onepunch-Man</a></b><br>
-<span><a href="./onepunch-man/115" class="chapters">Onepunch-Man 115</a></span></div>
-</li>
-<li><div style="background-position: 0 -1050px;" class="icon"><div class="pop1"></div>
-</div><div class="manga"><b><a href="./karate-shoukoushi-kohinata-minoru" class="popularitemcaption">Karate Shoukoushi Kohinata Minoru</a></b><br>
-<span><a href="./karate-shoukoushi-kohinata-minoru/438" class="chapters">Karate Shoukoushi Kohinata Minoru 438</a></span></div>
-</li>
-<li><div style="background-position: 0 -1100px;" class="icon"><div class="pop1"></div>
-</div><div class="manga"><b><a href="./sket-dance" class="popularitemcaption">Sket Dance</a></b><br>
-<span><a href="./sket-dance/288" class="chapters">Sket Dance 288</a></span></div>
-</li>
-<li><div style="background-position: 0 -1150px;" class="icon"><div class="pop1"></div>
-</div><div class="manga"><b><a href="./magi" class="popularitemcaption">Magi</a></b><br>
-<span><a href="./magi/340" class="chapters">Magi 340</a></span></div>
-</li>
-<li><div style="background-position: 0 -1200px;" class="icon"><div class="pop1"></div>
-</div><div class="manga"><b><a href="./hayate-the-combat-butler" class="popularitemcaption">Hayate the Combat Butler</a></b><br>
-<span><a href="./hayate-the-combat-butler/565" class="chapters">Hayate the Combat Butler 565</a></span></div>
-</li>
-<li><div style="background-position: 0 -1250px;" class="icon"><div class="pop1"></div>
-</div><div class="manga"><b><a href="./shokugeki-no-soma" class="popularitemcaption">Shokugeki no Soma</a></b><br>
-<span><a href="./shokugeki-no-soma/209" class="chapters">Shokugeki no Soma 209</a></span></div>
-</li>
-<li><div style="background-position: 0 -1300px;" class="icon"><div class="pop1"></div>
-</div><div class="manga"><b><a href="./soul-catchers" class="popularitemcaption">Soul Catchers</a></b><br>
-<span><a href="./soul-catchers/41" class="chapters">Soul Catchers 41</a></span></div>
-</li>
-<li><div style="background-position: 0 -1350px;" class="icon"><div class="pop1"></div>
-</div><div class="manga"><b><a href="./akuma-no-riddle" class="popularitemcaption">Akuma no Riddle</a></b><br>
-<span><a href="./akuma-no-riddle/46" class="chapters">Akuma no Riddle 46</a></span></div>
-</li>
-<li><div style="background-position: 0 -1400px;" class="icon"><div class="pop1"></div>
-</div><div class="manga"><b><a href="./ao-haru-ride" class="popularitemcaption">Ao Haru Ride</a></b><br>
-<span><a href="./ao-haru-ride/49" class="chapters">Ao Haru Ride 49</a></span></div>
-</li>
-<li><div style="background-position: 0 -1450px;" class="icon"><div class="pop1"></div>
-</div><div class="manga"><b><a href="./noblesse" class="popularitemcaption">Noblesse</a></b><br>
-<span><a href="./noblesse/452" class="chapters">Noblesse 452</a></span></div>
-</li>
-<li><div style="background-position: 0 -1500px;" class="icon"><div class="pop1"></div>
-</div><div class="manga"><b><a href="./say-i-love-you" class="popularitemcaption">Say I love You</a></b><br>
-<span><a href="./say-i-love-you/52" class="chapters">Say I love You 52</a></span></div>
-</li>
-<li><div style="background-position: 0 -1550px;" class="icon"><div class="pop1"></div>
-</div><div class="manga"><b><a href="./yamada-kun-to-7-nin-no-majo" class="popularitemcaption">Yamada-kun to 7-nin no Majo</a></b><br>
-<span><a href="./yamada-kun-to-7-nin-no-majo/243" class="chapters">Yamada-kun to 7-nin no Majo 243</a></span></div>
-</li>
-<li><div style="background-position: 0 -1600px;" class="icon"><div class="pop1"></div>
-</div><div class="manga"><b><a href="./kuroshitsuji" class="popularitemcaption">Kuroshitsuji</a></b><br>
-<span><a href="./kuroshitsuji/126" class="chapters">Kuroshitsuji 126</a></span></div>
-</li>
-<li><div style="background-position: 0 -1650px;" class="icon"><div class="pop1"></div>
-</div><div class="manga"><b><a href="./the-gamer" class="popularitemcaption">The Gamer</a></b><br>
-<span><a href="./the-gamer/167" class="chapters">The Gamer 167</a></span></div>
-</li>
-<li><div style="background-position: 0 -1700px;" class="icon"><div class="pop1"></div>
-</div><div class="manga"><b><a href="./tate-no-yuusha-no-nariagari" class="popularitemcaption">Tate no Yuusha no Nariagari</a></b><br>
-<span><a href="./tate-no-yuusha-no-nariagari/32" class="chapters">Tate no Yuusha no Nariagari 32</a></span></div>
-</li>
-<li><div style="background-position: 0 -1750px;" class="icon"><div class="pop1"></div>
-</div><div class="manga"><b><a href="./highschool-dxd" class="popularitemcaption">Highschool DxD</a></b><br>
-<span><a href="./highschool-dxd/32" class="chapters">Highschool DxD 32</a></span></div>
-</li>
-<li><div style="background-position: 0 -1800px;" class="icon"><div class="pop1"></div>
-</div><div class="manga"><b><a href="./watashi-ni-xx-shinasai" class="popularitemcaption">Watashi ni xx Shinasai!</a></b><br>
-<span><a href="./watashi-ni-xx-shinasai/74" class="chapters">Watashi ni xx Shinasai! 74</a></span></div>
-</li>
-<li><div style="background-position: 0 -1850px;" class="icon"><div class="pop1"></div>
-</div><div class="manga"><b><a href="./kimi-ni-todoke" class="popularitemcaption">Kimi Ni Todoke</a></b><br>
-<span><a href="./kimi-ni-todoke/110" class="chapters">Kimi Ni Todoke 110</a></span></div>
-</li>
-<li><div style="background-position: 0 -1900px;" class="icon"><div class="pop1"></div>
-</div><div class="manga"><b><a href="./love-so-life" class="popularitemcaption">Love So Life</a></b><br>
-<span><a href="./love-so-life/106" class="chapters">Love So Life 106</a></span></div>
-</li>
-<li><div style="background-position: 0 -1950px;" class="icon"><div class="pop1"></div>
-</div><div class="manga"><b><a href="./kamisama-hajimemashita" class="popularitemcaption">Kamisama Hajimemashita</a></b><br>
-<span><a href="./kamisama-hajimemashita/135" class="chapters">Kamisama Hajimemashita 135</a></span></div>
-</li>
-</ol>
-</div>
-</div>
-<div class="clear"></div>
-</div>
-<div class="clear"></div>
-</div>
+  </div>
+  <div id="container">
+    <div id="wrapper_header">
+      <div class="top">
+        <div class="logo"><a href="./"></a>
+          <div id="logoimg"></div>
+        </div>
+        <div class="mobileMenuTrigger"></div>
+        <div id="top_navigation">
+          <ul>
+            <li class="topnav-first topnav-current"><a href="./"><span>Home</span></a></li>
+            <li><a href="./search"><span>Advanced Search</span></a></li>
+            <li><a href="./popular"><span>Popular Manga</span></a></li>
+            <li><a href="./alphabetical"><span>Manga List</span></a></li>
+            <li class="topnav-last"><a href="./latest"><span>Latest Releases</span></a></li>
+          </ul>
+        </div>
+        <div id="sec_navigation">
+          <ul>
+            <li class="secnav-first">
+              <div id="fpage">
+                <iframe src="./index_files/like.html" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:450px; height:21px;"
+                  allowtransparency="true"></iframe>
+              </div>
+            </li>
+            <li class="aftersearch"><input type="text" id="searchbox" autocomplete="off" class="ac_input"></li>
+            <li class="secnav"><a rel="nofollow" href="./random">Surprise Me!</a></li>
+            <li class="secnav"><a href="http://www.animefreak.tv/" target="_blank" title="Anime">Anime</a></li>
+            <li class="secnav-last"><a href="mailto:info@mangareader.net" title="Contact">Contact Us</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="clear"></div>
+    </div>
+    <div id="wrapper_body">
+      <div id="bodyust">
+        <div id="onlinemanga">
+          <h1>Read Manga Online</h1>
+          <p><strong>Manga</strong> is the Japanese comics with a <em>unique story</em> line and style. In Japan people of all
+            ages <strong>read manga</strong>, <strong>manga</strong> does not target younger audiences like american comics.
+            The genre includes a broad range of subjects. Here you will find 1000s of free <strong>english translated manga</strong>            scans to <em>read online</em>. Discover the world of otaku!</p>
+          <div id="poolbox">
+            <div id="surveyimg" onclick="window.open(&#39;https://spreadsheets.google.com/viewform?formkey=dG5YaFdhV2dkSFFpRUljV3FVS3FWR2c6MQ&#39;, &#39;_blank&#39;); return false;"></div>
+            <div id="surveymsg"><strong>Are you happy with new mangareader.net ?</strong><br>
+              <a class="c1" href="https://spreadsheets.google.com/viewform?formkey=dG5YaFdhV2dkSFFpRUljV3FVS3FWR2c6MQ" target="_blank">Join Our Poll</a></div>
+          </div>
+        </div>
+        <div id="latesthot">
+          <h2>Popular Manga Updates</h2>
+          <div class="latesthotimages">
+            <div class="imageinside"><a href="./fairy-tail/529"><img src="./index_files/fairy-tail-m0.jpg" width="122" height="191" alt="Fairy Tail 529"></a></div>
+            <h3><a href="./fairy-tail/529">Fairy Tail 529</a></h3>
+          </div>
+          <div class="latesthotimages">
+            <div class="imageinside"><a href="./gintama"><img src="./index_files/gintama-m0.jpg" width="122" height="184" alt="Gintama 629"></a></div>
+            <h3><a href="./gintama">Gintama 629</a></h3>
+          </div>
+          <div class="latesthotimages">
+            <div class="imageinside"><a href="./hayate-the-combat-butler/565"><img src="./index_files/hayate-the-combat-butler-m0.jpg" width="122" height="192" alt="Hayate the Combat Butler 565"></a></div>
+            <h3><a href="./hayate-the-combat-butler/565">Hayate the Combat Butler 565</a></h3>
+          </div>
+          <div class="latesthotimages">
+            <div class="imageinside"><a href="./shingeki-no-kyojin/92"><img src="./index_files/shingeki-no-kyojin-m0.jpg" width="122" height="183" alt="Shingeki no Kyojin 92"></a></div>
+            <h3><a href="./shingeki-no-kyojin/92">Shingeki no Kyojin 92</a></h3>
+          </div>
+        </div>
+        <div class="clear"></div>
+        <div class="c4">
+          <iframe width="728" height="90" scrolling="no" frameborder="0" id="admaintop" src="./index_files/hmtop4.html" class="c2"
+            name="admaintop" style="display: none !important;"></iframe> <a href="http://www.animemobile.com/MangaApp/index.html" target="_blank" class="c3"></a></div>
+      </div>
+      <div id="bodyalt">
+        <div id="latestchapters">
+          <h2>Latest Manga Updates</h2>
+          <h3>Today's Manga</h3>
+          <table class="updates">
+            <tbody>
+              <tr class="c6">
+                <td class="manga_open"></td>
+                <td><a class="chapter" href="./kurogane-no-linebarrel"><strong>Kurogane No LineBarrel</strong></a> <br>
+                  <a class="chaptersrec" href="./kurogane-no-linebarrel/116">Kurogane No LineBarrel 116</a><br>
+                </td>
+                <td class="c5">Today</td>
+              </tr>
+              <tr class="c6">
+                <td class="manga_open"></td>
+                <td><a class="chapter" href="./secret"><strong>Secret</strong></a> <br>
+                  <a class="chaptersrec" href="./secret/40">Secret 40</a><br>
+                </td>
+                <td class="c5">Today</td>
+              </tr>
+              <tr class="c6">
+                <td class="manga_open"></td>
+                <td><a class="chapter" href="./dr-stone"><strong>Dr. Stone</strong></a> <br>
+                  <a class="chaptersrec" href="./dr-stone/6">Dr. Stone 6</a><br>
+                </td>
+                <td class="c5">Today</td>
+              </tr>
+              <tr class="c6">
+                <td class="manga_open"></td>
+                <td><a class="chapter" href="./dice-the-cube-that-changes-everything"><strong>DICE: The Cube that Changes Everything</strong></a>                  <br>
+                  <a class="chaptersrec" href="./dice-the-cube-that-changes-everything/185">DICE: The Cube that Changes Everything 185</a><br>
+                  <a class="chaptersrec" href="./dice-the-cube-that-changes-everything/184">DICE: The Cube that Changes Everything 184</a><br>
+                  <a class="chaptersrec" href="./dice-the-cube-that-changes-everything/183">DICE: The Cube that Changes Everything 183</a><br>
+                </td>
+                <td class="c5">Today</td>
+              </tr>
+              <tr class="c6">
+                <td class="manga_open"></td>
+                <td><a class="chapter" href="./to-you-the-immortal"><strong>To You, The Immortal</strong></a> <br>
+                  <a class="chaptersrec" href="./to-you-the-immortal/19">To You, The Immortal 19</a><br>
+                  <a class="chaptersrec" href="./to-you-the-immortal/18">To You, The Immortal 18</a><br>
+                  <a class="chaptersrec" href="./to-you-the-immortal/17">To You, The Immortal 17</a><br>
+                </td>
+                <td class="c5">Today</td>
+              </tr>
+              <tr class="c6">
+                <td class="manga_open"></td>
+                <td><a class="chapter" href="./accel-world"><strong>Accel World</strong></a> <br>
+                  <a class="chaptersrec" href="./accel-world/40">Accel World 40</a><br>
+                  <a class="chaptersrec" href="./accel-world/39">Accel World 39</a><br>
+                  <a class="chaptersrec" href="./accel-world/38">Accel World 38</a><br>
+                </td>
+                <td class="c5">Today</td>
+              </tr>
+            </tbody>
+          </table>
+          <h3>Yesterday's Manga</h3>
+          <table class="updates">
+            <tbody>
+              <tr class="c6">
+                <td class="manga_open"></td>
+                <td><a class="chapter" href="./diamond-no-ace-act-ii"><strong>Diamond no Ace Act II</strong></a> <br>
+                  <a class="chaptersrec" href="./diamond-no-ace-act-ii/73">Diamond no Ace Act II 73</a><br>
+                  <a class="chaptersrec" href="./diamond-no-ace-act-ii/72">Diamond no Ace Act II 72</a><br>
+                </td>
+                <td class="c7">Yesterday</td>
+              </tr>
+              <tr class="c6">
+                <td class="manga_open"></td>
+                <td><a class="chapter" href="./jitsu-wa-watashi-wa"><strong>Jitsu wa Watashi wa</strong></a> <br>
+                  <a class="chaptersrec" href="./jitsu-wa-watashi-wa/164">Jitsu wa Watashi wa 164</a><br>
+                </td>
+                <td class="c7">Yesterday</td>
+              </tr>
+              <tr class="c6">
+                <td class="manga_open"></td>
+                <td><a class="chapter" href="./combat-continent-ii"><strong>Combat Continent II</strong></a> <br>
+                  <a class="chaptersrec" href="./combat-continent-ii/98">Combat Continent II 98</a><br>
+                </td>
+                <td class="c7">Yesterday</td>
+              </tr>
+              <tr class="c6">
+                <td class="manga_open"></td>
+                <td><a class="chapter" href="./spirit-blade-mountain"><strong>Spirit Blade Mountain</strong></a> <br>
+                  <a class="chaptersrec" href="./spirit-blade-mountain/158">Spirit Blade Mountain 158</a><br>
+                  <a class="chaptersrec" href="./spirit-blade-mountain/157">Spirit Blade Mountain 157</a><br>
+                </td>
+                <td class="c7">Yesterday</td>
+              </tr>
+              <tr class="c6">
+                <td class="manga_open"></td>
+                <td><a class="chapter" href="./kono-oto-tomare"><strong>Kono Oto Tomare!</strong></a> <br>
+                  <a class="chaptersrec" href="./kono-oto-tomare/54">Kono Oto Tomare! 54</a><br>
+                </td>
+                <td class="c7">Yesterday</td>
+              </tr>
+              <tr class="c6">
+                <td class="manga_open"></td>
+                <td><a class="chapter" href="./shingeki-no-kyojin"><strong>Shingeki no Kyojin</strong></a>
+                  <div class="hot"></div>
+                  <br>
+                  <a class="chaptersrec" href="./shingeki-no-kyojin/92">Shingeki no Kyojin 92</a><br>
+                </td>
+                <td class="c7">Yesterday</td>
+              </tr>
+              <tr class="c6">
+                <td class="manga_open"></td>
+                <td><a class="chapter" href="./tohai"><strong>Tohai</strong></a> <br>
+                  <a class="chaptersrec" href="./tohai/24">Tohai 24</a><br>
+                </td>
+                <td class="c7">Yesterday</td>
+              </tr>
+              <tr class="c6">
+                <td class="manga_close"></td>
+                <td><a class="chapter" href="./azumi"><strong>Azumi</strong></a> <br>
+                  <a class="chaptersrec" href="./azumi/151">Azumi 151</a><br>
+                </td>
+                <td class="c7">Yesterday</td>
+              </tr>
+              <tr class="c6">
+                <td class="manga_open"></td>
+                <td><a class="chapter" href="./golden-kamui"><strong>Golden Kamui</strong></a> <br>
+                  <a class="chaptersrec" href="./golden-kamui/90">Golden Kamui 90</a><br>
+                </td>
+                <td class="c7">Yesterday</td>
+              </tr>
+              <tr class="c6">
+                <td class="manga_open"></td>
+                <td><a class="chapter" href="./black-haze"><strong>Black Haze</strong></a> <br>
+                  <a class="chaptersrec" href="./black-haze/205">Black Haze 205</a><br>
+                </td>
+                <td class="c7">Yesterday</td>
+              </tr>
+              <tr class="c6">
+                <td class="manga_open"></td>
+                <td><a class="chapter" href="./fukigen-na-mononokean"><strong>Fukigen na Mononokean</strong></a> <br>
+                  <a class="chaptersrec" href="./fukigen-na-mononokean/43">Fukigen na Mononokean 43</a><br>
+                </td>
+                <td class="c7">Yesterday</td>
+              </tr>
+              <tr class="c6">
+                <td class="manga_open"></td>
+                <td><a class="chapter" href="./hatsukoi-zombie"><strong>Hatsukoi Zombie</strong></a> <br>
+                  <a class="chaptersrec" href="./hatsukoi-zombie/72">Hatsukoi Zombie 72</a><br>
+                </td>
+                <td class="c7">Yesterday</td>
+              </tr>
+              <tr class="c6">
+                <td class="manga_open"></td>
+                <td><a class="chapter" href="./koibana-koiseyo-hanabi"><strong>Koibana! Koiseyo Hanabi</strong></a> <br>
+                  <a class="chaptersrec" href="./koibana-koiseyo-hanabi/61">Koibana! Koiseyo Hanabi 61</a><br>
+                  <a class="chaptersrec" href="./koibana-koiseyo-hanabi/60">Koibana! Koiseyo Hanabi 60</a><br>
+                </td>
+                <td class="c7">Yesterday</td>
+              </tr>
+              <tr class="c6">
+                <td class="manga_open"></td>
+                <td><a class="chapter" href="./hayate-the-combat-butler"><strong>Hayate the Combat Butler</strong></a>
+                  <div class="hot"></div>
+                  <br>
+                  <a class="chaptersrec" href="./hayate-the-combat-butler/565">Hayate the Combat Butler 565</a><br>
+                </td>
+                <td class="c7">Yesterday</td>
+              </tr>
+              <tr class="c6">
+                <td class="manga_open"></td>
+                <td><a class="chapter" href="./combat-continent"><strong>Combat Continent</strong></a> <br>
+                  <a class="chaptersrec" href="./combat-continent/176">Combat Continent 176</a><br>
+                  <a class="chaptersrec" href="./combat-continent/175">Combat Continent 175</a><br>
+                </td>
+                <td class="c7">Yesterday</td>
+              </tr>
+              <tr class="c6">
+                <td class="manga_open"></td>
+                <td><a class="chapter" href="./tales-of-the-unusual"><strong>Tales of the Unusual</strong></a> <br>
+                  <a class="chaptersrec" href="./tales-of-the-unusual/163">Tales of the Unusual 163</a><br>
+                </td>
+                <td class="c7">Yesterday</td>
+              </tr>
+              <tr class="c6">
+                <td class="manga_open"></td>
+                <td><a class="chapter" href="./star-martial-god-technique"><strong>Star Martial God Technique</strong></a> <br>
+                  <a class="chaptersrec" href="./star-martial-god-technique/45">Star Martial God Technique 45</a><br>
+                </td>
+                <td class="c7">Yesterday</td>
+              </tr>
+              <tr class="c6">
+                <td class="manga_open"></td>
+                <td><a class="chapter" href="./shishunki-bitter-change"><strong>Shishunki Bitter Change</strong></a> <br>
+                  <a class="chaptersrec" href="./shishunki-bitter-change/47">Shishunki Bitter Change 47</a><br>
+                </td>
+                <td class="c7">Yesterday</td>
+              </tr>
+              <tr class="c6">
+                <td class="manga_open"></td>
+                <td><a class="chapter" href="./saike-mata-shite-mo"><strong>Saike Mata Shite mo</strong></a> <br>
+                  <a class="chaptersrec" href="./saike-mata-shite-mo/47">Saike Mata Shite mo 47</a><br>
+                </td>
+                <td class="c7">Yesterday</td>
+              </tr>
+              <tr class="c6">
+                <td class="manga_open"></td>
+                <td><a class="chapter" href="./winter-woods"><strong>Winter Woods</strong></a> <br>
+                  <a class="chaptersrec" href="./winter-woods/119">Winter Woods 119</a><br>
+                </td>
+                <td class="c7">Yesterday</td>
+              </tr>
+            </tbody>
+          </table>
+          <h3>Older Manga</h3>
+          <table class="updates">
+            <tbody>
+              <tr class="c6">
+                <td class="manga_open"></td>
+                <td><a class="chapter" href="./moyashimon"><strong>Moyashimon</strong></a> <br>
+                  <a class="chaptersrec" href="./moyashimon/27">Moyashimon 27</a><br>
+                  <a class="chaptersrec" href="./moyashimon/26">Moyashimon 26</a><br>
+                  <a class="chaptersrec" href="./moyashimon/25">Moyashimon 25</a><br>
+                </td>
+                <td class="c7">05 Apr 2017</td>
+              </tr>
+              <tr class="c6">
+                <td class="manga_open"></td>
+                <td><a class="chapter" href="./saiki-kusuo-no-psi-nan"><strong>Saiki Kusuo no Psi Nan</strong></a> <br>
+                  <a class="chaptersrec" href="./saiki-kusuo-no-psi-nan/96">Saiki Kusuo no Psi Nan 96</a><br>
+                  <a class="chaptersrec" href="./saiki-kusuo-no-psi-nan/95">Saiki Kusuo no Psi Nan 95</a><br>
+                </td>
+                <td class="c7">05 Apr 2017</td>
+              </tr>
+              <tr class="c6">
+                <td class="manga_open"></td>
+                <td><a class="chapter" href="./kingdom"><strong>Kingdom</strong></a> <br>
+                  <a class="chaptersrec" href="./kingdom/512">Kingdom 512</a><br>
+                  <a class="chaptersrec" href="./kingdom/511">Kingdom 511</a><br>
+                </td>
+                <td class="c7">04 Apr 2017</td>
+              </tr>
+              <tr class="c6">
+                <td class="manga_open"></td>
+                <td><a class="chapter" href="./dagashi-kashi"><strong>Dagashi Kashi</strong></a> <br>
+                  <a class="chaptersrec" href="./dagashi-kashi/49">Dagashi Kashi 49</a><br>
+                  <a class="chaptersrec" href="./dagashi-kashi/48">Dagashi Kashi 48</a><br>
+                  <a class="chaptersrec" href="./dagashi-kashi/47">Dagashi Kashi 47</a><br>
+                </td>
+                <td class="c7">04 Apr 2017</td>
+              </tr>
+              <tr class="c6">
+                <td class="manga_open"></td>
+                <td><a class="chapter" href="./hare-kon"><strong>Hare Kon.</strong></a> <br>
+                  <a class="chaptersrec" href="./hare-kon/79">Hare Kon. 79</a><br>
+                  <a class="chaptersrec" href="./hare-kon/78">Hare Kon. 78</a><br>
+                  <a class="chaptersrec" href="./hare-kon/77">Hare Kon. 77</a><br>
+                </td>
+                <td class="c7">04 Apr 2017</td>
+              </tr>
+              <tr class="c6">
+                <td class="manga_open"></td>
+                <td><a class="chapter" href="./battle-through-the-heavens"><strong>Battle Through The Heavens</strong></a> <br>
+                  <a class="chaptersrec" href="./battle-through-the-heavens/190">Battle Through The Heavens 190</a><br>
+                </td>
+                <td class="c7">04 Apr 2017</td>
+              </tr>
+              <tr class="c6">
+                <td class="manga_open"></td>
+                <td><a class="chapter" href="./autophagy-regulation"><strong>Autophagy Regulation</strong></a> <br>
+                  <a class="chaptersrec" href="./autophagy-regulation/117">Autophagy Regulation 117</a><br>
+                  <a class="chaptersrec" href="./autophagy-regulation/116">Autophagy Regulation 116</a><br>
+                  <a class="chaptersrec" href="./autophagy-regulation/115">Autophagy Regulation 115</a><br>
+                </td>
+                <td class="c7">04 Apr 2017</td>
+              </tr>
+              <tr class="c6">
+                <td class="manga_open"></td>
+                <td><a class="chapter" href="./tal"><strong>TAL</strong></a> <br>
+                  <a class="chaptersrec" href="./tal/192">TAL 192</a><br>
+                  <a class="chaptersrec" href="./tal/191">TAL 191</a><br>
+                </td>
+                <td class="c7">04 Apr 2017</td>
+              </tr>
+              <tr class="c6">
+                <td class="manga_open"></td>
+                <td><a class="chapter" href="./its-my-life"><strong>It's My Life</strong></a> <br>
+                  <a class="chaptersrec" href="./its-my-life/16">It's My Life 16</a><br>
+                </td>
+                <td class="c7">04 Apr 2017</td>
+              </tr>
+              <tr class="c6">
+                <td class="manga_open"></td>
+                <td><a class="chapter" href="./ayashiya"><strong>Ayashiya</strong></a> <br>
+                  <a class="chaptersrec" href="./ayashiya/7">Ayashiya 7</a><br>
+                </td>
+                <td class="c7">04 Apr 2017</td>
+              </tr>
+              <tr class="c6">
+                <td class="manga_open"></td>
+                <td><a class="chapter" href="./amatsuki"><strong>Amatsuki</strong></a> <br>
+                  <a class="chaptersrec" href="./amatsuki/108">Amatsuki 108</a><br>
+                  <a class="chaptersrec" href="./amatsuki/107">Amatsuki 107</a><br>
+                </td>
+                <td class="c7">04 Apr 2017</td>
+              </tr>
+              <tr class="c6">
+                <td class="manga_open"></td>
+                <td><a class="chapter" href="./aku-no-kyouten"><strong>Aku no Kyouten</strong></a> <br>
+                  <a class="chaptersrec" href="./aku-no-kyouten/9">Aku no Kyouten 9</a><br>
+                </td>
+                <td class="c7">04 Apr 2017</td>
+              </tr>
+              <tr class="c6">
+                <td class="manga_open"></td>
+                <td><a class="chapter" href="./gunka-no-baltzar"><strong>Gunka no Baltzar</strong></a> <br>
+                  <a class="chaptersrec" href="./gunka-no-baltzar/43">Gunka no Baltzar 43</a><br>
+                </td>
+                <td class="c7">04 Apr 2017</td>
+              </tr>
+              <tr class="c6">
+                <td class="manga_open"></td>
+                <td><a class="chapter" href="./hajime-no-ippo"><strong>Hajime no Ippo</strong></a> <br>
+                  <a class="chaptersrec" href="./hajime-no-ippo/1175">Hajime no Ippo 1175</a><br>
+                  <a class="chaptersrec" href="./hajime-no-ippo/1174">Hajime no Ippo 1174</a><br>
+                  <a class="chaptersrec" href="./hajime-no-ippo/1173">Hajime no Ippo 1173</a><br>
+                </td>
+                <td class="c7">04 Apr 2017</td>
+              </tr>
+              <tr class="c6">
+                <td class="manga_close"></td>
+                <td><a class="chapter" href="./dont-cry-bureum"><strong>Don't Cry Bureum</strong></a> <br>
+                  <a class="chaptersrec" href="./dont-cry-bureum/23">Don't Cry Bureum 23</a><br>
+                </td>
+                <td class="c7">04 Apr 2017</td>
+              </tr>
+              <tr class="c6">
+                <td class="manga_open"></td>
+                <td><a class="chapter" href="./happy-if-you-died"><strong>Happy if You Died</strong></a> <br>
+                  <a class="chaptersrec" href="./happy-if-you-died/18">Happy if You Died 18</a><br>
+                </td>
+                <td class="c7">04 Apr 2017</td>
+              </tr>
+              <tr class="c6">
+                <td class="manga_open"></td>
+                <td><a class="chapter" href="./kamisama-dolls"><strong>Kamisama Dolls</strong></a> <br>
+                  <a class="chaptersrec" href="./kamisama-dolls/55">Kamisama Dolls 55</a><br>
+                </td>
+                <td class="c7">04 Apr 2017</td>
+              </tr>
+              <tr class="c6">
+                <td class="manga_close"></td>
+                <td><a class="chapter" href="./yongbi"><strong>Yongbi</strong></a> <br>
+                  <a class="chaptersrec" href="./yongbi/130">Yongbi 130</a><br>
+                </td>
+                <td class="c7">04 Apr 2017</td>
+              </tr>
+              <tr class="c6">
+                <td class="manga_close"></td>
+                <td><a class="chapter" href="./shana-oh-yoshitsune"><strong>Shana oh Yoshitsune</strong></a> <br>
+                  <a class="chaptersrec" href="./shana-oh-yoshitsune/66">Shana oh Yoshitsune 66</a><br>
+                </td>
+                <td class="c7">04 Apr 2017</td>
+              </tr>
+              <tr class="c6">
+                <td class="manga_open"></td>
+                <td><a class="chapter" href="./yamikin-ushijima-kun"><strong>Yamikin Ushijima-kun</strong></a> <br>
+                  <a class="chaptersrec" href="./yamikin-ushijima-kun/51">Yamikin Ushijima-kun 51</a><br>
+                  <a class="chaptersrec" href="./yamikin-ushijima-kun/50">Yamikin Ushijima-kun 50</a><br>
+                </td>
+                <td class="c7">04 Apr 2017</td>
+              </tr>
+              <tr class="c6">
+                <td class="manga_open"></td>
+                <td><a class="chapter" href="./imori-201"><strong>Imori 201</strong></a> <br>
+                  <a class="chaptersrec" href="./imori-201/30">Imori 201 30</a><br>
+                </td>
+                <td class="c7">03 Apr 2017</td>
+              </tr>
+              <tr class="c6">
+                <td class="manga_open"></td>
+                <td><a class="chapter" href="./niflheim"><strong>Niflheim</strong></a> <br>
+                  <a class="chaptersrec" href="./niflheim/71">Niflheim 71</a><br>
+                  <a class="chaptersrec" href="./niflheim/70">Niflheim 70</a><br>
+                  <a class="chaptersrec" href="./niflheim/69">Niflheim 69</a><br>
+                </td>
+                <td class="c7">03 Apr 2017</td>
+              </tr>
+              <tr class="c6">
+                <td class="manga_open"></td>
+                <td><a class="chapter" href="./im-a-loser"><strong>I'm a Loser</strong></a> <br>
+                  <a class="chaptersrec" href="./im-a-loser/56">I'm a Loser 56</a><br>
+                  <a class="chaptersrec" href="./im-a-loser/55">I'm a Loser 55</a><br>
+                  <a class="chaptersrec" href="./im-a-loser/54">I'm a Loser 54</a><br>
+                </td>
+                <td class="c7">03 Apr 2017</td>
+              </tr>
+              <tr class="c6">
+                <td class="manga_open"></td>
+                <td><a class="chapter" href="./the-legendary-moonlight-sculptor"><strong>The Legendary Moonlight Sculptor</strong></a>                  <br>
+                  <a class="chaptersrec" href="./the-legendary-moonlight-sculptor/90">The Legendary Moonlight Sculptor 90</a><br>
+                  <a class="chaptersrec" href="./the-legendary-moonlight-sculptor/89">The Legendary Moonlight Sculptor 89</a><br>
+                  <a class="chaptersrec" href="./the-legendary-moonlight-sculptor/88">The Legendary Moonlight Sculptor 88</a><br>
+                </td>
+                <td class="c7">03 Apr 2017</td>
+              </tr>
+              <tr class="c6">
+                <td class="manga_open"></td>
+                <td><a class="chapter" href="./horimiya"><strong>Horimiya</strong></a> <br>
+                  <a class="chaptersrec" href="./horimiya/76">Horimiya 76</a><br>
+                </td>
+                <td class="c7">03 Apr 2017</td>
+              </tr>
+              <tr class="c6">
+                <td class="manga_open"></td>
+                <td><a class="chapter" href="./white-epic"><strong>White Epic</strong></a> <br>
+                  <a class="chaptersrec" href="./white-epic/69">White Epic 69</a><br>
+                  <a class="chaptersrec" href="./white-epic/68">White Epic 68</a><br>
+                  <a class="chaptersrec" href="./white-epic/67">White Epic 67</a><br>
+                </td>
+                <td class="c7">03 Apr 2017</td>
+              </tr>
+              <tr class="c6">
+                <td class="manga_open"></td>
+                <td><a class="chapter" href="./wind-breaker"><strong>Wind Breaker</strong></a> <br>
+                  <a class="chaptersrec" href="./wind-breaker/119">Wind Breaker 119</a><br>
+                  <a class="chaptersrec" href="./wind-breaker/118">Wind Breaker 118</a><br>
+                  <a class="chaptersrec" href="./wind-breaker/117">Wind Breaker 117</a><br>
+                </td>
+                <td class="c7">03 Apr 2017</td>
+              </tr>
+              <tr class="c6">
+                <td class="manga_open"></td>
+                <td><a class="chapter" href="./heavenly-match"><strong>Heavenly Match</strong></a> <br>
+                  <a class="chaptersrec" href="./heavenly-match/43">Heavenly Match 43</a><br>
+                  <a class="chaptersrec" href="./heavenly-match/42">Heavenly Match 42</a><br>
+                </td>
+                <td class="c7">03 Apr 2017</td>
+              </tr>
+              <tr class="c6">
+                <td class="manga_open"></td>
+                <td><a class="chapter" href="./hyougemono"><strong>Hyougemono</strong></a> <br>
+                  <a class="chaptersrec" href="./hyougemono/66">Hyougemono 66</a><br>
+                </td>
+                <td class="c7">03 Apr 2017</td>
+              </tr>
+              <tr class="c6">
+                <td class="manga_open"></td>
+                <td><a class="chapter" href="./terra-formars"><strong>Terra Formars</strong></a> <br>
+                  <a class="chaptersrec" href="./terra-formars/207">Terra Formars 207</a><br>
+                </td>
+                <td class="c7">03 Apr 2017</td>
+              </tr>
+            </tbody>
+          </table>
+          <span class="c8"><a href="./latest">Click for Older Manga Updates..</a></span></div>
+        <div id="popularmangas">
+          <div id="tfollowme">
+            <iframe allowtransparency="true" frameborder="0" scrolling="no" src="./index_files/follow_button.html" style="width:300px; height:20px;"></iframe>
+          </div>
+          <div class="clear"></div>
+          <div class="c9">
+            <iframe width="300" height="250" scrolling="no" frameborder="0" id="adbottomright2" src="./index_files/rtop4.html"
+              name="adbottomright2" style="display: none !important;"></iframe>
+          </div>
+          <div id="popularcaption">
+            <h2>Popular Manga</h2>
+          </div>
+          <div id="popularlist">
+            <ol>
+              <li>
+                <div style="background-position: 0 0px;" class="icon">
+                  <div class="pop1"></div>
+                </div>
+                <div class="manga"><b><a href="./naruto" class="popularitemcaption">Naruto</a></b><br>
+                  <span><a href="./naruto/700" class="chapters">Naruto 700</a></span></div>
+              </li>
+              <li>
+                <div style="background-position: 0 -50px;" class="icon">
+                  <div class="pop1"></div>
+                </div>
+                <div class="manga"><b><a href="./naruto-gaiden-the-seventh-hokage" class="popularitemcaption">Naruto Gaiden: The Seventh Hokage</a></b><br>
+                  <span><a href="./naruto-gaiden-the-seventh-hokage/10" class="chapters">Naruto Gaiden: The Seventh Hokage 10</a></span></div>
+              </li>
+              <li>
+                <div style="background-position: 0 -100px;" class="icon">
+                  <div class="pop1"></div>
+                </div>
+                <div class="manga"><b><a href="./bleach" class="popularitemcaption">Bleach</a></b><br>
+                  <span><a href="./bleach/686" class="chapters">Bleach 686</a></span></div>
+              </li>
+              <li>
+                <div style="background-position: 0 -150px;" class="icon">
+                  <div class="pop1"></div>
+                </div>
+                <div class="manga"><b><a href="./fairy-tail" class="popularitemcaption">Fairy Tail</a></b><br>
+                  <span><a href="./fairy-tail/529" class="chapters">Fairy Tail 529</a></span></div>
+              </li>
+              <li>
+                <div style="background-position: 0 -200px;" class="icon">
+                  <div class="pop1"></div>
+                </div>
+                <div class="manga"><b><a href="./one-piece" class="popularitemcaption">One Piece</a></b><br>
+                  <span><a href="./one-piece/861" class="chapters">One Piece 861</a></span></div>
+              </li>
+              <li>
+                <div style="background-position: 0 -250px;" class="icon">
+                  <div class="pop1"></div>
+                </div>
+                <div class="manga"><b><a href="./shingeki-no-kyojin" class="popularitemcaption">Shingeki no Kyojin</a></b><br>
+                  <span><a href="./shingeki-no-kyojin/92" class="chapters">Shingeki no Kyojin 92</a></span></div>
+              </li>
+              <li>
+                <div style="background-position: 0 -300px;" class="icon">
+                  <div class="pop1"></div>
+                </div>
+                <div class="manga"><b><a href="./dengeki-daisy" class="popularitemcaption">Dengeki Daisy</a></b><br>
+                  <span><a href="./dengeki-daisy/75" class="chapters">Dengeki Daisy 75</a></span></div>
+              </li>
+              <li>
+                <div style="background-position: 0 -350px;" class="icon">
+                  <div class="pop1"></div>
+                </div>
+                <div class="manga"><b><a href="./hunter-x-hunter" class="popularitemcaption">Hunter X Hunter</a></b><br>
+                  <span><a href="./hunter-x-hunter/360" class="chapters">Hunter X Hunter 360</a></span></div>
+              </li>
+              <li>
+                <div style="background-position: 0 -400px;" class="icon">
+                  <div class="pop1"></div>
+                </div>
+                <div class="manga"><b><a href="./the-breaker-new-waves" class="popularitemcaption">The Breaker: New Waves</a></b><br>
+                  <span><a href="./the-breaker-new-waves/201" class="chapters">The Breaker: New Waves 201</a></span></div>
+              </li>
+              <li>
+                <div style="background-position: 0 -450px;" class="icon">
+                  <div class="pop1"></div>
+                </div>
+                <div class="manga"><b><a href="./toriko" class="popularitemcaption">Toriko</a></b><br>
+                  <span><a href="./toriko/396" class="chapters">Toriko 396</a></span></div>
+              </li>
+              <li>
+                <div style="background-position: 0 -500px;" class="icon">
+                  <div class="pop1"></div>
+                </div>
+                <div class="manga"><b><a href="./fairy-tail-zero" class="popularitemcaption">Fairy Tail Zero</a></b><br>
+                  <span><a href="./fairy-tail-zero/13" class="chapters">Fairy Tail Zero 13</a></span></div>
+              </li>
+              <li>
+                <div style="background-position: 0 -550px;" class="icon">
+                  <div class="pop1"></div>
+                </div>
+                <div class="manga"><b><a href="./nisekoi" class="popularitemcaption">Nisekoi</a></b><br>
+                  <span><a href="./nisekoi/229" class="chapters">Nisekoi 229</a></span></div>
+              </li>
+              <li>
+                <div style="background-position: 0 -600px;" class="icon">
+                  <div class="pop1"></div>
+                </div>
+                <div class="manga"><b><a href="./ao-no-exorcist" class="popularitemcaption">Ao No Exorcist</a></b><br>
+                  <span><a href="./ao-no-exorcist/88" class="chapters">Ao No Exorcist 88</a></span></div>
+              </li>
+              <li>
+                <div style="background-position: 0 -650px;" class="icon">
+                  <div class="pop1"></div>
+                </div>
+                <div class="manga"><b><a href="./nanatsu-no-taizai" class="popularitemcaption">Nanatsu no Taizai</a></b><br>
+                  <span><a href="./nanatsu-no-taizai/210" class="chapters">Nanatsu no Taizai 210</a></span></div>
+              </li>
+              <li>
+                <div style="background-position: 0 -700px;" class="icon">
+                  <div class="pop1"></div>
+                </div>
+                <div class="manga"><b><a href="./akame-ga-kiru" class="popularitemcaption">Akame ga Kiru!</a></b><br>
+                  <span><a href="./akame-ga-kiru/78" class="chapters">Akame ga Kiru! 78</a></span></div>
+              </li>
+              <li>
+                <div style="background-position: 0 -750px;" class="icon">
+                  <div class="pop1"></div>
+                </div>
+                <div class="manga"><b><a href="./freezing" class="popularitemcaption">Freezing</a></b><br>
+                  <span><a href="./freezing/207" class="chapters">Freezing 207</a></span></div>
+              </li>
+              <li>
+                <div style="background-position: 0 -800px;" class="icon">
+                  <div class="pop1"></div>
+                </div>
+                <div class="manga"><b><a href="./gintama" class="popularitemcaption">Gintama</a></b><br>
+                  <span><a href="./gintama/629" class="chapters">Gintama 629</a></span></div>
+              </li>
+              <li>
+                <div style="background-position: 0 -850px;" class="icon">
+                  <div class="pop1"></div>
+                </div>
+                <div class="manga"><b><a href="./assassination-classroom" class="popularitemcaption">Assassination Classroom</a></b><br>
+                  <span><a href="./assassination-classroom/184" class="chapters">Assassination Classroom 184</a></span></div>
+              </li>
+              <li>
+                <div style="background-position: 0 -900px;" class="icon">
+                  <div class="pop1"></div>
+                </div>
+                <div class="manga"><b><a href="./world-trigger" class="popularitemcaption">World Trigger</a></b><br>
+                  <span><a href="./world-trigger/164" class="chapters">World Trigger 164</a></span></div>
+              </li>
+              <li>
+                <div style="background-position: 0 -950px;" class="icon">
+                  <div class="pop1"></div>
+                </div>
+                <div class="manga"><b><a href="./tale-of-fairy-ice-trail-koori-no-kiseki" class="popularitemcaption">Tale of Fairy Ice Trail - Koori no Kiseki</a></b><br>
+                  <span><a href="./tale-of-fairy-ice-trail-koori-no-kiseki/13" class="chapters">Tale of Fairy Ice Trail - Koori no Kiseki 13</a></span></div>
+              </li>
+              <li>
+                <div style="background-position: 0 -1000px;" class="icon">
+                  <div class="pop1"></div>
+                </div>
+                <div class="manga"><b><a href="./onepunch-man" class="popularitemcaption">Onepunch-Man</a></b><br>
+                  <span><a href="./onepunch-man/115" class="chapters">Onepunch-Man 115</a></span></div>
+              </li>
+              <li>
+                <div style="background-position: 0 -1050px;" class="icon">
+                  <div class="pop1"></div>
+                </div>
+                <div class="manga"><b><a href="./karate-shoukoushi-kohinata-minoru" class="popularitemcaption">Karate Shoukoushi Kohinata Minoru</a></b><br>
+                  <span><a href="./karate-shoukoushi-kohinata-minoru/438" class="chapters">Karate Shoukoushi Kohinata Minoru 438</a></span></div>
+              </li>
+              <li>
+                <div style="background-position: 0 -1100px;" class="icon">
+                  <div class="pop1"></div>
+                </div>
+                <div class="manga"><b><a href="./sket-dance" class="popularitemcaption">Sket Dance</a></b><br>
+                  <span><a href="./sket-dance/288" class="chapters">Sket Dance 288</a></span></div>
+              </li>
+              <li>
+                <div style="background-position: 0 -1150px;" class="icon">
+                  <div class="pop1"></div>
+                </div>
+                <div class="manga"><b><a href="./magi" class="popularitemcaption">Magi</a></b><br>
+                  <span><a href="./magi/340" class="chapters">Magi 340</a></span></div>
+              </li>
+              <li>
+                <div style="background-position: 0 -1200px;" class="icon">
+                  <div class="pop1"></div>
+                </div>
+                <div class="manga"><b><a href="./hayate-the-combat-butler" class="popularitemcaption">Hayate the Combat Butler</a></b><br>
+                  <span><a href="./hayate-the-combat-butler/565" class="chapters">Hayate the Combat Butler 565</a></span></div>
+              </li>
+              <li>
+                <div style="background-position: 0 -1250px;" class="icon">
+                  <div class="pop1"></div>
+                </div>
+                <div class="manga"><b><a href="./shokugeki-no-soma" class="popularitemcaption">Shokugeki no Soma</a></b><br>
+                  <span><a href="./shokugeki-no-soma/209" class="chapters">Shokugeki no Soma 209</a></span></div>
+              </li>
+              <li>
+                <div style="background-position: 0 -1300px;" class="icon">
+                  <div class="pop1"></div>
+                </div>
+                <div class="manga"><b><a href="./soul-catchers" class="popularitemcaption">Soul Catchers</a></b><br>
+                  <span><a href="./soul-catchers/41" class="chapters">Soul Catchers 41</a></span></div>
+              </li>
+              <li>
+                <div style="background-position: 0 -1350px;" class="icon">
+                  <div class="pop1"></div>
+                </div>
+                <div class="manga"><b><a href="./akuma-no-riddle" class="popularitemcaption">Akuma no Riddle</a></b><br>
+                  <span><a href="./akuma-no-riddle/46" class="chapters">Akuma no Riddle 46</a></span></div>
+              </li>
+              <li>
+                <div style="background-position: 0 -1400px;" class="icon">
+                  <div class="pop1"></div>
+                </div>
+                <div class="manga"><b><a href="./ao-haru-ride" class="popularitemcaption">Ao Haru Ride</a></b><br>
+                  <span><a href="./ao-haru-ride/49" class="chapters">Ao Haru Ride 49</a></span></div>
+              </li>
+              <li>
+                <div style="background-position: 0 -1450px;" class="icon">
+                  <div class="pop1"></div>
+                </div>
+                <div class="manga"><b><a href="./noblesse" class="popularitemcaption">Noblesse</a></b><br>
+                  <span><a href="./noblesse/452" class="chapters">Noblesse 452</a></span></div>
+              </li>
+              <li>
+                <div style="background-position: 0 -1500px;" class="icon">
+                  <div class="pop1"></div>
+                </div>
+                <div class="manga"><b><a href="./say-i-love-you" class="popularitemcaption">Say I love You</a></b><br>
+                  <span><a href="./say-i-love-you/52" class="chapters">Say I love You 52</a></span></div>
+              </li>
+              <li>
+                <div style="background-position: 0 -1550px;" class="icon">
+                  <div class="pop1"></div>
+                </div>
+                <div class="manga"><b><a href="./yamada-kun-to-7-nin-no-majo" class="popularitemcaption">Yamada-kun to 7-nin no Majo</a></b><br>
+                  <span><a href="./yamada-kun-to-7-nin-no-majo/243" class="chapters">Yamada-kun to 7-nin no Majo 243</a></span></div>
+              </li>
+              <li>
+                <div style="background-position: 0 -1600px;" class="icon">
+                  <div class="pop1"></div>
+                </div>
+                <div class="manga"><b><a href="./kuroshitsuji" class="popularitemcaption">Kuroshitsuji</a></b><br>
+                  <span><a href="./kuroshitsuji/126" class="chapters">Kuroshitsuji 126</a></span></div>
+              </li>
+              <li>
+                <div style="background-position: 0 -1650px;" class="icon">
+                  <div class="pop1"></div>
+                </div>
+                <div class="manga"><b><a href="./the-gamer" class="popularitemcaption">The Gamer</a></b><br>
+                  <span><a href="./the-gamer/167" class="chapters">The Gamer 167</a></span></div>
+              </li>
+              <li>
+                <div style="background-position: 0 -1700px;" class="icon">
+                  <div class="pop1"></div>
+                </div>
+                <div class="manga"><b><a href="./tate-no-yuusha-no-nariagari" class="popularitemcaption">Tate no Yuusha no Nariagari</a></b><br>
+                  <span><a href="./tate-no-yuusha-no-nariagari/32" class="chapters">Tate no Yuusha no Nariagari 32</a></span></div>
+              </li>
+              <li>
+                <div style="background-position: 0 -1750px;" class="icon">
+                  <div class="pop1"></div>
+                </div>
+                <div class="manga"><b><a href="./highschool-dxd" class="popularitemcaption">Highschool DxD</a></b><br>
+                  <span><a href="./highschool-dxd/32" class="chapters">Highschool DxD 32</a></span></div>
+              </li>
+              <li>
+                <div style="background-position: 0 -1800px;" class="icon">
+                  <div class="pop1"></div>
+                </div>
+                <div class="manga"><b><a href="./watashi-ni-xx-shinasai" class="popularitemcaption">Watashi ni xx Shinasai!</a></b><br>
+                  <span><a href="./watashi-ni-xx-shinasai/74" class="chapters">Watashi ni xx Shinasai! 74</a></span></div>
+              </li>
+              <li>
+                <div style="background-position: 0 -1850px;" class="icon">
+                  <div class="pop1"></div>
+                </div>
+                <div class="manga"><b><a href="./kimi-ni-todoke" class="popularitemcaption">Kimi Ni Todoke</a></b><br>
+                  <span><a href="./kimi-ni-todoke/110" class="chapters">Kimi Ni Todoke 110</a></span></div>
+              </li>
+              <li>
+                <div style="background-position: 0 -1900px;" class="icon">
+                  <div class="pop1"></div>
+                </div>
+                <div class="manga"><b><a href="./love-so-life" class="popularitemcaption">Love So Life</a></b><br>
+                  <span><a href="./love-so-life/106" class="chapters">Love So Life 106</a></span></div>
+              </li>
+              <li>
+                <div style="background-position: 0 -1950px;" class="icon">
+                  <div class="pop1"></div>
+                </div>
+                <div class="manga"><b><a href="./kamisama-hajimemashita" class="popularitemcaption">Kamisama Hajimemashita</a></b><br>
+                  <span><a href="./kamisama-hajimemashita/135" class="chapters">Kamisama Hajimemashita 135</a></span></div>
+              </li>
+            </ol>
+          </div>
+        </div>
+        <div class="clear"></div>
+      </div>
+      <div class="clear"></div>
+    </div>
 
-<!-- BEGIN BEBI SKIN JS TAG -->
-<script type="text/javascript">
-    if(!window.BB_ind) { BB_ind = 0; }
-    if(!window.BB_r) { BB_r = Math.floor(Math.random()*1000000000)}
-    BB_ind++;
-    window.BB_skin = {
+    <!-- BEGIN BEBI SKIN JS TAG -->
+    <script type="text/javascript">
+      if (!window.BB_ind) { BB_ind = 0; }
+      if (!window.BB_r) { BB_r = Math.floor(Math.random() * 1000000000) }
+      BB_ind++;
+      window.BB_skin = {
         centerWidth: 950,
         centerDomId: '',
         deferLoading: false,
@@ -748,52 +925,60 @@ ga('send', 'pageview');
         //DO NOT CHANGE BELOW
         pl: 7,
         index: BB_ind
-    };
-</script>
-<script type="text/javascript" async="" src="http://st.bebi.com/bebi_v3.js"></script>
-<!-- END TAG -->
-<div class="clear"></div>
-<div id="adfooter"><iframe width="300" height="250" scrolling="no" frameborder="0" id="adbottomleft" src="./index_files/left8.html" name="adbottomleft" style="display: none !important;"></iframe> <iframe width="300" height="250" scrolling="no" frameborder="0" id="adbottomright" src="./index_files/right13.html" name="adbottomright" style="display: none !important;"></iframe></div>
-<div id="wrapper_footer">
-<table cellspacing="0">
-<tbody>
-<tr>
-<td class="footer-column bold c10" align="left" valign="top">2016 AFTV Network</td>
-<td class="footer-column" valign="top" width="20%">
-<ul>
-<li><b>Network</b></li>
-<li><a href="http://www.animefreak.tv/" target="_blank">Anime</a></li>
-<li><a href="http://www.animepremium.net/" target="_blank">Anime Downloads</a></li>
-<li><a href="./">Manga</a></li>
-<li><a href="./privacy">Privacy Statements</a></li>
-</ul>
-</td>
-<td class="footer-column" align="left" valign="top" width="20%">
-<ul>
-<li><b>Partners</b></li>
-<li><a href="http://www.upload2.com/" target="_blank">Free File Hosting</a></li>
-<li><a href="http://www.watchcartoons.com/" target="_blank">Watch Cartoons Online</a></li>
-<li><a href="http://www.animemobile.com/MangaApp/" target="_blank">Android Manga App</a></li>
-<li><a href="http://www.animemobile.com/apk/" target="_blank">Android Anime App</a></li>
-<li><a href="http://www.memecenter.com/" target="_blank">Memes</a></li>
-</ul>
-</td>
-<td class="footer-column" align="left" valign="top" width="1%"></td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
+      };
 
-<script language="JavaScript" type="text/javascript">
-        var bebi_acc = '1';
-        var bebi_campaign = '150';
     </script>
-    <script type="text/javascript" src="http://srv.bebi.com/public/js/bebi_v1.js"></script>
-<script language="JavaScript" type="text/javascript">
+    <script type="text/javascript" async="" src="http://st.bebi.com/bebi_v3.js"></script>
+    <!-- END TAG -->
+    <div class="clear"></div>
+    <div id="adfooter">
+      <iframe width="300" height="250" scrolling="no" frameborder="0" id="adbottomleft" src="./index_files/left8.html" name="adbottomleft"
+        style="display: none !important;"></iframe>
+      <iframe width="300" height="250" scrolling="no" frameborder="0" id="adbottomright" src="./index_files/right13.html"
+        name="adbottomright" style="display: none !important;"></iframe>
+    </div>
+    <div id="wrapper_footer">
+      <table cellspacing="0">
+        <tbody>
+          <tr>
+            <td class="footer-column bold c10" align="left" valign="top">2016 AFTV Network</td>
+            <td class="footer-column" valign="top" width="20%">
+              <ul>
+                <li><b>Network</b></li>
+                <li><a href="http://www.animefreak.tv/" target="_blank">Anime</a></li>
+                <li><a href="http://www.animepremium.net/" target="_blank">Anime Downloads</a></li>
+                <li><a href="./">Manga</a></li>
+                <li><a href="./privacy">Privacy Statements</a></li>
+              </ul>
+            </td>
+            <td class="footer-column" align="left" valign="top" width="20%">
+              <ul>
+                <li><b>Partners</b></li>
+                <li><a href="http://www.upload2.com/" target="_blank">Free File Hosting</a></li>
+                <li><a href="http://www.watchcartoons.com/" target="_blank">Watch Cartoons Online</a></li>
+                <li><a href="http://www.animemobile.com/MangaApp/" target="_blank">Android Manga App</a></li>
+                <li><a href="http://www.animemobile.com/apk/" target="_blank">Android Anime App</a></li>
+                <li><a href="http://www.memecenter.com/" target="_blank">Memes</a></li>
+              </ul>
+            </td>
+            <td class="footer-column" align="left" valign="top" width="1%"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script language="JavaScript" type="text/javascript">
+    var bebi_acc = '1';
+    var bebi_campaign = '150';
+  </script>
+  <script type="text/javascript" src="http://srv.bebi.com/public/js/bebi_v1.js"></script>
+  <script language="JavaScript" type="text/javascript">
         var bebi_acc = '1';
         var bebi_campaign = '180';
-    </script>
-    <script type="text/javascript" src="http://srv.bebi.com/public/js/bebi_v1.js"></script>
+  </script>
+  <script type="text/javascript" src="http://srv.bebi.com/public/js/bebi_v1.js"></script>
 
-</body></html>
+</body>
+
+</html>
