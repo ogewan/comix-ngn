@@ -1,4 +1,4 @@
-/** @preserve comix-ngn v1.3.0 | (c) 2015 Oluwaseun Ogedengbe| ogewan.github.io/comix-ngn/ |License: MIT|
+/** @preserve comix-ngn v1.4.0 | (c) 2015 Oluwaseun Ogedengbe| ogewan.github.io/comix-ngn/ |License: MIT|
 embeds domReady: github.com/ded/domready (MIT) (c) 2013 Dustin Diaz, pegasus: typicode.github.io/pegasus (MIT) (c) 2014 typicode, pathjs (MIT) (c) 2011 Mike Trpcic, direction.js*/
 /*The namespace of comix-ngn
 all variables should be properties of this to prevent global namespace pollution*/
@@ -55,6 +55,7 @@ cG.verbose = function(a){
 /*Check repo existence*/
 cG.REPO = cG.REPO||{};
 /*Set repo defaults - ASSUMES defaults aren't set, will overwrite them*/
+//TODO: REPLACE pegasus and domReady to support electron app
 cG.REPO.agent = {def:/*pegasus.js*/function(t,e){return e=new XMLHttpRequest,e.open("GET",t),t=[],e.onreadystatechange=e.then=function(n,o,i){if(n&&n.call&&(t=[,n,o]),4==e.readyState&&(i=t[0|e.status/200]))try{i(JSON.parse(e.responseText),e)}catch(r){i(e.responseText,e)}},e.send(),e}};
 cG.REPO.director = {"def":Path};
 cG.REPO.producer = {"def":cG.N};

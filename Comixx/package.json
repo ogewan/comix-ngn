@@ -1,0 +1,19 @@
+{
+  "name": "comixx",
+  "version": "0.0.1",
+  "description": "The premiere comic viewer and manager for Comics and WebComics powered by comix-ngn.",
+  "author": "Ogewan <seun40@gmail.com>",
+  "license": "Apache-2.0",
+  "main": "./main.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ogewan/comixx.git"
+  },
+  "scripts": {
+    "start": "electron ."
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "electron": "^2.0.0"
+  }
+}

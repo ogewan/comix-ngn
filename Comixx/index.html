@@ -1,23 +1,25 @@
+<!DOCTYPE html><title>comixx</title>
+
 <script>
-    //Minify before use
     var cG = {};
     cG.recyclebin = {
         defer : !0,
-        mainsrc : "comixngn.min.js",
+        mainsrc : "../comixngn.js",
         loadcng : [],/*to load*/
         plugin : "",
         comicID : "",
         disable : [],
-        /*! Bellerophon: Comix-Ngn plugin|pegasus: typicode.github.io/pegasus (MIT) (c) 2014 typicode*/
+        /*! Bellerophon_modded: Comix-Ngn plugin|pegasus: typicode.github.io/pegasus (MIT) (c) 2014 typicode*/
         dir : "",
         tir : "",
         air : "",
         fBox: {fstrun: true, pgepsh: true, pgesve: true, rtepge: true, protect: true, noverwrite: true, arrow: true},
         dfr : function() {
+            console.log("debug bellerophon");
             var c = document.createElement("script");
-            cG.REPO.scReq.getScript = cG.agent("./" + cG.recyclebin.dir + "script.json");
-            cG.REPO.scReq.getDecor = cG.agent("./" + cG.recyclebin.tir + "decor.html");
-            cG.REPO.scReq.getCtrls = cG.agent(cG.recyclebin.tir+'ctrls.html');
+            cG.REPO.scReq.getScript = cG.agent("./" + cG.recyclebin.dir + "config.json");
+            cG.REPO.scReq.getDecor = true;
+            cG.REPO.scReq.getCtrls = true;
             cG.REPO.scReq.getScript.then(function(c) {
                 void 0 === cG.REPO.script ? cG.REPO.script = {
                     def: c
@@ -26,23 +28,10 @@
                 console.error(c, e.status), void 0 === cG.REPO.script ? cG.REPO.script = {
                     def: 0
                 } : cG.REPO.script.def = c, cG.script = cG.REPO.script.def
-            }), cG.REPO.scReq.getDecor.then(function(c) {
-                void 0 === cG.REPO.decor ? cG.REPO.decor = {
-                    def: c
-                } : cG.REPO.decor.def = c, cG.decor = cG.REPO.decor.def
-            }, function(c, e) {
-                console.error(c, e.status), void 0 === cG.REPO.decor ? cG.REPO.decor = {
-                    def: 0
-                } : cG.REPO.decor.def = 0, cG.decor = cG.REPO.decor.def
-            }), cG.REPO.scReq.getCtrls.then(function(c) {
-                void 0 === cG.REPO.ctrls ? cG.REPO.ctrls = {
-                    def: c
-                } : cG.REPO.ctrls.def = c, cG.ctrls = cG.REPO.ctrls.def
-            }, function(c, e) {
-                console.error(c, e.status), void 0 === cG.REPO.ctrls ? cG.REPO.ctrls = {
-                    def: 0
-                } : cG.REPO.ctrls.def = 0, cG.ctrls = cG.REPO.ctrls.def
             });
+            void 0 === cG.REPO.decor ? cG.REPO.decor = { def: 0 } : cG.REPO.decor.def = c, cG.decor = cG.REPO.decor.def;
+            void 0 === cG.REPO.ctrls ? cG.REPO.ctrls = { def: 0 } : cG.REPO.ctrls.def = c, cG.ctrls = cG.REPO.ctrls.def;
+
             cG.comicID = cG.recyclebin.comicID;
             for(var b=0;b<cG.recyclebin.disable.length;b++){
                 cG.dis[cG.recyclebin.disable[b]]=true;
@@ -70,3 +59,18 @@
         return cG.recyclebin.defer ? void(window.addEventListener ? window.addEventListener("load", cG.recyclebin.dfr, !1) : window.attachEvent ? window.attachEvent("onload", cG.recyclebin.dfr) : window.onload = cG.recyclebin.dfr) : cG.recyclebin.dfr()
     }();
 </script>
+
+<!--
+if script.json is in a directory other than root, you must specify that directory's path in the optional dir attribute of the script tag, preferably the first. Using different dir values will result in unpredictable behavior.
+the html templates must be in the directory specified by template, if they are not in root-->
+<div id class="venue" use script config additive="additive"></div>
+<!--
+id-selector that will be prepended to all interior elements
+class"venue" - required class that identifies this tag as an entry point
+use - an additional attribute that specifies the plug in to use for this venue. 
+It only applies to plugins that modify the stage. By default, it is the last plug-in added.
+"default" uses factory stage, "plug-in name" applies a specific plug-in
+script - an additional attribute that specifies which script this venue shoud use, either a url or a string.
+By default it uses script.json.
+-->
+<span cglink="gsvfgshdyfgftdgxs"></span>

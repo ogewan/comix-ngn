@@ -1,4 +1,5 @@
-/*_comixngn is a development only JavaScript file that compiles the seperate modules in factory into a single core file.
+/* DEPRECATED
+_comixngn is a development only JavaScript file that compiles the seperate modules in factory into a single core file.
 It is only for testing purposes to ensure the modules work together as intended.
 Suggested order:
 1. def_libs - defines global libraries that cannot be included in the cG namespace, Path, DomReady

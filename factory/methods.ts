@@ -192,7 +192,12 @@ cG.stageInjection = function(SPECIFIC,attempts){
     if (attempts === void 0 || attempts === null) attempts = 0;
     else if (attempts>20){
         console.error("cG.stageInjection has timed out");
-        return cG.cPanel;
+        if (cG.script !== '') {
+            console.error("OVERRIDE: Ignore other preferences")
+            cG.decor = cG.decor || 0;
+            cG.ctrls = cG.ctrls || 0;
+        }
+         else return cG.cPanel;
     }
     if(cG.script === '' || cG.decor === ''|| cG.ctrls === '') {//although we don't need decor, if there is a template, we prioritize it
         /*if are stuff isn't ready yet we are going to wait for it*/
