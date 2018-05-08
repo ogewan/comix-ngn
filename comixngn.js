@@ -1,5 +1,5 @@
 "use strict";
-/*DEFAULT LIB FUNCTIONS-contains Path(Router) and DomReady*/
+/*DEFAULT LIB FUNCTIONS-contains Path(Router)*/
 var Path = { version: "0.8.4", map: function (a) { if (Path.routes.defined.hasOwnProperty(a)) {
         return Path.routes.defined[a];
     }
@@ -133,14 +133,6 @@ Path.core.route.prototype = { to: function (a) { this.action = a; return this; }
         this.router = router;
     }
 }).call(this); //location init
-/*domReady.js _MODDED*/ !((e, t) => { this[e] = t(); })("domReady", function (e) { function p(e) { h = 1; while (e = t.shift())
-    e(); } var t = [], n, r = !1, i = document, s = i.documentElement, o = s.doScroll, u = "DOMContentLoaded", a = "addEventListener", f = "onreadystatechange", l = "readyState", c = o ? /^loaded|^c/ : /^loaded|c/, h = c.test(i[l]); return i[a] && i[a](u, n = function () { i.removeEventListener(u, n, r), p(); }, r), o && i.attachEvent(f, n = function () { /^c/.test(i[l]) && (i.detachEvent(f, n), p()); }), e = o ? function (n) { self != top ? h ? n() : t.push(n) : function () { try {
-    s.doScroll("left");
-}
-catch (t) {
-    return setTimeout(function () { e(n); }, 50);
-} n(); }(); } : function (e) { h ? e() : t.push(e); }; });
-/*domready cannot be embedded into the cG object, which means it is not replacable via plugin*/
 function syncJSON(filePath) {
     // Load json file;
     var json = loadTextFileAjaxSync(filePath, "application/json");
@@ -200,7 +192,7 @@ cG.cPanel = cG.cPanel || {}; /*cG control panel, all stages are stored here*/
 * click - toggles click navigation
 * vscript - virtual script allows, a script defined as a JS variable to overwrite the script request (Writer)
 * addme = supports additive jsons*/
-cG.info = { vix: "1.3.0", vwr: "2.0.0", vpr: "0.1.0" }; /*version settings*/
+cG.info = { vix: "1.3.0", vwr: "2.0.0", vpr: "0.1.0", vxx: "0.0.1" }; /*version settings*/
 cG.dis = cG.dis || {}; //disables statistic and error reporting
 cG.recyclebin = cG.recyclebin || {}; //variables that are used in initialization, disposed at stage injection
 cG.queue = cG.queue || {}; //stores functions that are called incertain events
@@ -232,6 +224,8 @@ cG.verbose = function (a) {
 cG.REPO = cG.REPO || {};
 /*Set repo defaults - ASSUMES defaults aren't set, will overwrite them*/
 //TODO: REPLACE pegasus and domReady to support electron app
+cG.REPO.rdy = { def: /*domready (c) Dustin Diaz 2014 - License MIT _ogewan fork*/ (a => ("undefined" != typeof module && module.exports ? module.exports = a() : "function" == typeof define && "object" == define.amd && define(a), a()))(() => { var a, b = [], c = "object" == typeof document && document, d = c && c.documentElement.doScroll, e = c && (d ? /^loaded|^c/ : /^loaded|^i|^c/).test(c.readyState); return !e && c && c.addEventListener("DOMContentLoaded", a = () => { for (c.removeEventListener("DOMContentLoaded", a), e = 1; a = b.shift();)
+        a(); }), a => { e ? setTimeout(a, 0) : b.push(a); }; }) };
 cG.REPO.agent = { def: /*pegasus.js*/ function (t, e) { return e = new XMLHttpRequest, e.open("GET", t), t = [], e.onreadystatechange = e.then = function (n, o, i) { if (n && n.call && (t = [, n, o]), 4 == e.readyState && (i = t[0 | e.status / 200]))
         try {
             i(JSON.parse(e.responseText), e);
@@ -252,6 +246,7 @@ cG.producer = cG.REPO.producer.def;
 cG.ctrls = cG.REPO.ctrls.def;
 cG.decor = cG.REPO.decor.def;
 cG.script = cG.REPO.script.def;
+cG.rdy = cG.REPO.rdy.def;
 /*END comix-ngn properties*/
 /*STAGE creation-REDACTED*/
 //cG.HELPERS.jstagecreate = cG.N;
@@ -1763,7 +1758,7 @@ cG.route2page = cG.route2page || function (orgvalue) {
 };
 /*end routing*/ 
 Path.map("#/:v1(/:v2/:v3/:v4/:v5/:v6/:v7/:v8/:v9)").to(cG.route2page);
-domReady(function () {
+cG.rdy(function () {
     Path.listen();
     //Path.history.listen(true);
     /*everything else occurs here*/

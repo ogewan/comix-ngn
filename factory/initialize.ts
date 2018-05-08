@@ -1,3 +1,4 @@
+//TODO: --rewrite_polyfills=false
 /** @preserve comix-ngn v1.4.0 | (c) 2015 Oluwaseun Ogedengbe| ogewan.github.io/comix-ngn/ |License: MIT|
 embeds domReady: github.com/ded/domready (MIT) (c) 2013 Dustin Diaz, pegasus: typicode.github.io/pegasus (MIT) (c) 2014 typicode, pathjs (MIT) (c) 2011 Mike Trpcic, direction.js*/
 /*The namespace of comix-ngn
@@ -29,7 +30,7 @@ cG.cPanel = cG.cPanel||{};/*cG control panel, all stages are stored here*/
 * click - toggles click navigation
 * vscript - virtual script allows, a script defined as a JS variable to overwrite the script request (Writer)
 * addme = supports additive jsons*/
-cG.info = {vix: "1.3.0",vwr: "2.0.0",vpr: "0.1.0"};/*version settings*/
+cG.info = {vix: "1.3.0",vwr: "2.0.0",vpr: "0.1.0", vxx: "0.0.1"};/*version settings*/
 cG.dis = cG.dis||{};//disables statistic and error reporting
 cG.recyclebin = cG.recyclebin||{};//variables that are used in initialization, disposed at stage injection
 cG.queue = cG.queue||{};//stores functions that are called incertain events
@@ -38,6 +39,18 @@ cG.prePage = cG.prePage||-1;//page given to the engine before initialization fin
 cG.controllers = cG.controllers||{};//stores all nav bars that control stages here
 cG.avx = cG.avx||cG.info.vix.split(".");
 cG.info.vrb = 1;
+Object.defineProperty(cG, 'script$', {
+  get() { return cG.script; },
+  set(script) { 
+      if (typeof script === 'string') {
+          try {script = JSON.parse(script)}
+          catch (e) { console.error("Script must be valid JSON")};
+      }
+      //TODO: validate JSON schema
+
+   },
+});
+//TODO: ES6 shorthand function support
 cG.verbose = function(a){
     var submit = [];
     var b=1,c,d=1;
@@ -56,6 +69,7 @@ cG.verbose = function(a){
 cG.REPO = cG.REPO||{};
 /*Set repo defaults - ASSUMES defaults aren't set, will overwrite them*/
 //TODO: REPLACE pegasus and domReady to support electron app
+cG.REPO.rdy = {def:/*domready (c) Dustin Diaz 2014 - License MIT _ogewan fork*/(a=>("undefined"!=typeof module&&module.exports?module.exports=a():"function"==typeof define&&"object"==define.amd&&define(a),a()))(()=>{var a,b=[],c="object"==typeof document&&document,d=c&&c.documentElement.doScroll,e=c&&(d?/^loaded|^c/:/^loaded|^i|^c/).test(c.readyState);return!e&&c&&c.addEventListener("DOMContentLoaded",a=()=>{for(c.removeEventListener("DOMContentLoaded",a),e=1;a=b.shift();)a()}),a=>{e?setTimeout(a,0):b.push(a)}})};
 cG.REPO.agent = {def:/*pegasus.js*/function(t,e){return e=new XMLHttpRequest,e.open("GET",t),t=[],e.onreadystatechange=e.then=function(n,o,i){if(n&&n.call&&(t=[,n,o]),4==e.readyState&&(i=t[0|e.status/200]))try{i(JSON.parse(e.responseText),e)}catch(r){i(e.responseText,e)}},e.send(),e}};
 cG.REPO.director = {"def":Path};
 cG.REPO.producer = {"def":cG.N};
@@ -70,6 +84,7 @@ cG.producer = cG.REPO.producer.def;
 cG.ctrls = cG.REPO.ctrls.def;
 cG.decor = cG.REPO.decor.def;
 cG.script = cG.REPO.script.def;
+cG.rdy = cG.REPO.rdy.def;
 /*END comix-ngn properties*/
 /*STAGE creation-REDACTED*/
 //cG.HELPERS.jstagecreate = cG.N;

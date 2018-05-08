@@ -12,7 +12,6 @@
   "scripts": {
     "start": "electron ."
   },
-  "dependencies": {},
   "devDependencies": {
     "electron": "^2.0.0"
   }
