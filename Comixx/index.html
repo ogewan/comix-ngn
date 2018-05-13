@@ -4,23 +4,26 @@
     <meta charset="utf-8">
     <meta content="width=device-width,initial-scale=1,minimal-ui" name="viewport">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Material+Icons">
-    <link rel="stylesheet" href="https://unpkg.com/vue-material@beta/dist/vue-material.min.css">
-    <link rel="stylesheet" href="https://unpkg.com/vue-material@beta/dist/theme/default.css">
+    <link rel="stylesheet" href="node_modules/xel/themes/macos.css">
   </head>
-
   <body>
-    <div id="app">
-        <md-app></md-app>
-    </div>
 
-    <script src="https://unpkg.com/vue"></script>
-    <script src="https://unpkg.com/vue-material@beta"></script>
-    <script>
-      Vue.use(VueMaterial.default)
+      <input id="flist" type="file" webkitdirectory/>
+      <div id="accordion">
+          <h3>Cover</h3>
+          <div id=cover>
+            <img id=covele >
+          </div>
+          <h3>Pages</h3>
+          <div id=pages>
+            
+          </div>
+          <h3>Comics</h3>
+          <div id=thumbs>
+            
+          </div>
+        </div>
 
-      new Vue({
-        el: '#app'
-      })
-    </script>
+    <script src="comixx.js"></script>
   </body>
 </html>

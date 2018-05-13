@@ -157,6 +157,12 @@ function loadTextFileAjaxSync(filePath, mimeType) {
         return null;
     }
 }
+//TODO: --rewrite_polyfills=false
+/*TODO:
+(()=>{return this['cG'] = this['cG'] || new (function cG(){
+this.voice = "Welcome to the World";
+})()})();
+*/
 /** @preserve comix-ngn v1.4.0 | (c) 2015 Oluwaseun Ogedengbe| ogewan.github.io/comix-ngn/ |License: MIT|
 embeds domReady: github.com/ded/domready (MIT) (c) 2013 Dustin Diaz, pegasus: typicode.github.io/pegasus (MIT) (c) 2014 typicode, pathjs (MIT) (c) 2011 Mike Trpcic, direction.js*/
 /*The namespace of comix-ngn
@@ -201,6 +207,24 @@ cG.prePage = cG.prePage || -1; //page given to the engine before initialization 
 cG.controllers = cG.controllers || {}; //stores all nav bars that control stages here
 cG.avx = cG.avx || cG.info.vix.split(".");
 cG.info.vrb = 1;
+Object.defineProperty(cG, 'script$', {
+    get() { return cG.script; },
+    set(script) {
+        if (typeof script === 'string') {
+            try {
+                script = JSON.parse(script);
+            }
+            catch (e) {
+                console.error("Script must be valid JSON");
+            }
+            ;
+        }
+        //TODO: validate JSON schema
+        cG.comix.internals = script;
+        cG.comix.frst();
+    },
+});
+//TODO: ES6 shorthand function support
 cG.verbose = function (a) {
     var submit = [];
     var b = 1, c, d = 1;
