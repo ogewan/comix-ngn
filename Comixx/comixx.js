@@ -1,4 +1,4 @@
-
+ 
 var fs = require("fs-extra")
     , Path = require("path")
     , targetDir = './.ignore/testDir'
