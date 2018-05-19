@@ -1,4 +1,4 @@
-(function (input, anchor, owrite, config) {
+cG.REPO.stage = cG.REPO.stage(function (input, anchor, owrite, config) {
     /* direction.js (c) 2015 Seun Ogedengbe, MIT*/
     //input - an object, list, or string
     //anchor - the html object to append
@@ -368,6 +368,7 @@
     layers[1].style.position = "relative";
     //layers[1].style.visibility="hidden";
     if (anchor) anchor.appendChild(layers[1]);
-    else document.body.appendChild(layers[1]);});
+    else document.body.appendChild(layers[1]);}
+);
 ///////
 cG.stage = cG.REPO.stage.def;

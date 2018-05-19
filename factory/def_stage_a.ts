@@ -1,5 +1,5 @@
 ///////
-cG.REPO.stage = ((direction) => {
+cG.REPO.stage = (direction: Function) => {
     return {
         "def": {
             id: "def",
@@ -151,4 +151,4 @@ cG.REPO.stage = ((direction) => {
             }
         }
     };
-})
+};
