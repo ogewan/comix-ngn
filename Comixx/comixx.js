@@ -1,6 +1,6 @@
  
 var fs = require("fs-extra")
-    , Path = require("path")
+    , $Path = require("path")
     , targetDir = './.ignore/testDir'
     , $ = jQuery = require("jquery")
     , up = require("all-unpacker")
@@ -28,6 +28,7 @@ var fs = require("fs-extra")
         imgar = imgar.map(ele => { return {id: ele.id, fi: tempDir + "\\" + ele.fi};});
         var subEle = $('<img height="100" width="100">')
         , loadPage = function() {
+            /*
             //var { imgar } = subEle.data();
             $("#covele").attr("src", imgar[0].fi);
             $("#pages").empty();
@@ -39,10 +40,20 @@ var fs = require("fs-extra")
                 });
                 $("#pages").append(ssEle);
             });
+            */
+            var { script } = subEle.data();
+            if (!stageOn) {
+                stageOn = true;
+                cG.script = script;
+                cG.stageInjection();
+            } else {
+                cG.comix.internals.pages = script.pages;
+                cG.comix.commitSwap();
+            }
         }
         , unpackComic = () => {
             var rest = imgar.map(ele => { return ele.id; });
-            fs.readdir(Path.dirname(imgar[0].fi), (err, files) => {
+            fs.readdir($Path.dirname(imgar[0].fi), (err, files) => {
                 if(files.length != imgar.length) {
                     rest.unshift(); //remove the first
                     return up.unpack(cPath, {targetDir, "forceOverwrite": true, "indexes" : rest}, (err, src) => {
@@ -53,11 +64,12 @@ var fs = require("fs-extra")
             });
         }
         , script = {
-            //config: { dir: tempDir +'/' },
+            config: { /*dir: tempDir +'/'*/ },
+            loading: {},
             pages: imgar.map(ele => {
                 return {
                     extractID: ele.id, 
-                    url: [tempDir + "\\" + ele.fi]
+                    url: [ele.fi]
                 };
             }),
             chapters: []
@@ -67,7 +79,7 @@ var fs = require("fs-extra")
         subEle.data({ cPath, script });
         subEle.click(unpackComic);
         $("#thumbs").append(subEle);
-    }
+    }, stageOn = false
     ;
 
 $("#flist").on("change", () => {
@@ -77,17 +89,17 @@ $("#flist").on("change", () => {
             //val = checkAscii(val);
             //list all files in a comic
             up.list(libDir.path + "\\" + val, {}, (err, files) => {
-                var imgar = [], target, tmpDir = Path.join(targetDir, Path.basename(val, Path.extname(val)));
+                var imgar = [], target, tmpDir = $Path.join(targetDir, $Path.basename(val, $Path.extname(val)));
                 /*if (notAscii(val)) {//assume files are top level temporary fix;
-                    tmpDir = Path.join(targetDir, Path.basename(val, Path.extname(val)));
+                    tmpDir = $Path.join(targetDir, $Path.basename(val, $Path.extname(val)));
                 }*/
                 //filter out only image filenames, with list index include -1
                 files.forEach((fi, id) => { 
                     id-=1; 
                     if (fi.includes(".jpg") || fi.includes(".png") || fi.includes(".jpeg")) {
-                        //imgar.push({id, fi: Path.basename(fi)});
+                        //imgar.push({id, fi: $Path.basename(fi)});
                         if (notAscii(val)) {//assume files are top level temporary fix;
-                            fi = Path.join(Path.basename(val, Path.extname(val)), Path.basename(fi));
+                            fi = $Path.join($Path.basename(val, $Path.extname(val)), $Path.basename(fi));
                         }
                         imgar.push({id, fi});
                     }

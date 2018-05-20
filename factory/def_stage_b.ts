@@ -128,6 +128,7 @@ cG.REPO.stage = cG.REPO.stage(
                 //console.log("to", to, "dis" ,dis, "(x", window.pageXOffset, document.documentElement.scrollLeft, "| y", window.pageYOffset, document.documentElement.scrollTop, ")" , time, time/5);
 
                 if (dis == { x: 0, y: 0 }) return dis; //if that distance is 0 on both x and y, no scrolling required
+                //TODO: direction fix scroll cancel
                 var clock = function (c, b, a) {
                     window.scrollBy(Math.floor(c.x) / b, Math.floor(c.y) / b);
                     if (a + 1 < b * 5) window.setTimeout(clock, 5, c, b, a + 1);
@@ -229,6 +230,7 @@ cG.REPO.stage = cG.REPO.stage(
         this.cb = cb;
         //METHODS - public
         this.hotswap = function (arr, opts, start) {
+            //TODO: fix for direction check arr is array
             iimg = arr.slice().map(function (val) { return { s: val } }) || iimg;
             if (opts) {
                 xtndLmt(spinner, opts);

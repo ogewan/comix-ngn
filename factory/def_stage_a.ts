@@ -62,17 +62,16 @@ cG.REPO.stage = (direction: (
                 pageArr = scriptt.pages.map((val: page) => {
                     return val.url[0];
                 }),
-                settings = {
-                    dir: scriptt.config.dir,
-                    lines: scriptt.loading.lines,
-                    rate: scriptt.loading.rate,
-                    diameter: scriptt.loading.diameter,
-                    loaderback: scriptt.loading.back,
-                    color: scriptt.loading.color,
-                    imgprebuffer: scriptt.config.imgprebuffer,
-                    imgpostbuffer: scriptt.config.imgpostbuffer,
-                    //back: 
-                };
+                //TODO: all script sections should be optional
+                settings = {};
+                if (scriptt.config.dir !== void(0)) settings.dir = scriptt.config.dir;
+                if (scriptt.loading.lines !== void(0)) settings.lines = scriptt.loading.lines;
+                if (scriptt.loading.rate !== void(0)) settings.rate = scriptt.loading.rate;
+                if (scriptt.loading.diameter !== void(0)) settings.dia = scriptt.loading.diameter;
+                if (scriptt.loading.back !== void(0)) settings.loaderback = scriptt.loading.back;
+                if (scriptt.loading.color !== void(0)) settings.color = scriptt.loading.color;
+                if (scriptt.config.imgprebuffer !== void(0)) settings.irb = scriptt.config.imgprebuffer;
+                if (scriptt.config.imgpostbuffer !== void(0)) settings.itb = scriptt.config.imgpostbuffer;
 
                 if (typeof (Storage) !== "undefined") {
                     get = parseInt(localStorage.getItem(cG.comicID + "|" + name + "|curPage") as string, 10);
@@ -103,16 +102,15 @@ cG.REPO.stage = (direction: (
                         internalPages = tmp.pages.map((val: page) => {
                             return val.url[0];
                         }),
-                        internalSettings = {
-                            dir: tmp.config.dir,
-                            lines: tmp.loading.lines,
-                            rate: tmp.loading.rate,
-                            diameter: tmp.loading.diameter,
-                            loaderback: tmp.loading.back,
-                            color: tmp.loading.color,
-                            imgprebuffer: tmp.config.imgprebuffer,
-                            imgpostbuffer: tmp.config.imgpostbuffer
-                        };
+                        internalSettings = {};
+                        if (tmp.config.dir !== void(0)) internalSettings.dir = tmp.config.dir;
+                        if (tmp.loading.lines !== void(0)) internalSettings.lines = tmp.loading.lines;
+                        if (tmp.loading.rate !== void(0)) internalSettings.rate = tmp.loading.rate;
+                        if (tmp.loading.diameter !== void(0)) internalSettings.dia = tmp.loading.diameter;
+                        if (tmp.loading.back !== void(0)) internalSettings.loaderback = tmp.loading.back;
+                        if (tmp.loading.color !== void(0)) internalSettings.color = tmp.loading.color;
+                        if (tmp.config.imgprebuffer !== void(0)) internalSettings.irb = tmp.config.imgprebuffer;
+                        if (tmp.config.imgpostbuffer !== void(0)) internalSettings.itb = tmp.config.imgpostbuffer;
                     main.hotswap(internalPages, internalSettings);
                 }
                 main.navto = function (a?:number) {

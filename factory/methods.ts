@@ -258,6 +258,7 @@ cG.stageInjection = function(SPECIFIC,attempts){
                 }
             } else if(source=="") myScript=cG.script;
             else myScript=source;
+            //TODO: all script sections should be optional
             if(myScript.config.additive&&cG.fBox.addme){
                 cG.addRender(null,null,myScript.config.additive);
                 myScript.config.additive = "";
