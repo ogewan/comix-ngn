@@ -41,15 +41,9 @@ var fs = require("fs-extra")
                 $("#pages").append(ssEle);
             });
             */
-            var { script } = subEle.data();
-            if (!stageOn) {
-                stageOn = true;
-                cG.script = script;
-                cG.stageInjection();
-            } else {
-                cG.comix.internals.pages = script.pages;
-                cG.comix.commitSwap();
-            }
+            var { script } = subEle.data();  
+            cG.comix.internals.pages = script.pages;
+            cG.comix.commitSwap();
         }
         , unpackComic = () => {
             var rest = imgar.map(ele => { return ele.id; });
@@ -79,9 +73,9 @@ var fs = require("fs-extra")
         subEle.data({ cPath, script });
         subEle.click(unpackComic);
         $("#thumbs").append(subEle);
-    }, stageOn = false
+    }
     ;
-
+cG.script = {pages:[]}
 $("#flist").on("change", () => {
     var libDir = $("#flist")[0].files[0];
     fs.readdir(libDir.path, (err, files) => {

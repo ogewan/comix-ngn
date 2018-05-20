@@ -482,25 +482,29 @@ cG.REPO.stage = (direction) => {
                         return fals;
                 }, get = -1, pageArr = scriptt.pages.map((val) => {
                     return val.url[0];
-                }), 
-                //TODO: all script sections should be optional
-                settings = {};
-                if (scriptt.config.dir !== void (0))
-                    settings.dir = scriptt.config.dir;
-                if (scriptt.loading.lines !== void (0))
-                    settings.lines = scriptt.loading.lines;
-                if (scriptt.loading.rate !== void (0))
-                    settings.rate = scriptt.loading.rate;
-                if (scriptt.loading.diameter !== void (0))
-                    settings.dia = scriptt.loading.diameter;
-                if (scriptt.loading.back !== void (0))
-                    settings.loaderback = scriptt.loading.back;
-                if (scriptt.loading.color !== void (0))
-                    settings.color = scriptt.loading.color;
-                if (scriptt.config.imgprebuffer !== void (0))
-                    settings.irb = scriptt.config.imgprebuffer;
-                if (scriptt.config.imgpostbuffer !== void (0))
-                    settings.itb = scriptt.config.imgpostbuffer;
+                }), settings = {};
+                if (scriptt !== void (0) && scriptt !== null) {
+                    if (scriptt.config !== void (0) && scriptt.config !== null) {
+                        if (scriptt.config.dir !== void (0))
+                            settings.dir = scriptt.config.dir;
+                        if (scriptt.config.imgprebuffer !== void (0))
+                            settings.imgprebuffer = scriptt.config.imgprebuffer;
+                        if (scriptt.config.imgpostbuffer !== void (0))
+                            settings.imgpostbuffer = scriptt.config.imgpostbuffer;
+                    }
+                    if (scriptt.loading !== void (0) && scriptt.loading !== null) {
+                        if (scriptt.loading.lines !== void (0))
+                            settings.lines = scriptt.loading.lines;
+                        if (scriptt.loading.rate !== void (0))
+                            settings.rate = scriptt.loading.rate;
+                        if (scriptt.loading.diameter !== void (0))
+                            settings.diameter = scriptt.loading.diameter;
+                        if (scriptt.loading.back !== void (0))
+                            settings.loaderback = scriptt.loading.back;
+                        if (scriptt.loading.color !== void (0))
+                            settings.color = scriptt.loading.color;
+                    }
+                }
                 if (typeof (Storage) !== "undefined") {
                     get = parseInt(localStorage.getItem(cG.comicID + "|" + name + "|curPage"), 10);
                     /*if(cG.avx[0]>0&&cG.avx[1]>0) */
@@ -519,28 +523,34 @@ cG.REPO.stage = (direction) => {
                 main.pg = [anchor];
                 main.at = 0;
                 main.my = 0;
-                main.internals = scriptt;
+                main.internals = scriptt || { pages: [], chapters: [], config: {}, loading: {} };
                 main.commitSwap = () => {
                     var tmp = main.internals, internalPages = tmp.pages.map((val) => {
                         return val.url[0];
                     }), internalSettings = {};
-                    if (tmp.config.dir !== void (0))
-                        internalSettings.dir = tmp.config.dir;
-                    if (tmp.loading.lines !== void (0))
-                        internalSettings.lines = tmp.loading.lines;
-                    if (tmp.loading.rate !== void (0))
-                        internalSettings.rate = tmp.loading.rate;
-                    if (tmp.loading.diameter !== void (0))
-                        internalSettings.dia = tmp.loading.diameter;
-                    if (tmp.loading.back !== void (0))
-                        internalSettings.loaderback = tmp.loading.back;
-                    if (tmp.loading.color !== void (0))
-                        internalSettings.color = tmp.loading.color;
-                    if (tmp.config.imgprebuffer !== void (0))
-                        internalSettings.irb = tmp.config.imgprebuffer;
-                    if (tmp.config.imgpostbuffer !== void (0))
-                        internalSettings.itb = tmp.config.imgpostbuffer;
-                    main.hotswap(internalPages, internalSettings);
+                    if (tmp !== void (0) || tmp !== null) {
+                        if (tmp.config !== void (0) && tmp.config !== null) {
+                            if (tmp.config.dir !== void (0))
+                                internalSettings.dir = tmp.config.dir;
+                            if (tmp.config.imgprebuffer !== void (0))
+                                internalSettings.imgprebuffer = tmp.config.imgprebuffer;
+                            if (tmp.config.imgpostbuffer !== void (0))
+                                internalSettings.imgpostbuffer = tmp.config.imgpostbuffer;
+                        }
+                        if (tmp.loading !== void (0) && tmp.loading !== null) {
+                            if (tmp.loading.lines !== void (0))
+                                internalSettings.lines = tmp.loading.lines;
+                            if (tmp.loading.rate !== void (0))
+                                internalSettings.rate = tmp.loading.rate;
+                            if (tmp.loading.diameter !== void (0))
+                                internalSettings.diameter = tmp.loading.diameter;
+                            if (tmp.loading.back !== void (0))
+                                internalSettings.loaderback = tmp.loading.back;
+                            if (tmp.loading.color !== void (0))
+                                internalSettings.color = tmp.loading.color;
+                        }
+                    }
+                    main.swap(internalPages, internalSettings);
                 };
                 main.navto = function (a) {
                     if (a !== null && a !== void 0 && a < main.pg.length)
@@ -699,6 +709,7 @@ cG.REPO.stage = cG.REPO.stage(function (input, anchor, owrite, config) {
         anchor = document.body;
     //PROPERTIES - private
     var iimg = input.slice().map(function (val) { return { s: val }; }), spinning = true, //is the spinner spinning?
+    scrolling = -1, //scroll ID
     current = -1, //-1 for unset, corresponds to current page
     spinner = {
         lines: config.lines || 16,
@@ -714,7 +725,7 @@ cG.REPO.stage = cG.REPO.stage(function (input, anchor, owrite, config) {
     }, pstload = [], preload = [], master = new Image(), skroll = true, layers = [
         document.createElement("canvas"),
         document.createElement("canvas")
-    ], context = layers[1].getContext("2d"), 
+    ], ctx = layers[1].getContext("2d"), 
     //METHODS - private
     //n = function(){return 0},//this null fuction save us some bytes
     cb = {
@@ -727,7 +738,7 @@ cG.REPO.stage = cG.REPO.stage(function (input, anchor, owrite, config) {
         slidn: [],
         slidd: []
     }, object = {
-        context: layers[0].getContext("2d"),
+        ctx: layers[0].getContext("2d"),
         color: spinner.color,
         start: Date.now(),
         lines: spinner.lines,
@@ -736,28 +747,28 @@ cG.REPO.stage = cG.REPO.stage(function (input, anchor, owrite, config) {
     }, spin = function (a) {
         layers[0].style.paddingLeft = (layers[1].width - 300) / 2 + "px";
         var rotation = Math.floor((Date.now() - a.start) / 1000 * a.lines) / a.lines, c = a.color.substr(1);
-        a.context.save();
-        a.context.clearRect(0, 0, 300, layers[1].height);
-        a.context.translate(150, layers[1].height / 2);
-        a.context.rotate(Math.PI * 2 * rotation);
+        a.ctx.save();
+        a.ctx.clearRect(0, 0, 300, layers[1].height);
+        a.ctx.translate(150, layers[1].height / 2);
+        a.ctx.rotate(Math.PI * 2 * rotation);
         if (c.length == 3)
             c = c[0] + C[0] + c[1] + c[1] + c[2] + c[2];
         var red = parseInt(c.substr(0, 2), 16).toString(), green = parseInt(c.substr(2, 2), 16).toString(), blue = parseInt(c.substr(4, 2), 16).toString();
         for (var i = 0; i < a.lines; i++) {
-            a.context.beginPath();
-            a.context.rotate(Math.PI * 2 / a.lines);
-            a.context.moveTo(a.dia / 10, 0);
-            a.context.lineTo(a.dia / 4, 0);
-            a.context.lineWidth = a.dia / 30;
-            a.context.strokeStyle =
+            a.ctx.beginPath();
+            a.ctx.rotate(Math.PI * 2 / a.lines);
+            a.ctx.moveTo(a.dia / 10, 0);
+            a.ctx.lineTo(a.dia / 4, 0);
+            a.ctx.lineWidth = a.dia / 30;
+            a.ctx.strokeStyle =
                 "rgba(" + red + "," + green + "," + blue + "," + i / a.lines + ")";
-            a.context.stroke();
+            a.ctx.stroke();
         }
-        a.context.restore();
+        a.ctx.restore();
         if (spinning)
             window.setTimeout(spin, a.rate, object);
         else
-            a.context.clearRect(0, 0, 300, layers[1].height);
+            a.ctx.clearRect(0, 0, 300, layers[1].height);
     }, scrollit = function (to, time) {
         //format inputs
         if (to === null || void 0 === to)
@@ -794,42 +805,42 @@ cG.REPO.stage = cG.REPO.stage(function (input, anchor, owrite, config) {
                 : to.y - document.documentElement.scrollTop
         };
         /*
-                  dis.x = (window.pageXOffset === void 0) ? to.x - window.pageXOffset : to.x - document.documentElement.scrollLeft;
-                  dis.y = (window.pageYOffset === void 0) ? to.y - window.pageYOffset : to.y - document.documentElement.scrollTop;
-                  */
+                dis.x = (window.pageXOffset === void 0) ? to.x - window.pageXOffset : to.x - document.documentElement.scrollLeft;
+                dis.y = (window.pageYOffset === void 0) ? to.y - window.pageYOffset : to.y - document.documentElement.scrollTop;
+                */
         //console.log("to", to, "dis" ,dis, "(x", window.pageXOffset, document.documentElement.scrollLeft, "| y", window.pageYOffset, document.documentElement.scrollTop, ")" , time, time/5);
         if (dis == { x: 0, y: 0 })
             return dis; //if that distance is 0 on both x and y, no scrolling required
         var clock = function (c, b, a) {
             window.scrollBy(Math.floor(c.x) / b, Math.floor(c.y) / b);
             if (a + 1 < b * 5)
-                window.setTimeout(clock, 5, c, b, a + 1);
+                scrolling = window.setTimeout(clock, 5, c, b, a + 1);
         };
-        window.setTimeout(clock, 5, dis, Math.floor(time / 5), 0);
+        scrolling = window.setTimeout(clock, 5, dis, Math.floor(time / 5), 0);
         //window.clearInterval(clock);
         return dis;
     }, preloadGeneric = function () {
         iimg[this.imaginaryID].loaded = true;
         /*possible implementation - Delete it when we are done, possibly saves memory, since its been cached?
-                  this.imaginaryID=-1;
-                  this.src="";*/
+                this.imaginaryID=-1;
+                this.src="";*/
     }, preloadMaster = function () {
         //actually a misnomer, master doesnt actually preload, it loads and draws
         if (iimg[this.imaginaryID].loaded)
-            context.clearRect(0, 0, this.width, this.height);
+            ctx.clearRect(0, 0, this.width, this.height);
         else
             iimg[this.imaginaryID].loaded = true;
         cb.run("slidn");
         //conviently, this callback draws the image as soon as master's src is changed and image loaded
         layers[1].width /*= layers[0].width = objref.acW */ = this.width;
         layers[1].height = layers[0].height /*= objref.acH*/ = this.height;
-        context.drawImage(this, 0, 0);
+        ctx.drawImage(this, 0, 0);
         //current = this.imaginaryID;//do not wait on load for page change, do not change page on page load
         /*
-                  console.log("killing", intervall);
-                  window.clearInterval(intervall);
-                  intervall = -1;
-                  */
+                console.log("killing", intervall);
+                window.clearInterval(intervall);
+                intervall = -1;
+                */
         spinning = 0;
         if (skroll)
             scrollit();
@@ -838,8 +849,8 @@ cG.REPO.stage = cG.REPO.stage(function (input, anchor, owrite, config) {
         //assign helper, assigns an src and iid according to given id
         //console.log("World");
         /*console.log("dead",intervall);
-                  if(intervall<0) intervall = window.setInterval(spin, spinner.rate, object);
-                  console.log("started",intervall);*/
+                if(intervall<0) intervall = window.setInterval(spin, spinner.rate, object);
+                console.log("started",intervall);*/
         spinning = true;
         window.setTimeout(spin, spinner.rate, object);
         cb.run("start"); //slidestart();
@@ -847,21 +858,23 @@ cG.REPO.stage = cG.REPO.stage(function (input, anchor, owrite, config) {
             idd = 0; //if lower than zero set to zero
         if (idd >= iimg.length)
             idd = iimg.length - 1; //can not be equal to our higher than the amount of pages
+        if (idd < 0)
+            return;
         if (!iimg[idd].loaded)
-            context.clearRect(0, 0, layers[1].width, layers[1].height);
+            ctx.clearRect(0, 0, layers[1].width, layers[1].height);
         imagething.imaginaryID = idd;
         imagething.src = options.dir + iimg[idd].s;
         current = idd; //we change page as soon as it is assigned, so that page still changes even if it never loads
         /*console.log("----");
-              for(var q = idd-1;q>idd-self.config.irb-1&&q>=0;q--){
-                  console.log(q);
-              }
-              console.log("//");
-              for(var q = idd+1;q<self.config.itb+idd+1&&q<self.count;q++){
-                  console.log(q);
-                  continue;
-  
-              console.log("----");*/
+            for(var q = idd-1;q>idd-self.config.irb-1&&q>=0;q--){
+                console.log(q);
+            }
+            console.log("//");
+            for(var q = idd+1;q<self.config.itb+idd+1&&q<self.count;q++){
+                console.log(q);
+                continue;
+
+            console.log("----");*/
         var r = 0, q = 0;
         for (q = idd - 1; q > idd - options.irb - 1 && q >= 0; q--) {
             if (iimg[q].loaded)
@@ -900,8 +913,12 @@ cG.REPO.stage = cG.REPO.stage(function (input, anchor, owrite, config) {
     this.canvi = layers;
     this.cb = cb;
     //METHODS - public
-    this.hotswap = function (arr, opts, start) {
-        iimg = arr.slice().map(function (val) { return { s: val }; }) || iimg;
+    this.cnl = function () {
+        //stop scrolling
+        window.clearTimeout(scrolling);
+    };
+    this.swap = function (arr, opts, start) {
+        iimg = Array.isArray(arr) ? arr.slice().map(function (val) { return { s: val }; }) : iimg;
         if (opts) {
             xtndLmt(spinner, opts);
             xtndLmt(options, opts);
@@ -1593,7 +1610,7 @@ cG.stageInjection = function (SPECIFIC, attempts) {
         else
             myScript = source;
         //TODO: all script sections should be optional
-        if (myScript.config.additive && cG.fBox.addme) {
+        if (myScript.config && myScript.config.additive && cG.fBox.addme) {
             cG.addRender(null, null, myScript.config.additive);
             myScript.config.additive = "";
         }
@@ -1663,15 +1680,15 @@ cG.stageInjection = function (SPECIFIC, attempts) {
             var transcriptBH = "<ul>";
             var chpapp = 0;
             var pagapp = 0;
-            if (myScript.config.pagestartnum)
+            if (myScript.config && myScript.config.pagestartnum)
                 pagapp = 1;
-            if (myScript.config.chapterstartnum)
+            if (myScript.config && myScript.config.chapterstartnum)
                 chpapp = 1;
             for (var y = 0; y < myScript.pages.length; y++) {
                 transcriptPG = transcriptPG + '<li onclick="cG.cPanel[' + "'" /*+'def_'*/ + id_attr + "'" + '].go(' + y + ');this.parentElement.parentElement.style.display=' + "'none'" + ';document.getElementById(' + "'" + id_attr + "_location'" + ').style.display=' + "'block'" + ';" style="display:block;">' + (y + pagapp) + '</li>';
                 //console.log(transcriptPG)
             }
-            for (var x = 0; x < myScript.chapters.length; x++) {
+            for (var x = 0; myScript.chapters && x < myScript.chapters.length; x++) {
                 transcriptCH = transcriptCH + '<li onclick="cG.cPanel[' + "'" /*+'def_'*/ + id_attr + "'" + '].ch_go(' + x + ');this.parentElement.parentElement.style.display=' + "'none'" + ';document.getElementById(' + "'" + id_attr + "_location'" + ').style.display=' + "'block'" + ';" style="display:block;">' + (x + chpapp) + '</li>';
                 transcriptBH = transcriptBH + '<li onclick="cG.cPanel[' + "'" /*+'def_'*/ + id_attr + "'" + '].ch_go(' + x + ');this.parentElement.parentElement.style.display=' + "'none'" + ';document.getElementById(' + "'" + id_attr + "_location'" + ').style.display=' + "'block'" + ';" style="display:block;">' + (x + chpapp) + '<ul>';
                 for (var u = myScript.chapters[x].start; u < myScript.chapters[x].end + 1; u++) {

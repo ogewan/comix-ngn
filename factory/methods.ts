@@ -259,7 +259,7 @@ cG.stageInjection = function(SPECIFIC,attempts){
             } else if(source=="") myScript=cG.script;
             else myScript=source;
             //TODO: all script sections should be optional
-            if(myScript.config.additive&&cG.fBox.addme){
+            if(myScript.config && myScript.config.additive && cG.fBox.addme){
                 cG.addRender(null,null,myScript.config.additive);
                 myScript.config.additive = "";
             }
@@ -320,19 +320,19 @@ cG.stageInjection = function(SPECIFIC,attempts){
             anchorto.style.display = "block";
             //if(cG.avx[0]>1&&cG.avx[1]>0){}
             var archival = document.getElementById(id_attr+"_archive");
-            if(archival!==void 0&&archival!==null){
+            if(archival!==void 0 && archival!==null){
                 var transcriptPG = "<ul>";
                 var transcriptCH = "<ul>";
                 var transcriptBH = "<ul>";
                 var chpapp = 0;
                 var pagapp = 0;
-                if(myScript.config.pagestartnum) pagapp=1;
-                if(myScript.config.chapterstartnum) chpapp=1;
+                if(myScript.config && myScript.config.pagestartnum) pagapp=1;
+                if(myScript.config && myScript.config.chapterstartnum) chpapp=1;
                 for(var y=0;y<myScript.pages.length;y++){
                     transcriptPG=transcriptPG+'<li onclick="cG.cPanel['+"'"/*+'def_'*/+id_attr+"'"+'].go('+y+');this.parentElement.parentElement.style.display='+"'none'"+';document.getElementById('+"'"+id_attr+"_location'"+').style.display='+"'block'"+';" style="display:block;">'+(y+pagapp)+'</li>';
                     //console.log(transcriptPG)
                 }
-                for(var x=0;x<myScript.chapters.length;x++){
+                for(var x=0;myScript.chapters && x<myScript.chapters.length;x++){
                     transcriptCH=transcriptCH+'<li onclick="cG.cPanel['+"'"/*+'def_'*/+id_attr+"'"+'].ch_go('+x+');this.parentElement.parentElement.style.display='+"'none'"+';document.getElementById('+"'"+id_attr+"_location'"+').style.display='+"'block'"+';" style="display:block;">'+(x+chpapp)+'</li>';
                     transcriptBH=transcriptBH+'<li onclick="cG.cPanel['+"'"/*+'def_'*/+id_attr+"'"+'].ch_go('+x+');this.parentElement.parentElement.style.display='+"'none'"+';document.getElementById('+"'"+id_attr+"_location'"+').style.display='+"'block'"+';" style="display:block;">'+(x+chpapp)+'<ul>';
                     for(var u=myScript.chapters[x].start;u<myScript.chapters[x].end+1;u++){

@@ -70,3 +70,13 @@ interface script {
     pages: page[];
     parent: any;
 }
+interface settings {
+    dir?: string;
+    lines?: number;
+    rate?: number;
+    diameter?: number;
+    loaderback?: string;
+    color?: string;
+    imgprebuffer?: number;
+    imgpostbuffer?: number;
+}
