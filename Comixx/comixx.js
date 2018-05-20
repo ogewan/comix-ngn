@@ -52,9 +52,19 @@ var fs = require("fs-extra")
                 return loadPage();
             });
         }
+        , script = {
+            //config: { dir: tempDir +'/' },
+            pages: imgar.map(ele => {
+                return {
+                    extractID: ele.id, 
+                    url: [tempDir + "\\" + ele.fi]
+                };
+            }),
+            chapters: []
+        }
         ;
         subEle.attr("src", imgar[0].fi);
-        subEle.data({ cPath, imgar });
+        subEle.data({ cPath, script });
         subEle.click(unpackComic);
         $("#thumbs").append(subEle);
     }

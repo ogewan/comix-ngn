@@ -12,7 +12,7 @@
         "imgprebuffer": 5,
         "pagestartnum": false,
         "startpage": 0,
-        "back":"#FFF",
+        "back":"#FFF"
     },
     "loading": {
         "diameter": 250,

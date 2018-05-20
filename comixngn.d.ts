@@ -28,3 +28,45 @@ declare function loadTextFileAjaxSync(filePath: any, mimeType: any): string | nu
 /** @preserve comix-ngn v1.4.0 | (c) 2015 Oluwaseun Ogedengbe| ogewan.github.io/comix-ngn/ |License: MIT|
 embeds domReady: github.com/ded/domready (MIT) (c) 2013 Dustin Diaz, pegasus: typicode.github.io/pegasus (MIT) (c) 2014 typicode, pathjs (MIT) (c) 2011 Mike Trpcic, direction.js*/
 declare var cG: any;
+interface page {
+    alt: string;
+    anim8: boolean;
+    hover: string;
+    note: string;
+    perm: boolean;
+    release: number;
+    title: string;
+    url: string[];
+    special: string;
+    absolute?: boolean;
+}
+interface chapter {
+    description: string;
+    end: number;
+    start: number;
+    title: string;
+}
+interface script {
+    chapters: chapter[];
+    config: {
+        chapterstartnum: boolean;
+        dir: string;
+        imgpostbuffer: number;
+        imgprebuffer: number;
+        pagestartnum: boolean;
+        startpage: number;
+        back: string;
+    };
+    loading: {
+        diameter: number;
+        lines: number;
+        rate: number;
+        xpos: number;
+        ypos: number;
+        back: string;
+        color: string;
+    };
+    offset: number;
+    pages: page[];
+    parent: any;
+}

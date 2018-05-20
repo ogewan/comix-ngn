@@ -466,7 +466,7 @@ else
     /*END AJAX calls*/
 }();
 ///////
-cG.REPO.stage = ((direction) => {
+cG.REPO.stage = (direction) => {
     return {
         "def": {
             id: "def",
@@ -480,32 +480,61 @@ cG.REPO.stage = ((direction) => {
                     }
                     else
                         return fals;
+                }, get = -1, pageArr = scriptt.pages.map((val) => {
+                    return val.url[0];
+                }), settings = {
+                    dir: scriptt.config.dir,
+                    lines: scriptt.loading.lines,
+                    rate: scriptt.loading.rate,
+                    diameter: scriptt.loading.diameter,
+                    loaderback: scriptt.loading.back,
+                    color: scriptt.loading.color,
+                    imgprebuffer: scriptt.config.imgprebuffer,
+                    imgpostbuffer: scriptt.config.imgpostbuffer,
                 };
-                var get; //still undefined
                 if (typeof (Storage) !== "undefined") {
                     get = parseInt(localStorage.getItem(cG.comicID + "|" + name + "|curPage"), 10);
                     /*if(cG.avx[0]>0&&cG.avx[1]>0) */
                     cG.verbose(1, cG.comicID + "|" + name + "|curPage", ":", get);
                     /*else console.log(cG.comicID+"|"+name+"|curPage",":",get);*/
                 }
+                //prepage, which is from router, overwrites localStorage if over -1, only works on comix
                 if (cG.comix === void 0 && cG.prePage >= 0)
-                    get = cG.prePage; //prepage, which is from router, overwrites localStorage if over -1, only works on comix
-                var main = new direction(scriptt, anchor, get);
+                    get = cG.prePage;
+                if (get < 0)
+                    get = scriptt.config.startpage;
+                var main = new direction(pageArr, anchor, get, settings);
                 main.name = name;
                 main.type = "def";
                 //if(cG.avx[0]>1&&cG.avx[1]>0){}
                 main.pg = [anchor];
                 main.at = 0;
                 main.my = 0;
+                main.internals = scriptt;
+                main.commitSwap = () => {
+                    var tmp = main.internals, internalPages = tmp.pages.map((val) => {
+                        return val.url[0];
+                    }), internalSettings = {
+                        dir: tmp.config.dir,
+                        lines: tmp.loading.lines,
+                        rate: tmp.loading.rate,
+                        diameter: tmp.loading.diameter,
+                        loaderback: tmp.loading.back,
+                        color: tmp.loading.color,
+                        imgprebuffer: tmp.config.imgprebuffer,
+                        imgpostbuffer: tmp.config.imgpostbuffer
+                    };
+                    main.hotswap(internalPages, internalSettings);
+                };
                 main.navto = function (a) {
-                    if (a < main.pg.length && a !== null & a !== void 0)
+                    if (a !== null && a !== void 0 && a < main.pg.length)
                         return main.pg[a]._nav();
                     else
                         return main.pg[main.my]._nav();
                 };
                 main.ch_data = function (a) {
                     var c = main.internals.chapters;
-                    var sre = (a === null || void 0 === a) ? main.ch_current() : parseInt(a, 10);
+                    var sre = (a === null || void 0 === a) ? main.ch_current() : a; //parseInt(a, 10);
                     return (main.ch_current() == -1) ? {} : (isNaN(sre)) ? c[main.ch_current()] : c[sre];
                 };
                 main.ch_count = function () {
@@ -520,7 +549,7 @@ cG.REPO.stage = ((direction) => {
                     return -1;
                 };
                 main.ch_go = function (a, b) {
-                    var sre = (a === null || void 0 === a) ? 0 : parseInt(a, 10);
+                    var sre = (a === null || void 0 === a) ? 0 : a; //parseInt(a, 10);
                     sre = (isNaN(sre)) ? 0 : sre;
                     var g;
                     if (b === null && b === void 0)
@@ -588,7 +617,7 @@ cG.REPO.stage = ((direction) => {
                                 var guide = cG.script.config.dateformat.split("/");
                                 for (var tim = 0; tim < 3; tim++) {
                                     if (guide[tim].indexOf("Y") + 1)
-                                        guide[tim] = nT.getYear() - 100;
+                                        guide[tim] = nT.getFullYear() - 100 + 2000; //TODO: what is this?
                                     else if (guide[tim].indexOf("M") + 1)
                                         guide[tim] = nT.getMonth() + 1;
                                     else if (guide[tim].indexOf("D") + 1)
@@ -603,7 +632,7 @@ cG.REPO.stage = ((direction) => {
                         //if(cG.avx[0]>0&&cG.avx[1]>0) 
                         cG.verbose(1, name, "Pushing state:", result);
                         if (cG.fBox.pgepsh)
-                            history.pushState({}, null, "#/" + result);
+                            history.pushState({}, void (0), "#/" + result);
                     }
                     if (cG.queue.stageChange !== void 0)
                         for (var ftn in cG.queue.stageChange) {
@@ -639,9 +668,9 @@ cG.REPO.stage = ((direction) => {
             }
         }
     };
-});
-(function (input, anchor, owrite, config) {
-    /* direction.js (c) 2015 Seun Ogedengbe, MIT*/
+};
+cG.REPO.stage = cG.REPO.stage(function (input, anchor, owrite, config) {
+    /** direction.js (c) 2015 Ogewan, MIT*/
     //input - an object, list, or string
     //anchor - the html object to append
     //owrite - index of image to start carousel on
@@ -653,18 +682,18 @@ cG.REPO.stage = ((direction) => {
     if (void 0 === anchor || anchor == null)
         anchor = document.body;
     //PROPERTIES - private
-    var iimg = input.slice(), spinning = true, //is the spinner spinning?
+    var iimg = input.slice().map(function (val) { return { s: val }; }), spinning = true, //is the spinner spinning?
     current = -1, //-1 for unset, corresponds to current page
     spinner = {
         lines: config.lines || 16,
         rate: config.rate || 1000 / 30,
-        diameter: config.diameter || 250,
+        dia: config.diameter || 250,
         back: config.loaderback || "#FFF",
         color: config.color || "#373737"
     }, options = {
         dir: config.dir || "assets/",
-        imgprebuffer: config.imgprebuffer || 5,
-        imgpostbuffer: config.imgpostbuffer || 5,
+        irb: config.imgprebuffer || 5,
+        itb: config.imgpostbuffer || 5,
         back: config.back || "#FFF"
     }, pstload = [], preload = [], master = new Image(), skroll = true, layers = [
         document.createElement("canvas"),
@@ -686,7 +715,7 @@ cG.REPO.stage = ((direction) => {
         color: spinner.color,
         start: Date.now(),
         lines: spinner.lines,
-        diameter: spinner.diameter,
+        dia: spinner.dia,
         rate: spinner.rate
     }, spin = function (a) {
         layers[0].style.paddingLeft = (layers[1].width - 300) / 2 + "px";
@@ -701,9 +730,9 @@ cG.REPO.stage = ((direction) => {
         for (var i = 0; i < a.lines; i++) {
             a.context.beginPath();
             a.context.rotate(Math.PI * 2 / a.lines);
-            a.context.moveTo(a.diameter / 10, 0);
-            a.context.lineTo(a.diameter / 4, 0);
-            a.context.lineWidth = a.diameter / 30;
+            a.context.moveTo(a.dia / 10, 0);
+            a.context.lineTo(a.dia / 4, 0);
+            a.context.lineWidth = a.dia / 30;
             a.context.strokeStyle =
                 "rgba(" + red + "," + green + "," + blue + "," + i / a.lines + ")";
             a.context.stroke();
@@ -805,40 +834,39 @@ cG.REPO.stage = ((direction) => {
         if (!iimg[idd].loaded)
             context.clearRect(0, 0, layers[1].width, layers[1].height);
         imagething.imaginaryID = idd;
-        imagething.src = options.dir + iimg[idd];
+        imagething.src = options.dir + iimg[idd].s;
         current = idd; //we change page as soon as it is assigned, so that page still changes even if it never loads
         /*console.log("----");
-              for(var q = idd-1;q>idd-self.config.imgprebuffer-1&&q>=0;q--){
+              for(var q = idd-1;q>idd-self.config.irb-1&&q>=0;q--){
                   console.log(q);
               }
               console.log("//");
-              for(var q = idd+1;q<self.config.imgpostbuffer+idd+1&&q<self.count;q++){
+              for(var q = idd+1;q<self.config.itb+idd+1&&q<self.count;q++){
                   console.log(q);
                   continue;
   
               console.log("----");*/
         var r = 0, q = 0;
-        for (q = idd - 1; q > idd - options.imgprebuffer - 1 && q >= 0; q--) {
+        for (q = idd - 1; q > idd - options.irb - 1 && q >= 0; q--) {
             if (iimg[q].loaded)
                 continue;
             preload[r].imaginaryID = q;
-            preload[r].src = options.dir + iimg[q];
+            preload[r].src = options.dir + iimg[q].s;
             r++;
         }
         r = 0;
-        for (q = idd + 1; q < options.imgpostbuffer + idd + 1 && q < iimg.length; q++) {
+        for (q = idd + 1; q < options.itb + idd + 1 && q < iimg.length; q++) {
             if (iimg[q].loaded)
                 continue;
             pstload[r].imaginaryID = q;
-            pstload[r].src = options.dir + iimg[q];
+            pstload[r].src = options.dir + iimg[q].s;
             r++;
         }
     }, xtndLmt = function (org, src) {
         for (var key in src)
             if (org.hasOwnProperty(key))
                 org[key] = src[key];
-    };
-    jq = function () {
+    }, jq = function () {
         try {
             jQuery.fn.direction = function (a, b, c) {
                 return this.each(function () {
@@ -857,7 +885,7 @@ cG.REPO.stage = ((direction) => {
     this.cb = cb;
     //METHODS - public
     this.hotswap = function (arr, opts, start) {
-        iimg = arr || iimg;
+        iimg = arr.slice().map(function (val) { return { s: val }; }) || iimg;
         if (opts) {
             xtndLmt(spinner, opts);
             xtndLmt(options, opts);
@@ -981,12 +1009,12 @@ cG.REPO.stage = ((direction) => {
         iimg[q].desig = q ? (q == iimg.length - 1 ? 1 : 0) : -1; //-1 means first, 0 means middle, 1 means last: true if endpoint, false if middle
         iimg[q].loaded = false;
     }
-    for (q = 0; q < options.imgprebuffer; q++) {
+    for (q = 0; q < options.irb; q++) {
         preload.push(new Image());
         preload[q].imaginaryID = -1; //unset to an imaginary image
         preload[q].addEventListener("load", preloadGeneric, false);
     }
-    for (q = 0; q < options.imgpostbuffer; q++) {
+    for (q = 0; q < options.itb; q++) {
         pstload.push(new Image());
         pstload[q].imaginaryID = -1; //unset to an imaginary image
         pstload[q].addEventListener("load", preloadGeneric, false);
