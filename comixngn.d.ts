@@ -51,3 +51,7 @@ interface settings {
     imgprebuffer?: number;
     imgpostbuffer?: number;
 }
+/** @function setValid
+ * @param element If element is null, void, empty string, or -1 it is unset or set to unset
+ */
+declare var setValid: (element: any) => boolean, smartAttrib: (source: any, mapper: any, ignore: any) => void, stick: (obj: any, parent: any, sauce: any, pos: any) => any, FEbyIdAI: (source: any, ids: any, inner: any) => any, FindClassesInside: (source: any, cls: any) => any, renameEles: (bool: boolean, source: Element, prepend?: string | undefined, append?: string | undefined) => void;

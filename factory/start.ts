@@ -18,7 +18,7 @@ cG.rdy(function(){
     }
     //console.log(cG.script.config.dir);
     if((b===null||b||b===void 0||b=="")&&cG.fBox.fstrun){
-        //cG.HELPERS.jstagecreate();
+        //jstagecreate();
         //cG.cPanel=cG.stageInjection();
         cG.stageInjection();
         //console.log(cG.cPanel);

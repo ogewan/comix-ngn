@@ -16,7 +16,7 @@ if(void 0===cG.$GPC){cG.$GPC=0;}/*Global Plugin Counter (no longer global)*/
 cG.root = '';/*current default settings of cng, overwritten by plugins*/
 cG.cPanel = cG.cPanel||{};/*cG control panel, all stages are stored here*/
 (function(){//this function dynamically adds missing properties to fBox
-    var deft = {fstrun: true, pgepsh: true, pgesve: true, rtepge: true, protect: true, noverwrite: true, arrow: true, addme: true, vscript: false, click: true};
+    var deft = {fstrun: true, pgepsh: true, pgesve: true, rtepge: true, protect: true, noverwrite: true, arrow: true, vscript: false, click: true};
     if(cG.fBox){
         for(var u in deft){
                 if (!cG.fBox.hasOwnProperty(u)) cG.fBox[u] = deft[u];
@@ -33,8 +33,9 @@ cG.cPanel = cG.cPanel||{};/*cG control panel, all stages are stored here*/
 * noverwrite - by default, stageInjection cannot overwrite already inserted comics, set to false to allow overwriting
 * arrow - toggles arrow key navigation
 * click - toggles click navigation
+TODO: DEPRECATE vscript and addme
 * vscript - virtual script allows, a script defined as a JS variable to overwrite the script request (Writer)
-* addme = supports additive jsons*/
+*/
 cG.info = {vix: "1.3.0",vwr: "2.0.0",vpr: "0.1.0", vxx: "0.0.1"};/*version settings*/
 cG.dis = cG.dis||{};//disables statistic and error reporting
 cG.recyclebin = cG.recyclebin||{};//variables that are used in initialization, disposed at stage injection
@@ -93,4 +94,4 @@ cG.script = cG.REPO.script.def;
 cG.rdy = cG.REPO.rdy.def;
 /*END comix-ngn properties*/
 /*STAGE creation-REDACTED*/
-//cG.HELPERS.jstagecreate = cG.N;
+//jstagecreate = cG.N;

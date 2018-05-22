@@ -26,7 +26,7 @@ cG.queue.stageChange.controller=function(target){
         bcollect=[],
         check = target.data().desig;
     for(var o=0;o<target.brains.length;o++){
-        bcollect = cG.HELPERS.FindClassesInside(target.brains[o],["frst","last","prev","next","rand"]);
+        bcollect = FindClassesInside(target.brains[o],["frst","last","prev","next","rand"]);
         //console.log(bcollect);
         for(var p=0;p<bcollect.length;p++){
             b=bcollect[p];

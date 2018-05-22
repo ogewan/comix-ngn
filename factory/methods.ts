@@ -1,5 +1,6 @@
 ///METHODS///
 //TODO: Only called by stage injection; evaluate necessity
+//DEPRECATED
 cG.addRender = function(addme, dest, name) {
     //dest = script obj
     var pushonpages = function(tget) {
@@ -211,46 +212,10 @@ cG.controlInjection = function(SPECIFIC) {
     }
 }
 cG.stageInjection = function() {
-    /*if (attempts === void 0 || attempts === null) attempts = 0;
-    else if (attempts > 20) {
-        console.error("cG.stageInjection has timed out");
-        if (cG.script !== '') {
-            console.error("OVERRIDE: Ignore other preferences")
-            cG.decor = cG.decor || 0;
-            cG.ctrls = cG.ctrls || 0;
-        } else return cG.cPanel;
-    }
-    if (cG.script === '' || cG.decor === '' || cG.ctrls === '') { //although we don't need decor, if there is a template, we prioritize it
-        //if are stuff isn't ready yet we are going to wait for it
-        setTimeout(cG.stageInjection, 300, SPECIFIC, ++attempts);
-        return cG.cPanel;
-    }
-    if (!cG.script && !cG.fBox.vscript) return console.error("No script.JSON found. script.JSON is REQUIRED to create any stage. Please create a script.JSON or move it to the directory specified in the script tag for comix-ngn or bellerophon if it is added.");
-    else if (!cG.script && cG.fBox.vscript) {
-        cG.script = cG.fBox.vscript; //'';
-        //cG.fBox.vscript = false;
-        setTimeout(cG.stageInjection, 300, SPECIFIC, 0); //reset attempts
-        return cG.cPanel;
-    }
-    var stages = [],
-        errr = "stageInjection can only operate on elements or arrays of elements";
-    if (void 0 === SPECIFIC) stages = document.getElementsByClassName("venue"); //get all entry points
-    else if (Array.isArray(SPECIFIC)) {
-        if (SPECIFIC.length <= 0)
-            if (void 0 === SPECIFIC[0].nodeName) return console.error(errr);
-            else return console.error(errr);
-        stages = stages.concat(SPECIFIC);
-    } else {
-        if (void 0 === SPECIFIC.nodeName) return console.error(errr);
-        stages.push(SPECIFIC); //if not array and not undefined, assume it is a Element
-    }
-    */
     var stages = document.getElementsByClassName("venue"); //get all entry points
-    //auto-preload
-    //if(stages.length>=0) cG.preloadonpage();
-
-    //
-    if (cG.recyclebin.air != "" && cG.recyclebin.air !== void 0 && cG.recyclebin.air !== null) cG.script.config.dir = cG.recyclebin.air;
+    //if(stages.length>=0) cG.preloadonpage();//auto-preload
+    
+    if (setValid(cG.recyclebin.air)) cG.script.config.dir = cG.recyclebin.air;
     //console.log(cG.script.config.dir,cG.recyclebin.air);
     cG.REPO.scReq.address = cG.REPO.scReq.address || cG.recyclebin.dir;
     for (var p in cG.recyclebin)
@@ -260,19 +225,20 @@ cG.stageInjection = function() {
     var final_res = cG.cPanel,
         decor = (cG.decor) ? cG.decor : '<div id="location"></div><div id="archive">Archive</div><div id="me">About Me</div>',
         ctrls = (cG.ctrls) ? cG.ctrls : '<div>NOT IMPLEMENTED YET</div>',
-        reqQueue = [],
+        reqQueue:Promise<void>[] = [],
         request = function(iD, source) { //,srcScript,srcScriptReq){            
             /*initial setup*/
             /*////get attributes */
             /*////////async request the script if it is specified, else use default*/
             if (!cG.fBox.noverwrite) stages[iD].innerHTML = "";
-            var myScript = (!iD) ? cG.script: {};
+            var myScript = (!iD) ? cG.script: {}, configSet = {}; 
+            let {config, pages, chapters} = myScript;
             if (source === null || source === void 0) {
                 var script_attr = stages[iD].getAttribute("script");
                 if (script_attr == "" || script_attr == "script.json" || void 0 === script_attr || script_attr === null) { /*if no script, use the default*/
                     myScript = cG.script;
                 } else {
-                    reqQueue.push(cG.agent(script_attr).then(
+                    reqQueue.push(<Promise<void>> cG.agent(script_attr).then(
                         function(data, xhr) {
                             request(iD, data);
                         },
@@ -284,18 +250,23 @@ cG.stageInjection = function() {
                 }
             } else if (source == "") myScript = cG.script;
             else myScript = source;
-            //TODO: all script sections should be optional
-            if (myScript.config.additive && cG.fBox.addme) {
-                cG.addRender(null, null, myScript.config.additive);
-                myScript.config.additive = "";
+            /* DEPRECATED
+            As all sections in script are optional, the need for additive is removed
+            //all script sections should be optional
+            
+            if (config && config.additive && cG.fBox.addme) {
+                cG.addRender(null, null, config.additive);
+                config.additive = "";
             }
+            */
             /*////////get the rest of the attributes*/
             var id_attr = stages[iD].getAttribute("id"),
                 use_attr = stages[iD].getAttribute("use"),
-                config_attr = stages[iD].getAttribute("config"),
-                add_attr = stages[iD].getAttribute("additive");
+                config_attr = stages[iD].getAttribute("config");
+                //add_attr = stages[iD].getAttribute("additive");
             /*////attribute processing */
             //cgcij tells cG that a stage has already been injectted on this element, and you should skip it normally
+            /* DEPRECATED
             if (add_attr != "" && void 0 !== add_attr && add_attr !== null && cG.fBox.addme) {
                 if (source === null || source === void 0) {
                     myScript = cG.addRender(null, null, add_attr);
@@ -304,23 +275,23 @@ cG.stageInjection = function() {
                     myScript = cG.addRender(null, source, add_attr)
                 }
             }
-            stages[iD].setAttribute("cgcij", 1);
-            if (id_attr == "" || void 0 === id_attr || id_attr === null) { /*if no ID, make one*/
+            */
+            stages[iD].setAttribute("cgcij", "1");
+            if (!setValid(id_attr)) { /*if no ID, make one*/
                 var name = "STG" + iD;
                 var j = 1;
                 while (document.getElementById(name)) name = "STG" + (iD + j++);
                 id_attr = name.toString();
                 stages[iD].setAttribute("id", id_attr);
             }
-            if (use_attr == "" || void 0 === use_attr || use_attr === null) use_attr = "def"; /*if no use specified, use current*/
-            if (config_attr != "") {
+            if (!setValid(use_attr)) use_attr = "def"; /*if no use specified, use current*/
+            if (config_attr !== "") {
                 try {
-                    config_attr = JSON.parse(config_attr);
+                    configSet = JSON.parse(<string> config_attr);
                 } catch (err) {
                     console.debug("The following configuration settings are malformed for plugin[" + use_attr + "]: ", config_attr, "\nIt has been ignored");
-                    config_attr = {};
                 }
-            } else config_attr = {};
+            }
             /*END initial set up*/
             //if(cG.avx[0]>1&&cG.avx[1]>0){}
             var sbvenue = [],
@@ -332,11 +303,14 @@ cG.stageInjection = function() {
             }
             stages[iD].innerHTML = decor;
             //console.log(stages[iD],decor)
-            cG.HELPERS.renameEles(false, stages[iD], id_attr);
-            var anchorto = document.getElementById(id_attr + "_location");
-            if (anchorto === void 0 || anchorto === null) anchorto = stages[iD];
+            renameEles(false, stages[iD], <string> id_attr);
+
+            //If stage doesn't have explict anchor point, anchor it to the venue it was created
+            //TODO: investigate _location's purpose here
+            var anchorto = <HTMLElement> document.getElementById(id_attr + "_location");
+            if (setValid(anchorto)) anchorto = <HTMLElement> stages[iD];
             else { //we only use the helpers if anchorto is actually correctly set
-                cG.HELPERS.smartAttrib(stages[iD], {
+                smartAttrib(stages[iD], {
                     div: {
                         style: "display: none;"
                     }
@@ -344,50 +318,69 @@ cG.stageInjection = function() {
             }
             anchorto.style.display = "block";
             //if(cG.avx[0]>1&&cG.avx[1]>0){}
-            var archival = document.getElementById(id_attr + "_archive");
-            if (archival !== void 0 && archival !== null) {
-                var transcriptPG = "<ul>";
-                var transcriptCH = "<ul>";
-                var transcriptBH = "<ul>";
-                var chpapp = 0;
-                var pagapp = 0;
-                if (myScript.config.pagestartnum) pagapp = 1;
-                if (myScript.config.chapterstartnum) chpapp = 1;
-                for (var y = 0; y < myScript.pages.length; y++) {
-                    transcriptPG = transcriptPG + '<li onclick="cG.cPanel[' + "'" /*+'def_'*/ + id_attr + "'" + '].go(' + y + ');this.parentElement.parentElement.style.display=' + "'none'" + ';document.getElementById(' + "'" + id_attr + "_location'" + ').style.display=' + "'block'" + ';" style="display:block;">' + (y + pagapp) + '</li>';
+
+            var archival = <HTMLElement> document.getElementById(id_attr + "_archive");
+            if (setValid(archival)) {
+                var transcriptPG = "<ul>", 
+                    transcriptCH = "<ul>",
+                    transcriptBH = "<ul>",
+                    chpapp = 0,
+                    pagapp = 0;
+
+                if (config && config.pagestartnum) pagapp = 1;
+                if (config && config.chapterstartnum) chpapp = 1;
+                //Create Page Based Table of Contents/Archive
+                for (var y = 0; pages && y < pages.length; y++) {
+                    transcriptPG = transcriptPG + '<li onclick="cG.cPanel[' + "'" /*+'def_'*/ + id_attr + "'" + '].go(' + y + ');'+
+                    'this.parentElement.parentElement.style.display=' + "'none'" + ';document.getElementById(' + "'" + id_attr + "_location'" +
+                    ').style.display=' + "'block'" + ';" style="display:block;">' + (y + pagapp) + '</li>';
                     //console.log(transcriptPG)
                 }
-                for (var x = 0; x < myScript.chapters.length; x++) {
-                    transcriptCH = transcriptCH + '<li onclick="cG.cPanel[' + "'" /*+'def_'*/ + id_attr + "'" + '].ch_go(' + x + ');this.parentElement.parentElement.style.display=' + "'none'" + ';document.getElementById(' + "'" + id_attr + "_location'" + ').style.display=' + "'block'" + ';" style="display:block;">' + (x + chpapp) + '</li>';
-                    transcriptBH = transcriptBH + '<li onclick="cG.cPanel[' + "'" /*+'def_'*/ + id_attr + "'" + '].ch_go(' + x + ');this.parentElement.parentElement.style.display=' + "'none'" + ';document.getElementById(' + "'" + id_attr + "_location'" + ').style.display=' + "'block'" + ';" style="display:block;">' + (x + chpapp) + '<ul>';
-                    for (var u = myScript.chapters[x].start; u < myScript.chapters[x].end + 1; u++) {
-                        transcriptBH = transcriptBH + '<li onclick="cG.cPanel[' + "'" /*+'def_'*/ + id_attr + "'" + '].go(' + u + ');this.parentElement.parentElement.parentElement.style.display=' + "'none'" + ';document.getElementById(' + "'" + id_attr + "_location'" + ').style.display=' + "'block'" + ';" style="display:block;">' + (u + pagapp) + '</li>';
+                //Create Chapter Based Table of Contents/Archive
+                for (var x = 0; chapters && x < chapters.length; x++) {
+                    transcriptCH = transcriptCH + '<li onclick="cG.cPanel[' + "'" /*+'def_'*/ + id_attr + "'" + '].ch_go(' + x + ');'+
+                    'this.parentElement.parentElement.style.display=' + "'none'" + ';document.getElementById(' + "'" + id_attr + "_location'" + 
+                    ').style.display=' + "'block'" + ';" style="display:block;">' + (x + chpapp) + '</li>';
+
+                    transcriptBH = transcriptBH + '<li onclick="cG.cPanel[' + "'" /*+'def_'*/ + id_attr + "'" + '].ch_go(' + x + ');'+
+                    'this.parentElement.parentElement.style.display=' + "'none'" + ';document.getElementById(' + "'" + id_attr + "_location'" +
+                    ').style.display=' + "'block'" + ';" style="display:block;">' + (x + chpapp) + '<ul>';
+                    
+                    for (var u = chapters[x].start; u < chapters[x].end + 1; u++) {
+                        transcriptBH = transcriptBH + '<li onclick="cG.cPanel[' + "'" /*+'def_'*/ + id_attr + "'" + '].go(' + u + ');'+
+                        'this.parentElement.parentElement.parentElement.style.display=' + "'none'" + ';document.getElementById(' + "'" + 
+                        id_attr + "_location'" + ').style.display=' + "'block'" + ';" style="display:block;">' + (u + pagapp) + '</li>';
                     }
                     transcriptBH = transcriptBH + '</ul></li>';
                 }
                 transcriptPG = transcriptPG + '</ul>';
                 transcriptCH = transcriptCH + '</ul>';
                 transcriptBH = transcriptBH + '</ul>';
-                if (archival.innerHTML == '' || archival.innerHTML == 'Archive') archival.innerHTML = transcriptBH + transcriptPG + transcriptCH;
+                if (setValid(archival.innerHTML)) archival.innerHTML = transcriptBH + transcriptPG + transcriptCH;
             }
-            var srch = /*use_attr+"_"+*/ id_attr;
-            final_res[srch] = cG.stage.construct(id_attr, myScript, anchorto, config_attr);
+            var srch = <string> id_attr;
+            final_res[srch] = cG.stage.construct(id_attr, myScript, anchorto, configSet);
             //console.log(sbvenue,nstpost)
             //if(cG.avx[0]>1&&cG.avx[1]>0){}
             //console.log(stages[iD])
-            if (!cG.fBox.protect) stages[iD].setAttribute("comix", -1); //comix protection disabled, all stages are comix
-            else if (stages[iD].getAttribute("id") == cG.comix.name) stages[iD].setAttribute("comix", 1);
+            if (!cG.fBox.protect) stages[iD].setAttribute("comix", "-1"); //comix protection disabled, all stages are comix
+            else if (stages[iD].getAttribute("id") == cG.comix.name) stages[iD].setAttribute("comix", "1");
+            
+            //Push child elements as PGes (Subordinate Elements)
             var chl = stages[iD].children;
             for (var t = 1; t < chl.length; t++) {
                 if (chl[t] == anchorto) continue;
                 final_res[srch].pg.push(chl[t]);
             }
+            
+            //Hide Non Venue Subordinate Elements
             for (var y = 0; y < nstpost.length; y++) {
                 nstpost[y].style = "display: none;"
                 stages[iD].appendChild(nstpost[y]);
                 final_res[srch].pg.push(nstpost[y]);
             }
-            //console.log(sbvenue,nstpost);
+            
+            //Set up Childings (Venu Subordinate Elements/ Sub Venues)
             for (var z = 0; z < sbvenue.length; z++) {
                 var sia = sbvenue[z].getAttribute("id"),
                     sua = sbvenue[z].getAttribute("use"),
@@ -398,14 +391,14 @@ cG.stageInjection = function() {
                 childling.setAttribute("id", sia || id_attr + "_" + z)
                 childling.setAttribute("style", "display:none;");
                 childling.my = z;
-                final_res[srch + "_" + z] = cG.stage.construct(sia || id_attr + "_" + z, sua || myScript, childling, sca || config_attr);
+                final_res[srch + "_" + z] = cG.stage.construct(sia || id_attr + "_" + z, sua || myScript, childling, sca || configSet);
                 stages[iD].appendChild(childling);
                 final_res[srch].pg.push(childling);
                 final_res[srch + "_" + z].my = z;
                 //console.log()
             }
             for (var r = 0; r < final_res[srch].pg.length; r++) {
-                var frspr = cG.HELPERS.stick(final_res[srch].pg[r], final_res[srch].pg, final_res[srch], r);
+                var frspr = stick(final_res[srch].pg[r], final_res[srch].pg, final_res[srch], r);
             }
         };
     for (var i = 0; i < stages.length; i++)

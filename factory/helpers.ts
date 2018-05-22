@@ -1,16 +1,18 @@
 ///HELPERS///
-cG.HELPERS = {};
-/*/////////////////////////////////////////////////
-HELPER FUNCTIONS*/
+
 /** @function setValid
- * @param element
- * If element is null, void, empty string, or -1 it is unset or set to unset
+ * @param element If element is null, void, empty string, or -1 it is unset or set to unset
  */
-cG.HELPERS.setValid = (element: any) => {
+var setValid = (element: any) => {
     if (element == -1 || element === "" || element === void 0 || element == null) return false;
     return true;
 }
-cG.HELPERS.smartAttrib = function(source,mapper,ignore){
+/** @function smartAttrib
+ * @param source
+ * @param mapper
+ * @param ignore
+ */
+,smartAttrib = function(source,mapper,ignore){
     var base;
     var ig = parseInt(ignore);
     ig = (isNaN(ig))?0:ig;
@@ -29,9 +31,15 @@ cG.HELPERS.smartAttrib = function(source,mapper,ignore){
             if(srch.count > 0) mapper[source.nodeType.toLowerCase()].count--;/*if count is above 0, decrement it (this limits the amount of sets)*/
         }
     } else ig--;
-    for(var x=0;x<source.children.length;x++) cG.HELPERS.smartAttrib(source.children[x],mapper,ig);
+    for(var x=0;x<source.children.length;x++) smartAttrib(source.children[x],mapper,ig);
 }
-cG.HELPERS.stick = function(obj,parent,sauce,pos){
+/** @function stick
+ * @param obj
+ * @param parent
+ * @param sauce
+ * @param pos
+ */
+,stick = function(obj,parent,sauce,pos){
     var ftns = [
         function(a){//order
             if(parent!==void 0||parent!==null){
@@ -130,7 +138,12 @@ cG.HELPERS.stick = function(obj,parent,sauce,pos){
     obj._chain = [];
     return obj;
 }
-cG.HELPERS.FEbyIdAI = function(source,ids,inner){
+/** @function FEbyIDAI
+ * @param source
+ * @param ids
+ * @param inner
+ */
+,FEbyIdAI = function(source,ids,inner){
     var ret = [];
     var w;
     var j;
@@ -151,17 +164,21 @@ cG.HELPERS.FEbyIdAI = function(source,ids,inner){
     }
 
     for(var a=0;a<source.children.length;a++){
-        ret = ret.concat(cG.HELPERS.FEbyIdAI(source.children[a],ids,inner));
+        ret = ret.concat(FEbyIdAI(source.children[a],ids,inner));
     }
     //console.log(q,ret,source);
     return ret;
 }
-cG.HELPERS.FindClassesInside = function(source,cls){
+/** @function FindClassesInside
+ * @param source
+ * @param class
+ */
+,FindClassesInside = function(source,cls){
     //console.log(source);
     var ret = [],
         q,
         w = source.className.split(" ");
-    for(var u=0;u<w.length;u++){
+    for(var u=0;u<w.length;u++) {
         //console.log(cls,w[u]);
         q=cls.indexOf(w[u])+1;
         if(q) break;
@@ -170,17 +187,23 @@ cG.HELPERS.FindClassesInside = function(source,cls){
         ret.push(source);
     }
     for(var a=0;a<source.children.length;a++){
-        ret = ret.concat(cG.HELPERS.FindClassesInside(source.children[a],cls));
+        ret = ret.concat(FindClassesInside(source.children[a], cls));
     }
     return ret;
 }
-cG.HELPERS.renameEles = function(bool,source,prepend,append){
-    for(var x=0;x<source.children.length;x++) cG.HELPERS.renameEles(true,source.children[x],prepend,append);
+/** @function renameEles
+ * @param bool
+ * @param source
+ * @param prepend
+ * @param append
+ */
+,renameEles = function(bool: boolean, source: Element, prepend?: string, append?: string){
+    for(var x=0;x<source.children.length;x++) renameEles(true, source.children[x], prepend, append);
     if(bool) {
         var pre = (void 0===prepend)?'':prepend+"_";
         var app = (void 0===append)?'':"_"+append;
         source.setAttribute("id",pre+source.getAttribute("id")+app);
-        if(source.className!="") source.className = " "+pre+source.className; 
+        if(source.className!=="") source.className = " "+pre+source.className; 
     }
 }
 /* setup complete

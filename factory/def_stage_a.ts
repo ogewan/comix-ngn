@@ -74,18 +74,19 @@ cG.REPO.stage = (direction: (
                     return val.url[0];
                 }),
                 settings:settings = {};
-                if (scriptt !== void(0) && scriptt !== null) {
-                    if (scriptt.config !== void(0) && scriptt.config !== null) {
-                        if (scriptt.config.dir !== void(0)) settings.dir = scriptt.config.dir;
-                        if (scriptt.config.imgprebuffer !== void(0)) settings.imgprebuffer = scriptt.config.imgprebuffer;
-                        if (scriptt.config.imgpostbuffer !== void(0)) settings.imgpostbuffer = scriptt.config.imgpostbuffer;
+                let { config, loading } = scriptt;
+                if (setValid(scriptt)) {
+                    if (setValid(config)) {
+                        if (config.dir !== void(0)) settings.dir = config.dir;
+                        if (config.imgprebuffer !== void(0)) settings.imgprebuffer = config.imgprebuffer;
+                        if (config.imgpostbuffer !== void(0)) settings.imgpostbuffer = config.imgpostbuffer;
                     }
-                    if (scriptt.loading !== void(0) && scriptt.loading !== null) {
-                        if (scriptt.loading.lines !== void(0)) settings.lines = scriptt.loading.lines;
-                        if (scriptt.loading.rate !== void(0)) settings.rate = scriptt.loading.rate;
-                        if (scriptt.loading.diameter !== void(0)) settings.diameter = scriptt.loading.diameter;
-                        if (scriptt.loading.back !== void(0)) settings.loaderback = scriptt.loading.back;
-                        if (scriptt.loading.color !== void(0)) settings.color = scriptt.loading.color;
+                    if (setValid(loading)) {
+                        if (loading.lines !== void(0)) settings.lines = loading.lines;
+                        if (loading.rate !== void(0)) settings.rate = loading.rate;
+                        if (loading.diameter !== void(0)) settings.diameter = loading.diameter;
+                        if (loading.back !== void(0)) settings.loaderback = loading.back;
+                        if (loading.color !== void(0)) settings.color = loading.color;
                     }
                 }
 
@@ -97,8 +98,8 @@ cG.REPO.stage = (direction: (
                 }
 
                 //prepage, which is from router, overwrites localStorage if over -1, only works on comix
-                if (cG.comix === void 0 && cG.prePage >= 0) get = cG.prePage;
-                if (get < 0 ) get = scriptt.config.startpage; 
+                if (setValid(cG.comix)) get = cG.prePage;
+                if (get < 0 ) get = config.startpage; 
 
                 interface direction {
                     new(): {
@@ -119,18 +120,19 @@ cG.REPO.stage = (direction: (
                             return val.url[0];
                         }),
                         internalSettings:settings = {};
-                        if (tmp !== void(0) || tmp !== null) {
-                            if (tmp.config !== void(0) && tmp.config !== null) {
-                                if (tmp.config.dir !== void(0)) internalSettings.dir = tmp.config.dir;
-                                if (tmp.config.imgprebuffer !== void(0)) internalSettings.imgprebuffer = tmp.config.imgprebuffer;
-                                if (tmp.config.imgpostbuffer !== void(0)) internalSettings.imgpostbuffer = tmp.config.imgpostbuffer;
+                    let { config, loading } = tmp;
+                        if (setValid(tmp)) {
+                            if (setValid(config)) {
+                                if (config.dir !== void(0)) internalSettings.dir = config.dir;
+                                if (config.imgprebuffer !== void(0)) internalSettings.imgprebuffer = config.imgprebuffer;
+                                if (config.imgpostbuffer !== void(0)) internalSettings.imgpostbuffer = config.imgpostbuffer;
                             }
                             if (tmp.loading !== void(0) && tmp.loading !== null) {
-                                if (tmp.loading.lines !== void(0)) internalSettings.lines = tmp.loading.lines;
-                                if (tmp.loading.rate !== void(0)) internalSettings.rate = tmp.loading.rate;
-                                if (tmp.loading.diameter !== void(0)) internalSettings.diameter = tmp.loading.diameter;
-                                if (tmp.loading.back !== void(0)) internalSettings.loaderback = tmp.loading.back;
-                                if (tmp.loading.color !== void(0)) internalSettings.color = tmp.loading.color;
+                                if (loading.lines !== void(0)) internalSettings.lines = loading.lines;
+                                if (loading.rate !== void(0)) internalSettings.rate = loading.rate;
+                                if (loading.diameter !== void(0)) internalSettings.diameter = loading.diameter;
+                                if (loading.back !== void(0)) internalSettings.loaderback = loading.back;
+                                if (loading.color !== void(0)) internalSettings.color = loading.color;
                             }
                         }
                     main.swap(internalPages, internalSettings);
@@ -230,8 +232,8 @@ cG.REPO.stage = (direction: (
                         }
                     var strct = cG.cPanel[/*"def_"+*/name].data(cG.cPanel[/*"def_"+*/name].current()).special;
                     var zombie = document.getElementById(name + "_tempScript");//fetch zombie child
-                    var preload = cG.HELPERS.stick(cG.cPanel[/*"def_"+*/name].canvi[0], null, null, 0);
-                    var display = cG.HELPERS.stick(cG.cPanel[/*"def_"+*/name].canvi[1], null, null, 1);
+                    var preload = stick(cG.cPanel[/*"def_"+*/name].canvi[0], null, null, 0);
+                    var display = stick(cG.cPanel[/*"def_"+*/name].canvi[1], null, null, 1);
                     if (zombie !== void 0 && zombie !== null) {
                         anchor.removeChild(zombie);//kill the zombie
                         //if(cG.avx[0]>1&&cG.avx[1]>0){}
