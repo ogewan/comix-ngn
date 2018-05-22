@@ -1,7 +1,8 @@
-Path.map("#/:v1(/:v2/:v3/:v4/:v5/:v6/:v7/:v8/:v9)").to(cG.route2page);
+///START///
+cG.director.map("#/:v1(/:v2/:v3/:v4/:v5/:v6/:v7/:v8/:v9)").to(cG.route2page);
 cG.rdy(function(){
-    Path.listen();
-    //Path.history.listen(true);
+    cG.director.listen();
+    //cG.director.history.listen(true);
     /*everything else occurs here*/
     if(!document.getElementById("$COMICNGWRITER$$$")){/*prints version information*/
         console.log("%c %c %c comix-ngn v"+ cG.info.vix +" %c \u262F %c \u00A9 2015 Oluwaseun Ogedengbe %c Plugins: "+cG.$GPC, "color:white; background:#2EB531", "background:purple","color:white; background:#32E237", 'color:red; background:black', "color:white; background:#2EB531", "color:white; background:purple");}

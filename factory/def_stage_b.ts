@@ -1,3 +1,4 @@
+///DEF_STAGE_B///
 cG.REPO.stage = cG.REPO.stage(
     function (input, anchor, owrite, config) {
         /** direction.js (c) 2015 Ogewan, MIT*/

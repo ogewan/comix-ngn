@@ -1,176 +1,20 @@
+/** @preserve comix-ngn v1.4.0 | (c) 2015 Oluwaseun Ogedengbe| ogewan.github.io/comix-ngn/ |License: MIT|
+embeds domReady: github.com/ded/domready (MIT) (c) 2013 Dustin Diaz, pegasus: typicode.github.io/pegasus (MIT) (c) 2014 typicode, pathjs (MIT) (c) 2011 Mike Trpcic, direction.js*/
+(function(){
 "use strict";
-/*DEFAULT LIB FUNCTIONS-contains Path(Router)*/
-var Path = { version: "0.8.4", map: function (a) { if (Path.routes.defined.hasOwnProperty(a)) {
-        return Path.routes.defined[a];
-    }
-    else {
-        return new Path.core.route(a);
-    } }, root: function (a) { Path.routes.root = a; }, rescue: function (a) { Path.routes.rescue = a; }, history: { initial: {}, pushState: function (a, b, c) { if (Path.history.supported) {
-            if (Path.dispatch(c)) {
-                history.pushState(a, b, c);
-            }
-        }
-        else {
-            if (Path.history.fallback) {
-                window.location.hash = "#" + c;
-            }
-        } }, popState: function (a) { var b = !Path.history.initial.popped && location.href == Path.history.initial.URL; Path.history.initial.popped = true; if (b)
-            return; Path.dispatch(document.location.pathname); }, listen: function (a) { Path.history.supported = !!(window.history && window.history.pushState); Path.history.fallback = a; if (Path.history.supported) {
-            Path.history.initial.popped = "state" in window.history, Path.history.initial.URL = location.href;
-            window.onpopstate = Path.history.popState;
-        }
-        else {
-            if (Path.history.fallback) {
-                for (route in Path.routes.defined) {
-                    if (route.charAt(0) != "#") {
-                        Path.routes.defined["#" + route] = Path.routes.defined[route];
-                        Path.routes.defined["#" + route].path = "#" + route;
-                    }
-                }
-                Path.listen();
-            }
-        } } }, match: function (a, b) { var c = {}, d = null, e, f, g, h, i; for (d in Path.routes.defined) {
-        if (d !== null && d !== undefined) {
-            d = Path.routes.defined[d];
-            e = d.partition();
-            for (h = 0; h < e.length; h++) {
-                f = e[h];
-                i = a;
-                if (f.search(/:/) > 0) {
-                    for (g = 0; g < f.split("/").length; g++) {
-                        if (g < i.split("/").length && f.split("/")[g].charAt(0) === ":") {
-                            c[f.split("/")[g].replace(/:/, "")] = i.split("/")[g];
-                            i = i.replace(i.split("/")[g], f.split("/")[g]);
-                        }
-                    }
-                }
-                if (f === i) {
-                    if (b) {
-                        d.params = c;
-                    }
-                    return d;
-                }
-            }
-        }
-    } return null; }, dispatch: function (a) { var b, c; if (Path.routes.current !== a) {
-        Path.routes.previous = Path.routes.current;
-        Path.routes.current = a;
-        c = Path.match(a, true);
-        if (Path.routes.previous) {
-            b = Path.match(Path.routes.previous);
-            if (b !== null && b.do_exit !== null) {
-                b.do_exit();
-            }
-        }
-        if (c !== null) {
-            c.run();
-            return true;
-        }
-        else {
-            if (Path.routes.rescue !== null) {
-                Path.routes.rescue();
-            }
-        }
-    } }, listen: function () { var a = function () { Path.dispatch(location.hash); }; if (location.hash === "") {
-        if (Path.routes.root !== null) {
-            location.hash = Path.routes.root;
-        }
-    } if ("onhashchange" in window && (!document.documentMode || document.documentMode >= 8)) {
-        window.onhashchange = a;
-    }
-    else {
-        setInterval(a, 50);
-    } if (location.hash !== "") {
-        Path.dispatch(location.hash);
-    } }, core: { route: function (a) { this.path = a; this.action = null; this.do_enter = []; this.do_exit = null; this.params = {}; Path.routes.defined[a] = this; } }, routes: { current: null, root: null, rescue: null, previous: null, defined: {} } };
-Path.core.route.prototype = { to: function (a) { this.action = a; return this; }, enter: function (a) { if (a instanceof Array) {
-        this.do_enter = this.do_enter.concat(a);
-    }
-    else {
-        this.do_enter.push(a);
-    } return this; }, exit: function (a) { this.do_exit = a; return this; }, partition: function () { var a = [], b = [], c = /\(([^}]+?)\)/g, d, e; while (d = c.exec(this.path)) {
-        a.push(d[1]);
-    } b.push(this.path.split("(")[0]); for (e = 0; e < a.length; e++) {
-        b.push(b[b.length - 1] + a[e]);
-    } return b; }, run: function () { var a = false, b, c, d; if (Path.routes.defined[this.path].hasOwnProperty("do_enter")) {
-        if (Path.routes.defined[this.path].do_enter.length > 0) {
-            for (b = 0; b < Path.routes.defined[this.path].do_enter.length; b++) {
-                c = Path.routes.defined[this.path].do_enter[b]();
-                if (c === false) {
-                    a = true;
-                    break;
-                }
-            }
-        }
-    } if (!a) {
-        Path.routes.defined[this.path].action();
-    } } };
-(function () {
-    "use strict";
-    var router = function () { var _routes = {}, _namedParam = /:\w+/g, _splatParam = /\*\w+/g, _prepareRoute, _stripTrailingSlash, module; _stripTrailingSlash = function (str) { if (str.substr(-1) == "/") {
-        return str.substr(0, str.length - 1);
-    } return str; }; _prepareRoute = function (route) { if (!route) {
-        return null;
-    } return _stripTrailingSlash(route).replace(_namedParam, "([^/]+)").replace(_splatParam, "(.*?)"); }; module = function (base, routes) { base || (base = "/"); this.base = _prepareRoute(base); if (typeof routes === "object") {
-        _routes = routes;
-        this.dispatch();
-    } }; module.prototype = { on: function (route, callback) { if (!route) {
-            throw new Error("A route needs to be defined");
-        } callback || (callback = function () { }); route = this.base + _prepareRoute(route); _routes["^" + route + "$"] = callback; return route; }, dispatch: function (event) { var regex, regexText, callback, path; for (regexText in _routes) {
-            if (_routes.hasOwnProperty(regexText)) {
-                callback = _routes[regexText];
-                regex = new RegExp(regexText);
-                path = _prepareRoute(window.location.pathname);
-                if (regex.test(path)) {
-                    callback.call(false, regexText, path, event);
-                }
-            }
-        } } }; return module; }();
-    if (typeof module !== "undefined" && module.exports) {
-        module.exports = router;
-    }
-    else if (typeof this !== "undefined") {
-        this.router = router;
-    }
-}).call(this); //location init
-function syncJSON(filePath) {
-    // Load json file;
-    var json = loadTextFileAjaxSync(filePath, "application/json");
-    // Parse json
-    return (json) ? JSON.parse(json) : 0;
-}
-// Load text with Ajax synchronously: takes path to file and optional MIME type
-function loadTextFileAjaxSync(filePath, mimeType) {
-    var xmlhttp = new XMLHttpRequest();
-    xmlhttp.open("GET", filePath, false);
-    if (mimeType != null) {
-        if (xmlhttp.overrideMimeType) {
-            xmlhttp.overrideMimeType(mimeType);
-        }
-    }
-    xmlhttp.send();
-    if (xmlhttp.status >= 200 && xmlhttp.status <= 304) {
-        return xmlhttp.responseText;
-    }
-    else {
-        // TODO Throw exception
-        return null;
-    }
-}
 //TODO: --rewrite_polyfills=false
 /*TODO:
 (()=>{return this['cG'] = this['cG'] || new (function cG(){
 this.voice = "Welcome to the World";
 })()})();
 */
-/** @preserve comix-ngn v1.4.0 | (c) 2015 Oluwaseun Ogedengbe| ogewan.github.io/comix-ngn/ |License: MIT|
-embeds domReady: github.com/ded/domready (MIT) (c) 2013 Dustin Diaz, pegasus: typicode.github.io/pegasus (MIT) (c) 2014 typicode, pathjs (MIT) (c) 2011 Mike Trpcic, direction.js*/
+///INITIALIZE///
 /*The namespace of comix-ngn
 all variables should be properties of this to prevent global namespace pollution*/
 var cG = cG || {}; /*Instantiate cG if not*/
 /*comix-ngn default properties*/
 /*IMMUTABLE*/
-cG.N = function () { return 0; }; /*null function*/
+cG.N = () => { return 0; }; /*null function*/
 if (void 0 === cG.$GPC) {
     cG.$GPC = 0;
 } /*Global Plugin Counter (no longer global)*/
@@ -257,7 +101,110 @@ cG.REPO.agent = { def: /*pegasus.js*/ function (t, e) { return e = new XMLHttpRe
         catch (r) {
             i(e.responseText, e);
         } }, e.send(), e; } };
-cG.REPO.director = { "def": Path };
+cG.REPO.director = { def: (() => { var Path = { version: "0.8.4", map: function (a) { if (Path.routes.defined.hasOwnProperty(a)) {
+            return Path.routes.defined[a];
+        }
+        else {
+            return new Path.core.route(a);
+        } }, root: function (a) { Path.routes.root = a; }, rescue: function (a) { Path.routes.rescue = a; }, history: { initial: {}, pushState: function (a, b, c) { if (Path.history.supported) {
+                if (Path.dispatch(c)) {
+                    history.pushState(a, b, c);
+                }
+            }
+            else {
+                if (Path.history.fallback) {
+                    window.location.hash = "#" + c;
+                }
+            } }, popState: function (a) { var b = !Path.history.initial.popped && location.href == Path.history.initial.URL; Path.history.initial.popped = true; if (b)
+                return; Path.dispatch(document.location.pathname); }, listen: function (a) { Path.history.supported = !!(window.history && window.history.pushState); Path.history.fallback = a; if (Path.history.supported) {
+                Path.history.initial.popped = "state" in window.history, Path.history.initial.URL = location.href;
+                window.onpopstate = Path.history.popState;
+            }
+            else {
+                if (Path.history.fallback) {
+                    for (route in Path.routes.defined) {
+                        if (route.charAt(0) != "#") {
+                            Path.routes.defined["#" + route] = Path.routes.defined[route];
+                            Path.routes.defined["#" + route].path = "#" + route;
+                        }
+                    }
+                    Path.listen();
+                }
+            } } }, match: function (a, b) { var c = {}, d = null, e, f, g, h, i; for (d in Path.routes.defined) {
+            if (d !== null && d !== undefined) {
+                d = Path.routes.defined[d];
+                e = d.partition();
+                for (h = 0; h < e.length; h++) {
+                    f = e[h];
+                    i = a;
+                    if (f.search(/:/) > 0) {
+                        for (g = 0; g < f.split("/").length; g++) {
+                            if (g < i.split("/").length && f.split("/")[g].charAt(0) === ":") {
+                                c[f.split("/")[g].replace(/:/, "")] = i.split("/")[g];
+                                i = i.replace(i.split("/")[g], f.split("/")[g]);
+                            }
+                        }
+                    }
+                    if (f === i) {
+                        if (b) {
+                            d.params = c;
+                        }
+                        return d;
+                    }
+                }
+            }
+        } return null; }, dispatch: function (a) { var b, c; if (Path.routes.current !== a) {
+            Path.routes.previous = Path.routes.current;
+            Path.routes.current = a;
+            c = Path.match(a, true);
+            if (Path.routes.previous) {
+                b = Path.match(Path.routes.previous);
+                if (b !== null && b.do_exit !== null) {
+                    b.do_exit();
+                }
+            }
+            if (c !== null) {
+                c.run();
+                return true;
+            }
+            else {
+                if (Path.routes.rescue !== null) {
+                    Path.routes.rescue();
+                }
+            }
+        } }, listen: function () { var a = function () { Path.dispatch(location.hash); }; if (location.hash === "") {
+            if (Path.routes.root !== null) {
+                location.hash = Path.routes.root;
+            }
+        } if ("onhashchange" in window && (!document.documentMode || document.documentMode >= 8)) {
+            window.onhashchange = a;
+        }
+        else {
+            setInterval(a, 50);
+        } if (location.hash !== "") {
+            Path.dispatch(location.hash);
+        } }, core: { route: function (a) { this.path = a; this.action = null; this.do_enter = []; this.do_exit = null; this.params = {}; Path.routes.defined[a] = this; } }, routes: { current: null, root: null, rescue: null, previous: null, defined: {} } }; Path.core.route.prototype = { to: function (a) { this.action = a; return this; }, enter: function (a) { if (a instanceof Array) {
+            this.do_enter = this.do_enter.concat(a);
+        }
+        else {
+            this.do_enter.push(a);
+        } return this; }, exit: function (a) { this.do_exit = a; return this; }, partition: function () { var a = [], b = [], c = /\(([^}]+?)\)/g, d, e; while (d = c.exec(this.path)) {
+            a.push(d[1]);
+        } b.push(this.path.split("(")[0]); for (e = 0; e < a.length; e++) {
+            b.push(b[b.length - 1] + a[e]);
+        } return b; }, run: function () { var a = false, b, c, d; if (Path.routes.defined[this.path].hasOwnProperty("do_enter")) {
+            if (Path.routes.defined[this.path].do_enter.length > 0) {
+                for (b = 0; b < Path.routes.defined[this.path].do_enter.length; b++) {
+                    c = Path.routes.defined[this.path].do_enter[b]();
+                    if (c === false) {
+                        a = true;
+                        break;
+                    }
+                }
+            }
+        } if (!a) {
+            Path.routes.defined[this.path].action();
+        } } }; return Path; })() };
 cG.REPO.producer = { "def": cG.N };
 cG.REPO.scReq = cG.REPO.scReq || {};
 cG.REPO.ctrls = cG.REPO.ctrls || { def: "" };
@@ -274,15 +221,16 @@ cG.rdy = cG.REPO.rdy.def;
 /*END comix-ngn properties*/
 /*STAGE creation-REDACTED*/
 //cG.HELPERS.jstagecreate = cG.N;
-//rollbar-production version
+//rollbar-development version 2.4
 if (cG.dis.rollbar != true) {
     /*rollbar*/
     var _rollbarConfig = _rollbarConfig || {
         accessToken: "3e8e8ecb63a04b5798e1d02adf2608cb",
         ignoredMessages: ["CNG Plug-in:", "status:"],
         captureUncaught: true,
+        captureUnhandledRejections: true,
         payload: {
-            environment: "production",
+            environment: "development",
             client: {
                 javascript: {
                     source_map_enabled: true,
@@ -294,81 +242,142 @@ if (cG.dis.rollbar != true) {
             }
         }
     };
-    !function (r) { function t(o) { if (e[o])
-        return e[o].exports; var n = e[o] = { exports: {}, id: o, loaded: !1 }; return r[o].call(n.exports, n, n.exports, t), n.loaded = !0, n.exports; } var e = {}; return t.m = r, t.c = e, t.p = "", t(0); }([function (r, t, e) {
+    // Rollbar Snippet
+    !function (r) { function e(n) { if (o[n])
+        return o[n].exports; var t = o[n] = { exports: {}, id: n, loaded: !1 }; return r[n].call(t.exports, t, t.exports, e), t.loaded = !0, t.exports; } var o = {}; return e.m = r, e.c = o, e.p = "", e(0); }([function (r, e, o) {
             "use strict";
-            var o = e(1).Rollbar, n = e(2), a = "https://d37gvrvc0wt4s1.cloudfront.net/js/v1.4/rollbar.min.js";
-            _rollbarConfig.rollbarJsUrl = _rollbarConfig.rollbarJsUrl || a;
-            var i = o.init(window, _rollbarConfig), l = n(i, _rollbarConfig);
-            i.loadFull(window, document, !1, _rollbarConfig, l);
-        }, function (r, t) {
+            var n = o(1), t = o(4);
+            _rollbarConfig = _rollbarConfig || {}, _rollbarConfig.rollbarJsUrl = _rollbarConfig.rollbarJsUrl || "https://cdnjs.cloudflare.com/ajax/libs/rollbar.js/2.4.0/rollbar.min.js", _rollbarConfig.async = void 0 === _rollbarConfig.async || _rollbarConfig.async;
+            var a = n.setupShim(window, _rollbarConfig), l = t(_rollbarConfig);
+            window.rollbar = n.Rollbar, a.loadFull(window, document, !_rollbarConfig.async, _rollbarConfig, l);
+        }, function (r, e, o) {
             "use strict";
-            function e() { var r = window.console; r && "function" == typeof r.log && r.log.apply(r, arguments); }
-            function o(r) { this.shimId = ++u, this.notifier = null, this.parentShim = r, this.logger = e, this._rollbarOldOnError = null; }
-            function n(r, t, e) { window._rollbarWrappedError && (e[4] || (e[4] = window._rollbarWrappedError), e[5] || (e[5] = window._rollbarWrappedError._rollbarContext), window._rollbarWrappedError = null), r.uncaughtError.apply(r, e), t && t.apply(window, e); }
-            function a(r) { var t = o; return l(function () { if (this.notifier)
-                return this.notifier[r].apply(this.notifier, arguments); var e = this, o = "scope" === r; o && (e = new t(this)); var n = Array.prototype.slice.call(arguments, 0), a = { shim: e, method: r, args: n, ts: new Date }; return window._rollbarShimQueue.push(a), o ? e : void 0; }); }
-            function i(r, t) { if (t.hasOwnProperty && t.hasOwnProperty("addEventListener")) {
-                var e = t.addEventListener;
-                t.addEventListener = function (t, o, n) { e.call(this, t, r.wrap(o), n); };
-                var o = t.removeEventListener;
-                t.removeEventListener = function (r, t, e) { o.call(this, r, t && t._wrapped ? t._wrapped : t, e); };
-            } }
-            function l(r, t) { return t = t || e, function () { try {
+            function n(r) { return function () { try {
                 return r.apply(this, arguments);
             }
-            catch (e) {
-                t("Rollbar internal error:", e);
+            catch (r) {
+                try {
+                    console.error("[Rollbar]: Internal error", r);
+                }
+                catch (r) { }
             } }; }
-            var u = 0;
-            o.init = function (r, t) { var e = t.globalAlias || "Rollbar"; if ("object" == typeof r[e])
-                return r[e]; r._rollbarShimQueue = [], r._rollbarWrappedError = null, t = t || {}; var a = new o; return l(function () { if (a.configure(t), t.captureUncaught) {
-                a._rollbarOldOnError = r.onerror, r.onerror = function () { var r = Array.prototype.slice.call(arguments, 0); n(a, a._rollbarOldOnError, r); };
-                var o, l, u = "EventTarget,Window,Node,ApplicationCache,AudioTrackList,ChannelMergerNode,CryptoOperation,EventSource,FileReader,HTMLUnknownElement,IDBDatabase,IDBRequest,IDBTransaction,KeyOperation,MediaController,MessagePort,ModalWindow,Notification,SVGElementInstance,Screen,TextTrack,TextTrackCue,TextTrackList,WebSocket,WebSocketWorker,Worker,XMLHttpRequest,XMLHttpRequestEventTarget,XMLHttpRequestUpload".split(",");
-                for (o = 0; o < u.length; ++o)
-                    l = u[o], r[l] && r[l].prototype && i(a, r[l].prototype);
-            } return r[e] = a, a; }, a.logger)(); }, o.prototype.loadFull = function (r, t, e, o, n) { var a = l(function () { var r = t.createElement("script"), n = t.getElementsByTagName("script")[0]; r.src = o.rollbarJsUrl, r.async = !e, r.onload = i, n.parentNode.insertBefore(r, n); }, this.logger), i = l(function () { var t; if (void 0 === r._rollbarPayloadQueue) {
-                var e, o, a, i;
-                for (t = new Error("rollbar.js did not load"); e = r._rollbarShimQueue.shift();)
-                    for (a = e.args, i = 0; i < a.length; ++i)
-                        if (o = a[i], "function" == typeof o) {
-                            o(t);
-                            break;
-                        }
-            } "function" == typeof n && n(t); }, this.logger); l(function () { e ? a() : r.addEventListener ? r.addEventListener("load", a, !1) : r.attachEvent("onload", a); }, this.logger)(); }, o.prototype.wrap = function (r, t) { try {
-                var e;
-                if (e = "function" == typeof t ? t : function () { return t || {}; }, "function" != typeof r)
+            function t(r, e) { this.options = r, this._rollbarOldOnError = null; var o = s++; this.shimId = function () { return o; }, "undefined" != typeof window && window._rollbarShims && (window._rollbarShims[o] = { handler: e, messages: [] }); }
+            function a(r, e) { if (r) {
+                var o = e.globalAlias || "Rollbar";
+                if ("object" == typeof r[o])
+                    return r[o];
+                r._rollbarShims = {}, r._rollbarWrappedError = null;
+                var t = new p(e);
+                return n(function () { e.captureUncaught && (t._rollbarOldOnError = r.onerror, i.captureUncaughtExceptions(r, t, !0), i.wrapGlobals(r, t, !0)), e.captureUnhandledRejections && i.captureUnhandledRejections(r, t, !0); var n = e.autoInstrument; return e.enabled !== !1 && (void 0 === n || n === !0 || "object" == typeof n && n.network) && r.addEventListener && (r.addEventListener("load", t.captureLoad.bind(t)), r.addEventListener("DOMContentLoaded", t.captureDomContentLoaded.bind(t))), r[o] = t, t; })();
+            } }
+            function l(r) { return n(function () { var e = this, o = Array.prototype.slice.call(arguments, 0), n = { shim: e, method: r, args: o, ts: new Date }; window._rollbarShims[this.shimId()].messages.push(n); }); }
+            var i = o(2), s = 0, d = o(3), c = function (r, e) { return new t(r, e); }, p = d.bind(null, c);
+            t.prototype.loadFull = function (r, e, o, t, a) { var l = function () { var e; if (void 0 === r._rollbarDidLoad) {
+                e = new Error("rollbar.js did not load");
+                for (var o, n, t, l, i = 0; o = r._rollbarShims[i++];)
+                    for (o = o.messages || []; n = o.shift();)
+                        for (t = n.args || [], i = 0; i < t.length; ++i)
+                            if (l = t[i], "function" == typeof l) {
+                                l(e);
+                                break;
+                            }
+            } "function" == typeof a && a(e); }, i = !1, s = e.createElement("script"), d = e.getElementsByTagName("script")[0], c = d.parentNode; s.crossOrigin = "", s.src = t.rollbarJsUrl, o || (s.async = !0), s.onload = s.onreadystatechange = n(function () { if (!(i || this.readyState && "loaded" !== this.readyState && "complete" !== this.readyState)) {
+                s.onload = s.onreadystatechange = null;
+                try {
+                    c.removeChild(s);
+                }
+                catch (r) { }
+                i = !0, l();
+            } }), c.insertBefore(s, d); }, t.prototype.wrap = function (r, e, o) { try {
+                var n;
+                if (n = "function" == typeof e ? e : function () { return e || {}; }, "function" != typeof r)
                     return r;
                 if (r._isWrap)
                     return r;
-                if (!r._wrapped) {
-                    r._wrapped = function () { try {
-                        return r.apply(this, arguments);
-                    }
-                    catch (t) {
-                        throw t._rollbarContext = e() || {}, t._rollbarContext._wrappedSource = r.toString(), window._rollbarWrappedError = t, t;
-                    } }, r._wrapped._isWrap = !0;
-                    for (var o in r)
-                        r.hasOwnProperty(o) && (r._wrapped[o] = r[o]);
+                if (!r._rollbar_wrapped && (r._rollbar_wrapped = function () { o && "function" == typeof o && o.apply(this, arguments); try {
+                    return r.apply(this, arguments);
                 }
-                return r._wrapped;
+                catch (o) {
+                    var e = o;
+                    throw e && ("string" == typeof e && (e = new String(e)), e._rollbarContext = n() || {}, e._rollbarContext._wrappedSource = r.toString(), window._rollbarWrappedError = e), e;
+                } }, r._rollbar_wrapped._isWrap = !0, r.hasOwnProperty))
+                    for (var t in r)
+                        r.hasOwnProperty(t) && (r._rollbar_wrapped[t] = r[t]);
+                return r._rollbar_wrapped;
             }
-            catch (n) {
+            catch (e) {
                 return r;
             } };
-            for (var s = "log,debug,info,warn,warning,error,critical,global,configure,scope,uncaughtError".split(","), p = 0; p < s.length; ++p)
-                o.prototype[s[p]] = a(s[p]);
-            r.exports = { Rollbar: o, _rollbarWindowOnError: n };
-        }, function (r, t) {
+            for (var u = "log,debug,info,warn,warning,error,critical,global,configure,handleUncaughtException,handleUnhandledRejection,captureEvent,captureDomContentLoaded,captureLoad".split(","), f = 0; f < u.length; ++f)
+                t.prototype[u[f]] = l(u[f]);
+            r.exports = { setupShim: a, Rollbar: p };
+        }, function (r, e) {
             "use strict";
-            r.exports = function (r, t) { return function (e) { if (!e && !window._rollbarInitialized) {
-                var o = window.RollbarNotifier, n = t || {}, a = n.globalAlias || "Rollbar", i = window.Rollbar.init(n, r);
-                i._processShimQueue(window._rollbarShimQueue || []), window[a] = i, window._rollbarInitialized = !0, o.processPayloads();
+            function o(r, e, o) { if (r) {
+                var t;
+                "function" == typeof e._rollbarOldOnError ? t = e._rollbarOldOnError : r.onerror && !r.onerror.belongsToShim && (t = r.onerror, e._rollbarOldOnError = t);
+                var a = function () { var o = Array.prototype.slice.call(arguments, 0); n(r, e, t, o); };
+                a.belongsToShim = o, r.onerror = a;
+            } }
+            function n(r, e, o, n) { r._rollbarWrappedError && (n[4] || (n[4] = r._rollbarWrappedError), n[5] || (n[5] = r._rollbarWrappedError._rollbarContext), r._rollbarWrappedError = null), e.handleUncaughtException.apply(e, n), o && o.apply(r, n); }
+            function t(r, e, o) { if (r) {
+                "function" == typeof r._rollbarURH && r._rollbarURH.belongsToShim && r.removeEventListener("unhandledrejection", r._rollbarURH);
+                var n = function (r) { var o, n, t; try {
+                    o = r.reason;
+                }
+                catch (r) {
+                    o = void 0;
+                } try {
+                    n = r.promise;
+                }
+                catch (r) {
+                    n = "[unhandledrejection] error getting `promise` from event";
+                } try {
+                    t = r.detail, !o && t && (o = t.reason, n = t.promise);
+                }
+                catch (r) {
+                    t = "[unhandledrejection] error getting `detail` from event";
+                } o || (o = "[unhandledrejection] error getting `reason` from event"), e && e.handleUnhandledRejection && e.handleUnhandledRejection(o, n); };
+                n.belongsToShim = o, r._rollbarURH = n, r.addEventListener("unhandledrejection", n);
+            } }
+            function a(r, e, o) { if (r) {
+                var n, t, a = "EventTarget,Window,Node,ApplicationCache,AudioTrackList,ChannelMergerNode,CryptoOperation,EventSource,FileReader,HTMLUnknownElement,IDBDatabase,IDBRequest,IDBTransaction,KeyOperation,MediaController,MessagePort,ModalWindow,Notification,SVGElementInstance,Screen,TextTrack,TextTrackCue,TextTrackList,WebSocket,WebSocketWorker,Worker,XMLHttpRequest,XMLHttpRequestEventTarget,XMLHttpRequestUpload".split(",");
+                for (n = 0; n < a.length; ++n)
+                    t = a[n], r[t] && r[t].prototype && l(e, r[t].prototype, o);
+            } }
+            function l(r, e, o) { if (e.hasOwnProperty && e.hasOwnProperty("addEventListener")) {
+                for (var n = e.addEventListener; n._rollbarOldAdd && n.belongsToShim;)
+                    n = n._rollbarOldAdd;
+                var t = function (e, o, t) { n.call(this, e, r.wrap(o), t); };
+                t._rollbarOldAdd = n, t.belongsToShim = o, e.addEventListener = t;
+                for (var a = e.removeEventListener; a._rollbarOldRemove && a.belongsToShim;)
+                    a = a._rollbarOldRemove;
+                var l = function (r, e, o) { a.call(this, r, e && e._rollbar_wrapped || e, o); };
+                l._rollbarOldRemove = a, l.belongsToShim = o, e.removeEventListener = l;
+            } }
+            r.exports = { captureUncaughtExceptions: o, captureUnhandledRejections: t, wrapGlobals: a };
+        }, function (r, e) {
+            "use strict";
+            function o(r, e) { this.impl = r(e, this), this.options = e, n(o.prototype); }
+            function n(r) { for (var e = function (r) { return function () { var e = Array.prototype.slice.call(arguments, 0); if (this.impl[r])
+                return this.impl[r].apply(this.impl, e); }; }, o = "log,debug,info,warn,warning,error,critical,global,configure,handleUncaughtException,handleUnhandledRejection,_createItem,wrap,loadFull,shimId,captureEvent,captureDomContentLoaded,captureLoad".split(","), n = 0; n < o.length; n++)
+                r[o[n]] = e(o[n]); }
+            o.prototype._swapAndProcessMessages = function (r, e) { this.impl = r(this.options); for (var o, n, t; o = e.shift();)
+                n = o.method, t = o.args, this[n] && "function" == typeof this[n] && ("captureDomContentLoaded" === n || "captureLoad" === n ? this[n].apply(this, [t[0], o.ts]) : this[n].apply(this, t)); return this; }, r.exports = o;
+        }, function (r, e) {
+            "use strict";
+            r.exports = function (r) { return function (e) { if (!e && !window._rollbarInitialized) {
+                r = r || {};
+                for (var o, n, t = r.globalAlias || "Rollbar", a = window.rollbar, l = function (r) { return new a(r); }, i = 0; o = window._rollbarShims[i++];)
+                    n || (n = o.handler), o.handler._swapAndProcessMessages(l, o.messages);
+                window[t] = n, window._rollbarInitialized = !0;
             } }; };
-        }]); /*end rollbar*/
+        }]);
+    // End Rollbar Snippet
 }
 else
     window.console.debug("status: rollbar disabled");
+///RETRIEVAL//
 //Retrieve additional parameters from script tag
 !function () {
     //get all scripts
@@ -695,6 +704,7 @@ cG.REPO.stage = (direction) => {
         }
     };
 };
+///DEF_STAGE_B///
 cG.REPO.stage = cG.REPO.stage(function (input, anchor, owrite, config) {
     /** direction.js (c) 2015 Ogewan, MIT*/
     //input - an object, list, or string
@@ -1070,6 +1080,7 @@ cG.REPO.stage = cG.REPO.stage(function (input, anchor, owrite, config) {
 });
 ///////
 cG.stage = cG.REPO.stage.def;
+///DEF_STAGECHANGE//
 cG.queue.stageChange = cG.queue.stageChange || {};
 cG.queue.stageChange.hotcontent = function () {
     var hotstuff = document.getElementsByClassName("cg-hot");
@@ -1140,10 +1151,19 @@ cG.queue.stageChange.controller = function (target) {
         }
     }
 };
-/*HELPERS*/
+///HELPERS///
 cG.HELPERS = {};
 /*/////////////////////////////////////////////////
 HELPER FUNCTIONS*/
+/** @function setValid
+ * @param element
+ * If element is null, void, empty string, or -1 it is unset or set to unset
+ */
+cG.HELPERS.setValid = (element) => {
+    if (element == -1 || element === "" || element === void 0 || element == null)
+        return false;
+    return true;
+};
 cG.HELPERS.smartAttrib = function (source, mapper, ignore) {
     var base;
     var ig = parseInt(ignore);
@@ -1331,6 +1351,8 @@ cG.HELPERS.renameEles = function (bool, source, prepend, append) {
 };
 /* setup complete
 /////////////////////////////////////////////////*/ 
+///METHODS///
+//TODO: Only called by stage injection; evaluate necessity
 cG.addRender = function (addme, dest, name) {
     //dest = script obj
     var pushonpages = function (tget) {
@@ -1338,9 +1360,27 @@ cG.addRender = function (addme, dest, name) {
         var work;
         for (var i = 0; i < tget.length; i++) {
             if (Array.isArray(tget[i]))
-                work = { alt: "", hover: "", title: "", url: tget[i], release: 0, note: "", perm: !1, anim8: !1 };
+                work = {
+                    alt: "",
+                    hover: "",
+                    title: "",
+                    url: tget[i],
+                    release: 0,
+                    note: "",
+                    perm: !1,
+                    anim8: !1
+                };
             else
-                work = { alt: "", hover: "", title: "", url: [tget[i]], release: 0, note: "", perm: !1, anim8: !1 };
+                work = {
+                    alt: "",
+                    hover: "",
+                    title: "",
+                    url: [tget[i]],
+                    release: 0,
+                    note: "",
+                    perm: !1,
+                    anim8: !1
+                };
             if (dest !== void 0 && dest !== null)
                 dest.pages.push(work);
             else
@@ -1356,6 +1396,7 @@ cG.addRender = function (addme, dest, name) {
     if (void 0 === addme || addme === null) {
         if (void 0 === name || name === null)
             name = "additive";
+        //TODO: syncJSON is deprecated  
         var data = syncJSON(cG.REPO.scReq.address + name + '.json');
         return pushonpages(data.p);
         /*cG.REPO.scReq.getAdd = cG.agent(cG.REPO.scReq.address+name+'.json');
@@ -1532,50 +1573,45 @@ cG.controlInjection = function (SPECIFIC) {
         }
     }
 };
-cG.stageInjection = function (SPECIFIC, attempts) {
-    if (attempts === void 0 || attempts === null)
-        attempts = 0;
+cG.stageInjection = function () {
+    /*if (attempts === void 0 || attempts === null) attempts = 0;
     else if (attempts > 20) {
         console.error("cG.stageInjection has timed out");
         if (cG.script !== '') {
-            console.error("OVERRIDE: Ignore other preferences");
+            console.error("OVERRIDE: Ignore other preferences")
             cG.decor = cG.decor || 0;
             cG.ctrls = cG.ctrls || 0;
-        }
-        else
-            return cG.cPanel;
+        } else return cG.cPanel;
     }
     if (cG.script === '' || cG.decor === '' || cG.ctrls === '') { //although we don't need decor, if there is a template, we prioritize it
-        /*if are stuff isn't ready yet we are going to wait for it*/
+        //if are stuff isn't ready yet we are going to wait for it
         setTimeout(cG.stageInjection, 300, SPECIFIC, ++attempts);
         return cG.cPanel;
     }
-    if (!cG.script && !cG.fBox.vscript)
-        return console.error("No script.JSON found. script.JSON is REQUIRED to create any stage. Please create a script.JSON or move it to the directory specified in the script tag for comix-ngn or bellerophon if it is added.");
+    if (!cG.script && !cG.fBox.vscript) return console.error("No script.JSON found. script.JSON is REQUIRED to create any stage. Please create a script.JSON or move it to the directory specified in the script tag for comix-ngn or bellerophon if it is added.");
     else if (!cG.script && cG.fBox.vscript) {
         cG.script = cG.fBox.vscript; //'';
         //cG.fBox.vscript = false;
         setTimeout(cG.stageInjection, 300, SPECIFIC, 0); //reset attempts
         return cG.cPanel;
     }
-    var stages = [], errr = "stageInjection can only operate on elements or arrays of elements";
-    if (void 0 === SPECIFIC)
-        stages = document.getElementsByClassName("venue"); /*get all entry points*/
+    var stages = [],
+        errr = "stageInjection can only operate on elements or arrays of elements";
+    if (void 0 === SPECIFIC) stages = document.getElementsByClassName("venue"); //get all entry points
     else if (Array.isArray(SPECIFIC)) {
         if (SPECIFIC.length <= 0)
-            if (void 0 === SPECIFIC[0].nodeName)
-                return console.error(errr);
-            else
-                return console.error(errr);
+            if (void 0 === SPECIFIC[0].nodeName) return console.error(errr);
+            else return console.error(errr);
         stages = stages.concat(SPECIFIC);
+    } else {
+        if (void 0 === SPECIFIC.nodeName) return console.error(errr);
+        stages.push(SPECIFIC); //if not array and not undefined, assume it is a Element
     }
-    else {
-        if (void 0 === SPECIFIC.nodeName)
-            return console.error(errr);
-        stages.push(SPECIFIC); /*if not array and not undefined, assume it is a Element*/
-    }
+    */
+    var stages = document.getElementsByClassName("venue"); //get all entry points
     //auto-preload
     //if(stages.length>=0) cG.preloadonpage();
+    //
     if (cG.recyclebin.air != "" && cG.recyclebin.air !== void 0 && cG.recyclebin.air !== null)
         cG.script.config.dir = cG.recyclebin.air;
     //console.log(cG.script.config.dir,cG.recyclebin.air);
@@ -1589,7 +1625,7 @@ cG.stageInjection = function (SPECIFIC, attempts) {
         /*////////async request the script if it is specified, else use default*/
         if (!cG.fBox.noverwrite)
             stages[iD].innerHTML = "";
-        var myScript;
+        var myScript = (!iD) ? cG.script : {};
         if (source === null || source === void 0) {
             var script_attr = stages[iD].getAttribute("script");
             if (script_attr == "" || script_attr == "script.json" || void 0 === script_attr || script_attr === null) { /*if no script, use the default*/
@@ -1610,7 +1646,7 @@ cG.stageInjection = function (SPECIFIC, attempts) {
         else
             myScript = source;
         //TODO: all script sections should be optional
-        if (myScript.config && myScript.config.additive && cG.fBox.addme) {
+        if (myScript.config.additive && cG.fBox.addme) {
             cG.addRender(null, null, myScript.config.additive);
             myScript.config.additive = "";
         }
@@ -1680,15 +1716,15 @@ cG.stageInjection = function (SPECIFIC, attempts) {
             var transcriptBH = "<ul>";
             var chpapp = 0;
             var pagapp = 0;
-            if (myScript.config && myScript.config.pagestartnum)
+            if (myScript.config.pagestartnum)
                 pagapp = 1;
-            if (myScript.config && myScript.config.chapterstartnum)
+            if (myScript.config.chapterstartnum)
                 chpapp = 1;
             for (var y = 0; y < myScript.pages.length; y++) {
                 transcriptPG = transcriptPG + '<li onclick="cG.cPanel[' + "'" /*+'def_'*/ + id_attr + "'" + '].go(' + y + ');this.parentElement.parentElement.style.display=' + "'none'" + ';document.getElementById(' + "'" + id_attr + "_location'" + ').style.display=' + "'block'" + ';" style="display:block;">' + (y + pagapp) + '</li>';
                 //console.log(transcriptPG)
             }
-            for (var x = 0; myScript.chapters && x < myScript.chapters.length; x++) {
+            for (var x = 0; x < myScript.chapters.length; x++) {
                 transcriptCH = transcriptCH + '<li onclick="cG.cPanel[' + "'" /*+'def_'*/ + id_attr + "'" + '].ch_go(' + x + ');this.parentElement.parentElement.style.display=' + "'none'" + ';document.getElementById(' + "'" + id_attr + "_location'" + ').style.display=' + "'block'" + ';" style="display:block;">' + (x + chpapp) + '</li>';
                 transcriptBH = transcriptBH + '<li onclick="cG.cPanel[' + "'" /*+'def_'*/ + id_attr + "'" + '].ch_go(' + x + ');this.parentElement.parentElement.style.display=' + "'none'" + ';document.getElementById(' + "'" + id_attr + "_location'" + ').style.display=' + "'block'" + ';" style="display:block;">' + (x + chpapp) + '<ul>';
                 for (var u = myScript.chapters[x].start; u < myScript.chapters[x].end + 1; u++) {
@@ -1745,7 +1781,7 @@ cG.stageInjection = function (SPECIFIC, attempts) {
         if (!stages[i].getAttribute("cgcij") == true || !cG.fBox.noverwrite)
             request(i);
     cG.cPanel = final_res;
-    cG.controlInjection(SPECIFIC);
+    cG.controlInjection(stages);
     return final_res;
 };
 /*end STAGE creation*/
@@ -1753,104 +1789,86 @@ cG.stageInjection = function (SPECIFIC, attempts) {
     
 };*/
 /*ROUTING*/
-cG.route2page = cG.route2page || function (orgvalue) {
+//TODO: Reduce/remove set timeout make the code reslient and async by not requiring anything
+cG.route2page = cG.route2page || function () {
     //var com = cG.script.config.orderby,
     if (!cG.fBox.rtepge)
-        return 0;
-    var value;
-    if (orgvalue === null || orgvalue === void 0 || !orgvalue) {
-        var z = 0;
-        value = [];
-        for (var y in this.params) {
-            if (this.params.hasOwnProperty(y) && y !== null && y !== void 0) {
-                z = Number(this.params[y]);
-                if (isNaN(z))
-                    value.push(this.params[y]);
+        return 0; //routing is turned off
+    console.log("Routing is currently Disabled");
+    return 0;
+    var routeVal = this.params;
+    if (cG.script) {
+        var chpmod = (cG.script.config.chapterstartnum) ? 1 : 0, modify = (cG.script.config.pagestartnum) ? 1 : 0, query = {}, value = 0, pages = cG.script.pages;
+        switch (routeVal.length) {
+            case 1: //Can be a name 
+                if (!isNaN(routeVal[0]) && Number(routeVal[0]) >= cG.script.pages.length) {
+                    value = Number(routeVal[0]);
+                }
                 else
-                    value.push(z);
-            }
-        }
-        if (!value.length)
-            value = 0;
-    }
-    else {
-        value = orgvalue;
-    }
-    if (cG.script === '')
-        return setTimeout(cG.route2page, 300, value);
-    if (!cG.script)
-        return -1;
-    var chpmod = (cG.script.config.chapterstartnum) ? 1 : 0;
-    var modify = (cG.script.config.pagestartnum) ? 1 : 0;
-    if (Array.isArray(value)) {
-        if (value.length == 1 && !isNaN(value[0] % 1) && value[0] >= cG.script.pages.length) {
-            value = value[0];
-        }
-        else {
-            var query, b = cG.script.pages;
-            switch (value.length) {
-                case 1:
-                    value = value[0];
-                    break;
-                case 2:
-                    if (value[0] < cG.script.chapters.length)
-                        query = cG.script.chapters[value[0]].start + (value[1] - modify) + modify;
-                    else {
-                        value = -1;
-                        b = [];
-                    }
-                    break;
-                case 3:
-                    var guide = cG.script.config.dateformat.split("/");
-                    if (isNaN(value[0] % 1) || isNaN(value[1] % 1) || isNaN(value[2] % 1)) {
-                        value = -1;
-                        b = [];
-                        break;
-                    }
-                    for (var tim = 0; tim < 3; tim++) {
-                        if (guide[tim].indexOf("Y") + 1)
-                            guide[tim] = 0;
-                        else if (guide[tim].indexOf("M") + 1)
-                            guide[tim] = 1;
-                        else if (guide[tim].indexOf("D") + 1)
-                            guide[tim] = 2; //2,1,0
-                    }
-                    if (value[guide[0]].length > 1900)
-                        value[guide[0]] += 2000;
-                    var timme = new Date(value[guide[0]], value[guide[1]], value[guide[2]]);
-                    value = timme.getTime();
-                    break;
-            }
-            query = String(value);
-            for (var a = 0; a < b.length; a++) {
-                if (b[a].alt.indexOf(query) + 1 || b[a].hover.indexOf(query) + 1 || b[a].title.indexOf(query) + 1 || b[a].release == Number(query)) {
-                    //console.log(b[a].alt.indexOf(query),b[a].hover.indexOf(query),b[a].title.indexOf(query),b[a].release==Number(query))
-                    value = a + modify;
+                    query.key1 = routeVal[0];
+                break;
+            case 2: //Expected to be a chapter/page
+                if (!isNaN(routeVal[0]) && Number(routeVal[0]) >= cG.script.pages.length) {
+                    value = cG.script.chapters[Number(routeVal[0])].start + Number(routeVal[1]) - modify; // + modify;
+                }
+                else {
+                    query.key1 = routeVal[0];
+                    query.key2 = routeVal[1];
+                }
+                break;
+            case 3: //3 part date
+                var guide = cG.script.config.dateformat.split("/");
+                if (isNaN(value[0] % 1) || isNaN(value[1] % 1) || isNaN(value[2] % 1)) {
+                    value = -1;
+                    b = [];
                     break;
                 }
+                for (var tim = 0; tim < 3; tim++) {
+                    if (guide[tim].indexOf("Y") + 1)
+                        guide[tim] = 0;
+                    else if (guide[tim].indexOf("M") + 1)
+                        guide[tim] = 1;
+                    else if (guide[tim].indexOf("D") + 1)
+                        guide[tim] = 2; //2,1,0
+                }
+                if (value[guide[0]].length > 1900)
+                    value[guide[0]] += 2000;
+                var timme = new Date(value[guide[0]], value[guide[1]], value[guide[2]]);
+                value = timme.getTime();
+                break;
+        }
+        query = String(value);
+        for (var a = 0; a < b.length; a++) {
+            if (b[a].alt.indexOf(query) + 1 || b[a].hover.indexOf(query) + 1 || b[a].title.indexOf(query) + 1 || b[a].release == Number(query)) {
+                //console.log(b[a].alt.indexOf(query),b[a].hover.indexOf(query),b[a].title.indexOf(query),b[a].release==Number(query))
+                value = a + modify;
+                break;
             }
         }
+        cG.prePage = value - modify;
+        //search for page mismatch
+        if (cG.comix !== void 0 && cG.prePage != cG.comix.current()) {
+            cG.comix.go(cG.prePage);
+            var box = cG.comix.data(cG.prePage);
+            document.getElementById(cG.comix.name + "_location").title = box.hover;
+            var boe = document.getElementById(cG.comix.name + "_location");
+            var csf = document.getElementsByClassName("cgtitle");
+            for (var eq = 0; eq < csf.length; eq++)
+                csf[eq].innerHTML = box.title;
+            //console.log(cG.comix.name+"_location");
+        }
+        /*if(cG.avx[0]>1&&cG.avx[1]>0)*/
+        cG.verbose(1, "AutoPage: " + cG.prePage);
     }
-    cG.prePage = value - modify;
-    //search for page mismatch
-    if (cG.comix !== void 0 && cG.prePage != cG.comix.current()) {
-        cG.comix.go(cG.prePage);
-        var box = cG.comix.data(cG.prePage);
-        document.getElementById(cG.comix.name + "_location").title = box.hover;
-        var boe = document.getElementById(cG.comix.name + "_location");
-        var csf = document.getElementsByClassName("cgtitle");
-        for (var eq = 0; eq < csf.length; eq++)
-            csf[eq].innerHTML = box.title;
-        //console.log(cG.comix.name+"_location");
-    }
-    /*if(cG.avx[0]>1&&cG.avx[1]>0)*/
-    cG.verbose(1, "AutoPage: " + cG.prePage);
+    else
+        cG.verbose(1, "AutoPage unset due to missing cG.script");
 };
 /*end routing*/ 
-Path.map("#/:v1(/:v2/:v3/:v4/:v5/:v6/:v7/:v8/:v9)").to(cG.route2page);
+///START///
+cG.director.map("#/:v1(/:v2/:v3/:v4/:v5/:v6/:v7/:v8/:v9)").to(cG.route2page);
 cG.rdy(function () {
-    Path.listen();
-    //Path.history.listen(true);
+    cG.director.listen();
+    //cG.director.history.listen(true);
     /*everything else occurs here*/
     if (!document.getElementById("$COMICNGWRITER$$$")) { /*prints version information*/
         console.log("%c %c %c comix-ngn v" + cG.info.vix + " %c \u262F %c \u00A9 2015 Oluwaseun Ogedengbe %c Plugins: " + cG.$GPC, "color:white; background:#2EB531", "background:purple", "color:white; background:#32E237", 'color:red; background:black', "color:white; background:#2EB531", "color:white; background:purple");
@@ -1876,3 +1894,7 @@ cG.rdy(function () {
     }
 });
 //# sourceMappingURL=comixngn.js.map
+//This is a hack. Wrap the whole damn thing in a closure
+//In future, it would make more sense if comix-ngn was rewritten in a class based format if continuing to use typescript
+//linters hate this trick
+window.cG = cG;}());

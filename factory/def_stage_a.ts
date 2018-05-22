@@ -1,3 +1,4 @@
+///DEF_STAGE_A///
 interface page {
     alt: string,
     anim8: boolean,

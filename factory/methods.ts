@@ -1,3 +1,5 @@
+///METHODS///
+//TODO: Only called by stage injection; evaluate necessity
 cG.addRender = function(addme, dest, name) {
     //dest = script obj
     var pushonpages = function(tget) {
@@ -40,6 +42,7 @@ cG.addRender = function(addme, dest, name) {
     }
     if (void 0 === addme || addme === null) {
         if (void 0 === name || name === null) name = "additive";
+        //TODO: syncJSON is deprecated  
         var data = syncJSON(cG.REPO.scReq.address + name + '.json');
         return pushonpages(data.p);
         /*cG.REPO.scReq.getAdd = cG.agent(cG.REPO.scReq.address+name+'.json');
@@ -207,8 +210,8 @@ cG.controlInjection = function(SPECIFIC) {
         }
     }
 }
-cG.stageInjection = function(SPECIFIC, attempts) {
-    if (attempts === void 0 || attempts === null) attempts = 0;
+cG.stageInjection = function() {
+    /*if (attempts === void 0 || attempts === null) attempts = 0;
     else if (attempts > 20) {
         console.error("cG.stageInjection has timed out");
         if (cG.script !== '') {
@@ -218,7 +221,7 @@ cG.stageInjection = function(SPECIFIC, attempts) {
         } else return cG.cPanel;
     }
     if (cG.script === '' || cG.decor === '' || cG.ctrls === '') { //although we don't need decor, if there is a template, we prioritize it
-        /*if are stuff isn't ready yet we are going to wait for it*/
+        //if are stuff isn't ready yet we are going to wait for it
         setTimeout(cG.stageInjection, 300, SPECIFIC, ++attempts);
         return cG.cPanel;
     }
@@ -231,7 +234,7 @@ cG.stageInjection = function(SPECIFIC, attempts) {
     }
     var stages = [],
         errr = "stageInjection can only operate on elements or arrays of elements";
-    if (void 0 === SPECIFIC) stages = document.getElementsByClassName("venue"); /*get all entry points*/
+    if (void 0 === SPECIFIC) stages = document.getElementsByClassName("venue"); //get all entry points
     else if (Array.isArray(SPECIFIC)) {
         if (SPECIFIC.length <= 0)
             if (void 0 === SPECIFIC[0].nodeName) return console.error(errr);
@@ -239,17 +242,21 @@ cG.stageInjection = function(SPECIFIC, attempts) {
         stages = stages.concat(SPECIFIC);
     } else {
         if (void 0 === SPECIFIC.nodeName) return console.error(errr);
-        stages.push(SPECIFIC); /*if not array and not undefined, assume it is a Element*/
+        stages.push(SPECIFIC); //if not array and not undefined, assume it is a Element
     }
+    */
+    var stages = document.getElementsByClassName("venue"); //get all entry points
     //auto-preload
     //if(stages.length>=0) cG.preloadonpage();
 
+    //
     if (cG.recyclebin.air != "" && cG.recyclebin.air !== void 0 && cG.recyclebin.air !== null) cG.script.config.dir = cG.recyclebin.air;
     //console.log(cG.script.config.dir,cG.recyclebin.air);
     cG.REPO.scReq.address = cG.REPO.scReq.address || cG.recyclebin.dir;
     for (var p in cG.recyclebin)
         if (cG.recyclebin.hasOwnProperty(p) && p !== null)
             cG.recyclebin[p] = null;
+
     var final_res = cG.cPanel,
         decor = (cG.decor) ? cG.decor : '<div id="location"></div><div id="archive">Archive</div><div id="me">About Me</div>',
         ctrls = (cG.ctrls) ? cG.ctrls : '<div>NOT IMPLEMENTED YET</div>',
@@ -259,7 +266,7 @@ cG.stageInjection = function(SPECIFIC, attempts) {
             /*////get attributes */
             /*////////async request the script if it is specified, else use default*/
             if (!cG.fBox.noverwrite) stages[iD].innerHTML = "";
-            var myScript;
+            var myScript = (!iD) ? cG.script: {};
             if (source === null || source === void 0) {
                 var script_attr = stages[iD].getAttribute("script");
                 if (script_attr == "" || script_attr == "script.json" || void 0 === script_attr || script_attr === null) { /*if no script, use the default*/
@@ -404,7 +411,7 @@ cG.stageInjection = function(SPECIFIC, attempts) {
     for (var i = 0; i < stages.length; i++)
         if (!stages[i].getAttribute("cgcij") == true || !cG.fBox.noverwrite) request(i);
     cG.cPanel = final_res;
-    cG.controlInjection(SPECIFIC);
+    cG.controlInjection(stages);
     return final_res;
 };
 /*end STAGE creation*/
@@ -412,47 +419,33 @@ cG.stageInjection = function(SPECIFIC, attempts) {
     
 };*/
 /*ROUTING*/
-cG.route2page = cG.route2page || function(orgvalue) {
+//TODO: Reduce/remove set timeout make the code reslient and async by not requiring anything
+cG.route2page = cG.route2page || function (this: any) {
     //var com = cG.script.config.orderby,
-    if (!cG.fBox.rtepge) return 0;
-    var value;
-    if (orgvalue === null || orgvalue === void 0 || !orgvalue) {
-        var z = 0;
-        value = [];
-        for (var y in this.params) {
-            if (this.params.hasOwnProperty(y) && y !== null && y !== void 0) {
-                z = Number(this.params[y]);
-                if (isNaN(z)) value.push(this.params[y]);
-                else value.push(z);
-            }
-        }
-        if (!value.length) value = 0;
-    } else {
-        value = orgvalue
-    }
-    if (cG.script === '') return setTimeout(cG.route2page, 300, value);
-    if (!cG.script) return -1;
-    var chpmod = (cG.script.config.chapterstartnum) ? 1 : 0;
-    var modify = (cG.script.config.pagestartnum) ? 1 : 0;
-    if (Array.isArray(value)) {
-        if (value.length == 1 && !isNaN(value[0] % 1) && value[0] >= cG.script.pages.length) {
-            value = value[0];
-        } else {
-            var query,
-                b = cG.script.pages;
-            switch (value.length) {
-                case 1:
-                    value = value[0]
+    if (!cG.fBox.rtepge) return 0; //routing is turned off
+    console.log("Routing is currently Disabled"); return 0;
+    var routeVal: string[] = this.params;
+    
+    if (cG.script) {
+        var chpmod = (cG.script.config.chapterstartnum) ? 1 : 0,
+            modify = (cG.script.config.pagestartnum) ? 1 : 0,
+            query: any = {}, value: number = 0, pages: page[] = cG.script.pages;
+        
+            switch (routeVal.length) {
+                case 1: //Can be a name 
+                    if (!isNaN(<any>routeVal[0]) && Number(routeVal[0]) >= cG.script.pages.length) {
+                        value = Number(routeVal[0]);
+                    } else query.key1 = routeVal[0];
                     break;
-                case 2:
-                    if (value[0] < cG.script.chapters.length)
-                        query = cG.script.chapters[value[0]].start + (value[1] - modify) + modify;
-                    else {
-                        value = -1
-                        b = [];
+                case 2: //Expected to be a chapter/page
+                    if (!isNaN(<any>routeVal[0]) && Number(routeVal[0]) >= cG.script.pages.length) {
+                        value = cG.script.chapters[Number(routeVal[0])].start + Number(routeVal[1]) - modify;// + modify;
+                    } else {
+                        query.key1 = routeVal[0];
+                        query.key2 = routeVal[1];
                     }
                     break;
-                case 3:
+                case 3: //3 part date
                     var guide = cG.script.config.dateformat.split("/");
                     if (isNaN(value[0] % 1) || isNaN(value[1] % 1) || isNaN(value[2] % 1)) {
                         value = -1
@@ -469,6 +462,7 @@ cG.route2page = cG.route2page || function(orgvalue) {
                     value = timme.getTime();
                     break;
             }
+
             query = String(value);
             for (var a = 0; a < b.length; a++) {
                 if (b[a].alt.indexOf(query) + 1 || b[a].hover.indexOf(query) + 1 || b[a].title.indexOf(query) + 1 || b[a].release == Number(query)) {
@@ -477,20 +471,20 @@ cG.route2page = cG.route2page || function(orgvalue) {
                     break;
                 }
             }
+        
+        cG.prePage = value - modify;
+        //search for page mismatch
+        if (cG.comix !== void 0 && cG.prePage != cG.comix.current()) {
+            cG.comix.go(cG.prePage);
+            var box = cG.comix.data(cG.prePage);
+            document.getElementById(cG.comix.name + "_location").title = box.hover;
+            var boe = document.getElementById(cG.comix.name + "_location");
+            var csf = document.getElementsByClassName("cgtitle");
+            for (var eq = 0; eq < csf.length; eq++) csf[eq].innerHTML = box.title;
+            //console.log(cG.comix.name+"_location");
         }
-    }
-    cG.prePage = value - modify;
-    //search for page mismatch
-    if (cG.comix !== void 0 && cG.prePage != cG.comix.current()) {
-        cG.comix.go(cG.prePage);
-        var box = cG.comix.data(cG.prePage);
-        document.getElementById(cG.comix.name + "_location").title = box.hover;
-        var boe = document.getElementById(cG.comix.name + "_location");
-        var csf = document.getElementsByClassName("cgtitle");
-        for (var eq = 0; eq < csf.length; eq++) csf[eq].innerHTML = box.title;
-        //console.log(cG.comix.name+"_location");
-    }
-    /*if(cG.avx[0]>1&&cG.avx[1]>0)*/
-    cG.verbose(1, "AutoPage: " + cG.prePage)
+        /*if(cG.avx[0]>1&&cG.avx[1]>0)*/
+        cG.verbose(1, "AutoPage: " + cG.prePage)
+    } else cG.verbose(1, "AutoPage unset due to missing cG.script");
 }
 /*end routing*/

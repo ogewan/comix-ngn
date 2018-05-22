@@ -55,9 +55,9 @@
     // "emitDecoratorMetadata": true,         /* Enables experimental support for emitting type metadata for decorators. */
   },
   "files": [
-    "./factory/def_libs.ts",
+//    "./factory/def_libs.ts",
     "./factory/initialize.ts",
-    "./factory/rollbar.ts",
+    /*"./factory/rollbar.ts",//*/"./factory/rollbar_dev.ts",
     "./factory/retrieval.ts",
     "./factory/def_stage_a.ts",
     "./factory/def_stage_b.ts",

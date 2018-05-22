@@ -1,3 +1,4 @@
+///DEF_STAGECHANGE//
 cG.queue.stageChange=cG.queue.stageChange||{};
 cG.queue.stageChange.hotcontent=function(){
     var hotstuff = document.getElementsByClassName("cg-hot");

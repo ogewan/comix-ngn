@@ -1,3 +1,4 @@
+///RETRIEVAL//
 //Retrieve additional parameters from script tag
 !function(){
     //get all scripts

@@ -1,7 +1,15 @@
-/*HELPERS*/
+///HELPERS///
 cG.HELPERS = {};
 /*/////////////////////////////////////////////////
 HELPER FUNCTIONS*/
+/** @function setValid
+ * @param element
+ * If element is null, void, empty string, or -1 it is unset or set to unset
+ */
+cG.HELPERS.setValid = (element: any) => {
+    if (element == -1 || element === "" || element === void 0 || element == null) return false;
+    return true;
+}
 cG.HELPERS.smartAttrib = function(source,mapper,ignore){
     var base;
     var ig = parseInt(ignore);
