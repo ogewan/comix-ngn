@@ -3,6 +3,7 @@
 (()=>{return this['cG'] = this['cG'] || new (function cG(){
 this.voice = "Welcome to the World";
 })()})();
+TODO: consider using data attribute on html
 */
 
 ///INITIALIZE///

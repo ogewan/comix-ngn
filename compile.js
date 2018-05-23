@@ -11,7 +11,7 @@ var typescript = (cbr) => {
         });
     },
     concat = (cbr) => {
-        exec("concat -o comixngn.js ./factory/header.js ./comixngn.js ./factory/footer.js", (er, so, se) => {
+        exec("concat -o .concat.comixngn.js ./factory/header.js ./comixngn.js ./factory/footer.js", (er, so, se) => {
             //console.log(er, so, se);
             console.log("=CONCAT=");
             console.log(er);
@@ -21,7 +21,7 @@ var typescript = (cbr) => {
         });
     },
     wccompiler = (cbr) => {
-        exec("java -jar .\\tools\\compiler.jar --language_in ECMASCRIPT6_STRICT --js .\\comixngn.js --create_source_map .\\comixngn.min.js.map --js_output_file .\\comixngn.min.js",
+        exec("java -jar .\\tools\\compiler.jar --language_in ECMASCRIPT6_STRICT --js .\\.concat.comixngn.js --create_source_map .\\comixngn.min.js.map --js_output_file .\\comixngn.min.js",
             (er, so, se) => {
                 //console.log(er, so, se);
                 console.log("=CLOSURE COMPILER=");

@@ -6,15 +6,14 @@
 var setValid = (element: any) => {
     if (element == -1 || element === "" || element === void 0 || element == null) return false;
     return true;
-}
+},
 /** @function smartAttrib
  * @param source
  * @param mapper
  * @param ignore
  */
-,smartAttrib = function(source,mapper,ignore){
+smartAttrib = (source: Element, mapper:any, ig: number) => {
     var base;
-    var ig = parseInt(ignore);
     ig = (isNaN(ig))?0:ig;
     var srch = mapper[source.nodeName.toLowerCase()];
     if(void 0 !== srch&&ig<=0){
@@ -28,18 +27,18 @@ var setValid = (element: any) => {
                 }
                 source.setAttribute(base[y],srch[base[y]]);         
             }
-            if(srch.count > 0) mapper[source.nodeType.toLowerCase()].count--;/*if count is above 0, decrement it (this limits the amount of sets)*/
+            if(srch.count > 0) mapper[source.nodeType].count--;/*if count is above 0, decrement it (this limits the amount of sets)*/
         }
     } else ig--;
     for(var x=0;x<source.children.length;x++) smartAttrib(source.children[x],mapper,ig);
-}
+},
 /** @function stick
  * @param obj
  * @param parent
  * @param sauce
  * @param pos
  */
-,stick = function(obj,parent,sauce,pos){
+stick = function(obj,parent,sauce,pos){
     var ftns = [
         function(a){//order
             if(parent!==void 0||parent!==null){
@@ -137,13 +136,13 @@ var setValid = (element: any) => {
     obj._pos = pos;
     obj._chain = [];
     return obj;
-}
+},
 /** @function FEbyIDAI
  * @param source
  * @param ids
  * @param inner
  */
-,FEbyIdAI = function(source,ids,inner){
+FEbyIdAI = function(source,ids,inner){
     var ret = [];
     var w;
     var j;
@@ -168,12 +167,12 @@ var setValid = (element: any) => {
     }
     //console.log(q,ret,source);
     return ret;
-}
+},
 /** @function FindClassesInside
  * @param source
  * @param class
  */
-,FindClassesInside = function(source,cls){
+FindClassesInside = function(source,cls){
     //console.log(source);
     var ret = [],
         q,
@@ -190,14 +189,14 @@ var setValid = (element: any) => {
         ret = ret.concat(FindClassesInside(source.children[a], cls));
     }
     return ret;
-}
+},
 /** @function renameEles
  * @param bool
  * @param source
  * @param prepend
  * @param append
  */
-,renameEles = function(bool: boolean, source: Element, prepend?: string, append?: string){
+renameEles = function(bool: boolean, source: Element, prepend?: string, append?: string){
     for(var x=0;x<source.children.length;x++) renameEles(true, source.children[x], prepend, append);
     if(bool) {
         var pre = (void 0===prepend)?'':prepend+"_";

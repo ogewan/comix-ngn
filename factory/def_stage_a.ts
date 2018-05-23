@@ -137,6 +137,12 @@ cG.REPO.stage = (direction: (
                         }
                     main.swap(internalPages, internalSettings);
                 }
+                var _dataOriginal = main.data;
+                main.data = function (to?: number) {
+                    //wrap direction data function with error handlers
+                    var data = _dataOriginal(to);
+                    return setValid(data) ? data : {};
+                };
                 main.navto = function (a?:number) {
                     if (a !== null && a !== void 0 && a < main.pg.length) return main.pg[a]._nav();
                     else return main.pg[main.my]._nav();

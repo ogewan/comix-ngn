@@ -1,12 +1,10 @@
-/** @preserve comix-ngn v1.4.0 | (c) 2015 Oluwaseun Ogedengbe| ogewan.github.io/comix-ngn/ |License: MIT|
-embeds domReady: github.com/ded/domready (MIT) (c) 2013 Dustin Diaz, pegasus: typicode.github.io/pegasus (MIT) (c) 2014 typicode, pathjs (MIT) (c) 2011 Mike Trpcic, direction.js*/
-(function(){
 "use strict";
 //TODO: --rewrite_polyfills=false
 /*TODO:
 (()=>{return this['cG'] = this['cG'] || new (function cG(){
 this.voice = "Welcome to the World";
 })()})();
+TODO: consider using data attribute on html
 */
 ///INITIALIZE///
 /*The namespace of comix-ngn
@@ -563,6 +561,12 @@ cG.REPO.stage = (direction) => {
                         }
                     }
                     main.swap(internalPages, internalSettings);
+                };
+                var _dataOriginal = main.data;
+                main.data = function (to) {
+                    //wrap direction data function with error handlers
+                    var data = _dataOriginal(to);
+                    return setValid(data) ? data : {};
                 };
                 main.navto = function (a) {
                     if (a !== null && a !== void 0 && a < main.pg.length)
@@ -1162,15 +1166,14 @@ var setValid = (element) => {
     if (element == -1 || element === "" || element === void 0 || element == null)
         return false;
     return true;
-}
+}, 
 /** @function smartAttrib
  * @param source
  * @param mapper
  * @param ignore
  */
-, smartAttrib = function (source, mapper, ignore) {
+smartAttrib = (source, mapper, ig) => {
     var base;
-    var ig = parseInt(ignore);
     ig = (isNaN(ig)) ? 0 : ig;
     var srch = mapper[source.nodeName.toLowerCase()];
     if (void 0 !== srch && ig <= 0) {
@@ -1186,21 +1189,21 @@ var setValid = (element) => {
                 source.setAttribute(base[y], srch[base[y]]);
             }
             if (srch.count > 0)
-                mapper[source.nodeType.toLowerCase()].count--; /*if count is above 0, decrement it (this limits the amount of sets)*/
+                mapper[source.nodeType].count--; /*if count is above 0, decrement it (this limits the amount of sets)*/
         }
     }
     else
         ig--;
     for (var x = 0; x < source.children.length; x++)
         smartAttrib(source.children[x], mapper, ig);
-}
+}, 
 /** @function stick
  * @param obj
  * @param parent
  * @param sauce
  * @param pos
  */
-, stick = function (obj, parent, sauce, pos) {
+stick = function (obj, parent, sauce, pos) {
     var ftns = [
         function (a) {
             if (parent !== void 0 || parent !== null) {
@@ -1304,13 +1307,13 @@ var setValid = (element) => {
     obj._pos = pos;
     obj._chain = [];
     return obj;
-}
+}, 
 /** @function FEbyIDAI
  * @param source
  * @param ids
  * @param inner
  */
-, FEbyIdAI = function (source, ids, inner) {
+FEbyIdAI = function (source, ids, inner) {
     var ret = [];
     var w;
     var j;
@@ -1335,12 +1338,12 @@ var setValid = (element) => {
     }
     //console.log(q,ret,source);
     return ret;
-}
+}, 
 /** @function FindClassesInside
  * @param source
  * @param class
  */
-, FindClassesInside = function (source, cls) {
+FindClassesInside = function (source, cls) {
     //console.log(source);
     var ret = [], q, w = source.className.split(" ");
     for (var u = 0; u < w.length; u++) {
@@ -1356,14 +1359,14 @@ var setValid = (element) => {
         ret = ret.concat(FindClassesInside(source.children[a], cls));
     }
     return ret;
-}
+}, 
 /** @function renameEles
  * @param bool
  * @param source
  * @param prepend
  * @param append
  */
-, renameEles = function (bool, source, prepend, append) {
+renameEles = function (bool, source, prepend, append) {
     for (var x = 0; x < source.children.length; x++)
         renameEles(true, source.children[x], prepend, append);
     if (bool) {
@@ -1377,84 +1380,37 @@ var setValid = (element) => {
 /* setup complete
 /////////////////////////////////////////////////*/ 
 ///METHODS///
-//TODO: Only called by stage injection; evaluate necessity
-//DEPRECATED
-cG.addRender = function (addme, dest, name) {
-    //dest = script obj
-    var pushonpages = function (tget) {
-        //convert data to page array
-        var work;
-        for (var i = 0; i < tget.length; i++) {
-            if (Array.isArray(tget[i]))
-                work = {
-                    alt: "",
-                    hover: "",
-                    title: "",
-                    url: tget[i],
-                    release: 0,
-                    note: "",
-                    perm: !1,
-                    anim8: !1
-                };
-            else
-                work = {
-                    alt: "",
-                    hover: "",
-                    title: "",
-                    url: [tget[i]],
-                    release: 0,
-                    note: "",
-                    perm: !1,
-                    anim8: !1
-                };
-            if (dest !== void 0 && dest !== null)
-                dest.pages.push(work);
-            else
-                cG.REPO.script.def.pages.push(work);
-        }
-        //this overwrites cG.script, if it it changed by something other than def
-        if (dest === void 0 || dest === null)
-            cG.script = cG.REPO.script.def;
-        else
-            return dest;
-        return cG.script;
-    };
-    if (void 0 === addme || addme === null) {
-        if (void 0 === name || name === null)
-            name = "additive";
-        //TODO: syncJSON is deprecated  
-        var data = syncJSON(cG.REPO.scReq.address + name + '.json');
-        return pushonpages(data.p);
-        /*cG.REPO.scReq.getAdd = cG.agent(cG.REPO.scReq.address+name+'.json');
-        cG.REPO.scReq.getAdd.then(
-            function(data, xhr) {
-                return pushonpages(data.p);
-            },
-            function(data, xhr) {
-                console.error(data, xhr.status);
-                console.log("addRender has failed")
-                //cG.script = cG.REPO.script.def = 0;
-            });*/
-    }
-    else
-        return pushonpages(addme.p);
-};
-cG.controlInjection = function (SPECIFIC) {
+cG.controlInjection = function (stages) {
     if (!cG.documentcontrolkeyset && cG.fBox.arrow) {
+        //Arrow must be enabled and documentcontrol cannot be already set
         cG.documentcontrolkeyset = true;
         document.onkeyup = function (e) {
             //console.log("keydown");
             e = e || window.event;
-            if (e.keyCode == '37')
+            if (e.keyCode == 37)
                 cG.comix.prev();
-            else if (e.keyCode == '39')
+            else if (e.keyCode == 39)
                 cG.comix.next();
-            else if (e.keyCode == '82')
+            else if (e.keyCode == 82)
                 cG.comix.rand();
         };
     }
-    var stages = [], ctrls = (cG.ctrls) ? cG.ctrls : '<ul><li style="display: inline;"><button class="frst" >|&lt;</button></li><li style="display: inline;"><button class="prev" rel="prev" accesskey="p">&lt; Prev</button></li><li style="display: inline;"><button class="rand" >Random</button></li><li style="display: inline;"><button class="next" rel="next" accesskey="n">Next &gt;</button></li><li style="display: inline;"><button class="last" >&gt;|</button></li></ul>', antictrl = '<ul><li style="display: inline;"><button class="last" >&lt;|</button></li><li style="display: inline;"><button class="next" rel="next" accesskey="n">Next &lt;</button></li><li style="display: inline;"><button class="rand" >Random</button></li><li style="display: inline;"><button class="prev" rel="prev" accesskey="p">&gt; Prev</button></li><li style="display: inline;"><button class="frst" >|&gt;</button></li></ul>', pod, podling, errr = "controlInjection can only operate on elements or arrays of elements", eventer = function (par, chd) {
+    var ctrls = (cG.ctrls) ? cG.ctrls :
+        '<ul>' +
+            '<li style="display: inline;"><button class="frst" >|&lt;</button></li>' +
+            '<li style="display: inline;"><button class="prev" rel="prev" accesskey="p">&lt; Prev</button></li>' +
+            '<li style="display: inline;"><button class="rand" >Random</button></li>' +
+            '<li style="display: inline;"><button class="next" rel="next" accesskey="n">Next &gt;</button></li>' +
+            '<li style="display: inline;"><button class="last" >&gt;|</button></li>' +
+            '</ul>', antictrl = '<ul>' +
+        '<li style="display: inline;"><button class="last" >&lt;|</button></li>' +
+        '<li style="display: inline;"><button class="next" rel="next" accesskey="n">Next &lt;</button></li>' +
+        '<li style="display: inline;"><button class="rand" >Random</button></li>' +
+        '<li style="display: inline;"><button class="prev" rel="prev" accesskey="p">&gt; Prev</button></li>' +
+        '<li style="display: inline;"><button class="frst" >|&gt;</button></li>' +
+        '</ul>', pod, podling, eventer = function (par, chd) {
         par.setAttribute("mind", 1);
+        //TODO: INSPECT
         document.getElementById(par.id + "_location").title = cG.cPanel[par.id].data().hover;
         var classstuff = (par.getAttribute("comix")) ? document.getElementsByClassName("cgtitle") : [], working, classdate = (par.getAttribute("comix")) ? document.getElementsByClassName("cgdate") : [];
         for (var eq = 0; eq < classstuff.length; eq++)
@@ -1551,27 +1507,11 @@ cG.controlInjection = function (SPECIFIC) {
                 });
             t[y].setAttribute("cgae", "1");
         }
-    };
-    if (void 0 === SPECIFIC)
-        stages = document.getElementsByClassName("venue"); /*get all entry points*/
-    else if (Array.isArray(SPECIFIC)) {
-        if (SPECIFIC.length <= 0)
-            if (void 0 === SPECIFIC[0].nodeName)
-                return console.error(errr);
-            else
-                return console.error(errr);
-        stages = stages.concat(SPECIFIC);
-    }
-    else {
-        if (void 0 === SPECIFIC.nodeName)
-            return console.error(errr);
-        stages.push(SPECIFIC); /*if not array and not undefined, assume it is a Element*/
-    }
-    var exist = document.querySelectorAll('[cglink]'), linkcg;
-    //console.log(exist)
+    }, exist = document.querySelectorAll('[cglink]'), linkcg;
+    stages = document.getElementsByClassName("venue") /*get all entry points*/;
     for (var v = 0; v < exist.length; v++) {
         linkcg = exist[v].getAttribute("cglink");
-        if (cG.cPanel[linkcg] !== void 0 && cG.cPanel[linkcg] !== null) {
+        if (setValid(cG.cPanel[linkcg])) {
             cG.cPanel[linkcg].brains = cG.cPanel[linkcg].brains || [];
             cG.cPanel[linkcg].brains.push(exist[v]);
             eventer(document.getElementById(linkcg), exist[v]);
@@ -1580,7 +1520,9 @@ cG.controlInjection = function (SPECIFIC) {
     for (var u = 0; u < stages.length; u++) {
         if (!stages[u].getAttribute("mind")) { //add event handlers
             pod = document.createElement("DIV");
-            pod.innerHTML = ((stages[u].getAttribute("readdir") || cG.script.config.readdir) && !cG.ctrls) ? antictrl : ctrls;
+            //check if read direction is reversed
+            let { config } = cG.script;
+            pod.innerHTML = ((stages[u].getAttribute("readdir") || (config && config.readdir)) && !cG.ctrls) ? antictrl : ctrls;
             podling = pod.children[0];
             if (!stages[u].getAttribute("comix"))
                 podling.setAttribute("style", "display:none;");
@@ -1615,51 +1557,29 @@ cG.stageInjection = function () {
         /*////////async request the script if it is specified, else use default*/
         if (!cG.fBox.noverwrite)
             stages[iD].innerHTML = "";
-        var myScript = (!iD) ? cG.script : {}, configSet = {};
-        let { config, pages, chapters } = myScript;
-        if (source === null || source === void 0) {
+        var myScript, configSet = {};
+        if (!setValid(source)) {
             var script_attr = stages[iD].getAttribute("script");
-            if (script_attr == "" || script_attr == "script.json" || void 0 === script_attr || script_attr === null) { /*if no script, use the default*/
+            if (setValid(!script_attr) || !iD) { /*if no script or first comic, use the default*/
                 myScript = cG.script;
             }
             else {
                 reqQueue.push(cG.agent(script_attr).then(function (data, xhr) {
-                    request(iD, data);
+                    request(iD, JSON.stringify(data));
                 }, function (data, xhr) {
                     console.error(data, xhr.status);
-                    request(iD, "");
+                    request(iD, {});
                 }));
                 return 0; //stop execution
             }
         }
-        else if (source == "")
-            myScript = cG.script;
         else
             myScript = source;
-        /* DEPRECATED
-        As all sections in script are optional, the need for additive is removed
-        //all script sections should be optional
-        
-        if (config && config.additive && cG.fBox.addme) {
-            cG.addRender(null, null, config.additive);
-            config.additive = "";
-        }
-        */
+        let { config, pages, chapters } = myScript;
         /*////////get the rest of the attributes*/
         var id_attr = stages[iD].getAttribute("id"), use_attr = stages[iD].getAttribute("use"), config_attr = stages[iD].getAttribute("config");
-        //add_attr = stages[iD].getAttribute("additive");
         /*////attribute processing */
-        //cgcij tells cG that a stage has already been injectted on this element, and you should skip it normally
-        /* DEPRECATED
-        if (add_attr != "" && void 0 !== add_attr && add_attr !== null && cG.fBox.addme) {
-            if (source === null || source === void 0) {
-                myScript = cG.addRender(null, null, add_attr);
-                stages[iD].removeAttribute("additive");
-            } else {
-                myScript = cG.addRender(null, source, add_attr)
-            }
-        }
-        */
+        //cgcij tells cG that a stage has already been injected on this element, and you should skip it normally
         stages[iD].setAttribute("cgcij", "1");
         if (!setValid(id_attr)) { /*if no ID, make one*/
             var name = "STG" + iD;
@@ -1775,7 +1695,6 @@ cG.stageInjection = function () {
             stages[iD].appendChild(childling);
             final_res[srch].pg.push(childling);
             final_res[srch + "_" + z].my = z;
-            //console.log()
         }
         for (var r = 0; r < final_res[srch].pg.length; r++) {
             var frspr = stick(final_res[srch].pg[r], final_res[srch].pg, final_res[srch], r);
@@ -1898,7 +1817,3 @@ cG.rdy(function () {
     }
 });
 //# sourceMappingURL=comixngn.js.map
-//This is a hack. Wrap the whole damn thing in a closure
-//In future, it would make more sense if comix-ngn was rewritten in a class based format if continuing to use typescript
-//linters hate this trick
-window.cG = cG;}());
