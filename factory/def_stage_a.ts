@@ -51,16 +51,20 @@ interface settings {
     imgprebuffer?: number,
     imgpostbuffer?: number,
 }
+interface direction {
+    new (
+        input:string[], 
+        anchor?:HTMLElement, 
+        owrite?:number, 
+        config?:object) : any;
+}
 ///////
-cG.REPO.stage = (direction: (
-    input:string[], 
-    anchor?:HTMLElement, 
-    owrite?:number, 
-    config?:object) => void) => {
+cG.REPO.stage = (direction: direction) => {
     return {
         "def": {
             id: "def",
             construct: function (name: string, scriptt: script, anchor: HTMLElement, options: object) {
+                let { config, loading, pages } = scriptt;
                 var chek = function (truth:any, fals:any, iimg:page) {
                     //console.log((iimg.absolute||iimg.url[0].indexOf('https://')+1||iimg.url[0].indexOf('http://')+1),iimg.absolute,iimg.url[0].indexOf('https://')+1,iimg.url[0].indexOf('http://')+1);
                     if (iimg.url[0] === void 0) return '';
@@ -70,11 +74,11 @@ cG.REPO.stage = (direction: (
                         return fals;
                 },
                 get = -1,
-                pageArr = scriptt.pages.map((val: page) => {
+                pageArr = (pages) ? pages.map((val: page) => {
                     return val.url[0];
-                }),
+                }) : [],
                 settings:settings = {};
-                let { config, loading } = scriptt;
+
                 if (setValid(scriptt)) {
                     if (setValid(config)) {
                         if (config.dir !== void(0)) settings.dir = config.dir;
@@ -101,16 +105,11 @@ cG.REPO.stage = (direction: (
                 if (setValid(cG.comix)) get = cG.prePage;
                 if (get < 0 ) get = config.startpage; 
 
-                interface direction {
-                    new(): {
-                        iimg: string[]
-                    }
-                }
                 var main = new direction(pageArr, anchor, get, settings);
                 main.name = name;
                 main.type = "def";
                 //if(cG.avx[0]>1&&cG.avx[1]>0){}
-                main.pg = [anchor]
+                main.pg = [anchor];
                 main.at = 0;
                 main.my = 0;
                 main.internals = scriptt || {pages:[], chapters:[], config:{}, loading:{}};
@@ -204,11 +203,12 @@ cG.REPO.stage = (direction: (
                     if (typeof (Storage) !== void 0 && cG.fBox.pgesve) {
                         localStorage.setItem(cG.comicID + "|" + name + "|curPage", cG.cPanel[/*"def_"+*/name].current().toString());
                     }
-                    if (cG.comix === cG.cPanel[/*"def_"+*/name]) {//if comic is the comix, then push its state
-                        var chpmod = (cG.script.config.chapterstartnum) ? 1 : 0,
-                            modify = (cG.script.config.pagestartnum) ? 1 : 0,
+                    if (cG.comix === cG.cPanel[/*"def_"+*/name] && cG.script.config) {//if comic is the comix, then push its state
+                        let { chapterstartnum, pagestartnum, orderby, dateformat } = cG.script.config;
+                        var chpmod = (chapterstartnum) ? 1 : 0,
+                            modify = (pagestartnum) ? 1 : 0,
                             result = cG.cPanel[/*"def_"+*/name].current();
-                        switch (cG.script.config.orderby) {
+                        switch (orderby) {
                             case 1:
                                 console.log(result);
                                 var mechp = cG.cPanel[/*"def_"+*/name].ch_current();
@@ -216,7 +216,7 @@ cG.REPO.stage = (direction: (
                                 break;
                             case 2:
                                 var nT = new Date(cG.cPanel[/*"def_"+*/name].data().release * 1000);
-                                var guide = cG.script.config.dateformat.split("/");
+                                var guide = dateformat.split("/");
                                 for (var tim = 0; tim < 3; tim++) {
                                     if (guide[tim].indexOf("Y") + 1) guide[tim] = nT.getFullYear() - 100 + 2000; //TODO: what is this?
                                     else if (guide[tim].indexOf("M") + 1) guide[tim] = nT.getMonth() + 1;

@@ -51,6 +51,9 @@ interface settings {
     imgprebuffer?: number;
     imgpostbuffer?: number;
 }
+interface direction {
+    new (input: string[], anchor?: HTMLElement, owrite?: number, config?: object): any;
+}
 /** @function setValid
  * @param element If element is null, void, empty string, or -1 it is unset or set to unset
  */

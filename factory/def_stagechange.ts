@@ -1,30 +1,32 @@
 ///DEF_STAGECHANGE//
 cG.queue.stageChange=cG.queue.stageChange||{};
 cG.queue.stageChange.hotcontent=function(){
-    var hotstuff = document.getElementsByClassName("cg-hot");
+    var hotstuff = <HTMLCollectionOf<Element>> document.getElementsByClassName("cg-hot");
     var hotqueue = [];//window.hotqueue||[];
     for (var i = 0; i < hotstuff.length; i++) { 
         hotqueue.push({place:hotstuff[i].parentNode,time:hotstuff[i]});
     }
     while (hotstuff.length) {
-        hotstuff[0].parentNode.removeChild(hotstuff[0]);
+        let {parentNode} = hotstuff[0];
+        if (parentNode) parentNode.removeChild(hotstuff[0]);
     }
     for (var j = 0; j < hotqueue.length; j++) { 
-        console.log("queued stuff",cG.info.vrb,hotqueue[j])
-            hotqueue[j].place.appendChild(hotqueue[j].time);/*
+        console.log("queued stuff",cG.info.vrb,hotqueue[j]);
+        let { place } = hotqueue[0];
+        if (place) place.appendChild(hotqueue[j].time);/*
         if(cG.info.vrb!=500){
             hotqueue[j].place.appendChild(hotqueue[j].time);
         } else window.hotqueue = hotqueue;*/
     }    
 }
-cG.queue.stageChange.controller=function(target){
-    //console.log(target.data().desig);
+cG.queue.stageChange.controller=function(target: any){
+    //console.log(target.data().d);
     var b,
         c,
         key,
         mykey,
         bcollect=[],
-        check = target.data().desig;
+        check = target.data().d;
     for(var o=0;o<target.brains.length;o++){
         bcollect = FindClassesInside(target.brains[o],["frst","last","prev","next","rand"]);
         //console.log(bcollect);
@@ -37,6 +39,7 @@ cG.queue.stageChange.controller=function(target){
             if(key) mykey = key;
             else mykey = "disable";
             //console.log(check)
+            //TODO: investigate for bugs
             if((c=="frst"||c=="prev")&&check==-1){
                 if(c=="frst") b.setAttribute("class","frst "+mykey);
                 else b.setAttribute("class","prev "+mykey);

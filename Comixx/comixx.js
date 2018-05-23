@@ -75,7 +75,8 @@ var fs = require("fs-extra")
         $("#thumbs").append(subEle);
     }
     ;
-cG.script = {pages:[]}
+//cG.script = {pages:[]}
+console.log("%c %c %c comixx v" + cG.info.vxx + " %c \u262F %c \u00A9 2018 Ogewan %c ", "color:white; background:#2E31B5", "background:purple","color:white; background:#3339E0", 'color:red; background:black', "color:white; background:#2E31B5", "background:purple");
 $("#flist").on("change", () => {
     var libDir = $("#flist")[0].files[0];
     fs.readdir(libDir.path, (err, files) => {

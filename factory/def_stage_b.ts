@@ -25,7 +25,7 @@ cG.REPO.stage = cG.REPO.stage(
                 color: config.color || "#373737"
             },
             options = {
-                dir: config.dir || "assets/",
+                dir: config.dir || "",
                 irb: config.imgprebuffer || 5,
                 itb: config.imgpostbuffer || 5,
                 back: config.back || "#FFF"
@@ -236,7 +236,7 @@ cG.REPO.stage = cG.REPO.stage(
             window.clearTimeout(scrolling);
         }
         this.swap = function (arr, opts, start) {
-            iimg = Array.isArray(arr) ? arr.slice().map(function(val){return {s:val}}) : iimg;
+            iimg = Array.isArray(arr) ? arr.slice().map(function(val, id){return {s:val, d: id ? (id == arr.length - 1 ? 1 : 0) : -1};}) : iimg;
             if (opts) {
                 xtndLmt(spinner, opts);
                 xtndLmt(options, opts);
@@ -351,7 +351,7 @@ cG.REPO.stage = cG.REPO.stage(
         var q;
         for (q = 0; q < iimg.length; q++) {
             //iimg[q].btog = 0; a holdover from the old html based canvas
-            iimg[q].desig = q ? (q == iimg.length - 1 ? 1 : 0) : -1; //-1 means first, 0 means middle, 1 means last: true if endpoint, false if middle
+            iimg[q].d = q ? (q == iimg.length - 1 ? 1 : 0) : -1; //-1 means first, 0 means middle, 1 means last: true if endpoint, false if middle (desig)
             iimg[q].loaded = false;
         }
         for (q = 0; q < options.irb; q++) {

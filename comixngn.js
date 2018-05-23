@@ -41,7 +41,7 @@ cG.cPanel = cG.cPanel || {}; /*cG control panel, all stages are stored here*/
 TODO: DEPRECATE vscript and addme
 * vscript - virtual script allows, a script defined as a JS variable to overwrite the script request (Writer)
 */
-cG.info = { vix: "1.3.0", vwr: "2.0.0", vpr: "0.1.0", vxx: "0.0.1" }; /*version settings*/
+cG.info = { vix: "1.3.5", vwr: "2.0.0", vpr: "0.1.0", vxx: "0.0.2" }; /*version settings*/
 cG.dis = cG.dis || {}; //disables statistic and error reporting
 cG.recyclebin = cG.recyclebin || {}; //variables that are used in initialization, disposed at stage injection
 cG.queue = cG.queue || {}; //stores functions that are called incertain events
@@ -479,6 +479,7 @@ cG.REPO.stage = (direction) => {
         "def": {
             id: "def",
             construct: function (name, scriptt, anchor, options) {
+                let { config, loading, pages } = scriptt;
                 var chek = function (truth, fals, iimg) {
                     //console.log((iimg.absolute||iimg.url[0].indexOf('https://')+1||iimg.url[0].indexOf('http://')+1),iimg.absolute,iimg.url[0].indexOf('https://')+1,iimg.url[0].indexOf('http://')+1);
                     if (iimg.url[0] === void 0)
@@ -488,10 +489,9 @@ cG.REPO.stage = (direction) => {
                     }
                     else
                         return fals;
-                }, get = -1, pageArr = scriptt.pages.map((val) => {
+                }, get = -1, pageArr = (pages) ? pages.map((val) => {
                     return val.url[0];
-                }), settings = {};
-                let { config, loading } = scriptt;
+                }) : [], settings = {};
                 if (setValid(scriptt)) {
                     if (setValid(config)) {
                         if (config.dir !== void (0))
@@ -646,9 +646,10 @@ cG.REPO.stage = (direction) => {
                     if (typeof (Storage) !== void 0 && cG.fBox.pgesve) {
                         localStorage.setItem(cG.comicID + "|" + name + "|curPage", cG.cPanel[ /*"def_"+*/name].current().toString());
                     }
-                    if (cG.comix === cG.cPanel[ /*"def_"+*/name]) { //if comic is the comix, then push its state
-                        var chpmod = (cG.script.config.chapterstartnum) ? 1 : 0, modify = (cG.script.config.pagestartnum) ? 1 : 0, result = cG.cPanel[ /*"def_"+*/name].current();
-                        switch (cG.script.config.orderby) {
+                    if (cG.comix === cG.cPanel[ /*"def_"+*/name] && cG.script.config) { //if comic is the comix, then push its state
+                        let { chapterstartnum, pagestartnum, orderby, dateformat } = cG.script.config;
+                        var chpmod = (chapterstartnum) ? 1 : 0, modify = (pagestartnum) ? 1 : 0, result = cG.cPanel[ /*"def_"+*/name].current();
+                        switch (orderby) {
                             case 1:
                                 console.log(result);
                                 var mechp = cG.cPanel[ /*"def_"+*/name].ch_current();
@@ -656,7 +657,7 @@ cG.REPO.stage = (direction) => {
                                 break;
                             case 2:
                                 var nT = new Date(cG.cPanel[ /*"def_"+*/name].data().release * 1000);
-                                var guide = cG.script.config.dateformat.split("/");
+                                var guide = dateformat.split("/");
                                 for (var tim = 0; tim < 3; tim++) {
                                     if (guide[tim].indexOf("Y") + 1)
                                         guide[tim] = nT.getFullYear() - 100 + 2000; //TODO: what is this?
@@ -735,7 +736,7 @@ cG.REPO.stage = cG.REPO.stage(function (input, anchor, owrite, config) {
         back: config.loaderback || "#FFF",
         color: config.color || "#373737"
     }, options = {
-        dir: config.dir || "assets/",
+        dir: config.dir || "",
         irb: config.imgprebuffer || 5,
         itb: config.imgpostbuffer || 5,
         back: config.back || "#FFF"
@@ -935,7 +936,7 @@ cG.REPO.stage = cG.REPO.stage(function (input, anchor, owrite, config) {
         window.clearTimeout(scrolling);
     };
     this.swap = function (arr, opts, start) {
-        iimg = Array.isArray(arr) ? arr.slice().map(function (val) { return { s: val }; }) : iimg;
+        iimg = Array.isArray(arr) ? arr.slice().map(function (val, id) { return { s: val, d: id ? (id == arr.length - 1 ? 1 : 0) : -1 }; }) : iimg;
         if (opts) {
             xtndLmt(spinner, opts);
             xtndLmt(options, opts);
@@ -1056,7 +1057,7 @@ cG.REPO.stage = cG.REPO.stage(function (input, anchor, owrite, config) {
     var q;
     for (q = 0; q < iimg.length; q++) {
         //iimg[q].btog = 0; a holdover from the old html based canvas
-        iimg[q].desig = q ? (q == iimg.length - 1 ? 1 : 0) : -1; //-1 means first, 0 means middle, 1 means last: true if endpoint, false if middle
+        iimg[q].d = q ? (q == iimg.length - 1 ? 1 : 0) : -1; //-1 means first, 0 means middle, 1 means last: true if endpoint, false if middle (desig)
         iimg[q].loaded = false;
     }
     for (q = 0; q < options.irb; q++) {
@@ -1096,19 +1097,23 @@ cG.queue.stageChange.hotcontent = function () {
         hotqueue.push({ place: hotstuff[i].parentNode, time: hotstuff[i] });
     }
     while (hotstuff.length) {
-        hotstuff[0].parentNode.removeChild(hotstuff[0]);
+        let { parentNode } = hotstuff[0];
+        if (parentNode)
+            parentNode.removeChild(hotstuff[0]);
     }
     for (var j = 0; j < hotqueue.length; j++) {
         console.log("queued stuff", cG.info.vrb, hotqueue[j]);
-        hotqueue[j].place.appendChild(hotqueue[j].time); /*
-    if(cG.info.vrb!=500){
-        hotqueue[j].place.appendChild(hotqueue[j].time);
-    } else window.hotqueue = hotqueue;*/
+        let { place } = hotqueue[0];
+        if (place)
+            place.appendChild(hotqueue[j].time); /*
+        if(cG.info.vrb!=500){
+            hotqueue[j].place.appendChild(hotqueue[j].time);
+        } else window.hotqueue = hotqueue;*/
     }
 };
 cG.queue.stageChange.controller = function (target) {
-    //console.log(target.data().desig);
-    var b, c, key, mykey, bcollect = [], check = target.data().desig;
+    //console.log(target.data().d);
+    var b, c, key, mykey, bcollect = [], check = target.data().d;
     for (var o = 0; o < target.brains.length; o++) {
         bcollect = FindClassesInside(target.brains[o], ["frst", "last", "prev", "next", "rand"]);
         //console.log(bcollect);
@@ -1123,6 +1128,7 @@ cG.queue.stageChange.controller = function (target) {
             else
                 mykey = "disable";
             //console.log(check)
+            //TODO: investigate for bugs
             if ((c == "frst" || c == "prev") && check == -1) {
                 if (c == "frst")
                     b.setAttribute("class", "frst " + mykey);
@@ -1409,9 +1415,8 @@ cG.controlInjection = function (stages) {
         '<li style="display: inline;"><button class="prev" rel="prev" accesskey="p">&gt; Prev</button></li>' +
         '<li style="display: inline;"><button class="frst" >|&gt;</button></li>' +
         '</ul>', pod, podling, eventer = function (par, chd) {
-        par.setAttribute("mind", 1);
-        //TODO: INSPECT
-        document.getElementById(par.id + "_location").title = cG.cPanel[par.id].data().hover;
+        par.setAttribute("mind", "1");
+        document.getElementById(par.id + "_location").title = cG.cPanel[par.id].data().hover || "";
         var classstuff = (par.getAttribute("comix")) ? document.getElementsByClassName("cgtitle") : [], working, classdate = (par.getAttribute("comix")) ? document.getElementsByClassName("cgdate") : [];
         for (var eq = 0; eq < classstuff.length; eq++)
             classstuff[eq].innerHTML = cG.cPanel[par.id].data().title;
@@ -1519,6 +1524,7 @@ cG.controlInjection = function (stages) {
     }
     for (var u = 0; u < stages.length; u++) {
         if (!stages[u].getAttribute("mind")) { //add event handlers
+            let { id, parentNode, nextSibling } = stages[u];
             pod = document.createElement("DIV");
             //check if read direction is reversed
             let { config } = cG.script;
@@ -1528,15 +1534,16 @@ cG.controlInjection = function (stages) {
                 podling.setAttribute("style", "display:none;");
             else
                 podling.setAttribute("style", "display:block;");
-            podling.setAttribute("cglink", stages[u].id);
-            stages[u].parentNode.insertBefore(podling, stages[u].nextSibling);
-            //console.log(stages[u],stages[u].nextSibling)
+            podling.setAttribute("cglink", id);
+            if (parentNode)
+                parentNode.insertBefore(podling, nextSibling);
+            //console.log(stages[u],nextSibling)
             if (cG.fBox.click) {
-                cG.cPanel[stages[u].id].canvi[1].style.cursor = 'pointer';
-                cG.cPanel[stages[u].id].canvi[1].addEventListener("click", cG.cPanel[stages[u].id].next);
+                cG.cPanel[id].canvi[1].style.cursor = 'pointer';
+                cG.cPanel[id].canvi[1].addEventListener("click", cG.cPanel[id].next);
             }
-            cG.cPanel[stages[u].id].brains = cG.cPanel[stages[u].id].brains || [];
-            cG.cPanel[stages[u].id].brains.push(podling);
+            cG.cPanel[id].brains = cG.cPanel[id].brains || [];
+            cG.cPanel[id].brains.push(podling);
             eventer(stages[u], podling);
         }
     }
@@ -1551,7 +1558,28 @@ cG.stageInjection = function () {
     for (var p in cG.recyclebin)
         if (cG.recyclebin.hasOwnProperty(p) && p !== null)
             cG.recyclebin[p] = null;
-    var final_res = cG.cPanel, decor = (cG.decor) ? cG.decor : '<div id="location"></div><div id="archive">Archive</div><div id="me">About Me</div>', ctrls = (cG.ctrls) ? cG.ctrls : '<div>NOT IMPLEMENTED YET</div>', reqQueue = [], request = function (iD, source) {
+    var final_res = cG.cPanel, decor = (cG.decor) ? cG.decor : '<div id="location"></div><div id="archive">Archive</div><div id="me">About Me</div>', ctrls = (cG.ctrls) ? cG.ctrls : '<div>NOT IMPLEMENTED YET</div>', reqQueue = [], miniRequest = function (iD, item, id_attr, promiseArr, parentID, source) {
+        if (!setValid(source)) {
+            var script_attr = item.getAttribute("script");
+            promiseArr.push(cG.agent(script_attr).then(function (data, xhr) {
+                miniRequest(iD, item, id_attr, promiseArr, parentID, JSON.stringify(data));
+            }, function (data, xhr) {
+                console.error(data, xhr.status);
+                miniRequest(iD, item, id_attr, promiseArr, parentID, {});
+            }));
+            return 0; //stop execution
+        }
+        let { config, pages, chapters } = source;
+        var sia = item.getAttribute("id"), sua = item.getAttribute("use"), sca = item.getAttribute("config"), configSet = {}, childling = document.createElement("DIV");
+        //console.log(sia,sia||id_attr+"_"+z,id_attr+"_"+z)
+        //console.log(final_res[parentID])
+        childling.setAttribute("id", sia || id_attr + "_" + iD);
+        childling.setAttribute("style", "display:none;");
+        final_res[parentID + "_" + iD] = cG.stage.construct(sia || id_attr + "_" + iD, source, childling, sca || configSet);
+        stages[iD].appendChild(childling);
+        final_res[parentID].pg.push(childling);
+        final_res[parentID + "_" + iD].my = iD;
+    }, request = function (iD, source) {
         /*initial setup*/
         /*////get attributes */
         /*////////async request the script if it is specified, else use default*/
@@ -1602,12 +1630,11 @@ cG.stageInjection = function () {
         /*END initial set up*/
         //if(cG.avx[0]>1&&cG.avx[1]>0){}
         var sbvenue = [], nstpost = [], nestcom = stages[iD].children;
+        /*
         for (var h = 0; h < nestcom.length; h++) {
-            if (nestcom[h].getAttribute("class") == "venue")
-                sbvenue.push(nestcom[h]);
-            else
-                nstpost.push(nestcom[h]);
-        }
+            if (nestcom[h].getAttribute("class") == "venue") sbvenue.push(nestcom[h]);
+            else nstpost.push(<HTMLElement> nestcom[h]);
+        }*/
         stages[iD].innerHTML = decor;
         //console.log(stages[iD],decor)
         renameEles(false, stages[iD], id_attr);
@@ -1660,6 +1687,13 @@ cG.stageInjection = function () {
             if (setValid(archival.innerHTML))
                 archival.innerHTML = transcriptBH + transcriptPG + transcriptCH;
         }
+        //HTML Collections are dynamic, move lower so we can capture the new inputs
+        for (var h = 0; h < nestcom.length; h++) {
+            if (nestcom[h].getAttribute("class") == "venue")
+                sbvenue.push(nestcom[h]);
+            else
+                nstpost.push(nestcom[h]);
+        }
         var srch = id_attr;
         final_res[srch] = cG.stage.construct(id_attr, myScript, anchorto, configSet);
         //console.log(sbvenue,nstpost)
@@ -1678,23 +1712,17 @@ cG.stageInjection = function () {
         }
         //Hide Non Venue Subordinate Elements
         for (var y = 0; y < nstpost.length; y++) {
-            nstpost[y].style = "display: none;";
+            //nstpost[y].style = "display: none;"
+            nstpost[y].style.display = "none";
             stages[iD].appendChild(nstpost[y]);
             final_res[srch].pg.push(nstpost[y]);
         }
         //Set up Childings (Venu Subordinate Elements/ Sub Venues)
+        var childlingReq = [];
         for (var z = 0; z < sbvenue.length; z++) {
-            var sia = sbvenue[z].getAttribute("id"), sua = sbvenue[z].getAttribute("use"), sca = sbvenue[z].getAttribute("config");
-            //console.log(sia,sia||id_attr+"_"+z,id_attr+"_"+z)
-            //console.log(final_res[srch])
-            var childling = document.createElement("DIV");
-            childling.setAttribute("id", sia || id_attr + "_" + z);
-            childling.setAttribute("style", "display:none;");
-            childling.my = z;
-            final_res[srch + "_" + z] = cG.stage.construct(sia || id_attr + "_" + z, sua || myScript, childling, sca || configSet);
-            stages[iD].appendChild(childling);
-            final_res[srch].pg.push(childling);
-            final_res[srch + "_" + z].my = z;
+            //TODO: Investigate why this exists
+            //childling.my = z;
+            miniRequest(z, sbvenue[z], id_attr, childlingReq, srch);
         }
         for (var r = 0; r < final_res[srch].pg.length; r++) {
             var frspr = stick(final_res[srch].pg[r], final_res[srch].pg, final_res[srch], r);
@@ -1793,7 +1821,7 @@ cG.rdy(function () {
     cG.director.listen();
     //cG.director.history.listen(true);
     /*everything else occurs here*/
-    if (!document.getElementById("$COMICNGWRITER$$$")) { /*prints version information*/
+    if (!document.getElementById("$COMICXX$$$")) { /*prints version information*/
         console.log("%c %c %c comix-ngn v" + cG.info.vix + " %c \u262F %c \u00A9 2015 Oluwaseun Ogedengbe %c Plugins: " + cG.$GPC, "color:white; background:#2EB531", "background:purple", "color:white; background:#32E237", 'color:red; background:black', "color:white; background:#2EB531", "color:white; background:purple");
     }
     //console.log(JSON.stringify(cG, null, 2) );

@@ -27,9 +27,9 @@ cG.controlInjection = function(stages?: HTMLCollectionOf<Element>) {
                 '<li style="display: inline;"><button class="frst" >|&gt;</button></li>'+
             '</ul>',
         pod, podling,
-        eventer = function(par, chd) {
-            par.setAttribute("mind", 1);
-            //TODO: INSPECT
+        eventer = function(par: Element, chd: Element) {
+            par.setAttribute("mind", "1");
+            
             (<HTMLElement> document.getElementById(par.id + "_location")).title = cG.cPanel[par.id].data().hover || "";
             var classstuff = (par.getAttribute("comix")) ? document.getElementsByClassName("cgtitle") : [],
                 working,
@@ -50,6 +50,7 @@ cG.controlInjection = function(stages?: HTMLCollectionOf<Element>) {
                 getme = "" + par.id;
             //console.log(q,w,e,r,t,cG.cPanel["def_"+name]);
             //console.log(arguments.callee,chd);
+            
             for (var y = 0; y < q.length; y++) {
                 if (chd.getAttribute("cglink") == getme && !q[y].getAttribute("cgae")) q[y].addEventListener("click", function() {
                     var box = cG.cPanel[getme].data(cG.cPanel[getme].frst());
@@ -129,18 +130,19 @@ cG.controlInjection = function(stages?: HTMLCollectionOf<Element>) {
         exist = document.querySelectorAll('[cglink]'),
         linkcg;
     
-    stages = document.getElementsByClassName("venue") /*get all entry points*/;
+    stages = <HTMLCollectionOf<Element>> document.getElementsByClassName("venue") /*get all entry points*/;
     for (var v = 0; v < exist.length; v++) {
         linkcg = <string> exist[v].getAttribute("cglink");
         if (setValid(cG.cPanel[linkcg])) {
             cG.cPanel[linkcg].brains = cG.cPanel[linkcg].brains || [];
             cG.cPanel[linkcg].brains.push(exist[v]);
-            eventer(document.getElementById(linkcg), exist[v]);
+            eventer(<Element> document.getElementById(linkcg), exist[v]);
         }
     }
 
     for (var u = 0; u < stages.length; u++) {
         if (!stages[u].getAttribute("mind")) { //add event handlers
+            let {id, parentNode, nextSibling } = stages[u];
             pod = document.createElement("DIV");
             //check if read direction is reversed
             let { config } = cG.script;
@@ -148,15 +150,15 @@ cG.controlInjection = function(stages?: HTMLCollectionOf<Element>) {
             podling = pod.children[0];
             if (!stages[u].getAttribute("comix")) podling.setAttribute("style", "display:none;");
             else podling.setAttribute("style", "display:block;");
-            podling.setAttribute("cglink", stages[u].id);
-            stages[u].parentNode.insertBefore(podling, stages[u].nextSibling);
-            //console.log(stages[u],stages[u].nextSibling)
+            podling.setAttribute("cglink", id);
+            if (parentNode) parentNode.insertBefore(podling, nextSibling);
+            //console.log(stages[u],nextSibling)
             if (cG.fBox.click) {
-                cG.cPanel[stages[u].id].canvi[1].style.cursor = 'pointer';
-                cG.cPanel[stages[u].id].canvi[1].addEventListener("click", cG.cPanel[stages[u].id].next);
+                cG.cPanel[id].canvi[1].style.cursor = 'pointer';
+                cG.cPanel[id].canvi[1].addEventListener("click", cG.cPanel[id].next);
             }
-            cG.cPanel[stages[u].id].brains = cG.cPanel[stages[u].id].brains || [];
-            cG.cPanel[stages[u].id].brains.push(podling);
+            cG.cPanel[id].brains = cG.cPanel[id].brains || [];
+            cG.cPanel[id].brains.push(podling);
             eventer(stages[u], podling);
         }
     }
@@ -177,6 +179,36 @@ cG.stageInjection = function() {
         decor = (cG.decor) ? cG.decor : '<div id="location"></div><div id="archive">Archive</div><div id="me">About Me</div>',
         ctrls = (cG.ctrls) ? cG.ctrls : '<div>NOT IMPLEMENTED YET</div>',
         reqQueue:Promise<void>[] = [],
+        miniRequest = function(iD: number, item: Element, id_attr: string, promiseArr: Promise<void>[], parentID: string, source?: script | {}) { 
+            if (!setValid(source)) {
+                var script_attr = item.getAttribute("script");
+                promiseArr.push(<Promise<void>> cG.agent(script_attr).then(
+                function(data: string, xhr: XMLHttpRequest) {
+                    miniRequest(iD, item, id_attr, promiseArr, parentID, JSON.stringify(data));
+                },
+                function(data: string, xhr: XMLHttpRequest) {
+                    console.error(data, xhr.status);
+                    miniRequest(iD, item, id_attr, promiseArr, parentID, {});
+                }));
+                return 0; //stop execution
+            } 
+            let {config, pages, chapters} = <script> source;
+            var sia = item.getAttribute("id"),
+                sua = item.getAttribute("use"),
+                sca = item.getAttribute("config"),
+                configSet = {},
+                childling = document.createElement("DIV");
+            //console.log(sia,sia||id_attr+"_"+z,id_attr+"_"+z)
+            //console.log(final_res[parentID])
+
+            childling.setAttribute("id", sia || id_attr + "_" + iD)
+            childling.setAttribute("style", "display:none;");
+            final_res[parentID + "_" + iD] = cG.stage.construct(sia || id_attr + "_" + iD, source, childling, sca || configSet);
+
+            stages[iD].appendChild(childling);
+            final_res[parentID].pg.push(childling);
+            final_res[parentID + "_" + iD].my = iD;
+        },
         request = function(iD: number, source?: script | {}) { //,srcScript,srcScriptReq){            
             /*initial setup*/
             /*////get attributes */
@@ -228,12 +260,13 @@ cG.stageInjection = function() {
             /*END initial set up*/
             //if(cG.avx[0]>1&&cG.avx[1]>0){}
             var sbvenue = [],
-                nstpost = [],
+                nstpost: HTMLElement[] = [],
                 nestcom = stages[iD].children;
+            /*
             for (var h = 0; h < nestcom.length; h++) {
                 if (nestcom[h].getAttribute("class") == "venue") sbvenue.push(nestcom[h]);
-                else nstpost.push(nestcom[h]);
-            }
+                else nstpost.push(<HTMLElement> nestcom[h]);
+            }*/
             stages[iD].innerHTML = decor;
             //console.log(stages[iD],decor)
             renameEles(false, stages[iD], <string> id_attr);
@@ -291,6 +324,11 @@ cG.stageInjection = function() {
                 transcriptBH = transcriptBH + '</ul>';
                 if (setValid(archival.innerHTML)) archival.innerHTML = transcriptBH + transcriptPG + transcriptCH;
             }
+            //HTML Collections are dynamic, move lower so we can capture the new inputs
+            for (var h = 0; h < nestcom.length; h++) {
+                if (nestcom[h].getAttribute("class") == "venue") sbvenue.push(nestcom[h]);
+                else nstpost.push(<HTMLElement> nestcom[h]);
+            }
             var srch = <string> id_attr;
             final_res[srch] = cG.stage.construct(id_attr, myScript, anchorto, configSet);
             //console.log(sbvenue,nstpost)
@@ -308,26 +346,18 @@ cG.stageInjection = function() {
             
             //Hide Non Venue Subordinate Elements
             for (var y = 0; y < nstpost.length; y++) {
-                nstpost[y].style = "display: none;"
+                //nstpost[y].style = "display: none;"
+                nstpost[y].style.display = "none";
                 stages[iD].appendChild(nstpost[y]);
                 final_res[srch].pg.push(nstpost[y]);
             }
             
             //Set up Childings (Venu Subordinate Elements/ Sub Venues)
+            var childlingReq: Promise<void>[] = [];
             for (var z = 0; z < sbvenue.length; z++) {
-                var sia = sbvenue[z].getAttribute("id"),
-                    sua = sbvenue[z].getAttribute("use"),
-                    sca = sbvenue[z].getAttribute("config");
-                //console.log(sia,sia||id_attr+"_"+z,id_attr+"_"+z)
-                //console.log(final_res[srch])
-                var childling = document.createElement("DIV");
-                childling.setAttribute("id", sia || id_attr + "_" + z)
-                childling.setAttribute("style", "display:none;");
-                childling.my = z;
-                final_res[srch + "_" + z] = cG.stage.construct(sia || id_attr + "_" + z, sua || myScript, childling, sca || configSet);
-                stages[iD].appendChild(childling);
-                final_res[srch].pg.push(childling);
-                final_res[srch + "_" + z].my = z;
+                //TODO: Investigate why this exists
+                //childling.my = z;
+                miniRequest(z, sbvenue[z], <string> id_attr, childlingReq, srch)
             }
             for (var r = 0; r < final_res[srch].pg.length; r++) {
                 var frspr = stick(final_res[srch].pg[r], final_res[srch].pg, final_res[srch], r);
