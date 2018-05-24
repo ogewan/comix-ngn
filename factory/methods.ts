@@ -6,9 +6,15 @@ cG.controlInjection = function(stages?: HTMLCollectionOf<Element>) {
         document.onkeyup = function(e) {
             //console.log("keydown");
             e = e || window.event;
+            cG.comix.cnl(); // cancel scrolling on key press
             if (e.keyCode == 37) cG.comix.prev();
             else if (e.keyCode == 39) cG.comix.next();
             else if (e.keyCode == 82) cG.comix.rand();
+        }
+        document.onwheel = function(e) {
+            //console.log("scroll detected");
+            //e = e || window.event;
+            cG.comix.cnl(); // cancel scrolling on movement
         }
     }
     var ctrls = (cG.ctrls) ? cG.ctrls : 
@@ -27,6 +33,37 @@ cG.controlInjection = function(stages?: HTMLCollectionOf<Element>) {
                 '<li style="display: inline;"><button class="frst" >|&gt;</button></li>'+
             '</ul>',
         pod, podling,
+        ctrlSetup = function(key: string, parent: Element, childTarget: Element) {
+            var myself = "" + parent.id,
+            clickHandler = () => {
+                var box = cG.cPanel[myself].data(cG.cPanel[myself].frst()), working,
+                    boe = document.getElementById(myself),
+                    titleBar = document.getElementById(myself + "_location"),
+                    titleTar: HTMLCollectionOf<Element>| never[] = [],
+                    dateTar: HTMLCollectionOf<Element>| never[] = [];
+
+                if (titleBar) titleBar.title = box.hover;
+                if (boe && boe.getAttribute("comix")) {
+                    titleTar = document.getElementsByClassName("cgtitle");
+                    dateTar = document.getElementsByClassName("cgdate");
+                }
+                for (var eq = 0; eq < titleTar.length; eq++) {
+                    titleTar[eq].innerHTML = box.title;
+                }
+                for (var eq = 0; eq < dateTar.length; eq++) {
+                    working = new Date(cG.cPanel[parent.id].data().release * 1000);
+                    dateTar[eq].innerHTML = working.toDateString();
+                }
+            },
+            buttons = document.getElementsByClassName(key);
+            for (var y = 0; y < buttons.length; y++) {
+                if (childTarget.getAttribute("cglink") == myself && !buttons[y].getAttribute("cgae")) {
+                    buttons[y].addEventListener("click", clickHandler);
+                    buttons[y].setAttribute("cgae", "1");
+                }
+            }
+        },
+
         eventer = function(par: Element, chd: Element) {
             par.setAttribute("mind", "1");
             
@@ -42,90 +79,7 @@ cG.controlInjection = function(stages?: HTMLCollectionOf<Element>) {
                 classdate[eq].innerHTML = working.toDateString();
             }
             
-            var q = document.getElementsByClassName("frst"),
-                w = document.getElementsByClassName("prev"),
-                e = document.getElementsByClassName("rand"),
-                r = document.getElementsByClassName("next"),
-                t = document.getElementsByClassName("last"),
-                getme = "" + par.id;
-            //console.log(q,w,e,r,t,cG.cPanel["def_"+name]);
-            //console.log(arguments.callee,chd);
-            
-            for (var y = 0; y < q.length; y++) {
-                if (chd.getAttribute("cglink") == getme && !q[y].getAttribute("cgae")) q[y].addEventListener("click", function() {
-                    var box = cG.cPanel[getme].data(cG.cPanel[getme].frst());
-                    document.getElementById(getme + "_location").title = box.hover;
-                    var boe = document.getElementById(getme);
-                    classstuff = (boe.getAttribute("comix")) ? document.getElementsByClassName("cgtitle") : [];
-                    for (var eq = 0; eq < classstuff.length; eq++) classstuff[eq].innerHTML = box.title;
-                    classdate = (boe.getAttribute("comix")) ? document.getElementsByClassName("cgdate") : [];
-                    for (var eq = 0; eq < classdate.length; eq++) {
-                        working = new Date(cG.cPanel[par.id].data().release * 1000);
-                        classdate[eq].innerHTML = working.toDateString();
-                    }
-                });
-                q[y].setAttribute("cgae", "1");
-            }
-            for (var y = 0; y < w.length; y++) {
-                if (chd.getAttribute("cglink") == getme && !w[y].getAttribute("cgae")) w[y].addEventListener("click", function() {
-                    var box = cG.cPanel[getme].data(cG.cPanel[getme].prev());
-                    document.getElementById(getme + "_location").title = box.hover;
-                    var boe = document.getElementById(getme);
-                    classstuff = (boe.getAttribute("comix")) ? document.getElementsByClassName("cgtitle") : [];
-                    for (var eq = 0; eq < classstuff.length; eq++) classstuff[eq].innerHTML = box.title;
-                    classdate = (boe.getAttribute("comix")) ? document.getElementsByClassName("cgdate") : [];
-                    for (var eq = 0; eq < classdate.length; eq++) {
-                        working = new Date(cG.cPanel[par.id].data().release * 1000);
-                        classdate[eq].innerHTML = working.toDateString();
-                    }
-                });
-                w[y].setAttribute("cgae", "1");
-            }
-            for (var y = 0; y < e.length; y++) {
-                if (chd.getAttribute("cglink") == getme && !e[y].getAttribute("cgae")) e[y].addEventListener("click", function() {
-                    var box = cG.cPanel[getme].data(cG.cPanel[getme].rand());
-                    document.getElementById(getme + "_location").title = box.hover;
-                    var boe = document.getElementById(getme);
-                    classstuff = (boe.getAttribute("comix")) ? document.getElementsByClassName("cgtitle") : [];
-                    for (var eq = 0; eq < classstuff.length; eq++) classstuff[eq].innerHTML = box.title;
-                    classdate = (boe.getAttribute("comix")) ? document.getElementsByClassName("cgdate") : [];
-                    for (var eq = 0; eq < classdate.length; eq++) {
-                        working = new Date(cG.cPanel[par.id].data().release * 1000);
-                        classdate[eq].innerHTML = working.toDateString();
-                    }
-                });
-                e[y].setAttribute("cgae", "1");
-            }
-            for (var y = 0; y < r.length; y++) {
-                if (chd.getAttribute("cglink") == getme && !r[y].getAttribute("cgae")) r[y].addEventListener("click", function() {
-                    var box = cG.cPanel[getme].data(cG.cPanel[getme].next());
-                    document.getElementById(getme + "_location").title = box.hover;
-                    var boe = document.getElementById(getme);
-                    classstuff = (boe.getAttribute("comix")) ? document.getElementsByClassName("cgtitle") : [];
-                    for (var eq = 0; eq < classstuff.length; eq++) classstuff[eq].innerHTML = box.title;
-                    classdate = (boe.getAttribute("comix")) ? document.getElementsByClassName("cgdate") : [];
-                    for (var eq = 0; eq < classdate.length; eq++) {
-                        working = new Date(cG.cPanel[par.id].data().release * 1000);
-                        classdate[eq].innerHTML = working.toDateString();
-                    }
-                });
-                r[y].setAttribute("cgae", "1");
-            }
-            for (var y = 0; y < t.length; y++) {
-                if (chd.getAttribute("cglink") == getme && !t[y].getAttribute("cgae")) t[y].addEventListener("click", function() {
-                    var box = cG.cPanel[getme].data(cG.cPanel[getme].last());
-                    document.getElementById(getme + "_location").title = box.hover;
-                    var boe = document.getElementById(getme);
-                    classstuff = (boe.getAttribute("comix")) ? document.getElementsByClassName("cgtitle") : [];
-                    for (var eq = 0; eq < classstuff.length; eq++) classstuff[eq].innerHTML = box.title;
-                    classdate = (boe.getAttribute("comix")) ? document.getElementsByClassName("cgdate") : [];
-                    for (var eq = 0; eq < classdate.length; eq++) {
-                        working = new Date(cG.cPanel[par.id].data().release * 1000);
-                        classdate[eq].innerHTML = working.toDateString();
-                    }
-                });
-                t[y].setAttribute("cgae", "1");
-            }
+            ["frst", "prev", "rand", "next", "last"].forEach(val => {ctrlSetup(val, par, chd);});
         }, 
         exist = document.querySelectorAll('[cglink]'),
         linkcg;
