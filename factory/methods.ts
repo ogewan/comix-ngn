@@ -36,7 +36,7 @@ cG.controlInjection = function(stages?: HTMLCollectionOf<Element>) {
         ctrlSetup = function(key: string, parent: Element, childTarget: Element) {
             var myself = "" + parent.id,
             clickHandler = () => {
-                var box = cG.cPanel[myself].data(cG.cPanel[myself].frst()), working,
+                var box = cG.cPanel[myself].data(cG.cPanel[myself][key]()), working,
                     boe = document.getElementById(myself),
                     titleBar = document.getElementById(myself + "_location"),
                     titleTar: HTMLCollectionOf<Element>| never[] = [],

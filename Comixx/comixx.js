@@ -112,25 +112,3 @@ $("#flist").on("change", () => {
     });
     //$("#delete").click(unpackComic);
 });
-
-//require("jquery-ui-dist");
-/*
-$(function () {
-  $("#accordion").accordion({
-    collapsible: true
-  });
-});
-*/
-
-/*
-((fnt) => {
-    fnt
-})(up);
-*/
-
-    /*
-    fs.readdir(dir.path, (err, files)=> {return files;});
-    fs.readdir(dir.path, (err, files)=> { dirList = files;});
-    up.unpack(dir.path + "\\" + dirList[0], {}, (err, files, text) => {upfile = files; uptext = text; console.log(err, files, text);})
-    fs.readdir(upfile + "\\" + dirList[0], (err, files)=> { imgList = files;});
-    */

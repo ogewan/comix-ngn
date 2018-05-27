@@ -10,7 +10,9 @@ cG.REPO.stage = cG.REPO.stage(
         if (void 0 === input) return -1;
         owrite = owrite || 0;
         config = config || {};
-        if (void 0 === anchor || anchor == null) anchor = document.body;
+        //redefine globals
+        var dc = document, db = dc.body, de = dc.documentElement, pi = parseInt;
+        if (void 0 === anchor || anchor == null) anchor = db;
 
         //PROPERTIES - private
         var iimg = input.slice().map(function(val){return {s:val}}),
@@ -28,15 +30,17 @@ cG.REPO.stage = cG.REPO.stage(
                 dir: config.dir || "",
                 irb: config.imgprebuffer || 5,
                 itb: config.imgpostbuffer || 5,
-                back: config.back || "#FFF"
+                back: config.back || "#FFF",
+                sz: config.size || 0,
+                scl: 0
             },
             pstload = [],
             preload = [],
             master = new Image(),
             skroll = true,
             layers = [
-                document.createElement("canvas"),
-                document.createElement("canvas")
+                dc.createElement("canvas"),
+                dc.createElement("canvas")
             ],
             ctx = layers[1].getContext("2d"),
             //METHODS - private
@@ -70,9 +74,9 @@ cG.REPO.stage = cG.REPO.stage(
                 a.ctx.rotate(Math.PI * 2 * rotation);
 
                 if (c.length == 3) c = c[0] + C[0] + c[1] + c[1] + c[2] + c[2];
-                var red = parseInt(c.substr(0, 2), 16).toString(),
-                    green = parseInt(c.substr(2, 2), 16).toString(),
-                    blue = parseInt(c.substr(4, 2), 16).toString();
+                var red = pi(c.substr(0, 2), 16).toString(),
+                    green = pi(c.substr(2, 2), 16).toString(),
+                    blue = pi(c.substr(4, 2), 16).toString();
 
                 for (var i = 0; i < a.lines; i++) {
                     a.ctx.beginPath();
@@ -103,31 +107,31 @@ cG.REPO.stage = cG.REPO.stage(
                 if (to.y < 0)
                     to.y =
                         window.innerHeight ||
-                        document.documentElement.clientHeight ||
-                        document.body.clientHeight;
+                        de.clientHeight ||
+                        db.clientHeight;
                 if (to.x < 0)
                     to.x =
                         window.innerWidth ||
-                        document.documentElement.clientWidth ||
-                        document.body.clientWidth;
+                        de.clientWidth ||
+                        db.clientWidth;
 
                 //calculate distance needed to travel
                 var dis = {
                     x:
                         window.pageXOffset !== void 0
                             ? to.x - window.pageXOffset
-                            : to.x - document.documentElement.scrollLeft,
+                            : to.x - de.scrollLeft,
                     y:
                         window.pageYOffset !== void 0
                             ? to.y - window.pageYOffset
-                            : to.y - document.documentElement.scrollTop
+                            : to.y - de.scrollTop
                 };
 
                 /*
-                        dis.x = (window.pageXOffset === void 0) ? to.x - window.pageXOffset : to.x - document.documentElement.scrollLeft;
-                        dis.y = (window.pageYOffset === void 0) ? to.y - window.pageYOffset : to.y - document.documentElement.scrollTop;
+                        dis.x = (window.pageXOffset === void 0) ? to.x - window.pageXOffset : to.x - de.scrollLeft;
+                        dis.y = (window.pageYOffset === void 0) ? to.y - window.pageYOffset : to.y - de.scrollTop;
                         */
-                //console.log("to", to, "dis" ,dis, "(x", window.pageXOffset, document.documentElement.scrollLeft, "| y", window.pageYOffset, document.documentElement.scrollTop, ")" , time, time/5);
+                //console.log("to", to, "dis" ,dis, "(x", window.pageXOffset, de.scrollLeft, "| y", window.pageYOffset, de.scrollTop, ")" , time, time/5);
 
                 if (dis == { x: 0, y: 0 }) return dis; //if that distance is 0 on both x and y, no scrolling required
                 var clock = function (c, b, a) {
@@ -139,27 +143,41 @@ cG.REPO.stage = cG.REPO.stage(
                 return dis;
             },
             preloadGeneric = function () {
-                iimg[this.imaginaryID].loaded = true;
+                iimg[this.virID].ld = true;
                 /*possible implementation - Delete it when we are done, possibly saves memory, since its been cached?
-                        this.imaginaryID=-1;
+                        this.virID=-1;
                         this.src="";*/
             },
-            preloadMaster = function () {
-                //actually a misnomer, master doesnt actually preload, it loads and draws
-                if (iimg[this.imaginaryID].loaded)
-                    ctx.clearRect(0, 0, this.width, this.height);
-                else iimg[this.imaginaryID].loaded = true;
+            draw = function () {
+                var dif, siz;
+                //it loads and draws
+                if (iimg[master.virID].ld)
+                    ctx.clearRect(0, 0, layers[1].width, layers[1].height); //clear the canvas based on its size
+                else iimg[master.virID].ld = true;
+                
                 cb.run("slidn");
                 //conviently, this callback draws the image as soon as master's src is changed and image loaded
-                layers[1].width /*= layers[0].width = objref.acW */ = this.width;
-                layers[1].height = layers[0].height /*= objref.acH*/ = this.height;
-                ctx.drawImage(this, 0, 0);
-                //current = this.imaginaryID;//do not wait on load for page change, do not change page on page load
-                /*
-                        console.log("killing", intervall);
-                        window.clearInterval(intervall);
-                        intervall = -1;
-                        */
+                if (options.sz) siz = [options.sz.w, options.sz.h];
+                else {
+                    switch (options.scl) { //scales to canvas
+                        case 1://scale width
+                            dif = layers[1].width / master.width;
+                            siz = [layers[1].width, master.height * dif];
+                            break;
+                        case 2://scale height
+                            dif = layers[1].height / master.height;
+                            siz = [master.width * dif, layers[1].height];
+                            break;
+                        default:
+                            if (options.scl) siz = [layers[1].width, layers[1].height];
+                            else siz = [master.width, master.height];
+                    }
+                }
+                layers[1].width /*= layers[0].width = objref.acW */ = siz[0];
+                layers[1].height = layers[0].height /*= objref.acH*/ = siz[1];
+                //ctx.drawImage(master, 0, 0);
+                ctx.drawImage.apply(ctx, [master, 0, 0].concat(siz));
+                
                 spinning = 0;
                 if (skroll) scrollit();
                 cb.run("slidd");
@@ -176,9 +194,9 @@ cG.REPO.stage = cG.REPO.stage(
                 if (idd < 0) idd = 0; //if lower than zero set to zero
                 if (idd >= iimg.length) idd = iimg.length - 1; //can not be equal to our higher than the amount of pages
                 if (idd < 0) return;
-                if (!iimg[idd].loaded)
+                if (!iimg[idd].ld)
                     ctx.clearRect(0, 0, layers[1].width, layers[1].height);
-                imagething.imaginaryID = idd;
+                imagething.virID = idd;
                 imagething.src = options.dir + iimg[idd].s;
                 current = idd; //we change page as soon as it is assigned, so that page still changes even if it never loads
                 /*console.log("----");
@@ -194,8 +212,8 @@ cG.REPO.stage = cG.REPO.stage(
                 var r = 0,
                     q = 0;
                 for (q = idd - 1; q > idd - options.irb - 1 && q >= 0; q--) {
-                    if (iimg[q].loaded) continue;
-                    preload[r].imaginaryID = q;
+                    if (iimg[q].ld) continue;
+                    preload[r].virID = q;
                     preload[r].src = options.dir + iimg[q].s;
                     r++;
                 }
@@ -205,8 +223,8 @@ cG.REPO.stage = cG.REPO.stage(
                     q < options.itb + idd + 1 && q < iimg.length;
                     q++
                 ) {
-                    if (iimg[q].loaded) continue;
-                    pstload[r].imaginaryID = q;
+                    if (iimg[q].ld) continue;
+                    pstload[r].virID = q;
                     pstload[r].src = options.dir + iimg[q].s;
                     r++;
                 }
@@ -222,7 +240,7 @@ cG.REPO.stage = cG.REPO.stage(
                         });
                     };
                 } catch (e) {
-                    console.log("failed to attach to jQuery");
+                    console.log(e);
                 }
             };
         if (window.jQuery) jq();
@@ -234,7 +252,7 @@ cG.REPO.stage = cG.REPO.stage(
         this.cnl = function() {
             //stop scrolling
             window.clearTimeout(scrolling);
-        }
+        };
         this.swap = function (arr, opts, start) {
             iimg = Array.isArray(arr) ? arr.slice().map(function(val, id){return {s:val, d: id ? (id == arr.length - 1 ? 1 : 0) : -1};}) : iimg;
             if (opts) {
@@ -242,7 +260,7 @@ cG.REPO.stage = cG.REPO.stage(
                 xtndLmt(options, opts);
             }
             this.go(start||0);
-        }
+        };
         this.count = function () {
             return iimg.length;
         };
@@ -282,14 +300,14 @@ cG.REPO.stage = cG.REPO.stage(
                     return 1;*/
         };
         this.go = function (to) {
-            var sre = to === null || void 0 === to ? 0 : parseInt(to, 10);
+            var sre = to === null || void 0 === to ? 0 : pi(to, 10);
             //console.log(sre);
             sre = isNaN(sre) ? 0 : sre;
             assign(master, Math.floor(Math.max(0, Math.min(iimg.length - 1, sre))));
             return sre;
         };
         this.prev = function () {
-            var sre = current - 1; //avoids possible race condition, assign loads in new image which can call preloadMaster which can change self.current before it gets to the return call. storing it premptively will preserve the value
+            var sre = current - 1; //avoids possible race condition, assign loads in new image which can call draw which can change self.current before it gets to the return call. storing it premptively will preserve the value
             if (sre >= 0) assign(master, sre);
             return sre;
         };
@@ -315,7 +333,7 @@ cG.REPO.stage = cG.REPO.stage(
         };
         this.data = function (to) {
             //returns info about slide
-            var sre = to === null || void 0 === to ? current : parseInt(to, 10);
+            var sre = to === null || void 0 === to ? current : pi(to, 10);
             return isNaN(sre)
                 ? iimg[current]
                 : iimg[Math.floor(Math.max(0, Math.min(iimg.length - 1, sre)))];
@@ -338,33 +356,34 @@ cG.REPO.stage = cG.REPO.stage(
 
         //objref = object;
         //console.log(layers[1]);
-        if (anchor) anchor.appendChild(layers[0]);
-        else document.body.appendChild(layers[0]);
+        //if (anchor) anchor.appendChild(layers[0]);
+        //else dc.body.appendChild(layers[0]);
+        anchor.appendChild(layers[1]);
         //console.log(object);
         //intervall=window.setInterval(spin, spinner.rate, object);
         window.setTimeout(spin, spinner.rate, object);
         //DISPLAY - setup
         master = new Image();
-        master.imaginaryID = -1; //unset to an imaginary image
-        master.addEventListener("load", preloadMaster, false);
+        master.virID = -1; //unset to an vir image
+        master.addEventListener("load", draw, false);
         //console.log(this.master);
         var q;
         for (q = 0; q < iimg.length; q++) {
             //iimg[q].btog = 0; a holdover from the old html based canvas
             iimg[q].d = q ? (q == iimg.length - 1 ? 1 : 0) : -1; //-1 means first, 0 means middle, 1 means last: true if endpoint, false if middle (desig)
-            iimg[q].loaded = false;
+            iimg[q].ld = false;
         }
         for (q = 0; q < options.irb; q++) {
             preload.push(new Image());
-            preload[q].imaginaryID = -1; //unset to an imaginary image
+            preload[q].virID = -1; //unset to an vir image
             preload[q].addEventListener("load", preloadGeneric, false);
         }
         for (q = 0; q < options.itb; q++) {
             pstload.push(new Image());
-            pstload[q].imaginaryID = -1; //unset to an imaginary image
+            pstload[q].virID = -1; //unset to an vir image
             pstload[q].addEventListener("load", preloadGeneric, false);
         }
-        //preload[0].imaginaryID = 0;
+        //preload[0].virID = 0;
         //preload[0].src = input.pages[0].url;
         //init
         assign(master, options.startpage || owrite);
@@ -375,8 +394,9 @@ cG.REPO.stage = cG.REPO.stage(
         layers[1].style.zIndex = 1;
         layers[1].style.position = "relative";
         //layers[1].style.visibility="hidden";
-        if (anchor) anchor.appendChild(layers[1]);
-        else document.body.appendChild(layers[1]);
+        //if (anchor) anchor.appendChild(layers[1]);
+        //else dc.body.appendChild(layers[1]);
+        anchor.appendChild(layers[1]);
     }
 );
 ///////
