@@ -13,7 +13,8 @@
     "start": "electron ."
   },
   "devDependencies": {
-    "electron": "^2.0.0"
+    "electron": "^2.0.0",
+    "electron-devtools-installer": "^2.2.4"
   },
   "dependencies": {
     "@gxl/epub-parser": "^1.0.6",
@@ -21,7 +22,10 @@
     "fs-extra": "^6.0.1",
     "jquery": "^3.3.1",
     "jquery-ui-dist": "^1.12.1",
+    "material-design-icons-iconfont": "^3.0.3",
     "tesseract.js": "^1.0.10",
+    "vue": "^2.5.16",
+    "vuetify": "^1.0.18",
     "xel": "0.0.135"
   }
 }
