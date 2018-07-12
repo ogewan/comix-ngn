@@ -1,38 +1,50 @@
-const Crawler = require("crawler"), fs = require("fs"),
+const Crawler = require("crawler"), fs = require("fs"), path = require("path"),
     workers = (error, res, done) => {
         let rawanchors = [], queue = [],
             $ = res.$, uri = unorm(res.request.uri.href);
 
         console.log(uri);
         
+        if (!$) { return done(); }
+
         $("img").each((i, e) => { 
             //loop on all image srcs, complete incomplete links with URL construct
             let src = unorm(e.attribs.src);
             
+            //if (src.indexOf(init) + 1) {
             if (!images[src]) {
                 //images[src] = {org: [uri], cnt: 1};
                 images[src] = [uri];
-                linkmap[uri] = (linkmap[uri]) ? linkmap[uri].concat(src) : [src];
             } else {
                 //images[src].cnt++;
                 images[src] = images[src].concat(uri);
             }
+            linkmap[uri] = (linkmap[uri]) ? linkmap[uri].concat(src) : [src];
+            //}
         });
 
         $("a").each((i, e) => {
             //loop on all links, complete incomplete links with URL construct
-            let a = e.attribs.href;
+            let a = e.attribs.href, 
+                valid = ["", ".html", ".htm", ".php"],
+                ext = path.extname(new URL(e.attribs.href, init).pathname);
             if (a) {
                 a = unorm(a);
                 //check if link has the same host to see if it is part of the website
-                if (a.indexOf(init) + 1) {
+                if (a.indexOf(init) + 1 && valid.indexOf(ext) + 1) {
                     rawanchors.push(a);
+                } else {
+                    //console.log("REJECTED: ", a, a.indexOf(init) + 1, ext)
                 }
             }
         });
 
         rawanchors = nodup(rawanchors);
         //visited[lindex] = visited[lindex].concat(rawanchors);
+        if (!visited[uri] || queued[visited[uri]]) {
+            redirects.push(uri);
+            return done();
+        }
         visited[uri] = visited[uri].concat(rawanchors);
 
         rawanchors.forEach((e) => {
@@ -101,35 +113,150 @@ const Crawler = require("crawler"), fs = require("fs"),
     },
     dump = function (obj, name) {
         fs.writeFileSync(name, JSON.stringify(obj, null, 4));
+    },
+    binaryTraversal = (safeMod, linkedtomap) => {
+        //  Find endpoints - By definition, end points are accessible from every page
+        let somePage = safeMod[Object.keys(safeMod)[0]], 
+            endpoints = [], 
+            linkCnt = Object.keys(linkedtomap).length - 1,
+            fwdlist = [], revlist = [];
+    
+        for (let iter in somePage.lnk) {
+            let link = somePage.lnk[iter];
+            if (!linkedtomap[link]) {
+                continue;
+            }
+            if (linkedtomap[link].cnt == linkCnt) {
+                if (safeMod[link].lnk.length) {
+                    endpoints.push(link);
+                } else {
+                    //if lnk list is empty, don't even visit it (pretend we've already visited)
+                    safeMod[link].marked = 1;
+                }
+            }
+        }
+
+        for (let pts in endpoints) {
+            if (endpoints[pts] == init) {
+                end = endpoints[pts];
+            } else {
+                start = endpoints[pts];
+            }
+        }
+        if (endpoints.length != 2) { return {binSet: [], safeMod}; }
+        let fwdkey = start, revkey = end,
+            fwdnode = safeMod[fwdkey], revnode = safeMod[revkey],
+            fwdfail = false, revfail = false;
+
+        while (fwdnode || revnode) {
+            /*TBD
+            for (let it in nodes) {
+                let node = nodes[it];
+                if (!node.marked) {
+                    node.marked = 1;
+                    fwdlist.push(fwdnode.img[0]);
+                    for (let i in fwdnode.lnk) {
+                        let query = fwdnode.lnk[i];
+                        if (safeMod[query] && !safeMod[query].marked) {
+                            fwdnode = safeMod[query];
+                            break;
+                        }
+                    }
+                }
+            }*/
+            //If not marked, mark and push both fwdlist and revlist
+
+            //if (!fwdnode.marked) {
+                fwdnode.marked = 1;
+                fwdlist.push(fwdnode.img[0]);
+            //}
+            //if (!revnode.marked) {
+                revnode.marked = 1;
+                revlist.unshift(revnode.img[0]);
+            //}
+
+            //Now navigate to the next unmarked key, since we marked both fwdkey and revkey
+            //already we don't need to worry about them going in the wrong direction
+            //if we failed to leave a marked node, the while loop fails anyway
+            for (let i in fwdnode.lnk) {
+                fwdkey = fwdnode.lnk[i];
+                if (safeMod[fwdkey] && !safeMod[fwdkey].marked) {
+                    delete safeMod[fwdnode.key];
+                    fwdnode = safeMod[fwdkey];
+                    break;
+                }
+            }
+            for (let i in revnode.lnk) {
+                revkey = revnode.lnk[i];
+                if (safeMod[revkey] && !safeMod[revkey].marked) {
+                    delete safeMod[revnode.key];
+                    revnode = safeMod[revkey];
+                    break;
+                }
+            }
+            //Report a failed node traversal
+            if (!fwdnode && !fwdfail) {
+                delete safeMod[fwdkey];
+                console.log("Could not navigate to new node | not circular");
+                console.log("Break Detected @", fwdnode.key, "->", fwdkey);
+                fwdfail = true;
+            } 
+            if (!revnode && !revfail) {
+                delete safeMod[revkey];
+                console.log("Could not navigate to new node | not circular");
+                console.log("Break Detected @", revkey, "<-", revnode.key);
+                revfail = true;
+            }
+            //Remove the nodes' entirely
+        }
+        return {binSet: [fwdlist, revlist], safeMod};
+    },
+    spreadTraversal = (safeMod) => {
+        let binSet = [];
+
+        return {binSet, safeMod};
     }
 ;
 
-var init = unorm('https://www.xkcd.com/'),//'https://questionablecontent.net';
+var init = /*unorm('https://www.questionablecontent.net/'),//*/unorm('https://www.xkcd.com/'),
     images = {}, 
     visited = { [init]: [] }, 
     queued = { [init]: 1 }, 
     linkmap = {},
+    redirects = [],
     ordlist = [];
 
 c.on('drain', function(){
     var linkedtomap = {};
+    let linkCnt = Object.keys(linkedtomap).length - 1;
     console.log("Crawl Complete");
     
     for (let page in linkmap) {
         linkmap[page] = {
             img: linkmap[page],
-            lnk: []
+            lnk: [],
+            key: page
         };
+        let tmpList = [];
         for (let id in linkmap[page].img) {
             let imglist = linkmap[page].img, 
                 count = images[imglist[id]].length;
-            if (count >= Object.keys(linkmap).length) {
+            if (count < (Object.keys(linkmap).length / 2)) {
                 //must be in list to trigger this
-                imglist.splice(id, 1);
+                //imglist.splice(id, 1);
+                //must be on less than half the pages
+                tmpList.push(imglist[id]);
             }
         }
+        linkmap[page].img = tmpList;
+        if (!linkmap[page].img.length) {
+            //actually no images in this page so discard and move on
+            delete linkmap[page];
+            delete linkedtomap[page];
+            continue;
+        }
 
-        let anchors = visited[page], procmap = {};
+        let anchors = visited[page];
         for (let url in anchors) {
             let link = anchors[url];
 
@@ -138,71 +265,38 @@ c.on('drain', function(){
             }
 
             if (linkmap[link]) {
-                //linkmap[page].lnk[link] = 
                 linkmap[page].lnk.push(link);
                 linkedtomap[link] = linkedtomap[link] || {};
                 let l2m = linkedtomap[link];
                 l2m.cnt = (l2m.cnt) ? l2m.cnt + 1 : 1;
-                //linkmap[link]
-                //Build Link lists
             }
         }
     }
+
     //Traversal: find the first cycle or longest path
     //  Find endpoints - By definition, end points are accessible from every page
-    let somePage = linkmap[Object.keys(linkmap)[0]], 
-        endpoints = [], 
-        linkCnt = Object.keys(linkedtomap).length - 1;
 
-    for (let iter in somePage.lnk) {
-        let link = somePage.lnk[iter];
-        if (linkedtomap[link].cnt == linkCnt) {
-            if (linkmap[link].lnk.length) {
-                endpoints.push(link);
-            } else {
-                //if lnk list is empty, don't even visit it (pretend we've already visited)
-                linkmap[link].marked = 1;
+    //if (endpoints.length == 2) {
+        let {binSet, safeMod} = binaryTraversal(JSON.parse(JSON.stringify(linkmap)), linkedtomap), 
+            otherset = [];
+        if (binset < linkCnt) {
+            let section = 1;
+            while(section) {
+                if (section === 1) { otherset.push(section); }
+                ({section, safeMod} = spreadTraversal(safeMod));
             }
         }
-    }
-
-    if (endpoints.length == 2) {
-        for (let pts in endpoints) {
-            if (endpoints[pts] == init) {
-                end = endpoints[pts];
-            } else {
-                start = endpoints[pts];
-            }
-        }
-
-        //ordlist.push(end, start);
-        linkmap[end].marked = 1;
-        let currnode = linkmap[start];//, pgvisit = {[end] : 1};
-        while (!currnode.marked) {
-            currnode.marked = 1;
-            ordlist.push(currnode.img[0]);
-            for (let i in currnode.lnk) {
-                let query = currnode.lnk[i];
-                if (!linkmap[query].marked) {
-                    currnode = linkmap[query];
-                    break;
-                }
-            }
-        }
-        ordlist.push(linkmap[end].img[0]);
-    }
-    /*
-    dump(images, "xkcdimglist.json");
-    dump(visited, "visitedmap.json");
-    dump(linkmap, "linkmap.json");
-    console.log("Files Dumped");
-    dump(images, "xkcdimglist.json");
-    */
-    dump(linkmap, "linkmap3.json");
-    dump(linkedtomap, "link2map.json");
-    console.log("dump linkmap2");
+        ordlist = [].concat(binSet[0], [].concat(otherset), binSet[1]);
+    //}
     
-    dump(ordlist, "xkcdimglist.json");
-    console.log("Image list ")
+    dump(redirects, "redirects.json");
+    dump(visited, "visitedmap.json");
+    dump(images, "imgmap.json");
+    dump(linkmap, "linkmap.json");
+    dump(linkedtomap, "link2map.json");
+    dump(ordlist, "imglist.json");
+    console.log("Files Dumped");
+    console.log("Generated Image list count", ordlist.length);
+    console.log("Total pages with images:", linkCnt);
 });
 c.queue(init);
