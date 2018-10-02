@@ -131,7 +131,9 @@ const Crawler = require("crawler"), fs = require("fs"), path = require("path"),
                     endpoints.push(link);
                 } else {
                     //if lnk list is empty, don't even visit it (pretend we've already visited)
-                    safeMod[link].marked = 1;
+                    //safeMod[link].marked = 1;
+                    //delete it so that it is no longer in count
+                    delete safeMod[link];
                 }
             }
         }
@@ -143,41 +145,25 @@ const Crawler = require("crawler"), fs = require("fs"), path = require("path"),
                 start = endpoints[pts];
             }
         }
-        if (endpoints.length != 2) { return {binSet: [], safeMod}; }
+        if (endpoints.length != 2) { return {binSet: [[],[]], safeMod}; }
         let fwdkey = start, revkey = end,
             fwdnode = safeMod[fwdkey], revnode = safeMod[revkey],
             fwdfail = false, revfail = false;
 
-        while (fwdnode || revnode) {
-            /*TBD
-            for (let it in nodes) {
-                let node = nodes[it];
-                if (!node.marked) {
-                    node.marked = 1;
-                    fwdlist.push(fwdnode.img[0]);
-                    for (let i in fwdnode.lnk) {
-                        let query = fwdnode.lnk[i];
-                        if (safeMod[query] && !safeMod[query].marked) {
-                            fwdnode = safeMod[query];
-                            break;
-                        }
-                    }
-                }
-            }*/
+        while (!fwdnode.marked || !revnode.marked) {
             //If not marked, mark and push both fwdlist and revlist
-
-            //if (!fwdnode.marked) {
+            if (!fwdnode.marked) {
                 fwdnode.marked = 1;
                 fwdlist.push(fwdnode.img[0]);
-            //}
-            //if (!revnode.marked) {
+            }
+            if (!revnode.marked) {
                 revnode.marked = 1;
                 revlist.unshift(revnode.img[0]);
-            //}
+            }
 
-            //Now navigate to the next unmarked key, since we marked both fwdkey and revkey
-            //already we don't need to worry about them going in the wrong direction
-            //if we failed to leave a marked node, the while loop fails anyway
+            //attempt to navigate to the next key
+            //if the key doesn't exist, it has been visited (cannot go to)
+            //otherwise navigate to next node and delete the recent node
             for (let i in fwdnode.lnk) {
                 fwdkey = fwdnode.lnk[i];
                 if (safeMod[fwdkey] && !safeMod[fwdkey].marked) {
@@ -195,16 +181,16 @@ const Crawler = require("crawler"), fs = require("fs"), path = require("path"),
                 }
             }
             //Report a failed node traversal
-            if (!fwdnode && !fwdfail) {
-                delete safeMod[fwdkey];
+            if (fwdnode.marked && !fwdfail) {
                 console.log("Could not navigate to new node | not circular");
                 console.log("Break Detected @", fwdnode.key, "->", fwdkey);
+                delete safeMod[fwdnode.key];
                 fwdfail = true;
             } 
-            if (!revnode && !revfail) {
-                delete safeMod[revkey];
+            if (revnode.marked && !revfail) {
                 console.log("Could not navigate to new node | not circular");
                 console.log("Break Detected @", revkey, "<-", revnode.key);
+                delete safeMod[revnode.key];
                 revfail = true;
             }
             //Remove the nodes' entirely
@@ -212,13 +198,62 @@ const Crawler = require("crawler"), fs = require("fs"), path = require("path"),
         return {binSet: [fwdlist, revlist], safeMod};
     },
     spreadTraversal = (safeMod) => {
-        let binSet = [];
+        let section = [], aSafeMod = Object.keys(safeMod),
+            fwdkey = aSafeMod[Math.floor(Math.random() * aSafeMod.length)], revkey = fwdkey,
+            fwdnode = safeMod[fwdkey], revnode = safeMod[revkey],
+            fwdfail = false, revfail = false;
 
-        return {binSet, safeMod};
+        while (!fwdnode.marked || !revnode.marked) {
+            //If not marked, mark and push both fwdlist and revlist
+            if (!fwdnode.marked) {
+                fwdnode.marked = 1;
+                section.push(fwdnode.img[0]);
+            }
+            if (!revnode.marked) {
+                revnode.marked = 1;
+                section.unshift(revnode.img[0]);
+            }
+
+            //attempt to navigate to the next key
+            //if the key doesn't exist, it has been visited (cannot go to)
+            //otherwise navigate to next node and delete the recent node
+            for (let i in fwdnode.lnk) {
+                fwdkey = fwdnode.lnk[i];
+                if (safeMod[fwdkey] && !safeMod[fwdkey].marked) {
+                    delete safeMod[fwdnode.key];
+                    fwdnode = safeMod[fwdkey];
+                    break;
+                }
+            }
+            for (let i in revnode.lnk) {
+                revkey = revnode.lnk[i];
+                if (safeMod[revkey] && !safeMod[revkey].marked && revkey != fwdkey) {
+                    delete safeMod[revnode.key];
+                    revnode = safeMod[revkey];
+                    break;
+                }
+            }
+            //Report a failed node traversal
+            if (fwdnode.marked && !fwdfail) {
+                console.log("Could not navigate to new node | not circular");
+                console.log("Break Detected @", fwdnode.key, "->", fwdkey);
+                delete safeMod[fwdnode.key];
+                fwdfail = true;
+            } 
+            if (revnode.marked && !revfail) {
+                console.log("Could not navigate to new node | not circular");
+                console.log("Break Detected @", revkey, "<-", revnode.key);
+                delete safeMod[revnode.key];
+                revfail = true;
+            }
+            //Remove the nodes' entirely
+        }
+
+        return {section, safeMod};
     }
 ;
 
-var init = /*unorm('https://www.questionablecontent.net/'),//*/unorm('https://www.xkcd.com/'),
+var init = unorm('https://www.questionablecontent.net/'),//*/unorm('https://www.xkcd.com/'),
     images = {}, 
     visited = { [init]: [] }, 
     queued = { [init]: 1 }, 
@@ -228,7 +263,7 @@ var init = /*unorm('https://www.questionablecontent.net/'),//*/unorm('https://ww
 
 c.on('drain', function(){
     var linkedtomap = {};
-    let linkCnt = Object.keys(linkedtomap).length - 1;
+    let linkCnt = -1;
     console.log("Crawl Complete");
     
     for (let page in linkmap) {
@@ -272,21 +307,21 @@ c.on('drain', function(){
             }
         }
     }
+    linkCnt = Object.keys(linkedtomap).length - 1;
 
     //Traversal: find the first cycle or longest path
     //  Find endpoints - By definition, end points are accessible from every page
 
     //if (endpoints.length == 2) {
         let {binSet, safeMod} = binaryTraversal(JSON.parse(JSON.stringify(linkmap)), linkedtomap), 
-            otherset = [];
-        if (binset < linkCnt) {
-            let section = 1;
-            while(section) {
-                if (section === 1) { otherset.push(section); }
-                ({section, safeMod} = spreadTraversal(safeMod));
-            }
+            otherset = [], safeCnt = Object.keys(safeMod).length;
+
+        while(safeCnt) {
+            ({section, safeMod} = spreadTraversal(safeMod));
+            if (section) { otherset.push(section); }
+            safeCnt = Object.keys(safeMod).length;
         }
-        ordlist = [].concat(binSet[0], [].concat(otherset), binSet[1]);
+        ordlist = [].concat(binSet[0], [].concat.apply([], otherset), binSet[1]);
     //}
     
     dump(redirects, "redirects.json");

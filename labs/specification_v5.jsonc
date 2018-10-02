@@ -11,11 +11,11 @@
         "appendorderdir": false//The direction that the append order follows {Ascending|Descending}
     },
     "loading": {//loading spinner configuration
-        "lines":16,//lines in spinner
-        "rate":1000 / 30,//spin rate
+        "lines": 16, //lines in spinner
+        "rate": 1000/30,//spin rate
         "diameter": 250,//spinner diameter
-        "xpos":1/2,//x position of spinner relative to canvas size(legacy)
-        "ypos":1/2, //y position of spinner relative to canvas size(Legacy)
+        "xpos": 0.5, //x position of spinner relative to canvas size(legacy)
+        "ypos": 0.5, //y position of spinner relative to canvas size(Legacy)
         "back":"#FFF",//background color of spinner
         "color":"#373737"//color of spinner
     },

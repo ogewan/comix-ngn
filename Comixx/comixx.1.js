@@ -1,4 +1,17 @@
- var fs = require("fs-extra")
+ 
+//import Vue from 'vue'
+Vue = require("vue")
+Vuetify = require("vuetify")
+//import Vuetify from 'vuetify'
+// index.js or main.js
+//import 'vuetify/dist/vuetify.min.css' // Ensure you are using css-loader
+//import 'vuetify/dist/vuetify.min.css'
+//@import '~vuetify/src/stylus/main' // Ensure you are using stylus-loader
+
+//import 'material-design-icons-iconfont/dist/material-design-icons.css' 
+Vue.use(Vuetify)
+
+var fs = require("fs-extra")
     , $Path = require("path")
     , targetDir = './.ignore/testDir'
     , $ = jQuery = require("jquery")
