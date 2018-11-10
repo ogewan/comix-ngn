@@ -42,17 +42,20 @@ interface script {
     parent: any;
 }
 interface settings {
+    overwrite?: boolean;
+    anchor?: number;
     dir?: string;
+    imgprebuffer?: number;
+    imgpostbuffer?: number;
+    back?: string;
     lines?: number;
     rate?: number;
     diameter?: number;
     loaderback?: string;
     color?: string;
-    imgprebuffer?: number;
-    imgpostbuffer?: number;
 }
 interface direction {
-    new (input: string[], anchor?: HTMLElement, owrite?: number, config?: object): any;
+    new (input: string | string[], config?: object): any;
 }
 /** @function setValid
  * @param element If element is null, void, empty string, or -1 it is unset or set to unset

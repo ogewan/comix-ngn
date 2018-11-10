@@ -7,12 +7,12 @@ cG.rdy(function(){
     if(!document.getElementById("$COMICXX$$$")){/*prints version information*/
         console.log("%c %c %c comix-ngn v"+ cG.info.vix +" %c \u262F %c \u00A9 2015 Oluwaseun Ogedengbe %c Plugins: "+cG.$GPC, "color:white; background:#2EB531", "background:purple","color:white; background:#32E237", 'color:red; background:black', "color:white; background:#2EB531", "color:white; background:purple");}
     //console.log(JSON.stringify(cG, null, 2) );
-    var a = document.getElementsByTagName("SCRIPT");
-    var b;
+    var a = document.getElementsByTagName("SCRIPT"), b, c;
     for (var i = 0; i < a.length; i++) {
-        if(void 0==a[i].getAttribute("src")) continue;
-        if(a[i].getAttribute("src").indexOf("comixngn")>=0){
-            b=a[i].getAttribute("auto");
+        c = a[i].getAttribute("src") || null;
+        if (c == null) continue;
+        if(c.indexOf("comixngn")>=0){
+            b = a[i].getAttribute("auto");
             break;
         };
     }

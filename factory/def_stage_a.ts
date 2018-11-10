@@ -42,21 +42,20 @@ interface script {
     parent: any,
 }
 interface settings {
+    overwrite?: boolean,
+    anchor?: number,
     dir?: string,
+    imgprebuffer?: number,
+    imgpostbuffer?: number,
+    back?: string,
     lines?: number,
     rate?: number,
     diameter?: number,
     loaderback?: string,
     color?: string,
-    imgprebuffer?: number,
-    imgpostbuffer?: number,
 }
 interface direction {
-    new (
-        input:string[], 
-        anchor?:HTMLElement, 
-        owrite?:number, 
-        config?:object) : any;
+    new ( input:string|string[], config?:object ) : any;
 }
 ///////
 cG.REPO.stage = (direction: direction) => {
@@ -73,7 +72,7 @@ cG.REPO.stage = (direction: direction) => {
                     } else
                         return fals;
                 },
-                get = -1,
+                overwrite = -1,
                 pageArr = (pages) ? pages.map((val: page) => {
                     return val.url[0];
                 }) : [],
@@ -81,34 +80,27 @@ cG.REPO.stage = (direction: direction) => {
 
                 if (setValid(scriptt)) {
                     if (setValid(config)) {
-                        if (config.dir !== void(0)) settings.dir = config.dir;
-                        if (config.imgprebuffer !== void(0)) settings.imgprebuffer = config.imgprebuffer;
-                        if (config.imgpostbuffer !== void(0)) settings.imgpostbuffer = config.imgpostbuffer;
+                        let {dir, imgprebuffer, imgpostbuffer} = config;
+                        settings = {dir, imgprebuffer, imgpostbuffer, ...settings};
                     }
                     if (setValid(loading)) {
-                        if (loading.lines !== void(0)) settings.lines = loading.lines;
-                        if (loading.rate !== void(0)) settings.rate = loading.rate;
-                        if (loading.diameter !== void(0)) settings.diameter = loading.diameter;
-                        if (loading.back !== void(0)) settings.loaderback = loading.back;
-                        if (loading.color !== void(0)) settings.color = loading.color;
+                        let {lines, rate, diameter, back, color} = loading;
+                        settings = {lines, rate, diameter, back, color, ...settings};
                     }
                 }
 
                 if (typeof (Storage) !== "undefined") {
-                    get = parseInt(localStorage.getItem(cG.comicID + "|" + name + "|curPage") as string, 10);
-                    /*if(cG.avx[0]>0&&cG.avx[1]>0) */
-                    cG.verbose(1, cG.comicID + "|" + name + "|curPage", ":", get);
-                    /*else console.log(cG.comicID+"|"+name+"|curPage",":",get);*/
+                    overwrite = parseInt(localStorage.getItem(cG.comicID + "|" + name + "|curPage") as string, 10);
+                    cG.verbose(1, cG.comicID + "|" + name + "|curPage", ":", overwrite);
                 }
 
                 //prepage, which is from router, overwrites localStorage if over -1, only works on comix
-                if (setValid(cG.comix)) get = cG.prePage;
-                if (get < 0 ) get = config.startpage; 
+                if (setValid(cG.comix)) overwrite = cG.prePage;
+                if (overwrite < 0 ) overwrite = config.startpage; 
 
-                var main = new direction(pageArr, anchor, get, settings);
+                var main = new direction(pageArr, {anchor, overwrite, ...settings});
                 main.name = name;
                 main.type = "def";
-                //if(cG.avx[0]>1&&cG.avx[1]>0){}
                 main.pg = [anchor];
                 main.at = 0;
                 main.my = 0;
@@ -230,7 +222,7 @@ cG.REPO.stage = (direction: direction) => {
                         }
                         //if(cG.avx[0]>0&&cG.avx[1]>0) 
                         cG.verbose(1, name, "Pushing state:", result);
-                        if (cG.fBox.pgepsh) history.pushState({}, void(0), "#/" + result);
+                        if (cG.fBox.pgepsh) history.pushState({}, '', "#/" + result);
                     }
                     if (cG.queue.stageChange !== void 0)
                         for (var ftn in cG.queue.stageChange) {

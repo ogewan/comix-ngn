@@ -37,7 +37,7 @@ cG.cPanel = cG.cPanel||{};/*cG control panel, all stages are stored here*/
 TODO: DEPRECATE vscript and addme
 * vscript - virtual script allows, a script defined as a JS variable to overwrite the script request (Writer)
 */
-cG.info = {vix: "1.3.5",vwr: "2.0.0",vpr: "0.1.0", vxx: "0.0.2"};/*version settings*/
+cG.info = {vix: "1.3.7",vwr: "2.0.0",vpr: "0.1.0", vxx: "0.0.2"};/*version settings*/
 cG.dis = cG.dis||{};//disables statistic and error reporting
 cG.recyclebin = cG.recyclebin||{};//variables that are used in initialization, disposed at stage injection
 cG.queue = cG.queue||{};//stores functions that are called incertain events
