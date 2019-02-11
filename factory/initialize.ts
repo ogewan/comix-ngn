@@ -4,6 +4,8 @@
 this.voice = "Welcome to the World";
 })()})();
 TODO: consider using data attribute on html
+TODO: webcomponent script and control
+TODO: function documenation
 */
 
 ///INITIALIZE///
@@ -17,10 +19,10 @@ if(void 0===cG.$GPC){cG.$GPC=0;}/*Global Plugin Counter (no longer global)*/
 cG.root = '';/*current default settings of cng, overwritten by plugins*/
 cG.cPanel = cG.cPanel||{};/*cG control panel, all stages are stored here*/
 (function(){//this function dynamically adds missing properties to fBox
-    var deft = {fstrun: true, pgepsh: true, pgesve: true, rtepge: true, protect: true, noverwrite: true, arrow: true, vscript: false, click: true};
+    var deft:any = {fstrun: true, pgepsh: true, pgesve: true, rtepge: true, protect: true, noverwrite: true, arrow: true, vscript: false, click: true};
     if(cG.fBox){
         for(var u in deft){
-                if (!cG.fBox.hasOwnProperty(u)) cG.fBox[u] = deft[u];
+            if (!cG.fBox.hasOwnProperty(u)) cG.fBox[u] = deft[u];
         }
     } else {
         cG.fBox = deft;

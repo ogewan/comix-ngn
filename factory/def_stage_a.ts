@@ -1,4 +1,3 @@
-///DEF_STAGE_A///
 interface page {
     alt: string,
     anim8: boolean,
@@ -57,7 +56,7 @@ interface settings {
 interface direction {
     new ( input:string|string[], config?:object ) : any;
 }
-///////
+///DEF_STAGE_A///
 cG.REPO.stage = (direction: direction) => {
     return {
         "def": {

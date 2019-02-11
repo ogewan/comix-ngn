@@ -1,6 +1,6 @@
 ///DEF_STAGE_B///
 cG.REPO.stage = cG.REPO.stage(
-    function (input, config) {
+    function d(input, config) {
     //default parameters
     input = input || [];
     config = config || {};
@@ -233,9 +233,10 @@ cG.REPO.stage = cG.REPO.stage(
         },
         jq = function () {
             try {
-                jQuery.fn.direction = function (a, b, c) {
+                jQuery.fn.direction = function (a, c) {
                     return this.each(function () {
-                        direction(a, $(this), b, c);
+                        c.anchor = $(this);
+                        d(a, c);
                     });
                 };
             } catch (e) {
