@@ -60,4 +60,35 @@ interface direction {
 /** @function setValid
  * @param element If element is null, void, empty string, or -1 it is unset or set to unset
  */
-declare var setValid: (element: any) => boolean, smartAttrib: (source: Element, mapper: any, ig: number) => void, stick: (obj: any, parent: any, sauce: any, pos: any) => any, FEbyIdAI: (source: any, ids: any, inner: any) => any, FindClassesInside: (source: any, cls: any) => any, renameEles: (bool: boolean, source: Element, prepend?: string | undefined, append?: string | undefined) => void;
+declare var setValid: (element: any) => boolean, 
+/** @function smartAttrib
+ * @param source
+ * @param mapper
+ * @param ignore
+ */
+smartAttrib: (source: Element, mapper: any, ig: number) => void, 
+/** @function stick
+ * @param obj
+ * @param parent
+ * @param sauce
+ * @param pos
+ */
+stick: (obj: any, parent: any, sauce: any, pos: any) => any, 
+/** @function FEbyIDAI
+ * @param source
+ * @param ids
+ * @param inner
+ */
+FEbyIdAI: (source: any, ids: any, inner: any) => any, 
+/** @function FindClassesInside
+ * @param source
+ * @param class
+ */
+FindClassesInside: (source: any, cls: any) => any, 
+/** @function renameEles
+ * @param bool
+ * @param source
+ * @param prepend
+ * @param append
+ */
+renameEles: (bool: boolean, source: Element, prepend?: string | undefined, append?: string | undefined) => void;

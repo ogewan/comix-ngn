@@ -56,11 +56,11 @@ interface settings {
 interface direction {
     new ( input:string|string[], config?:object ) : any;
 }
-///DEF_STAGE_A///
-cG.REPO.stage = (direction: direction) => {
+///DEF_STAGE///
+cG.setupStage = (id: string, direction: direction) => {
     return {
-        "def": {
-            id: "def",
+        [id]: {
+            id,
             construct: function (name: string, scriptt: script, anchor: HTMLElement, options: object) {
                 let { config, loading, pages } = scriptt;
                 var chek = function (truth:any, fals:any, iimg:page) {
@@ -257,3 +257,10 @@ cG.REPO.stage = (direction: direction) => {
         }
     };
 };
+{
+    let direction;
+    /*#PASTE:https://raw.githubusercontent.com/ogewan/direction.js/master/direction.js#*/
+    cG.REPO.stage = cG.setupStage(direction);
+}
+///////
+cG.stage = cG.REPO.stage.def;
