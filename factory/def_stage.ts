@@ -259,8 +259,8 @@ cG.setupStage = (id: string, direction: direction) => {
 };
 {
     let direction;
-    /*#PASTE:https://raw.githubusercontent.com/ogewan/direction.js/master/direction.js#*/
-    cG.REPO.stage = cG.setupStage(direction);
+    /*#PASTE:https://raw.githubusercontent.com/ogewan/direction.js/master/directionx.js#*/
+    cG.REPO.stage = cG.setupStage("def", direction);
 }
 ///////
 cG.stage = cG.REPO.stage.def;

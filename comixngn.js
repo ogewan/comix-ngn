@@ -701,7 +701,7 @@ cG.setupStage = (id, direction) => {
 };
 {
     let direction;
-    /** @preserve direction.js (c) 2015 Ogewan, MIT*/
+    /** @preserve directionX.js (c) 2019 Ogewan, MIT*/
     /**
      * @suppress {globalThis}
      */
@@ -715,6 +715,9 @@ cG.setupStage = (id, direction) => {
      * @param {number}          [config.imgprebuffer] - The # of images to preload that precede the displayed image. [5]
      * @param {number}          [config.imgpostbuffer] - The # of images to preload that follow the displayed image. [5]
      * @param {string}          [config.back] - Hexstring for the display canvas's color. ["#373737"]
+     * @param {GPU}             [config.gpu] - GPU class constructor [Requires GPU.js]
+     * @param {Function}        [config.shader] - Kernel function that manipulates pixel data [Requires GPU.js]
+     * @param {Function}        [config.pixelfn] - Function to manually compute pixel data if GPU.js is not avaliable.
      * [Spinner]
      * @param {boolean}         [config.hideSpin] - Remove the spinner from the page temporarily. [false]
      * @param {boolean}         [config.disableSpin] - Deactivate the spinner forever. [false]
@@ -725,70 +728,32 @@ cG.setupStage = (id, direction) => {
      * @param {string}          [config.color] - Hexstring for the spinner's color. ["#FFF"]
      *
      */
-    direction = function d(input, config) {
-        //default parameters
-        input = input || [];
-        config = config || {};
-        //redefine globals
-        var du = document, db = du.body, de = du.documentElement, pi = parseInt, raf = window.requestAnimationFrame, 
-        //PROPERTIES - private
-        owrite = config.overwrite || 0, anchor = config.anchor || db, iimg = input.slice().map(function (val) {
-            return { s: val };
-        }), 
-        //is the spinner spinning?
-        spinning = true, 
-        //scroll ID
-        scrolling = -1, 
-        //-1 for unset, corresponds to current page
-        current = -1, layers = [
-            config.disableSpin ? null : du.createElement("canvas"),
-            du.createElement("canvas")
-        ], spinner = layers[0] ? {
-            ctx: layers[0].getContext("2d"),
-            clr: config.color || "#373737",
-            str: Date.now(),
-            lne: config.lines || 16,
-            rte: config.rate || 1000 / 30,
-            dia: config.diameter || 250,
-            lbk: config.loaderback || "#FFF",
-        } : null, options = {
-            dir: config.dir || "",
-            irb: config.imgprebuffer || 5,
-            itb: config.imgpostbuffer || 5,
-            bck: config.back || "#FFF",
-            sz: config.size || 0,
-            scl: 0
-        }, pstload = [], preload = [], master = new Image(), skroll = true, ctx = layers[1].getContext("2d"), 
+    //TODO: Shader change mechanism for pixelfn and shader, including iimg.shaderTime change when shader is changed
+    direction = function d(input = [], config = {}) {
         //METHODS - private
-        cb = {
-            run: function (a) {
-                for (var b = 0; b < cb[a].length; b++) {
-                    cb[a][b]();
-                }
-            },
-            start: [],
-            slidn: [],
-            slidd: []
-        }, spin = function () {
+        const spin = () => {
             if (!spinner)
                 return;
             layers[0].style.paddingLeft = (layers[1].width - 300) / 2 + "px";
-            var rotation = Math.floor((Date.now() - spinner.str) / 1000 * spinner.lne) / spinner.lne, c = spinner.clr.substr(1);
+            let rotation = Math.floor((Date.now() - spinner.str) / (1000) * spinner.lne) / spinner.lne, color = spinner.clr;
             spinner.ctx.save();
             spinner.ctx.clearRect(0, 0, 300, layers[1].height);
             spinner.ctx.translate(150, layers[1].height / 2);
-            spinner.ctx.rotate(Math.PI * 2 * rotation);
-            if (c.length == 3)
-                c = c[0] + C[0] + c[1] + c[1] + c[2] + c[2];
-            var red = pi(c.substr(0, 2), 16).toString(), green = pi(c.substr(2, 2), 16).toString(), blue = pi(c.substr(4, 2), 16).toString();
-            for (var i = 0; i < spinner.lne; i++) {
+            spinner.ctx.rotate((Math.PI * 2 * rotation) % (Math.PI * 2));
+            //spinner.ctx.rotate(rotation);
+            if (color.length == 3) {
+                color = `#${color[1]}${color[1]}${color[2]}${color[2]}${color[3]}${color[3]}`;
+            }
+            else {
+                pi(color, 16).toString();
+            }
+            for (let i = 0; i < spinner.lne; i++) {
                 spinner.ctx.beginPath();
                 spinner.ctx.rotate(Math.PI * 2 / spinner.lne);
                 spinner.ctx.moveTo(spinner.dia / 10, 0);
                 spinner.ctx.lineTo(spinner.dia / 4, 0);
                 spinner.ctx.lineWidth = spinner.dia / 30;
-                spinner.ctx.strokeStyle =
-                    "rgba(" + red + "," + green + "," + blue + "," + i / spinner.lne + ")";
+                spinner.ctx.strokeStyle = color;
                 spinner.ctx.stroke();
             }
             spinner.ctx.restore();
@@ -796,7 +761,7 @@ cG.setupStage = (id, direction) => {
                 raf(spin);
             else
                 spinner.ctx.clearRect(0, 0, 300, layers[1].height);
-        }, scrollit = function (to, time) {
+        }, scrollit = (to, time) => {
             //format inputs
             if (to === null || void 0 === to)
                 to = { x: 0, y: 0 };
@@ -823,7 +788,7 @@ cG.setupStage = (id, direction) => {
                         de.clientWidth ||
                         db.clientWidth;
             //calculate distance needed to travel
-            var dis = {
+            let dis = {
                 x: window.pageXOffset !== void 0 ? to.x - window.pageXOffset : to.x - de.scrollLeft,
                 y: window.pageYOffset !== void 0 ? to.y - window.pageYOffset : to.y - de.scrollTop
             };
@@ -831,7 +796,7 @@ cG.setupStage = (id, direction) => {
             //if that distance is 0 on both x and y, no scrolling required
             if (dis == { x: 0, y: 0 })
                 return dis;
-            var clock = function (c, b, a) {
+            let clock = function (c, b, a) {
                 window.scrollBy(Math.floor(c.x) / b, Math.floor(c.y) / b);
                 if (a + 1 < b * 5)
                     scrolling = window.setTimeout(clock, 5, c, b, a + 1);
@@ -839,106 +804,156 @@ cG.setupStage = (id, direction) => {
             scrolling = window.setTimeout(clock, 5, dis, Math.floor(time / 5), 0);
             //window.clearInterval(clock);
             return dis;
-        }, preloadGeneric = function () {
-            iimg[this.virID].ld = true;
-            /*possible implementation - Delete it when we are done, possibly saves memory, since its been cached?
-                      this.virID=-1;
-                      this.src="";*/
-        }, draw = function () {
-            var dif, siz;
-            //it loads and draws
-            if (iimg[master.virID].ld)
-                ctx.clearRect(0, 0, layers[1].width, layers[1].height); //clear the canvas based on its size
-            else
-                iimg[master.virID].ld = true;
+        }, draw = img => {
+            let siz = [0, 0];
+            ctx.clearRect(0, 0, layers[1].width, layers[1].height); //clear the canvas based on its size
             cb.run("slidn");
-            //conviently, this callback draws the image as soon as master's src is changed and image loaded
             if (options.sz)
                 siz = [options.sz.w, options.sz.h];
             else {
                 switch (options.scl) { //scales to canvas
                     case 1: //scale width
-                        dif = layers[1].width / master.width;
-                        siz = [layers[1].width, master.height * dif];
+                        dif = layers[1].width / img.width;
+                        siz = [layers[1].width, img.height * dif];
                         break;
                     case 2: //scale height
-                        dif = layers[1].height / master.height;
-                        siz = [master.width * dif, layers[1].height];
+                        dif = layers[1].height / img.height;
+                        siz = [img.width * dif, layers[1].height];
                         break;
                     default:
                         if (options.scl)
-                            siz = [layers[1].width, layers[1].height];
+                            siz = [layers[1].width, layers[1].height]; //scale both
                         else
-                            siz = [master.width, master.height];
+                            siz = [img.width, img.height]; //scale canvas
                 }
             }
-            layers[1].width /*= layers[0].width = objref.acW */ = siz[0];
-            layers[1].height /*= objref.acH*/ = siz[1];
+            layers[1].width = siz[0];
+            layers[1].height = siz[1];
             if (spinner)
                 layers[0].height = siz[1];
-            //ctx.drawImage(master, 0, 0);
-            ctx.drawImage.apply(ctx, [master, 0, 0].concat(siz));
-            spinning = 0;
+            ctx.drawImage(img, 0, 0, ...siz);
+            spinning = false;
             if (skroll)
                 scrollit();
             cb.run("slidd");
-        }, assign = function (imagething, idd) {
-            //assign helper, assigns an src and iid according to given id
-            //console.log("World");
-            /*console.log("dead",intervall);
-                      if(intervall<0) intervall = window.setInterval(spin, spinner.rate, canvasData);
-                      console.log("started",intervall);*/
+        }, offload = img => {
+            let siz = [img.width, img.height], vimg = iimg[img.virID], storeImgbit = imgbit => {
+                if (vimg)
+                    vimg.ib = imgbit;
+                if (img.master)
+                    draw(imgbit);
+            };
+            if (!img.ui) {
+                off.clearRect(0, 0, layers[2].width, layers[2].height);
+                layers[2].width = siz[0];
+                layers[2].height = siz[1];
+                off.drawImage(img, 0, 0);
+                try {
+                    vimg.ui = off.getImageData(0, 0, ...siz);
+                }
+                catch (e) {
+                    console.log("Cannot get imageData from cross-origin");
+                    let ib = layers[2].transferToImageBitmap();
+                    return storeImgbit(ib);
+                }
+            }
+            else {
+                vimg = img;
+            }
+            if (gpu) {
+                const shader = config.shader || function (data) {
+                    var x = this.thread.x;
+                    var y = this.thread.y;
+                    var n = 4 * (x + this.constants.w * (this.constants.h - y));
+                    var red = data[n] / 256;
+                    var green = data[n + 1] / 256;
+                    var blue = data[n + 2] / 256;
+                    var alpha = data[n + 3] / 256;
+                    this.color(red, green, blue, alpha);
+                }, 
+                // the kernel runs for each pixel, with:
+                // - this.thread.x = horizontal position in pixels from the left edge
+                // - this.thread.y = vertical position in pixels from the bottom edge (*opposite of canvas*)
+                render = gpu.createKernel(shader)
+                    .setConstants({ w: siz[0], h: siz[1] }).setOutput(siz).setGraphical(true);
+                render(vimg.ui.data);
+                createImageBitmap(render.canvas).then(storeImgbit);
+            }
+            else {
+                let pixelfn = config.pixelfn;
+                createImageBitmap((pixelfn) ? pixelfn(vimg.ui) : vimg.ui).then(storeImgbit);
+            }
+        }, assign = idd => {
+            /**
+             * iimg = {
+             *  s: (image source url),
+             *  d: (image order: -1 = first, 0 = mid, 1 = last),
+             *  ui: (imageData Uint8ClampedArray),
+             *  ib: (imageBitmap drawn image)
+             * }
+             */
             spinning = true;
             raf(spin);
             cb.run("start");
-            //if lower than zero set to zero
-            if (idd < 0)
-                idd = 0;
-            //can not be equal to our higher than the amount of pages
-            if (idd >= iimg.length)
-                idd = iimg.length - 1;
-            if (idd < 0)
-                return;
-            if (!iimg[idd].ld)
+            //clamp between 0 and iimg len
+            idd = Math.min(Math.max(0, idd), iimg.length - 1);
+            //if not loaded, clear top layer to show spinner
+            if (!iimg[idd].ib) {
                 ctx.clearRect(0, 0, layers[1].width, layers[1].height);
-            imagething.virID = idd;
-            imagething.src = options.dir + iimg[idd].s;
-            //we change page as soon as it is assigned, so that page still changes even if it never loads
+                master.virID = idd;
+                master.src = options.dir + iimg[idd].s;
+            }
+            else {
+                if (iimg[idd].st != iimg.shaderTime) {
+                    offload(iimg[idd]);
+                }
+                else {
+                    draw(iimg[idd].ib);
+                }
+            }
             current = idd;
-            /*console.log("----");
-                  for(var q = idd-1;q>idd-self.config.irb-1&&q>=0;q--){
-                      console.log(q);
-                  }
-                  console.log("//");
-                  for(var q = idd+1;q<self.config.itb+idd+1&&q<self.count;q++){
-                      console.log(q);
-                      continue;
-      
-                  console.log("----");*/
-            var r = 0, q = 0;
-            for (q = idd - 1; q > idd - options.irb - 1 && q >= 0; q--) {
-                if (iimg[q].ld)
+            let q, r = 0;
+            for (q = idd - 1; (r < options.irb) && (q >= 0); q--) {
+                if (iimg[q].ib)
                     continue;
-                preload[r].virID = q;
-                preload[r].src = options.dir + iimg[q].s;
+                else if (iimg[q].st != iimg.shaderTime) {
+                    offload(iimg[q]);
+                    continue;
+                }
+                setPreload(r, q, options.dir + iimg[q].s);
                 r++;
             }
-            r = 0;
-            for (q = idd + 1; q < options.itb + idd + 1 && q < iimg.length; q++) {
-                if (iimg[q].ld)
+            for (q = idd + 1; (r < options.itb) && (q < iimg.length); q++) {
+                if (iimg[q].ib)
                     continue;
-                pstload[r].virID = q;
-                pstload[r].src = options.dir + iimg[q].s;
+                else if (iimg[q].st != iimg.shaderTime) {
+                    offload(iimg[q]);
+                    continue;
+                }
+                setPreload(r, q, options.dir + iimg[q].s);
                 r++;
             }
-        }, xtndLmt = function (org, src) {
+        }, xtndLmt = (org, src) => {
             //add value from src if its key exists in org
             if (!org)
                 return;
             for (var key in src)
                 if (org.hasOwnProperty(key))
                     org[key] = src[key];
-        }, jq = function () {
+        }, setupLoader = count => Array(count).fill(1).map((e, i) => {
+            let img = new Image();
+            img.unique = i;
+            img.virID = -1;
+            img.addEventListener("load", offload.bind(null, img));
+            return img;
+        }), format_iimg = raw => {
+            let st = Date.now(), form = ((typeof raw == "string") ? raw.split(" ") : raw).map((v, i, a) => ({ s: v, st: st, d: (i ? (i == a.length - 1 ? 1 : 0) : -1) }));
+            form.shaderTime = st;
+            return form;
+        }, setPreload = (pid, id, src) => {
+            preload[pid].virID = id;
+            preload[pid].src = src;
+        }, jq = () => {
             try {
                 jQuery.fn.direction = function (a, c) {
                     return this.each(function () {
@@ -950,32 +965,79 @@ cG.setupStage = (id, direction) => {
             catch (e) {
                 console.log(e);
             }
-        };
+        }, 
+        //GLOBAL shortcuts
+        du = document, db = du.body, de = du.documentElement, pi = parseInt, raf = window.requestAnimationFrame;
+        //PROPERTIES - private
+        let owrite = config.overwrite || 0, anchor = config.anchor || db, iimg = format_iimg(input), 
+        //is the spinner spinning?
+        spinning = true, 
+        //scroll ID
+        scrolling = -1, 
+        //-1 for unset, corresponds to current page
+        current = -1, layers = {
+            0: config.disableSpin ? null : du.createElement("canvas"),
+            1: du.createElement("canvas"),
+            2: new OffscreenCanvas(640, 480)
+        }, spinner = layers[0] ? {
+            ctx: layers[0].getContext("2d"),
+            clr: config.color || "#373737",
+            str: Date.now(),
+            lne: config.lines || 16,
+            rte: config.rate || 1000 / 30,
+            dia: config.diameter || 250,
+            lbk: config.loaderback || "#FFF",
+            dat: Date.now(),
+            sav: []
+        } : null, options = {
+            dir: config.dir || "",
+            irb: config.imgprebuffer || 5,
+            itb: config.imgpostbuffer || 5,
+            bck: config.back || "#FFF",
+            sz: config.size || 0,
+            scl: 0
+        }, 
+        //MASTER = directly draws, preload only request image
+        preload = setupLoader(options.itb + options.irb), master = setupLoader(1)[0], skroll = true, ctx = layers[1].getContext("2d"), off = layers[2].getContext("2d"), cb = {
+            run: a => {
+                for (var b = 0; b < cb[a].length; b++) {
+                    cb[a][b]();
+                }
+            },
+            start: [],
+            slidn: [],
+            slidd: []
+        }, gpu;
+        //Library extensions
+        if (config.gpu) {
+            const canvas = new OffscreenCanvas(640, 480), webGl = canvas.getContext('webgl2', { premultipliedAlpha: false });
+            gpu = new config.gpu({ canvas, webGl });
+        }
         if (window.jQuery)
             jq();
         //PROPERTIES - public
         this.canvi = layers;
         this.cb = cb;
         //METHODS - public
-        this.cnl = function () {
+        this.cnl = () => {
             //stop scrolling
             window.clearTimeout(scrolling);
         };
-        this.swap = function (arr, opts, start) {
-            iimg = Array.isArray(arr) ? arr.slice().map(function (val, id) { return { s: val, d: id ? (id == arr.length - 1 ? 1 : 0) : -1 }; }) : iimg;
+        this.swap = (arr, opts, start) => {
+            iimg = Array.isArray(arr) ? format_iimg(arr) : iimg;
             if (opts) {
                 xtndLmt(spinner, opts);
                 xtndLmt(options, opts);
             }
             this.go(start || 0);
         };
-        this.count = function () {
+        this.count = () => {
             return iimg.length;
         };
-        this.current = function () {
+        this.current = () => {
             return current;
         };
-        this.callback = function (type, callback, index, remove) {
+        this.callback = (type, callback, index, remove) => {
             if (type === null || void 0 === type)
                 return cb.slidn;
             var typeMap = { "-1": cb.start, "0": cb.slidn, "1": cb.slidd }, select = typeMap[index || 0];
@@ -994,55 +1056,55 @@ cG.setupStage = (id, direction) => {
                 select[index] = callback;
             return 1;
         };
-        this.go = function (to) {
+        this.go = (to) => {
             var sre = to === null || void 0 === to ? 0 : pi(to, 10);
             //console.log(sre);
             sre = isNaN(sre) ? 0 : sre;
-            assign(master, Math.floor(Math.max(0, Math.min(iimg.length - 1, sre))));
+            assign(Math.floor(Math.max(0, Math.min(iimg.length - 1, sre))));
             return sre;
         };
-        this.prev = function () {
+        this.prev = () => {
             var sre = current - 1; //avoids possible race condition, assign loads in new image which can call draw which can change self.current before it gets to the return call. storing it premptively will preserve the value
             if (sre >= 0)
-                assign(master, sre);
+                assign(sre);
             return sre;
         };
-        this.next = function () {
+        this.next = () => {
             //console.log("Hello");
             var sre = current + 1;
             if (sre < iimg.length)
-                assign(master, sre);
+                assign(sre);
             return sre;
         };
-        this.frst = function () {
+        this.frst = () => {
             if (current >= 0)
-                assign(master, 0);
+                assign(0);
             return 0;
         };
-        this.last = function () {
-            assign(master, iimg.length - 1);
+        this.last = () => {
+            assign(iimg.length - 1);
             return iimg.length - 1;
         };
-        this.rand = function () {
+        this.rand = () => {
             var sre = Math.floor(Math.random() * (iimg.length - 1));
             //console.log(sre);
-            assign(master, sre);
+            assign(sre);
             return sre;
         };
-        this.data = function (to) {
+        this.data = (to) => {
             //returns info about slide
             var sre = to === null || void 0 === to ? current : pi(to, 10);
             return isNaN(sre)
                 ? iimg[current]
                 : iimg[Math.floor(Math.max(0, Math.min(iimg.length - 1, sre)))];
         };
-        this.scroll = function (bool) {
+        this.scroll = (bool) => {
             //toggles Auto Scrolling
             if (!(bool === null || void 0 === bool))
                 skroll = bool;
             return skroll;
         };
-        this.scrollTo = function (to, time) {
+        this.scrollTo = (to, time) => {
             return scrollit(to, time);
         }; //public wrapper for scrollit
         if (spinner) {
@@ -1052,41 +1114,12 @@ cG.setupStage = (id, direction) => {
             layers[0].style.paddingLeft = "170px";
             layers[0].style.zIndex = 0;
             layers[0].style.position = "absolute";
-        }
-        //objref = canvasData;
-        //console.log(layers[1]);
-        //if (anchor) anchor.appendChild(layers[0]);
-        //else du.body.appendChild(layers[0]);
-        if (spinner)
             anchor.appendChild(layers[0]);
-        //console.log(canvasData);
-        //intervall=window.setInterval(spin, spinner.rate, canvasData);
-        raf(spin);
-        //DISPLAY - setup
-        master = new Image();
-        master.virID = -1; //unset to an vir image
-        master.addEventListener("load", draw, false);
-        //console.log(this.master);
-        var q;
-        for (q = 0; q < iimg.length; q++) {
-            //iimg[q].btog = 0; a holdover from the old html based canvas
-            iimg[q].d = q ? (q == iimg.length - 1 ? 1 : 0) : -1; //-1 means first, 0 means middle, 1 means last: true if endpoint, false if middle (desig)
-            iimg[q].ld = false;
         }
-        for (q = 0; q < options.irb; q++) {
-            preload.push(new Image());
-            preload[q].virID = -1; //unset to an vir image
-            preload[q].addEventListener("load", preloadGeneric, false);
-        }
-        for (q = 0; q < options.itb; q++) {
-            pstload.push(new Image());
-            pstload[q].virID = -1; //unset to an vir image
-            pstload[q].addEventListener("load", preloadGeneric, false);
-        }
-        //preload[0].virID = 0;
-        //preload[0].src = input.pages[0].url;
         //init
-        assign(master, options.startpage || owrite);
+        master.master = true;
+        master.unique = -1;
+        assign(options.startpage || owrite);
         //end init
         layers[1].height = 480;
         layers[1].width = 640;
@@ -1098,7 +1131,7 @@ cG.setupStage = (id, direction) => {
         //else du.body.appendChild(layers[1]);
         anchor.appendChild(layers[1]);
     };
-    cG.REPO.stage = cG.setupStage(direction);
+    cG.REPO.stage = cG.setupStage("def", direction);
 }
 ///////
 cG.stage = cG.REPO.stage.def;
