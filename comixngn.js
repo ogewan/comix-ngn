@@ -523,30 +523,24 @@ cG.setupStage = (id, direction) => {
                 main.commitSwap = () => {
                     var tmp = main.internals, internalPages = tmp.pages.map((val) => {
                         return val.url[0];
-                    }), internalSettings = {};
-                    let { config, loading } = tmp;
+                    }), 
+                    /*internalSettings:settings = {};
+                let { config, loading } = tmp;
                     if (setValid(tmp)) {
                         if (setValid(config)) {
-                            if (config.dir !== void (0))
-                                internalSettings.dir = config.dir;
-                            if (config.imgprebuffer !== void (0))
-                                internalSettings.imgprebuffer = config.imgprebuffer;
-                            if (config.imgpostbuffer !== void (0))
-                                internalSettings.imgpostbuffer = config.imgpostbuffer;
+                            if (config.dir !== void(0)) internalSettings.dir = config.dir;
+                            if (config.imgprebuffer !== void(0)) internalSettings.imgprebuffer = config.imgprebuffer;
+                            if (config.imgpostbuffer !== void(0)) internalSettings.imgpostbuffer = config.imgpostbuffer;
                         }
-                        if (tmp.loading !== void (0) && tmp.loading !== null) {
-                            if (loading.lines !== void (0))
-                                internalSettings.lines = loading.lines;
-                            if (loading.rate !== void (0))
-                                internalSettings.rate = loading.rate;
-                            if (loading.diameter !== void (0))
-                                internalSettings.diameter = loading.diameter;
-                            if (loading.back !== void (0))
-                                internalSettings.loaderback = loading.back;
-                            if (loading.color !== void (0))
-                                internalSettings.color = loading.color;
+                        if (tmp.loading !== void(0) && tmp.loading !== null) {
+                            if (loading.lines !== void(0)) internalSettings.lines = loading.lines;
+                            if (loading.rate !== void(0)) internalSettings.rate = loading.rate;
+                            if (loading.diameter !== void(0)) internalSettings.diameter = loading.diameter;
+                            if (loading.back !== void(0)) internalSettings.loaderback = loading.back;
+                            if (loading.color !== void(0)) internalSettings.color = loading.color;
                         }
-                    }
+                    }*/
+                    internalSettings = Object.assign({}, tmp.config, tmp.loading);
                     main.swap(internalPages, internalSettings);
                 };
                 var _dataOriginal = main.data;
@@ -729,6 +723,9 @@ cG.setupStage = (id, direction) => {
      *
      */
     //TODO: Shader change mechanism for pixelfn and shader, including iimg.shaderTime change when shader is changed
+    //TODO: Redraw on resize canvas, clear canvas and then draw imageBitmap again with scale equaling new canvas size
+    //TODO: reduce size from 6 to under 5 kb
+    //only body has resize event; <body onresize="myFunction()">, tie canvas size to body size perhaps?
     direction = function d(input = [], config = {}) {
         //METHODS - private
         const spin = () => {
@@ -860,6 +857,7 @@ cG.setupStage = (id, direction) => {
             else {
                 vimg = img;
             }
+            //Does not work with CORS, limited to Electron for now (new BrowserWindow({webPreferences: {webSecurity: false}});)
             if (gpu) {
                 const shader = config.shader || function (data) {
                     var x = this.thread.x;
@@ -876,6 +874,10 @@ cG.setupStage = (id, direction) => {
                 // - this.thread.y = vertical position in pixels from the bottom edge (*opposite of canvas*)
                 render = gpu.createKernel(shader)
                     .setConstants({ w: siz[0], h: siz[1] }).setOutput(siz).setGraphical(true);
+                //RESET canvas to deal with bug
+                render.canvas.width = 1;
+                render.canvas.height = 1;
+                render.maxTexSize = [1, 1];
                 render(vimg.ui.data);
                 createImageBitmap(render.canvas).then(storeImgbit);
             }
@@ -892,6 +894,8 @@ cG.setupStage = (id, direction) => {
              *  ib: (imageBitmap drawn image)
              * }
              */
+            if (!iimg.length)
+                return;
             spinning = true;
             raf(spin);
             cb.run("start");
@@ -1009,20 +1013,27 @@ cG.setupStage = (id, direction) => {
             slidd: []
         }, gpu;
         //Library extensions
-        if (config.gpu) {
-            const canvas = new OffscreenCanvas(640, 480), webGl = canvas.getContext('webgl2', { premultipliedAlpha: false });
-            gpu = new config.gpu({ canvas, webGl });
-        }
         if (window.jQuery)
             jq();
         //PROPERTIES - public
         this.canvi = layers;
         this.cb = cb;
         //METHODS - public
-        this.cnl = () => {
-            //stop scrolling
-            window.clearTimeout(scrolling);
-        };
+        //TODO: temp patch for shader setup
+        this.setupShaders = (opts) => {
+            if (opts.gpu) {
+                const canvas = new OffscreenCanvas(640, 480), webGl = canvas.getContext('webgl2', { premultipliedAlpha: false });
+                gpu = new opts.gpu({ canvas, webGl });
+            }
+            if (opts.shader)
+                config.shader = opts.shader;
+            if (opts.pixelfn)
+                config.pixelfn = opts.pixelfn;
+        },
+            this.cnl = () => {
+                //stop scrolling
+                window.clearTimeout(scrolling);
+            };
         this.swap = (arr, opts, start) => {
             iimg = Array.isArray(arr) ? format_iimg(arr) : iimg;
             if (opts) {

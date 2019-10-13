@@ -109,7 +109,7 @@ cG.setupStage = (id: string, direction: direction) => {
                         internalPages = tmp.pages.map((val: page) => {
                             return val.url[0];
                         }),
-                        internalSettings:settings = {};
+                        /*internalSettings:settings = {};
                     let { config, loading } = tmp;
                         if (setValid(tmp)) {
                             if (setValid(config)) {
@@ -124,7 +124,8 @@ cG.setupStage = (id: string, direction: direction) => {
                                 if (loading.back !== void(0)) internalSettings.loaderback = loading.back;
                                 if (loading.color !== void(0)) internalSettings.color = loading.color;
                             }
-                        }
+                        }*/
+                        internalSettings:settings = { ...tmp.config, ...tmp.loading }
                     main.swap(internalPages, internalSettings);
                 }
                 var _dataOriginal = main.data;
