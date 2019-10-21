@@ -61,6 +61,7 @@
     "./factory/def_stagechange.ts",
     "./factory/helpers.ts",
     "./factory/methods.ts",
-    "./factory/start.ts"
+    "./factory/start.ts",
+    "./version 2/comixngn.ts"
   ]
 }

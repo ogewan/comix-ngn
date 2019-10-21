@@ -1688,4 +1688,57 @@ cG.rdy(function () {
         //console.log(cG.cPanel);
     }
 });
+class page {
+}
+class chapter {
+}
+class schema {
+    constructor(script) {
+        try {
+            const raw = JSON.parse(script);
+            Object.assign(this, raw);
+        }
+        catch (_a) {
+            const error = 'Failed to create script';
+            throw error;
+        }
+    }
+}
+class version {
+    constructor(major = 0, minor = 0, patch = 0) {
+        this.major = major;
+        this.minor = minor;
+        this.patch = patch;
+    }
+    toString() {
+        const { major, minor, patch } = this;
+        return `${major}.${minor}.${patch}`;
+    }
+}
+class comixngn {
+    constructor() {
+        this.coreVersion = new version(2, 0, 0);
+        this.cxxVersion = new version(0, 0, 2);
+        this.bookMap = new Map();
+    }
+}
+class cmxBook extends HTMLElement {
+    constructor(comixngn, cid, uid) {
+        super();
+        this.comixngn = comixngn;
+        this.cid = cid;
+        let keyId, j = 0;
+        do {
+            keyId = `${cid}|${++j}`;
+        } while (!uid && !comixngn.bookMap.get(keyId));
+        this.keyId = keyId;
+        comixngn.bookMap.set(keyId, this);
+    }
+}
+class cmxCtrl extends HTMLElement {
+    constructor() {
+        super();
+    }
+}
+customElements.define('comix-ngn', cmxBook);
 //# sourceMappingURL=comixngn.js.map
