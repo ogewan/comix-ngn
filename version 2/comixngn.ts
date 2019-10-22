@@ -54,26 +54,6 @@ interface settings {
     color?: string,
 }
 
-class Page {
-    altText: string;
-    animated: boolean;
-    hover: string;
-    note: string;
-    permanent: boolean;
-    release: number;//time in ms
-    title: string;
-    url: string[];
-    special: string;
-    absolute?: boolean;
-}
-
-class Chapter {
-    description: string;
-    end: number;
-    start: number;
-    title: string
-}
-
 class Schema {
     pages: page[];
     chapters: chapter[];
@@ -202,3 +182,25 @@ class CmxCtrl extends HTMLElement {
     }
 }
 customElements.define('comix-ngn', CmxBook);
+
+/* 
+class Page {
+    altText: string;
+    hover: string;
+    note: string;
+    release: number;//time in ms
+    title: string;
+    url: string[];
+    special: string;
+    absolute?: boolean;
+    animated: boolean;
+    permanent: boolean;
+}
+
+class Chapter {
+    description: string;
+    end: number;
+    start: number;
+    title: string
+}
+*/
