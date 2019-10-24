@@ -162,19 +162,33 @@ class CmxBook extends HTMLElement {
         this._cid = val;
 
     }
-
     get uid() { return this._uid; }
     get cid() { return this._cid; }
     static get observedAttributes() {
         return ['cid', 'uid'];
     }
-
     attributeChangedCallback(name: string, oldVal: string, newVal: string) {
         oldVal;
         this[name] = newVal;
     }
-
     _oldAttributeValue: any;
+
+    go(to?: number): number|void{}
+    ch_data(to?: number): chapter|void {}
+    ch_count(): number|void {}
+    ch_current(): number|void {}
+    ch_go(to?:number): number|void {}
+    ch_prev(): number|void {}
+    ch_next(): number|void {}
+    ch_frst(): number|void {}
+    ch_last(): number|void {}
+    data(to?: number): page|void {}
+    count(): number|void {}
+    current(): number|void {}
+    prev(): number|void {}
+    next(): number|void {}
+    frst(): number|void {}
+    last(): number|void {}
 }
 class CmxCtrl extends HTMLElement {
     constructor(public book: CmxBook) {
