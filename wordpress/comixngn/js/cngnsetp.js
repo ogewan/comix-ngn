@@ -1,1 +1,0 @@
-cG = {fBox: {fstrun:false,vscript:true}};
