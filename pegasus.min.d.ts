@@ -1,0 +1,1 @@
+export function pegasus(path: string): Promise<any>;

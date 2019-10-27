@@ -1,5 +1,20 @@
-//import direction from './directionx.js';
+import direction from './directionx.js';
+import pegasus from './pegasus.min.js';
 console.log('comix-ngn v2');
+/*interface settings {
+    overwrite?: boolean,
+    anchor?: number,
+    dir?: string,
+    imgprebuffer?: number,
+    imgpostbuffer?: number,
+    back?: string,
+    lines?: number,
+    rate?: number,
+    diameter?: number,
+    loaderback?: string,
+    color?: string,
+}
+*/
 class Hexstring {
     constructor(input) {
         this.toString = () => this.value.toString(16);
@@ -26,13 +41,21 @@ class Page {
     constructor(input, config) {
         this.url = [];
         let url;
-        if (typeof input === 'string') {
-            url = [input];
+        if (input) {
+            if (typeof input === 'string') {
+                url = [input];
+            }
+            else {
+                url = input;
+            }
+            Object.assign(this, Object.assign({}, config, { url }));
         }
         else {
-            url = input;
+            Object.assign(this, config);
         }
-        Object.assign(this, Object.assign({}, config, { url }));
+    }
+    collapse() {
+        return this.url.length ? this.url[0] : '';
     }
     toString() {
         const keys = Object.keys(this);
@@ -77,8 +100,14 @@ class Schema {
             color: new Hexstring("#373737")
         };
         try {
-            const raw = JSON.parse(script);
-            if (raw.pages && raw.pages.length) {
+            let raw;
+            if (typeof script === 'string') {
+                raw = JSON.parse(script);
+            }
+            else {
+                raw = script;
+            }
+            if (raw.pages.length) {
                 raw.pages = raw.pages.map((e) => {
                     if (e.url) {
                         return new Page(null, e);
@@ -86,15 +115,23 @@ class Schema {
                     return new Page(e);
                 });
             }
-            if (raw.chapters && raw.chapters.length) {
+            if (raw.chapters.length) {
                 raw.chapters = raw.chapters.map((e) => new Chapter(e.start, e.end));
             }
             Object.assign(this, raw);
         }
-        catch (_a) {
-            const error = 'Failed to create script';
-            throw error;
+        catch (e) {
+            const error = 'Failed to create script\n';
+            throw error + e;
         }
+    }
+    exportPages(ids = []) {
+        if (ids.length) {
+            let idMap = new Map();
+            ids.reduce((map, key) => map.set(key, true), new Map());
+            return this.pages.filter((page, id) => idMap.set(id, true)).map((page) => page.collapse());
+        }
+        return this.pages.map((page) => page.collapse());
     }
 }
 let comixngn;
@@ -119,7 +156,7 @@ class Comixngn {
          set id (_id: string) {
              this._id = _id;
          }*/
-        this.sysmsg = `%c %c %c comix-ngn v${this.coreVersion} %c \u262F %c \u00A9 2015 Oluwaseun Ogedengbe %c`;
+        this.sysmsg = `%c %c %c comix-ngn v${this.coreVersion} %c \u262F %c \u00A9 2020 Oluwaseun Ogedengbe %c`;
         this.sysclr = ["color:white; background:#2EB531", "background:purple", "color:white; background:#32E237", 'color:red; background:black', "color:white; background:#2EB531", "color:white; background:purple"];
         console.log(this.sysmsg, ...this.sysclr);
     }
@@ -131,15 +168,30 @@ class CmxBook extends HTMLElement {
         const { core } = this;
         let j = 1;
         let uid = `STG${j}`;
-        while (!core.bookMap.get(uid)) {
+        while (core.bookMap.get(uid)) {
             uid = `STG${++j}`;
         }
         this._uid = uid;
         core.bookMap.set(uid, this);
         this._cid = window.location.host;
-        //call custom constructor
-        //const base = new direction();
+        this.shadow = this.attachShadow({ mode: 'open' });
+        const schemaPath = this.getAttribute('schema');
+        if (schemaPath) {
+            pegasus(schemaPath).then(this.initializeDisplay.bind(this));
+        }
+        else {
+            this.initializeDisplay();
+        }
         console.log('construct cmxbook');
+    }
+    initializeDisplay(data) {
+        if (data)
+            this.schema = new Schema(data);
+        const { shadow } = this;
+        //call custom constructor
+        const pages = this.schema ? this.schema.exportPages() : [];
+        const base = new direction(pages, { anchor: shadow });
+        console.log('Intialize Display');
     }
     set uid(val) {
         if (this.core.bookMap.has(val)) {

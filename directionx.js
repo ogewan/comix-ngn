@@ -32,36 +32,35 @@
 export default function direction(input = [], config = {}) {
     //METHODS - private
     const spin = () => {
-        if (!spinner) return;
-        layers[0].style.paddingLeft = (layers[1].width - 300) / 2 + "px";
-        let rotation = Math.floor((Date.now() - spinner.str) / (1000) * spinner.lne) / spinner.lne,
-            color = spinner.clr;
-        spinner.ctx.save();
-        spinner.ctx.clearRect(0, 0, 300, layers[1].height);
-        spinner.ctx.translate(150, layers[1].height / 2);
-        spinner.ctx.rotate((Math.PI * 2 * rotation) % (Math.PI * 2));
-        //spinner.ctx.rotate(rotation);
+            if (!spinner) return;
+            layers[0].style.paddingLeft = (layers[1].width - 300) / 2 + "px";
+            let rotation = Math.floor((Date.now() - spinner.str) / (1000) * spinner.lne) / spinner.lne,
+                color = spinner.clr;
+            spinner.ctx.save();
+            spinner.ctx.clearRect(0, 0, 300, layers[1].height);
+            spinner.ctx.translate(150, layers[1].height / 2);
+            spinner.ctx.rotate((Math.PI * 2 * rotation) % (Math.PI * 2));
+            //spinner.ctx.rotate(rotation);
 
-        if (color.length == 3) {
-            color = `#${color[1]}${color[1]}${color[2]}${color[2]}${color[3]}${color[3]}`;
-        }
-        else {
-            pi(color, 16).toString();
-        }
+            if (color.length == 3) {
+                color = `#${color[1]}${color[1]}${color[2]}${color[2]}${color[3]}${color[3]}`;
+            } else {
+                pi(color, 16).toString();
+            }
 
-        for (let i = 0; i < spinner.lne; i++) {
-            spinner.ctx.beginPath();
-            spinner.ctx.rotate(Math.PI * 2 / spinner.lne);
-            spinner.ctx.moveTo(spinner.dia / 10, 0);
-            spinner.ctx.lineTo(spinner.dia / 4, 0);
-            spinner.ctx.lineWidth = spinner.dia / 30;
-            spinner.ctx.strokeStyle = color;
-            spinner.ctx.stroke();
-        }
-        spinner.ctx.restore();
+            for (let i = 0; i < spinner.lne; i++) {
+                spinner.ctx.beginPath();
+                spinner.ctx.rotate(Math.PI * 2 / spinner.lne);
+                spinner.ctx.moveTo(spinner.dia / 10, 0);
+                spinner.ctx.lineTo(spinner.dia / 4, 0);
+                spinner.ctx.lineWidth = spinner.dia / 30;
+                spinner.ctx.strokeStyle = color;
+                spinner.ctx.stroke();
+            }
+            spinner.ctx.restore();
 
-        if (spinning) raf(spin);
-        else spinner.ctx.clearRect(0, 0, 300, layers[1].height);
+            if (spinning) raf(spin);
+            else spinner.ctx.clearRect(0, 0, 300, layers[1].height);
         },
         scrollit = (to, time) => {
             //format inputs
@@ -77,28 +76,26 @@ export default function direction(input = [], config = {}) {
             //if x or y is less than 0 then go to the bottom
             if (to.y < 0)
                 to.y =
-                    window.innerHeight ||
-                    de.clientHeight ||
-                    db.clientHeight;
+                window.innerHeight ||
+                de.clientHeight ||
+                db.clientHeight;
             if (to.x < 0)
                 to.x =
-                    window.innerWidth ||
-                    de.clientWidth ||
-                    db.clientWidth;
+                window.innerWidth ||
+                de.clientWidth ||
+                db.clientWidth;
 
             //calculate distance needed to travel
             let dis = {
-                x:
-                    window.pageXOffset !== void 0 ? to.x - window.pageXOffset : to.x - de.scrollLeft,
-                y:
-                    window.pageYOffset !== void 0 ? to.y - window.pageYOffset : to.y - de.scrollTop
+                x: window.pageXOffset !== void 0 ? to.x - window.pageXOffset : to.x - de.scrollLeft,
+                y: window.pageYOffset !== void 0 ? to.y - window.pageYOffset : to.y - de.scrollTop
             };
 
             //console.log("to", to, "dis" ,dis, "(x", window.pageXOffset, de.scrollLeft, "| y", window.pageYOffset, de.scrollTop, ")" , time, time/5);
 
             //if that distance is 0 on both x and y, no scrolling required
             if (dis == { x: 0, y: 0 }) return dis;
-            let clock = function (c, b, a) {
+            let clock = function(c, b, a) {
                 window.scrollBy(Math.floor(c.x) / b, Math.floor(c.y) / b);
                 if (a + 1 < b * 5) scrolling = window.setTimeout(clock, 5, c, b, a + 1);
             };
@@ -110,30 +107,30 @@ export default function direction(input = [], config = {}) {
             let siz = [0, 0];
             ctx.clearRect(0, 0, layers[1].width, layers[1].height); //clear the canvas based on its size
             cb.run("slidn");
-            
+
             if (options.sz) siz = [options.sz.w, options.sz.h];
             else {
                 switch (options.scl) { //scales to canvas
-                    case 1://scale width
+                    case 1: //scale width
                         dif = layers[1].width / img.width;
                         siz = [layers[1].width, img.height * dif];
                         break;
-                    case 2://scale height
+                    case 2: //scale height
                         dif = layers[1].height / img.height;
                         siz = [img.width * dif, layers[1].height];
                         break;
                     default:
-                        if (options.scl) siz = [layers[1].width, layers[1].height];//scale both
-                        else siz = [img.width, img.height];//scale canvas
+                        if (options.scl) siz = [layers[1].width, layers[1].height]; //scale both
+                        else siz = [img.width, img.height]; //scale canvas
                 }
             }
             layers[1].width = siz[0];
             layers[1].height = siz[1];
 
             if (spinner) layers[0].height = siz[1];
-            
+
             ctx.drawImage(img, 0, 0, ...siz);
-            
+
             spinning = false;
             if (skroll) scrollit();
             cb.run("slidd");
@@ -145,9 +142,9 @@ export default function direction(input = [], config = {}) {
                     if (vimg) vimg.ib = imgbit;
                     if (img.master) draw(imgbit);
                 };
-            
+
             if (!img.ui) {
-                off.clearRect(0, 0, layers[2].width, layers[2].height); 
+                off.clearRect(0, 0, layers[2].width, layers[2].height);
                 layers[2].width = siz[0];
                 layers[2].height = siz[1];
                 off.drawImage(img, 0, 0);
@@ -156,31 +153,30 @@ export default function direction(input = [], config = {}) {
                 } catch (e) {
                     console.log("Cannot get imageData from cross-origin");
                     let ib = layers[2].transferToImageBitmap();
-                   return storeImgbit(ib);
+                    return storeImgbit(ib);
                 }
-            }
-            else {
+            } else {
                 vimg = img;
             }
             //Does not work with CORS, limited to Electron for now (new BrowserWindow({webPreferences: {webSecurity: false}});)
             if (gpu) {
                 const shader = config.shader || function(data) {
-                    var x = this.thread.x;
-                    var y = this.thread.y;
-                    var n = 4 * ( x + this.constants.w * (this.constants.h - y) );
+                        var x = this.thread.x;
+                        var y = this.thread.y;
+                        var n = 4 * (x + this.constants.w * (this.constants.h - y));
 
-                    var red = data[n]/256;
-                    var green = data[n+1]/256;
-                    var blue = data[n+2]/256;
-                    var alpha = data[n+3]/256;
-                    
-                    this.color(red, green, blue, alpha);
+                        var red = data[n] / 256;
+                        var green = data[n + 1] / 256;
+                        var blue = data[n + 2] / 256;
+                        var alpha = data[n + 3] / 256;
+
+                        this.color(red, green, blue, alpha);
                     },
                     // the kernel runs for each pixel, with:
                     // - this.thread.x = horizontal position in pixels from the left edge
                     // - this.thread.y = vertical position in pixels from the bottom edge (*opposite of canvas*)
                     render = gpu.createKernel(shader)
-                    .setConstants({w: siz[0], h: siz[1]}).setOutput(siz).setGraphical(true);
+                    .setConstants({ w: siz[0], h: siz[1] }).setOutput(siz).setGraphical(true);
 
                 //RESET canvas to deal with bug
                 render.canvas.width = 1;
@@ -188,8 +184,7 @@ export default function direction(input = [], config = {}) {
                 render.maxTexSize = [1, 1];
                 render(vimg.ui.data);
                 createImageBitmap(render.canvas).then(storeImgbit);
-            }
-            else {
+            } else {
                 let pixelfn = config.pixelfn;
                 createImageBitmap((pixelfn) ? pixelfn(vimg.ui) : vimg.ui).then(storeImgbit);
             }
@@ -214,19 +209,18 @@ export default function direction(input = [], config = {}) {
                 ctx.clearRect(0, 0, layers[1].width, layers[1].height);
                 master.virID = idd;
                 master.src = options.dir + iimg[idd].s;
-            }
-            else {
-                if (iimg[idd].st != iimg.shaderTime){
+            } else {
+                if (iimg[idd].st != iimg.shaderTime) {
                     offload(iimg[idd]);
-                }
-                else {
+                } else {
                     draw(iimg[idd].ib);
                 }
             }
             current = idd;
 
             let q, r = 0;
-            for (q = idd - 1; (r < options.irb) && (q >= 0); q--) {
+            for (q = idd - 1;
+                (r < options.irb) && (q >= 0); q--) {
                 if (iimg[q].ib) continue;
                 else if (iimg[q].st != iimg.shaderTime) {
                     offload(iimg[q]);
@@ -235,7 +229,8 @@ export default function direction(input = [], config = {}) {
                 setPreload(r, q, options.dir + iimg[q].s);
                 r++;
             }
-            for (q = idd + 1; (r < options.itb) && (q < iimg.length); q++) {
+            for (q = idd + 1;
+                (r < options.itb) && (q < iimg.length); q++) {
                 if (iimg[q].ib) continue;
                 else if (iimg[q].st != iimg.shaderTime) {
                     offload(iimg[q]);
@@ -248,29 +243,30 @@ export default function direction(input = [], config = {}) {
         xtndLmt = (org, src) => {
             //add value from src if its key exists in org
             if (!org) return;
-            for(var key in src) if (org.hasOwnProperty(key)) org[key] = src[key];
+            for (var key in src)
+                if (org.hasOwnProperty(key)) org[key] = src[key];
         },
         setupLoader = count => Array(count).fill(1).map((e, i) => {
             let img = new Image();
-            img.unique = i; 
+            img.unique = i;
             img.virID = -1;
             img.addEventListener("load", offload.bind(null, img));
             return img;
         }),
         format_iimg = raw => {
             let st = Date.now(),
-                form = ((typeof raw == "string") ? raw.split(" ") : raw).map((v, i, a) => ({s: v, st: st, d: (i ? (i == a.length - 1 ? 1 : 0) : -1)}));
+                form = ((typeof raw == "string") ? raw.split(" ") : raw).map((v, i, a) => ({ s: v, st: st, d: (i ? (i == a.length - 1 ? 1 : 0) : -1) }));
             form.shaderTime = st;
             return form;
         },
         setPreload = (pid, id, src) => {
-            preload[pid].virID = id; 
+            preload[pid].virID = id;
             preload[pid].src = src;
         },
         jq = () => {
             try {
-                jQuery.fn.direction = function (a, c) {
-                    return this.each(function () {
+                jQuery.fn.direction = function(a, c) {
+                    return this.each(function() {
                         c.anchor = $(this);
                         direction(a, c);
                     });
@@ -279,7 +275,7 @@ export default function direction(input = [], config = {}) {
                 console.log(e);
             }
         },
-    //GLOBAL shortcuts
+        //GLOBAL shortcuts
         du = document,
         db = du.body,
         de = du.documentElement,
@@ -336,7 +332,7 @@ export default function direction(input = [], config = {}) {
             slidd: []
         },
         gpu;
-    
+
     //Library extensions
     if (window.jQuery) jq();
     //PROPERTIES - public
@@ -345,26 +341,26 @@ export default function direction(input = [], config = {}) {
     //METHODS - public
     //TODO: temp patch for shader setup
     this.setupShaders = (opts) => {
-        if (opts.gpu) {
-            const canvas = new OffscreenCanvas(640, 480),
-                webGl = canvas.getContext('webgl2', {premultipliedAlpha: false});
-            
-            gpu = new opts.gpu({canvas, webGl});
-        }
-        if (opts.shader) config.shader = opts.shader;
-        if (opts.pixelfn) config.pixelfn = opts.pixelfn;
-    },
-    this.cnl = () => {
-        //stop scrolling
-        window.clearTimeout(scrolling);
-    };
+            if (opts.gpu) {
+                const canvas = new OffscreenCanvas(640, 480),
+                    webGl = canvas.getContext('webgl2', { premultipliedAlpha: false });
+
+                gpu = new opts.gpu({ canvas, webGl });
+            }
+            if (opts.shader) config.shader = opts.shader;
+            if (opts.pixelfn) config.pixelfn = opts.pixelfn;
+        },
+        this.cnl = () => {
+            //stop scrolling
+            window.clearTimeout(scrolling);
+        };
     this.swap = (arr, opts, start) => {
         iimg = Array.isArray(arr) ? format_iimg(arr) : iimg;
         if (opts) {
             xtndLmt(spinner, opts);
             xtndLmt(options, opts);
         }
-        this.go(start||0);
+        this.go(start || 0);
     };
     this.count = () => {
         return iimg.length;
@@ -374,7 +370,7 @@ export default function direction(input = [], config = {}) {
     };
     this.callback = (type, callback, index, remove) => {
         if (type === null || void 0 === type) return cb.slidn;
-        var typeMap = {"-1": cb.start, "0": cb.slidn, "1": cb.slidd},
+        var typeMap = { "-1": cb.start, "0": cb.slidn, "1": cb.slidd },
             select = typeMap[index || 0];
 
         if (remove) {
@@ -382,11 +378,11 @@ export default function direction(input = [], config = {}) {
         }
 
         if (callback === null || void 0 === callback) {
-            return index === null || void 0 === index
-                ? select
-                : select[index];
+            return index === null || void 0 === index ?
+                select :
+                select[index];
         }
-        
+
         if (index === null || void 0 === index) {
             select.push(callback);
         } else select[index] = callback;
@@ -401,7 +397,8 @@ export default function direction(input = [], config = {}) {
         return sre;
     };
     this.prev = () => {
-        var sre = current - 1; //avoids possible race condition, assign loads in new image which can call draw which can change self.current before it gets to the return call. storing it premptively will preserve the value
+        /*avoids possible race condition, assign loads in new image which can call draw which can change self.current before it gets to the return call. storing it premptively will preserve the value */
+        var sre = current - 1;
         if (sre >= 0) assign(sre);
         return sre;
     };
@@ -428,9 +425,9 @@ export default function direction(input = [], config = {}) {
     this.data = (to) => {
         //returns info about slide
         var sre = to === null || void 0 === to ? current : pi(to, 10);
-        return isNaN(sre)
-            ? iimg[current]
-            : iimg[Math.floor(Math.max(0, Math.min(iimg.length - 1, sre)))];
+        return isNaN(sre) ?
+            iimg[current] :
+            iimg[Math.floor(Math.max(0, Math.min(iimg.length - 1, sre)))];
     };
     this.scroll = (bool) => {
         //toggles Auto Scrolling
@@ -440,7 +437,7 @@ export default function direction(input = [], config = {}) {
     this.scrollTo = (to, time) => {
         return scrollit(to, time);
     }; //public wrapper for scrollit
-    
+
     if (spinner) {
         //LOADER - setup
         layers[0].height = 480;

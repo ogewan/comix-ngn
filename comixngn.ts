@@ -1,6 +1,7 @@
-import direction from 'directionx.js';
+import direction from './directionx.js';
+import pegasus from './pegasus.min.js';
 console.log('comix-ngn v2');
-interface settings {
+/*interface settings {
     overwrite?: boolean,
     anchor?: number,
     dir?: string,
@@ -13,6 +14,7 @@ interface settings {
     loaderback?: string,
     color?: string,
 }
+*/
 class Hexstring {
     value: number;
     toString = () => this.value.toString(16);
@@ -44,12 +46,19 @@ class Page {
     release?: number;
     constructor(input: string|string[]|null, config?: any) {
         let url;
-        if (typeof input === 'string') {
-            url = [input];
+        if (input) {
+            if (typeof input === 'string') {
+                url = [input];
+            } else {
+                url = input;
+            }
+            Object.assign(this, {...config, url});
         } else {
-            url = input;
+            Object.assign(this, config);
         }
-        Object.assign(this, {...config, url});
+    }
+    collapse() {
+        return this.url.length ? this.url[0] : '';
     }
     toString() {
         const keys = Object.keys(this);
@@ -93,10 +102,16 @@ class Schema {
         color: new Hexstring("#373737")
     };
 
-    constructor(script: string) {
+    constructor(script: any) {
         try {
-            const raw = JSON.parse(script);
-            if (raw.pages && raw.pages.length) {
+            let raw;
+            if (typeof script === 'string') {
+                raw = JSON.parse(script);
+            }
+            else {
+                raw = script;
+            }
+            if (raw.pages.length) {
                 raw.pages = raw.pages.map((e: any) => {
                     if (e.url) {
                         return new Page(null, e);
@@ -104,14 +119,22 @@ class Schema {
                     return new Page(e);
                 });
             }
-            if (raw.chapters && raw.chapters.length) {
+            if (raw.chapters.length) {
                 raw.chapters = raw.chapters.map((e: any) => new Chapter(e.start, e.end));
             }
             Object.assign(this, raw);
-        } catch {
-            const error = 'Failed to create script';
-            throw error;
+        } catch (e) {
+            const error = 'Failed to create script\n';
+            throw error + e;
         }
+    }
+    exportPages(ids: number[] = []) {
+        if (ids.length) {
+            let idMap = new Map<number, boolean>();
+            ids.reduce((map, key) => map.set(key, true), new Map<number, boolean>());
+            return this.pages.filter((page, id) => idMap.set(id, true)).map((page: Page) => page.collapse());
+        }
+        return this.pages.map((page: Page) => page.collapse());
     }
 }
 
@@ -136,7 +159,7 @@ class Comixngn {
     set id (_id: string) {
         this._id = _id;
     }*/
-    private sysmsg = `%c %c %c comix-ngn v${this.coreVersion} %c \u262F %c \u00A9 2015 Oluwaseun Ogedengbe %c`;
+    private sysmsg = `%c %c %c comix-ngn v${this.coreVersion} %c \u262F %c \u00A9 2020 Oluwaseun Ogedengbe %c`;
     private sysclr = ["color:white; background:#2EB531", "background:purple","color:white; background:#32E237", 'color:red; background:black', "color:white; background:#2EB531", "color:white; background:purple"];
 
     constructor() {
@@ -150,6 +173,7 @@ class CmxBook extends HTMLElement {
     _uid: string;
     _cid: string;
     core: Comixngn;
+    shadow: ShadowRoot;
     constructor() {
         super();
         this.core = comixngn();
@@ -157,17 +181,30 @@ class CmxBook extends HTMLElement {
 
         let j = 1;
         let uid = `STG${j}`;
-        while (!core.bookMap.get(uid)) {
+        while (core.bookMap.get(uid)) {
             uid = `STG${++j}`;
         }
         this._uid = uid;
         core.bookMap.set(uid, this);
 
         this._cid = window.location.host;
+        this.shadow = this.attachShadow({mode: 'open'});
 
-        //call custom constructor
-        const base = new (<any>direction)();
+        const schemaPath = this.getAttribute('schema');
+        if (schemaPath) {
+            (<any>pegasus)(schemaPath).then(this.initializeDisplay.bind(this));
+        } else {
+            this.initializeDisplay();
+        }
         console.log('construct cmxbook');
+    }
+    private initializeDisplay(data?: any) {
+        if (data) this.schema = new Schema(data);
+        const { shadow } = this;
+        //call custom constructor
+        const pages = this.schema ? this.schema.exportPages() : [];
+        const base = new (<any>direction)(pages, {anchor: shadow});
+        console.log('Intialize Display')
     }
 
     set uid(val: string) {
