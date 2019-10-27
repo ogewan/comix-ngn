@@ -1,1 +1,1 @@
-declare module 'direction';
+export function direction(urls: string[], config?: any): any;

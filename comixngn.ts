@@ -1,5 +1,5 @@
-import 'directionx.js'
-
+import direction from 'directionx.js';
+console.log('comix-ngn v2');
 interface settings {
     overwrite?: boolean,
     anchor?: number,
@@ -136,7 +136,11 @@ class Comixngn {
     set id (_id: string) {
         this._id = _id;
     }*/
+    private sysmsg = `%c %c %c comix-ngn v${this.coreVersion} %c \u262F %c \u00A9 2015 Oluwaseun Ogedengbe %c`;
+    private sysclr = ["color:white; background:#2EB531", "background:purple","color:white; background:#32E237", 'color:red; background:black', "color:white; background:#2EB531", "color:white; background:purple"];
+
     constructor() {
+        console.log(this.sysmsg, ...this.sysclr);
     }
 }
 class CmxBook extends HTMLElement {
@@ -162,7 +166,8 @@ class CmxBook extends HTMLElement {
         this._cid = window.location.host;
 
         //call custom constructor
-        const module = new direction();
+        const base = new (<any>direction)();
+        console.log('construct cmxbook');
     }
 
     set uid(val: string) {

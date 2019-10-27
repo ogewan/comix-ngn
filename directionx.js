@@ -29,7 +29,7 @@
 //TODO: Redraw on resize canvas, clear canvas and then draw imageBitmap again with scale equaling new canvas size
 //TODO: reduce size from 6 to under 5 kb
 //only body has resize event; <body onresize="myFunction()">, tie canvas size to body size perhaps?
-direction = function d(input = [], config = {}) {
+export default function direction(input = [], config = {}) {
     //METHODS - private
     const spin = () => {
         if (!spinner) return;
@@ -272,7 +272,7 @@ direction = function d(input = [], config = {}) {
                 jQuery.fn.direction = function (a, c) {
                     return this.each(function () {
                         c.anchor = $(this);
-                        d(a, c);
+                        direction(a, c);
                     });
                 };
             } catch (e) {
