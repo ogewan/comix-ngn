@@ -1,20 +1,7 @@
 import direction from './directionx.js';
 import pegasus from './pegasus.min.js';
 console.log('comix-ngn v2');
-/*interface settings {
-    overwrite?: boolean,
-    anchor?: number,
-    dir?: string,
-    imgprebuffer?: number,
-    imgpostbuffer?: number,
-    back?: string,
-    lines?: number,
-    rate?: number,
-    diameter?: number,
-    loaderback?: string,
-    color?: string,
-}
-*/
+
 class Hexstring {
     value: number;
     toString = () => this.value.toString(16);
@@ -204,7 +191,81 @@ class CmxBook extends HTMLElement {
         //call custom constructor
         const pages = this.schema ? this.schema.exportPages() : [];
         const base = new (<any>direction)(pages, {anchor: shadow});
-        console.log('Intialize Display')
+        this.defineMethods(base);
+        console.log('Intialize Display');
+        const ctrlPath = this.getAttribute('controller');
+        if (ctrlPath) {
+            (<any>pegasus)(ctrlPath).then(this.initializeControls.bind(this));
+        } else {
+            this.controller = <CmxCtrl> document.createElement('comix-ctrl');
+            this.insertAdjacentElement('afterend', this.controller);
+        }
+    }
+    private initializeControls(data?: any) {
+        if (data) {
+            this.controller = new CmxCtrl(data);
+            this.insertAdjacentElement('afterend', this.controller);
+        }
+    }
+
+    private defineMethods(base: any) {
+        this.go = base.go;
+        this.prev = base.prev;
+        this.next = base.next;
+        this.frst = base.first;
+        this.last = base.last;
+        this.ch_go = () => {};
+        this.ch_prev
+        this.ch_next
+        this.ch_frst
+        this.ch_last
+        /*
+        
+                main.ch_current = function () {
+                    var c = main.internals.chapters,
+                        d = main.current();
+                    for (var a = 0; a < c.length; a++) {
+                        if (c[a].start <= d && d <= c[a].end) return a;
+                    }
+                    return -1;
+                }
+        main.ch_go = function (a?:number, b?:number) {
+                    var sre = (a === null || void 0 === a) ? 0 : a;//parseInt(a, 10);
+                    sre = (isNaN(sre)) ? 0 : sre;
+                    var g;
+                    if (b === null && b === void 0) g = "start";
+                    else g = "end"
+                    if (main.ch_current() == -1) return main.go()
+                    return main.go(main.internals.chapters[Math.floor(Math.max(0, Math.min(main.internals.chapters.length - 1, sre)))][g]);
+                }
+                main.ch_prev = function (b?:number) {
+                    if (main.ch_current() == -1) return main.go();
+                    var g;
+                    if (b === null && b === void 0) g = "start";
+                    else g = "end"
+                    return main.go(main.internals.chapters[Math.max(0, main.ch_current() - 1)][g]);
+                }
+                main.ch_next = function (b?:number) {
+                    if (main.ch_current() == -1) return main.go();
+                    var g;
+                    if (b === null && b === void 0) g = "start";
+                    else g = "end"
+                    return main.go(main.internals.chapters[Math.min(main.ch_count() - 1, main.ch_current() + 1)][g]);
+                }
+                main.ch_frst = function (b?:number) {
+                    if (main.ch_current() == -1) return main.go();
+                    var g;
+                    if (b === null && b === void 0) g = "start";
+                    else g = "end"
+                    return main.go(main.internals.chapters[0][g]);
+                }
+                main.ch_last = function (b?:number) {
+                    if (main.ch_current() == -1) return main.go();
+                    var g;
+                    if (b === null && b === void 0) g = "start";
+                    else g = "end"
+                    return main.go(main.internals.chapters[main.ch_count() - 1][g]);
+                }*/
     }
 
     set uid(val: string) {
@@ -259,3 +320,4 @@ class CmxCtrl extends HTMLElement {
     }
 }
 customElements.define('comix-ngn', CmxBook);
+customElements.define('comix-ctrl', CmxCtrl);
