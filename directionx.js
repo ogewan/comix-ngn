@@ -350,17 +350,17 @@ export default function direction(input = [], config = {}) {
             if (opts.shader) config.shader = opts.shader;
             if (opts.pixelfn) config.pixelfn = opts.pixelfn;
         },
-        this.cnl = () => {
+    this.cnl = () => {
             //stop scrolling
             window.clearTimeout(scrolling);
-        };
+    };
     this.swap = (arr, opts, start) => {
         iimg = Array.isArray(arr) ? format_iimg(arr) : iimg;
         if (opts) {
             xtndLmt(spinner, opts);
             xtndLmt(options, opts);
         }
-        this.go(start || 0);
+        if (start) this.go(start);
     };
     this.count = () => {
         return iimg.length;

@@ -155,8 +155,8 @@ class Comixngn {
 }
 class CmxBook extends HTMLElement {
     [key: string]: any;
-    schema?: Schema;
     controller?: CmxCtrl;
+    _schema?: Schema;
     _uid: string;
     _cid: string;
     core: Comixngn;
@@ -185,12 +185,16 @@ class CmxBook extends HTMLElement {
         }
         console.log('construct cmxbook');
     }
+    private convertToDirectionSetting(data: Schema) {
+
+    }
     private initializeDisplay(data?: any) {
-        if (data) this.schema = new Schema(data);
+        if (data) this._schema = new Schema(data);
         const { shadow } = this;
         //call custom constructor
-        const pages = this.schema ? this.schema.exportPages() : [];
-        const base = new (<any>direction)(pages, {anchor: shadow});
+        const pages = this._schema ? this._schema.exportPages() : [];
+        const settings = this._schema ? this.convertToDirectionSetting(this._schema) : {};
+        const base = new (<any>direction)(pages, {...settings, anchor: shadow});
         this.defineMethods(base);
         console.log('Intialize Display');
         const ctrlPath = this.getAttribute('controller');
@@ -207,18 +211,39 @@ class CmxBook extends HTMLElement {
             this.insertAdjacentElement('afterend', this.controller);
         }
     }
-
     private defineMethods(base: any) {
+        const {pageToChapter, chapterToPage} = this;
+        const chapterNavigation = (method: Function, to?: number) => {
+            if (to !== 0 && !to) {
+                to = this.current() || 0;
+            }
+            return chapterToPage(method(pageToChapter(to)));
+        }
+        this.rand = base.rand;
         this.go = base.go;
         this.prev = base.prev;
         this.next = base.next;
         this.frst = base.first;
         this.last = base.last;
-        this.ch_go = () => {};
-        this.ch_prev
-        this.ch_next
-        this.ch_frst
-        this.ch_last
+        this.ch_go = (to?: number) => pageToChapter(this.go(pageToChapter(to)));
+        {
+            // if (this.ch_current() == -1) return this.go()
+            // return this.go(this._schema.chapters[Math.floor(Math.max(0, Math.min(main.internals.chapters.length - 1, sre)))][g]);
+        };
+        this.ch_prev = () => pageToChapter(this.go((<number>this.ch_current()) - 1)));
+        this.ch_next(): number|void {};
+        this.ch_frst(): number|void {};
+        this.ch_last(): number|void {};
+        this.update = () => {
+            const swap = <(arr: string[], opts: any, start?: number) => void> base.swap;
+            const pages = this._schema ? this._schema.exportPages() : [];
+            const settings = this._schema ? this.convertToDirectionSetting(this._schema) : {};
+            swap(pages, {...settings, anchor: this.shadow});
+        };
+        this.current(): number|void {};
+        this.ch_current(): number|void {};
+        this.data(to?: number): Page|void {}
+        this.ch_data(to?: number): Chapter|void {}
         /*
         
                 main.ch_current = function () {
@@ -268,6 +293,9 @@ class CmxBook extends HTMLElement {
                 }*/
     }
 
+    exportSchema() {
+        return JSON.stringify(this._schema);
+    }
     set uid(val: string) {
         if (this.core.bookMap.has(val)) {
             console.error(`CmxBook with uid ${val} already exist.`);
@@ -284,8 +312,16 @@ class CmxBook extends HTMLElement {
         this._cid = val;
 
     }
-    get uid() { return this._uid; }
-    get cid() { return this._cid; }
+    set schema(input: any) {
+        if (!(input instanceof Schema)) {
+            input = new Schema(input);
+        }
+        Object.assign(this._schema, input);
+        this.update();
+    }
+    get uid() { return this._uid; };
+    get cid() { return this._cid; };
+    get schema() { return this._schema; };
     static get observedAttributes() {
         return ['cid', 'uid'];
     }
@@ -295,24 +331,22 @@ class CmxBook extends HTMLElement {
     }
     _oldAttributeValue: any;
 
-    go(to?: number): number|void{}
-    prev(): number|void {}
-    next(): number|void {}
-    frst(): number|void {}
-    last(): number|void {}
-    ch_go(to?:number): number|void {}
-    ch_prev(): number|void {}
-    ch_next(): number|void {}
-    ch_frst(): number|void {}
-    ch_last(): number|void {}
-    /*
-    count(): number|void {}
-    current(): number|void {}
-    ch_count(): number|void {}
-    ch_current(): number|void {}
-    data(to?: number): page|void {}
-    ch_data(to?: number): chapter|void {}
-    */
+    rand(): number|void {};
+    go(to?: number): number|void{};
+    prev(): number|void {};
+    next(): number|void {};
+    frst(): number|void {};
+    last(): number|void {};
+    ch_go(to?:number): number|void {};
+    ch_prev(): number|void {};
+    ch_next(): number|void {};
+    ch_frst(): number|void {};
+    ch_last(): number|void {};
+    update(): void{};
+    current(): number|void {};
+    ch_current(): number|void {};
+    data(to?: number): Page|void {}
+    ch_data(to?: number): Chapter|void {}
 }
 class CmxCtrl extends HTMLElement {
     constructor(public book: CmxBook) {
