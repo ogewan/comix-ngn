@@ -189,6 +189,7 @@ class CmxBook extends HTMLElement {
 
     }
     private initializeDisplay(data?: any) {
+        // DIRECTION specific
         if (data) this._schema = new Schema(data);
         const { shadow } = this;
         //call custom constructor
@@ -212,6 +213,7 @@ class CmxBook extends HTMLElement {
         }
     }
     private defineMethods(base: any) {
+        // DIRECTION specific
         const {pageToChapter, chapterToPage} = this;
         const chapterNavigation = (method: Function, to?: number) => {
             if (to !== 0 && !to) {
@@ -230,67 +232,29 @@ class CmxBook extends HTMLElement {
             // if (this.ch_current() == -1) return this.go()
             // return this.go(this._schema.chapters[Math.floor(Math.max(0, Math.min(main.internals.chapters.length - 1, sre)))][g]);
         };
-        this.ch_prev = () => pageToChapter(this.go((<number>this.ch_current()) - 1)));
-        this.ch_next(): number|void {};
-        this.ch_frst(): number|void {};
-        this.ch_last(): number|void {};
+        this.ch_prev = () => pageToChapter(this.go(chapterToPage((<number>this.ch_current()) - 1)));
+        this.ch_next = () => pageToChapter(this.go(chapterToPage((<number>this.ch_current()) + 1)));
+        this.ch_frst = () => pageToChapter(this.go(chapterToPage(0)));
+        this.ch_last = () => pageToChapter(this.go(chapterToPage(this._schema?this._schema.chapters.length: 0)));
         this.update = () => {
             const swap = <(arr: string[], opts: any, start?: number) => void> base.swap;
             const pages = this._schema ? this._schema.exportPages() : [];
             const settings = this._schema ? this.convertToDirectionSetting(this._schema) : {};
             swap(pages, {...settings, anchor: this.shadow});
         };
-        this.current(): number|void {};
-        this.ch_current(): number|void {};
-        this.data(to?: number): Page|void {}
-        this.ch_data(to?: number): Chapter|void {}
-        /*
-        
-                main.ch_current = function () {
-                    var c = main.internals.chapters,
-                        d = main.current();
-                    for (var a = 0; a < c.length; a++) {
-                        if (c[a].start <= d && d <= c[a].end) return a;
-                    }
-                    return -1;
-                }
-        main.ch_go = function (a?:number, b?:number) {
-                    var sre = (a === null || void 0 === a) ? 0 : a;//parseInt(a, 10);
-                    sre = (isNaN(sre)) ? 0 : sre;
-                    var g;
-                    if (b === null && b === void 0) g = "start";
-                    else g = "end"
-                    if (main.ch_current() == -1) return main.go()
-                    return main.go(main.internals.chapters[Math.floor(Math.max(0, Math.min(main.internals.chapters.length - 1, sre)))][g]);
-                }
-                main.ch_prev = function (b?:number) {
-                    if (main.ch_current() == -1) return main.go();
-                    var g;
-                    if (b === null && b === void 0) g = "start";
-                    else g = "end"
-                    return main.go(main.internals.chapters[Math.max(0, main.ch_current() - 1)][g]);
-                }
-                main.ch_next = function (b?:number) {
-                    if (main.ch_current() == -1) return main.go();
-                    var g;
-                    if (b === null && b === void 0) g = "start";
-                    else g = "end"
-                    return main.go(main.internals.chapters[Math.min(main.ch_count() - 1, main.ch_current() + 1)][g]);
-                }
-                main.ch_frst = function (b?:number) {
-                    if (main.ch_current() == -1) return main.go();
-                    var g;
-                    if (b === null && b === void 0) g = "start";
-                    else g = "end"
-                    return main.go(main.internals.chapters[0][g]);
-                }
-                main.ch_last = function (b?:number) {
-                    if (main.ch_current() == -1) return main.go();
-                    var g;
-                    if (b === null && b === void 0) g = "start";
-                    else g = "end"
-                    return main.go(main.internals.chapters[main.ch_count() - 1][g]);
-                }*/
+        this.current = base.current;
+        this.ch_current = () => {pageToChapter(this.current())};
+        this.rawData = base.data;
+        this.pg_data = (to?: number) => {
+            if (this._schema && this._schema.pages.length) {
+                return this._schema.pages[to || this.current() || 0];
+            }
+        } 
+        this.ch_data = (to?: number) => {
+            if (this._schema && this._schema.chapters.length) {
+                return this._schema.chapters[to || this.ch_current() || 0];
+            }
+        }
     }
 
     exportSchema() {
@@ -345,6 +309,7 @@ class CmxBook extends HTMLElement {
     update(): void{};
     current(): number|void {};
     ch_current(): number|void {};
+    rawData(to?: number): any|void {}
     data(to?: number): Page|void {}
     ch_data(to?: number): Chapter|void {}
 }

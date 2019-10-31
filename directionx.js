@@ -410,7 +410,7 @@ export default function direction(input = [], config = {}) {
     };
     this.frst = () => {
         if (current >= 0) assign(0);
-        return 0;
+        return iimg.length ? 0 : -1;
     };
     this.last = () => {
         assign(iimg.length - 1);
@@ -425,6 +425,7 @@ export default function direction(input = [], config = {}) {
     this.data = (to) => {
         //returns info about slide
         var sre = to === null || void 0 === to ? current : pi(to, 10);
+        if (!iimg.length) return;
         return isNaN(sre) ?
             iimg[current] :
             iimg[Math.floor(Math.max(0, Math.min(iimg.length - 1, sre)))];
