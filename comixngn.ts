@@ -181,7 +181,7 @@ class CmxBook extends HTMLElement {
 
     }
     private pageChapterMap(chapterID?: number) {
-
+        
     }
     private initializeDisplay(data?: any) {
         // DIRECTION specific
