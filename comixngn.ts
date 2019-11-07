@@ -80,6 +80,7 @@ class Schema {
         back: new Hexstring("#FFF"),
         color: new Hexstring("#373737")
     };
+    private pageChapterMap = new Map<number, number>();
 
     constructor(script: any) {
         try {
@@ -115,10 +116,31 @@ class Schema {
         }
         return this.pages.map((page: Page) => page.collapse());
     }
+    mapPageChapter(indicies?: number[]) {
+        this.chapters = this.chapters.sort((a, b) => a.start - b.start);
+        const chapters = this.chapters.filter((e, index) => !indicies || indicies.includes(index));
+        chapters.forEach((chapter, chapterID, chapters) => {
+            const next = chapters[chapterID + 1];
+            const start = chapter.start;
+            const end = (next) ? next.start : this.pages.length;
+            if (start >= end) return;
+            for (let pageID = start; pageID < end; pageID++) {
+                this.pageChapterMap.set(pageID, chapterID);
+            }
+        });
+    }
+    pageToChapter(id: number) {
+        return this.pageChapterMap.get(id) || 0;
+    }
+    chapterToPage(id: number) {
+        const chapter = this.chapters[id];
+        return (chapter) ? chapter.start : 0;
+    }
+
 }
 
 let comixngn: () => Comixngn;
-//generate_comixngn
+//generate_comixngn 
 (() => {
     let core: Comixngn;
     comixngn = () => {
@@ -180,9 +202,6 @@ class CmxBook extends HTMLElement {
     private convertToDirectionSetting(data: Schema) {
 
     }
-    private pageChapterMap(chapterID?: number) {
-        
-    }
     private initializeDisplay(data?: any) {
         // DIRECTION specific
         if (data) this._schema = new Schema(data);
@@ -209,7 +228,7 @@ class CmxBook extends HTMLElement {
     }
     private defineMethods(base: any) {
         // DIRECTION specific
-        const { pageToChapter, chapterToPage } = this;
+        const { pageToChapter, chapterToPage } = this._schema;
         const chapterNavigation = (method: Function, to?: number) => {
             if (to !== 0 && !to) {
                 to = this.current() || 0;
