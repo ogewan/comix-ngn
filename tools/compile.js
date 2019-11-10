@@ -17,7 +17,9 @@ const aexec = (nm, cm) => new Promise((resolve) =>
         
     //await pasta(require("path").join(__dirname, 'factory', "def_stage.ts"), {'cache': false});
     await aexec("=TYPESCRIPT COMPILER=", "tsc --diagnostics");
-    
+    await aexec("=CONCAT=WIN", "concat -o _concat.comixngn.js _compile/util.js _compile/data.js _compile/schema.js _compile/comixngn.core.js _compile/cmxbook.js _compile/cmxctrl.js");
+    await aexec("=CLOSURE COMPILER=", "java -jar .\\tools\\compiler.jar --language_in ECMASCRIPT6_STRICT --js .\\_concat.comixngn.js --create_source_map .\\comixngn.min.js.map --js_output_file .\\comixngn.min.js");
+
     /*if (win) {
         await aexec("=CONCAT=WIN", "concat -o _concat.comixngn.js ./factory/header.js ./comixngn.js ./factory/footer.js");
         await aexec("=CLOSURE COMPILER=", "java -jar .\\tools\\compiler.jar --language_in ECMASCRIPT6_STRICT --js .\\_concat.comixngn.js --create_source_map .\\comixngn.min.js.map --js_output_file .\\comixngn.min.js");
