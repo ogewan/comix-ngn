@@ -453,6 +453,7 @@ export default function direction(input = [], config = {}) {
     master.master = true;
     master.unique = -1;
     assign(options.startpage || owrite);
+    window.addEventListener("wheel", e => this.cnl());
     //end init
     layers[1].height = 480;
     layers[1].width = 640;

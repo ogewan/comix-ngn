@@ -129,10 +129,10 @@ class Schema {
             }
         });
     }
-    pageToChapter(id: number) {
+    pageToChapter(id: number = 0) {
         return this.pageChapterMap.get(id) || 0;
     }
-    chapterToPage(id: number) {
+    chapterToPage(id: number = 0) {
         const chapter = this.chapters[id];
         return (chapter) ? chapter.start : 0;
     }
@@ -170,9 +170,9 @@ class Comixngn {
 class CmxBook extends HTMLElement {
     [key: string]: any;
     controller?: CmxCtrl;
-    _schema?: Schema;
-    _uid: string;
-    _cid: string;
+    private _schema?: Schema;
+    private _uid: string;
+    private _cid: string;
     core: Comixngn;
     shadow: ShadowRoot;
     constructor() {
@@ -200,7 +200,7 @@ class CmxBook extends HTMLElement {
         console.log('construct cmxbook');
     }
     private convertToDirectionSetting(data: Schema) {
-
+        return {};
     }
     private initializeDisplay(data?: any) {
         // DIRECTION specific
@@ -216,36 +216,30 @@ class CmxBook extends HTMLElement {
         if (ctrlPath) {
             (<any>pegasus)(ctrlPath).then(this.initializeControls.bind(this));
         } else {
-            this.controller = <CmxCtrl>document.createElement('comix-ctrl');
-            this.insertAdjacentElement('afterend', this.controller);
+            /*this.controller = <CmxCtrl>document.createElement('comix-ctrl');
+            this.insertAdjacentElement('afterend', this.controller);*/
+            this.initializeControls();
         }
     }
     private initializeControls(data?: any) {
-        if (data) {
-            this.controller = new CmxCtrl(data);
-            this.insertAdjacentElement('afterend', this.controller);
-        }
+        this.controller = new CmxCtrl(this, data);
+        this.insertAdjacentElement('afterend', this.controller);
     }
     private defineMethods(base: any) {
         // DIRECTION specific
-        const { pageToChapter, chapterToPage } = this._schema;
-        const chapterNavigation = (method: Function, to?: number) => {
-            if (to !== 0 && !to) {
-                to = this.current() || 0;
-            }
-            return chapterToPage(method(pageToChapter(to)));
+        let pageToChapter = (a: any) => 0;
+        let chapterToPage = (a: any) => 0;
+        if (this._schema) {
+            pageToChapter = this._schema.pageToChapter;
+            chapterToPage = this._schema.chapterToPage;
         }
         this.rand = base.rand;
         this.go = base.go;
         this.prev = base.prev;
         this.next = base.next;
-        this.frst = base.first;
+        this.frst = base.frst;
         this.last = base.last;
         this.ch_go = (to?: number) => pageToChapter(this.go(pageToChapter(to)));
-        {
-            // if (this.ch_current() == -1) return this.go()
-            // return this.go(this._schema.chapters[Math.floor(Math.max(0, Math.min(main.internals.chapters.length - 1, sre)))][g]);
-        };
         this.ch_prev = () => pageToChapter(this.go(chapterToPage((<number>this.ch_current()) - 1)));
         this.ch_next = () => pageToChapter(this.go(chapterToPage((<number>this.ch_current()) + 1)));
         this.ch_frst = () => pageToChapter(this.go(chapterToPage(0)));
@@ -270,7 +264,6 @@ class CmxBook extends HTMLElement {
             }
         }
     }
-
     exportSchema() {
         return JSON.stringify(this._schema);
     }
@@ -307,7 +300,7 @@ class CmxBook extends HTMLElement {
         oldVal;
         this[name] = newVal;
     }
-    _oldAttributeValue: any;
+    //_oldAttributeValue: any;
 
     rand(): number | void { };
     go(to?: number): number | void { };
@@ -328,9 +321,80 @@ class CmxBook extends HTMLElement {
     ch_data(to?: number): Chapter | void { }
 }
 class CmxCtrl extends HTMLElement {
-    constructor(public book: CmxBook) {
-        super();
+    shadow: ShadowRoot;
+    private _ctrlarray: HTMLElement[];
+    private _book?: CmxBook;
+    [key: string]: any;
+    private makeButton(txt?: string|null, classes?: string[]|null, click?: (this: GlobalEventHandlers, ev: MouseEvent) => any) {
+        const liNode = document.createElement('li');
+        const button = document.createElement('button');
+        button.innerText = txt || '';
+        if (classes) {
+            button.classList.add(...classes);
+        }
+        if (click) {
+            button.onclick = click;
+        }
+        liNode.appendChild(button);
+        return liNode;
     }
+    private btnAssign() {
+        const book = this._book;
+        if (book) {
+            const cmdarray = [book.frst, book.prev, book.rand, book.next, book.last];
+            this._ctrlarray.map((e, i) => {
+                e.onclick = cmdarray[i];
+            });
+        }
+    }
+    constructor(book: CmxBook|null, template?: any) {
+        super();
+        this.shadow = this.attachShadow({ mode: 'open' });
+        this.shadow.innerHTML = `<style>
+        ol {
+            list-style-type: none;
+        }
+        li {
+            display: inline;
+        }
+        </style>`;
+        const defaultCtrl = document.createElement('ol');
+        const {makeButton} = this;
+        this._ctrlarray = [
+            makeButton('|<', ['frst']),
+            makeButton('< Prev', ['prev']),
+            makeButton('Random', ['rand']),
+            makeButton('Next >', ['next']),
+            makeButton('>|', ['last'])
+        ];
+        if (book) {
+            this._book = book;
+            this.btnAssign();
+        } else {
+            const bookId = this.getAttribute('book');
+            if (bookId) {
+                this.book = bookId;
+            }
+        }
+        defaultCtrl.append(...this._ctrlarray);
+        this.shadow.appendChild(defaultCtrl);
+    }
+    static get observedAttributes() {
+        return ['book'];
+    }
+    attributeChangedCallback(name: string, oldVal: string, newVal: string) {
+        oldVal;
+        this[name] = newVal;
+    }
+    set book(id: string) {
+        const core = comixngn();
+        this._book = core.bookMap.get(id);
+        this.btnAssign();
+    }
+    get book() {
+        return <any> this._book;
+    }
+    bookId() { return this._book ? this._book.uid : void(0)}
 }
 customElements.define('comix-ngn', CmxBook);
 customElements.define('comix-ctrl', CmxCtrl);
