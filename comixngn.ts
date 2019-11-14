@@ -1,5 +1,6 @@
-import direction from './directionx.js';
-import pegasus from './pegasus.min.js';
+import direction from './lib/directionx.js';
+import pegasus from './lib/pegasus.min.js';
+import Path from './lib/path.min.js';
 console.log('comix-ngn v2');
 
 class Hexstring {
@@ -150,21 +151,70 @@ let comixngn: () => Comixngn;
 })();
 
 class Comixngn {
-    //_id = "";
+    //SINGLETON
     coreVersion = new Version(2, 0, 0);
     cxxVersion = new Version(0, 0, 2);
     bookMap: Map<string, CmxBook> = new Map();
-    /* get id () {
-         return this._id;
-     }
-     set id (_id: string) {
-         this._id = _id;
-     }*/
+    
+    private priority = false;
     private sysmsg = `%c %c %c comix-ngn v${this.coreVersion} %c \u262F %c \u00A9 2020 Oluwaseun Ogedengbe %c`;
     private sysclr = ["color:white; background:#2EB531", "background:purple", "color:white; background:#32E237", 'color:red; background:black', "color:white; background:#2EB531", "color:white; background:purple"];
 
+    private defRoute = "#/:v1(/:v2/:v3/:v4/:v5/:v6/:v7/:v8/:v9)";
+    private routing() {}
+
     constructor() {
+        const {defRoute, routing} = this;
         console.log(this.sysmsg, ...this.sysclr);
+        Path.map(defRoute).to(routing);
+    }
+
+    priorityConfig(setting: any) {
+        this.config(setting, true);
+    }
+    config(setting: any, priority?: boolean) {
+        if (this.priority) {
+            //HIGH priority required if set
+            if (priority) {
+                this.priority = true;
+            } else {
+                return;
+            }
+        } else {
+            //LOW priority config
+        }
+    }
+    reset() {
+        this.priority = false;
+    }
+}
+class CmxCore extends HTMLElement {
+    private _core: Comixngn;
+    get core() { return this._core; }
+    get initialized() {
+        return true;
+    }
+    constructor() {
+        super();
+        this.innerHTML = '';
+        this._core = comixngn();
+        this.setCore(this.getAttribute('config'));
+    }
+    setCore(configPath: string|null) {
+        const core = this._core;
+        if (configPath) {
+            try {
+                core.priorityConfig(JSON.parse(configPath));
+            } catch {
+                (<any>pegasus)(configPath).then(core.priorityConfig);
+            }
+        }
+    }
+    static get observedAttributes() {
+        return ['config'];
+    }
+    attributeChangedCallback(name: string, oldVal: string, newVal: string) {
+        this.setCore(newVal);
     }
 }
 class CmxBook extends HTMLElement {
@@ -173,11 +223,12 @@ class CmxBook extends HTMLElement {
     private _schema?: Schema;
     private _uid: string;
     private _cid: string;
-    core: Comixngn;
+    private _core: Comixngn;
+    get core() { return this._core; };
     shadow: ShadowRoot;
     constructor() {
         super();
-        this.core = comixngn();
+        this._core = comixngn();
         const { core } = this;
 
         let j = 1;
@@ -197,6 +248,8 @@ class CmxBook extends HTMLElement {
         } else {
             this.initializeDisplay();
         }
+
+        this.config = this.getAttribute('config');
         console.log('construct cmxbook');
     }
     private convertToDirectionSetting(data: Schema) {
@@ -290,11 +343,21 @@ class CmxBook extends HTMLElement {
         Object.assign(this._schema, input);
         this.update();
     }
+    set config(configPath: string|null) {
+        if (configPath) {
+            try {
+                this.core.config(JSON.parse(configPath));
+            } catch {
+                (<any>pegasus)(configPath).then(this.core.config);
+            }
+        }
+    }
     get uid() { return this._uid; };
     get cid() { return this._cid; };
+    get config() { return this.getAttribute('config');}
     get schema() { return this._schema; };
     static get observedAttributes() {
-        return ['cid', 'uid'];
+        return ['cid', 'uid', 'config'];
     }
     attributeChangedCallback(name: string, oldVal: string, newVal: string) {
         oldVal;
@@ -396,5 +459,6 @@ class CmxCtrl extends HTMLElement {
     }
     bookId() { return this._book ? this._book.uid : void(0)}
 }
+customElements.define('comix-core', CmxCore);
 customElements.define('comix-ngn', CmxBook);
 customElements.define('comix-ctrl', CmxCtrl);
