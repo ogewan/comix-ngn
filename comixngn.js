@@ -1,6 +1,6 @@
 import direction from './lib/directionx.js';
 import pegasus from './lib/pegasus.min.js';
-import pegasus from './lib/path.min.js';
+import Path from './lib/path.min.js';
 console.log('comix-ngn v2');
 class Hexstring {
     constructor(input) {
@@ -151,25 +151,75 @@ let comixngn;
 })();
 class Comixngn {
     constructor() {
-        //_id = "";
+        //SINGLETON
         this.coreVersion = new Version(2, 0, 0);
         this.cxxVersion = new Version(0, 0, 2);
         this.bookMap = new Map();
-        /* get id () {
-             return this._id;
-         }
-         set id (_id: string) {
-             this._id = _id;
-         }*/
-        this.sysmsg = `%c %c %c comix-ngn v${this.coreVersion} %c \u262F %c \u00A9 2020 Oluwaseun Ogedengbe %c`;
-        this.sysclr = ["color:white; background:#2EB531", "background:purple", "color:white; background:#32E237", 'color:red; background:black', "color:white; background:#2EB531", "color:white; background:purple"];
-        console.log(this.sysmsg, ...this.sysclr);
+        this._priority = false;
+        this._sysmsg = `%c %c %c comix-ngn v${this.coreVersion} %c \u262F %c \u00A9 2020 Oluwaseun Ogedengbe %c`;
+        this._sysclr = ["color:white; background:#2EB531", "background:purple", "color:white; background:#32E237", 'color:red; background:black', "color:white; background:#2EB531", "color:white; background:purple"];
+        this.defRoute = "#/:v1(/:v2/:v3/:v4/:v5/:v6/:v7/:v8/:v9)";
+        const { defRoute, routing } = this;
+        console.log(this._sysmsg, ...this._sysclr);
+        Path.map(defRoute).to(routing);
+    }
+    get setting() {
+        return this._setting;
+    }
+    routing() { }
+    priorityConfig(setting) {
+        this.config(setting, true);
+    }
+    config(setting, priority) {
+        if (this._priority || priority) {
+            if (priority) {
+                this._priority = true;
+            }
+            else {
+                return;
+            }
+        }
+        this._setting = setting;
+    }
+    reset() {
+        this._priority = false;
+    }
+}
+class CmxCore extends HTMLElement {
+    get core() { return this._core; }
+    get initialized() {
+        return true;
+    }
+    constructor() {
+        super();
+        this.innerHTML = '';
+        this._core = comixngn();
+        this.setCore(this.getAttribute('config'));
+    }
+    setCore(configPath) {
+        const core = this._core;
+        if (configPath) {
+            try {
+                core.priorityConfig(JSON.parse(configPath));
+            }
+            catch (_a) {
+                pegasus(configPath).then(core.priorityConfig);
+            }
+        }
+    }
+    static get observedAttributes() {
+        return ['config'];
+    }
+    attributeChangedCallback(name, oldVal, newVal) {
+        this.setCore(newVal);
     }
 }
 class CmxBook extends HTMLElement {
+    get core() { return this._core; }
+    ;
     constructor() {
         super();
-        this.core = comixngn();
+        this._core = comixngn();
         const { core } = this;
         let j = 1;
         let uid = `STG${j}`;
@@ -187,6 +237,7 @@ class CmxBook extends HTMLElement {
         else {
             this.initializeDisplay();
         }
+        this._setconfig(this.getAttribute('config'));
         console.log('construct cmxbook');
     }
     convertToDirectionSetting(data) {
@@ -282,14 +333,28 @@ class CmxBook extends HTMLElement {
         Object.assign(this._schema, input);
         this.update();
     }
+    set config(configPath) {
+        this._setconfig(configPath);
+    }
+    _setconfig(configPath) {
+        if (configPath) {
+            try {
+                this.core.config(JSON.parse(configPath));
+            }
+            catch (_a) {
+                pegasus(configPath).then(this.core.config.bind(this.core));
+            }
+        }
+    }
     get uid() { return this._uid; }
     ;
     get cid() { return this._cid; }
     ;
+    get config() { return this.getAttribute('config'); }
     get schema() { return this._schema; }
     ;
     static get observedAttributes() {
-        return ['cid', 'uid'];
+        return ['cid', 'uid', 'config'];
     }
     attributeChangedCallback(name, oldVal, newVal) {
         oldVal;
@@ -401,6 +466,7 @@ class CmxCtrl extends HTMLElement {
     }
     bookId() { return this._book ? this._book.uid : void (0); }
 }
+customElements.define('comix-core', CmxCore);
 customElements.define('comix-ngn', CmxBook);
 customElements.define('comix-ctrl', CmxCtrl);
 //# sourceMappingURL=comixngn.js.map

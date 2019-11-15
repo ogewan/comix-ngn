@@ -156,16 +156,20 @@ class Comixngn {
     cxxVersion = new Version(0, 0, 2);
     bookMap: Map<string, CmxBook> = new Map();
     
-    private priority = false;
-    private sysmsg = `%c %c %c comix-ngn v${this.coreVersion} %c \u262F %c \u00A9 2020 Oluwaseun Ogedengbe %c`;
-    private sysclr = ["color:white; background:#2EB531", "background:purple", "color:white; background:#32E237", 'color:red; background:black', "color:white; background:#2EB531", "color:white; background:purple"];
+    private _priority = false;
+    private _sysmsg = `%c %c %c comix-ngn v${this.coreVersion} %c \u262F %c \u00A9 2020 Oluwaseun Ogedengbe %c`;
+    private _sysclr = ["color:white; background:#2EB531", "background:purple", "color:white; background:#32E237", 'color:red; background:black', "color:white; background:#2EB531", "color:white; background:purple"];
+    private _setting: any;
+    get setting() {
+        return this._setting;
+    }
 
     private defRoute = "#/:v1(/:v2/:v3/:v4/:v5/:v6/:v7/:v8/:v9)";
     private routing() {}
 
     constructor() {
         const {defRoute, routing} = this;
-        console.log(this.sysmsg, ...this.sysclr);
+        console.log(this._sysmsg, ...this._sysclr);
         Path.map(defRoute).to(routing);
     }
 
@@ -173,19 +177,17 @@ class Comixngn {
         this.config(setting, true);
     }
     config(setting: any, priority?: boolean) {
-        if (this.priority) {
-            //HIGH priority required if set
+        if (this._priority || priority) {
             if (priority) {
-                this.priority = true;
+                this._priority = true;
             } else {
                 return;
             }
-        } else {
-            //LOW priority config
         }
+        this._setting = setting;
     }
     reset() {
-        this.priority = false;
+        this._priority = false;
     }
 }
 class CmxCore extends HTMLElement {
@@ -249,7 +251,7 @@ class CmxBook extends HTMLElement {
             this.initializeDisplay();
         }
 
-        this.config = this.getAttribute('config');
+        this._setconfig(this.getAttribute('config'));
         console.log('construct cmxbook');
     }
     private convertToDirectionSetting(data: Schema) {
@@ -344,11 +346,14 @@ class CmxBook extends HTMLElement {
         this.update();
     }
     set config(configPath: string|null) {
+        this._setconfig(configPath);
+    }
+    private _setconfig(configPath: string|null) {
         if (configPath) {
             try {
                 this.core.config(JSON.parse(configPath));
             } catch {
-                (<any>pegasus)(configPath).then(this.core.config);
+                (<any>pegasus)(configPath).then(this.core.config.bind(this.core));
             }
         }
     }
@@ -357,7 +362,7 @@ class CmxBook extends HTMLElement {
     get config() { return this.getAttribute('config');}
     get schema() { return this._schema; };
     static get observedAttributes() {
-        return ['cid', 'uid', 'config'];
+        return ['cid', 'uid', 'schema', 'config'];
     }
     attributeChangedCallback(name: string, oldVal: string, newVal: string) {
         oldVal;
