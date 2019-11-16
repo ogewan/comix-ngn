@@ -137,7 +137,6 @@ class Schema {
         const chapter = this.chapters[id];
         return (chapter) ? chapter.start : 0;
     }
-
 }
 
 let comixngn: () => Comixngn;
@@ -226,6 +225,7 @@ class CmxBook extends HTMLElement {
     private _uid: string;
     private _cid: string;
     private _core: Comixngn;
+    private _active = false;
     get core() { return this._core; };
     shadow: ShadowRoot;
     constructor() {
@@ -244,29 +244,50 @@ class CmxBook extends HTMLElement {
         this._cid = window.location.host;
         this.shadow = this.attachShadow({ mode: 'open' });
 
-        const schemaPath = this.getAttribute('schema');
+        /*const schemaPath = this.getAttribute('schema');
         if (schemaPath) {
             (<any>pegasus)(schemaPath).then(this.initializeDisplay.bind(this));
         } else {
             this.initializeDisplay();
         }
-
-        this._setconfig(this.getAttribute('config'));
+        this._setconfig(this.getAttribute('config'));*/
         console.log('construct cmxbook');
     }
-    private convertToDirectionSetting(data: Schema) {
-        return {};
+    private convertToDirectionSetting() {
+        const {_schema, _core} = this;
+        const setting = _core.setting;
+        const {config, loading} = _schema!;
+        const {dir, imgprebuffer, imgpostbuffer, startPage} = config;
+        const {diameter, lines, rate} = loading;
+        const back = config.back.toString();
+        const loaderback = loading.back.toString();
+        const color = loading.color.toString();
+        const overwrite = startPage;
+
+        return {
+            overwrite,
+            dir,
+            imgprebuffer,
+            imgpostbuffer,
+            diameter,
+            lines,
+            rate,
+            back,
+            loaderback,
+            color,
+            ...setting
+        };
     }
-    private initializeDisplay(data?: any) {
+    private initializeDisplay() {
         // DIRECTION specific
-        if (data) this._schema = new Schema(data);
         const { shadow } = this;
         //call custom constructor
         const pages = this._schema ? this._schema.exportPages() : [];
-        const settings = this._schema ? this.convertToDirectionSetting(this._schema) : {};
+        const settings = this._schema ? this.convertToDirectionSetting() : {};
         const base = new (<any>direction)(pages, { ...settings, anchor: shadow });
         this.defineMethods(base);
         console.log('Intialize Display');
+        this._active = true;
         const ctrlPath = this.getAttribute('controller');
         if (ctrlPath) {
             (<any>pegasus)(ctrlPath).then(this.initializeControls.bind(this));
@@ -339,16 +360,28 @@ class CmxBook extends HTMLElement {
 
     }
     set schema(input: any) {
-        if (!(input instanceof Schema)) {
-            input = new Schema(input);
+        const setUpdate = (data: any) => {
+            if (!(data instanceof Schema)) {
+                data = new Schema(data);
+            }
+            this._schema = data;
+            if (this._active) {
+                this.update();
+            } else {
+                this.initializeDisplay();
+            }
         }
-        Object.assign(this._schema, input);
-        this.update();
+        if (typeof input === 'string') {
+            try {
+                setUpdate(JSON.parse(input));
+            } catch {
+                (<any>pegasus)(input).then(setUpdate);
+            }
+        } else {
+            setUpdate(input);
+        }
     }
     set config(configPath: string|null) {
-        this._setconfig(configPath);
-    }
-    private _setconfig(configPath: string|null) {
         if (configPath) {
             try {
                 this.core.config(JSON.parse(configPath));
@@ -385,7 +418,7 @@ class CmxBook extends HTMLElement {
     current(): number | void { };
     ch_current(): number | void { };
     rawData(to?: number): any | void { }
-    data(to?: number): Page | void { }
+    pg_data(to?: number): Page | void { }
     ch_data(to?: number): Chapter | void { }
 }
 class CmxCtrl extends HTMLElement {

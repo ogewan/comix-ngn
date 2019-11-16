@@ -215,10 +215,9 @@ class CmxCore extends HTMLElement {
     }
 }
 class CmxBook extends HTMLElement {
-    get core() { return this._core; }
-    ;
     constructor() {
         super();
+        this._active = false;
         this._core = comixngn();
         const { core } = this;
         let j = 1;
@@ -230,30 +229,48 @@ class CmxBook extends HTMLElement {
         core.bookMap.set(uid, this);
         this._cid = window.location.host;
         this.shadow = this.attachShadow({ mode: 'open' });
-        const schemaPath = this.getAttribute('schema');
+        /*const schemaPath = this.getAttribute('schema');
         if (schemaPath) {
-            pegasus(schemaPath).then(this.initializeDisplay.bind(this));
-        }
-        else {
+            (<any>pegasus)(schemaPath).then(this.initializeDisplay.bind(this));
+        } else {
             this.initializeDisplay();
         }
-        this._setconfig(this.getAttribute('config'));
+        this._setconfig(this.getAttribute('config'));*/
         console.log('construct cmxbook');
     }
-    convertToDirectionSetting(data) {
-        return {};
+    get core() { return this._core; }
+    ;
+    convertToDirectionSetting() {
+        const { _schema, _core } = this;
+        const setting = _core.setting;
+        const { config, loading } = _schema;
+        const { dir, imgprebuffer, imgpostbuffer, startPage } = config;
+        const { diameter, lines, rate } = loading;
+        const back = config.back.toString();
+        const loaderback = loading.back.toString();
+        const color = loading.color.toString();
+        const overwrite = startPage;
+        return Object.assign({ overwrite,
+            dir,
+            imgprebuffer,
+            imgpostbuffer,
+            diameter,
+            lines,
+            rate,
+            back,
+            loaderback,
+            color }, setting);
     }
-    initializeDisplay(data) {
+    initializeDisplay() {
         // DIRECTION specific
-        if (data)
-            this._schema = new Schema(data);
         const { shadow } = this;
         //call custom constructor
         const pages = this._schema ? this._schema.exportPages() : [];
-        const settings = this._schema ? this.convertToDirectionSetting(this._schema) : {};
+        const settings = this._schema ? this.convertToDirectionSetting() : {};
         const base = new direction(pages, Object.assign({}, settings, { anchor: shadow }));
         this.defineMethods(base);
         console.log('Intialize Display');
+        this._active = true;
         const ctrlPath = this.getAttribute('controller');
         if (ctrlPath) {
             pegasus(ctrlPath).then(this.initializeControls.bind(this));
@@ -327,16 +344,31 @@ class CmxBook extends HTMLElement {
         this._cid = val;
     }
     set schema(input) {
-        if (!(input instanceof Schema)) {
-            input = new Schema(input);
+        const setUpdate = (data) => {
+            if (!(data instanceof Schema)) {
+                data = new Schema(data);
+            }
+            this._schema = data;
+            if (this._active) {
+                this.update();
+            }
+            else {
+                this.initializeDisplay();
+            }
+        };
+        if (typeof input === 'string') {
+            try {
+                setUpdate(JSON.parse(input));
+            }
+            catch (_a) {
+                pegasus(input).then(setUpdate);
+            }
         }
-        Object.assign(this._schema, input);
-        this.update();
+        else {
+            setUpdate(input);
+        }
     }
     set config(configPath) {
-        this._setconfig(configPath);
-    }
-    _setconfig(configPath) {
         if (configPath) {
             try {
                 this.core.config(JSON.parse(configPath));
@@ -354,7 +386,7 @@ class CmxBook extends HTMLElement {
     get schema() { return this._schema; }
     ;
     static get observedAttributes() {
-        return ['cid', 'uid', 'config'];
+        return ['cid', 'uid', 'schema', 'config'];
     }
     attributeChangedCallback(name, oldVal, newVal) {
         oldVal;
@@ -390,7 +422,7 @@ class CmxBook extends HTMLElement {
     ch_current() { }
     ;
     rawData(to) { }
-    data(to) { }
+    pg_data(to) { }
     ch_data(to) { }
 }
 class CmxCtrl extends HTMLElement {
