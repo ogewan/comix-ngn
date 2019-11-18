@@ -1,6 +1,8 @@
 {
-  "parent": null,
-  "offset": 0,
+  "orderby":0,//controls how the url of the page appears, 0 for by page, 1 for by chapter/page, 2 by year, chapter and page are affected by page/chapterstartnum
+  "dateformat":"MMDDYY",
+  "pageSave": true,
+  "pagePush": true,
   "config": {
     "dir": "",
     "startpage": 0,
@@ -8,11 +10,6 @@
     "chapterstartnum": false,
     "imgprebuffer": 5,
     "imgpostbuffer": 5
-  },
-  "pyr": {
-    "appendmismatch": true,
-    "appendorder": 0,
-    "appendorderdir": true
   },
   "loading": {
     "back": "#fff",

@@ -158,7 +158,10 @@ class Comixngn {
     private _priority = false;
     private _sysmsg = `%c %c %c comix-ngn v${this.coreVersion} %c \u262F %c \u00A9 2020 Oluwaseun Ogedengbe %c`;
     private _sysclr = ["color:white; background:#2EB531", "background:purple", "color:white; background:#32E237", 'color:red; background:black', "color:white; background:#2EB531", "color:white; background:purple"];
-    private _setting: any;
+    private _setting: any = {
+        pageSave: true,
+        pagePush: false
+    };
     get setting() {
         return this._setting;
     }
@@ -183,6 +186,9 @@ class Comixngn {
                 return;
             }
         }
+        //
+        setting.gpu = (setting.gpu) ? window[setting.gpu] : setting.GPU;
+        //
         this._setting = setting;
     }
     reset() {
@@ -233,7 +239,7 @@ class CmxBook extends HTMLElement {
         this._core = comixngn();
         const { core } = this;
 
-        let j = 1;
+        let j = 0;
         let uid = `STG${j}`;
         while (core.bookMap.get(uid)) {
             uid = `STG${++j}`;
@@ -244,13 +250,6 @@ class CmxBook extends HTMLElement {
         this._cid = window.location.host;
         this.shadow = this.attachShadow({ mode: 'open' });
 
-        /*const schemaPath = this.getAttribute('schema');
-        if (schemaPath) {
-            (<any>pegasus)(schemaPath).then(this.initializeDisplay.bind(this));
-        } else {
-            this.initializeDisplay();
-        }
-        this._setconfig(this.getAttribute('config'));*/
         console.log('construct cmxbook');
     }
     private convertToDirectionSetting() {
@@ -259,9 +258,9 @@ class CmxBook extends HTMLElement {
         const {config, loading} = _schema!;
         const {dir, imgprebuffer, imgpostbuffer, startPage} = config;
         const {diameter, lines, rate} = loading;
-        const back = config.back.toString();
-        const loaderback = loading.back.toString();
-        const color = loading.color.toString();
+        const back = (config.back) ? config.back.toString() : undefined;
+        const loaderback = (loading.back) ? loading.back.toString() : undefined;
+        const color = (loading.color) ? loading.color.toString() : undefined;
         const overwrite = startPage;
 
         return {
@@ -303,11 +302,13 @@ class CmxBook extends HTMLElement {
     }
     private defineMethods(base: any) {
         // DIRECTION specific
+        let options = { ...this._core.setting()};
         let pageToChapter = (a: any) => 0;
         let chapterToPage = (a: any) => 0;
         if (this._schema) {
             pageToChapter = this._schema.pageToChapter;
             chapterToPage = this._schema.chapterToPage;
+            options = { ...options, ...this._schema};
         }
         this.rand = base.rand;
         this.go = base.go;
@@ -323,8 +324,9 @@ class CmxBook extends HTMLElement {
         this.update = () => {
             const swap = <(arr: string[], opts: any, start?: number) => void>base.swap;
             const pages = this._schema ? this._schema.exportPages() : [];
-            const settings = this._schema ? this.convertToDirectionSetting(this._schema) : {};
+            const settings = this._schema ? this.convertToDirectionSetting() : {};
             swap(pages, { ...settings, anchor: this.shadow });
+            base.setupShaders(settings);
         };
         this.current = base.current;
         this.ch_current = () => { pageToChapter(this.current()) };
@@ -339,6 +341,86 @@ class CmxBook extends HTMLElement {
                 return this._schema.chapters[to || this.ch_current() || 0];
             }
         }
+        base.callback(1, () => {
+            if (localStorage && options.pageSave) {
+                const {_cid, _uid} = this;
+                localStorage.setItem(`${_cid }|${_uid}|current`, (this.current()||0).toString());
+            }
+            /* FORMAT STRING
+            Numbers form fill, that is, a number will fill as many spots as it needs
+            if the template is bigger than that it is zero padded
+            Cumulative forms are forms that form a cumulative total when lowercased.
+            In other words, all cumulative forms add
+            #Cumulative
+            Y - Year (defaults to two form year, until 3 digits)
+            M - Month (#)
+            D - Day
+            H - Hour
+            U - Minute
+            S - Second
+            //Standard
+            N - Month (Name full)/m - Month (Name acroynm)
+            C - Chapter (#)/c - Chapter (Title), fallback to number
+            P - Page (#)/p - Page (Title), fallback to number
+            F - Filename
+             */
+            if (options.pagePush) {
+                let { chapterstartnum, pagestartnum, orderby, dateformat } = cG.script.config;
+                var chpmod = (chapterstartnum) ? 1 : 0, modify = (pagestartnum) ? 1 : 0, result = cG.cPanel[ /*"def_"+*/name].current();
+                switch (orderby) {
+                    case 1:
+                        console.log(result);
+                        var mechp = cG.cPanel[ /*"def_"+*/name].ch_current();
+                        result = (mechp + chpmod) + "/" + (result - cG.cPanel[ /*"def_"+*/name].internals.chapters[mechp].start + modify);
+                        break;
+                    case 2:
+                        var nT = new Date(cG.cPanel[ /*"def_"+*/name].data().release * 1000);
+                        var guide = dateformat.split("/");
+                        for (var tim = 0; tim < 3; tim++) {
+                            if (guide[tim].indexOf("Y") + 1)
+                                guide[tim] = nT.getFullYear() - 100 + 2000; //TODO: what is this?
+                            else if (guide[tim].indexOf("M") + 1)
+                                guide[tim] = nT.getMonth() + 1;
+                            else if (guide[tim].indexOf("D") + 1)
+                                guide[tim] = nT.getDate();
+                        }
+                        result = guide.join("/");
+                        //console.log(result,guide,nT);
+                        break;
+                    default:
+                        result += modify;
+                }
+                //if(cG.avx[0]>0&&cG.avx[1]>0) 
+                cG.verbose(1, name, "Pushing state:", result);
+                if (cG.fBox.pgepsh)
+                    history.pushState({}, '', "#/" + result);
+            }
+            if (cG.queue.stageChange !== void 0)
+                for (var ftn in cG.queue.stageChange) {
+                    if (cG.queue.stageChange.hasOwnProperty(ftn))
+                        cG.queue.stageChange[ftn](cG.cPanel[ /*"def_"+*/name]);
+                }
+            var strct = cG.cPanel[ /*"def_"+*/name].data(cG.cPanel[ /*"def_"+*/name].current()).special;
+            var zombie = document.getElementById(name + "_tempScript"); //fetch zombie child
+            var preload = stick(cG.cPanel[ /*"def_"+*/name].canvi[0], null, null, 0);
+            var display = stick(cG.cPanel[ /*"def_"+*/name].canvi[1], null, null, 1);
+            if (zombie !== void 0 && zombie !== null) {
+                anchor.removeChild(zombie); //kill the zombie
+                //if(cG.avx[0]>1&&cG.avx[1]>0){}
+                preload._show();
+                display._show();
+            }
+            if (strct !== null && strct !== void 0 && strct != "") {
+                //anchor.innerHTML += anchor.innerHTML+strct;//this breaks the cavases
+                var spanr = document.createElement("SPAN");
+                spanr.setAttribute("id", name + "_tempScript");
+                spanr.innerHTML = strct;
+                anchor.appendChild(spanr);
+                //if(cG.avx[0]>1&&cG.avx[1]>0){}
+                preload._hide();
+                display._hide();
+            }
+        });
     }
     exportSchema() {
         return JSON.stringify(this._schema);
@@ -382,11 +464,17 @@ class CmxBook extends HTMLElement {
         }
     }
     set config(configPath: string|null) {
+        const setUpdate = (data: any) => {
+            this.core.config(data);
+            if (this._active) {
+                this.update();
+            }
+        }
         if (configPath) {
             try {
-                this.core.config(JSON.parse(configPath));
+                setUpdate(JSON.parse(configPath));
             } catch {
-                (<any>pegasus)(configPath).then(this.core.config.bind(this.core));
+                (<any>pegasus)(configPath).then(setUpdate);
             }
         }
     }
@@ -420,6 +508,7 @@ class CmxBook extends HTMLElement {
     rawData(to?: number): any | void { }
     pg_data(to?: number): Page | void { }
     ch_data(to?: number): Chapter | void { }
+    setupShaders(options?: number): void { }
 }
 class CmxCtrl extends HTMLElement {
     shadow: ShadowRoot;

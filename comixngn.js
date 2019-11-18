@@ -179,6 +179,9 @@ class Comixngn {
                 return;
             }
         }
+        //
+        setting.gpu = (setting.gpu) ? window[setting.gpu] : setting.GPU;
+        //
         this._setting = setting;
     }
     reset() {
@@ -229,13 +232,6 @@ class CmxBook extends HTMLElement {
         core.bookMap.set(uid, this);
         this._cid = window.location.host;
         this.shadow = this.attachShadow({ mode: 'open' });
-        /*const schemaPath = this.getAttribute('schema');
-        if (schemaPath) {
-            (<any>pegasus)(schemaPath).then(this.initializeDisplay.bind(this));
-        } else {
-            this.initializeDisplay();
-        }
-        this._setconfig(this.getAttribute('config'));*/
         console.log('construct cmxbook');
     }
     get core() { return this._core; }
@@ -246,9 +242,9 @@ class CmxBook extends HTMLElement {
         const { config, loading } = _schema;
         const { dir, imgprebuffer, imgpostbuffer, startPage } = config;
         const { diameter, lines, rate } = loading;
-        const back = config.back.toString();
-        const loaderback = loading.back.toString();
-        const color = loading.color.toString();
+        const back = (config.back) ? config.back.toString() : undefined;
+        const loaderback = (loading.back) ? loading.back.toString() : undefined;
+        const color = (loading.color) ? loading.color.toString() : undefined;
         const overwrite = startPage;
         return Object.assign({ overwrite,
             dir,
@@ -307,8 +303,9 @@ class CmxBook extends HTMLElement {
         this.update = () => {
             const swap = base.swap;
             const pages = this._schema ? this._schema.exportPages() : [];
-            const settings = this._schema ? this.convertToDirectionSetting(this._schema) : {};
+            const settings = this._schema ? this.convertToDirectionSetting() : {};
             swap(pages, Object.assign({}, settings, { anchor: this.shadow }));
+            base.setupShaders(settings);
         };
         this.current = base.current;
         this.ch_current = () => { pageToChapter(this.current()); };
@@ -369,12 +366,18 @@ class CmxBook extends HTMLElement {
         }
     }
     set config(configPath) {
+        const setUpdate = (data) => {
+            this.core.config(data);
+            if (this._active) {
+                this.update();
+            }
+        };
         if (configPath) {
             try {
-                this.core.config(JSON.parse(configPath));
+                setUpdate(JSON.parse(configPath));
             }
             catch (_a) {
-                pegasus(configPath).then(this.core.config.bind(this.core));
+                pegasus(configPath).then(setUpdate);
             }
         }
     }
@@ -424,6 +427,7 @@ class CmxBook extends HTMLElement {
     rawData(to) { }
     pg_data(to) { }
     ch_data(to) { }
+    setupShaders(options) { }
 }
 class CmxCtrl extends HTMLElement {
     makeButton(txt, classes, click) {
