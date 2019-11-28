@@ -1,6 +1,11 @@
+*.txt
+*.old
 _site/
 .DS_Store
-*.jar
 *.bat
-*.old
 swatches.html
+node_modules/
+.vscode/
+.ignore/
+_*
+*.jar
