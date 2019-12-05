@@ -154,8 +154,8 @@ let comixngn: () => Comixngn;
 (() => {
     let core: Comixngn;
     comixngn = () => {
-        if (core) return core;
-        return new Comixngn();
+        if (!core) core = new Comixngn();
+        return core;
     };
 })();
 
