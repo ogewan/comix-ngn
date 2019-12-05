@@ -1,6 +1,7 @@
 import direction from './lib/directionx.js';
 import pegasus from './lib/pegasus.min.js';
 import Path from './lib/path.min.js';
+export {Hexstring, Version, Page, Chapter, Schema, comixngn};
 console.log('comix-ngn v2');
 
 class Hexstring {
@@ -31,7 +32,7 @@ class Page {
     absolute?: boolean;
     animate?: boolean;
     permanent?: boolean;
-    release?: number;
+    release?: Date;
     constructor(input: string | string[] | null, config?: any) {
         let url;
         if (input) {
@@ -43,6 +44,9 @@ class Page {
             Object.assign(this, { ...config, url });
         } else {
             Object.assign(this, config);
+        }
+        if (this.release) {
+            this.release = new Date(this.release);
         }
     }
     collapse() {
@@ -66,8 +70,10 @@ class Schema {
     pages: Page[] = [];
     chapters: Chapter[] = [];
     config = {
-        chapterStartAt: 0,
-        pageStartAt: 0,
+        format: "C/PP",
+        startDate: <Date|void> void(0),
+        chapterStartAt: 1,
+        pageStartAt: 1,
         dir: '',
         imgpostbuffer: 5,
         imgprebuffer: 5,
@@ -102,6 +108,10 @@ class Schema {
             }
             if (raw.chapters.length) {
                 raw.chapters = (<any[]>raw.chapters).map((e: any) => new Chapter(e.start, e.title, e.description)).sort((a: Chapter, b: Chapter) => a.start - b.start);
+            }
+            if (raw.config.startDate) {
+                // TODO: make more robust
+                raw.config.startDate = new Date(raw.config.startDate);
             }
             Object.assign(this, raw);
         } catch (e) {
@@ -167,6 +177,7 @@ class Comixngn {
     }
 
     private defRoute = "#/:v1(/:v2/:v3/:v4/:v5/:v6/:v7/:v8/:v9)";
+    //TODO: Support html5pushstate routing, and route decode in general
     private routing() {}
 
     constructor() {
@@ -302,7 +313,7 @@ class CmxBook extends HTMLElement {
     }
     private defineMethods(base: any) {
         // DIRECTION specific
-        let options = { ...this._core.setting()};
+        let options = { ...this._core.setting};
         let pageToChapter = (a: any) => 0;
         let chapterToPage = (a: any) => 0;
         if (this._schema) {
@@ -342,83 +353,90 @@ class CmxBook extends HTMLElement {
             }
         }
         base.callback(1, () => {
+            const currentPageId = <number>this.current();
+            const currentPage = this._schema!.pages[currentPageId];
             if (localStorage && options.pageSave) {
                 const {_cid, _uid} = this;
-                localStorage.setItem(`${_cid }|${_uid}|current`, (this.current()||0).toString());
+                localStorage.setItem(`${_cid }|${_uid}|current`, currentPageId.toString());
             }
-            /* FORMAT STRING
-            Numbers form fill, that is, a number will fill as many spots as it needs
-            if the template is bigger than that it is zero padded
-            Cumulative forms are forms that form a cumulative total when lowercased.
-            In other words, all cumulative forms add
-            #Cumulative
-            Y - Year (defaults to two form year, until 3 digits)
-            M - Month (#)
-            D - Day
-            H - Hour
-            U - Minute
-            S - Second
-            //Standard
-            N - Month (Name full)/m - Month (Name acroynm)
-            C - Chapter (#)/c - Chapter (Title), fallback to number
-            P - Page (#)/p - Page (Title), fallback to number
-            F - Filename
-             */
             if (options.pagePush) {
-                let { chapterstartnum, pagestartnum, orderby, dateformat } = cG.script.config;
-                var chpmod = (chapterstartnum) ? 1 : 0, modify = (pagestartnum) ? 1 : 0, result = cG.cPanel[ /*"def_"+*/name].current();
-                switch (orderby) {
-                    case 1:
-                        console.log(result);
-                        var mechp = cG.cPanel[ /*"def_"+*/name].ch_current();
-                        result = (mechp + chpmod) + "/" + (result - cG.cPanel[ /*"def_"+*/name].internals.chapters[mechp].start + modify);
-                        break;
-                    case 2:
-                        var nT = new Date(cG.cPanel[ /*"def_"+*/name].data().release * 1000);
-                        var guide = dateformat.split("/");
-                        for (var tim = 0; tim < 3; tim++) {
-                            if (guide[tim].indexOf("Y") + 1)
-                                guide[tim] = nT.getFullYear() - 100 + 2000; //TODO: what is this?
-                            else if (guide[tim].indexOf("M") + 1)
-                                guide[tim] = nT.getMonth() + 1;
-                            else if (guide[tim].indexOf("D") + 1)
-                                guide[tim] = nT.getDate();
+                /* FORMAT STRING
+                Numbers form fill, that is, a number will fill as many spots as it needs
+                if the template is bigger than that it is zero padded
+                Y - Year (defaults to two form year, until 3 digits)
+                M - Month (#)
+                D - Day
+                H - Hour
+                U - Minute
+                S - Second
+                //Standard
+                N - Month (Name full)/n - Month (Name acroynm)
+                C - Chapter (#)/c - Chapter (Title), fallback to number
+                P - Page (#)/p - Page (Title), fallback to number
+                F - Filename
+                ex: 2017//05/04
+                YYY/MM/DD
+                 */
+                let state = '';
+                if (options.config.format) {
+                    const { format, chapterStartAt, pageStartAt, startDate } = options.config;
+                    const releaseDate = currentPage.release;
+                    const pageName = currentPage.title;
+                    const pageURL = currentPage.url[0];
+                    const pageNum = currentPageId + pageStartAt;
+                    const chpNum = this._schema!.pageToChapter(currentPageId) + chapterStartAt;
+                    const chpName = this.ch_data() ? (<Chapter>this.ch_data()).title : '';
+                    const calendar = ['january', 'febuary', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
+                    const evaluate = (cmd: string|undefined, size: number) => {
+                        if (!cmd) return '';
+                        const uppercase = cmd === cmd.toUpperCase();
+                        cmd = cmd.toLowerCase();
+                        const rs = () => size = 0;
+                        const dateProc = (action: Function) => 
+                            () => {
+                                if (!releaseDate) throw new Error(`Date required for format of ${format}`);
+                                // TODO: fallback calculate release date by startdate if consecutive release is set
+                                return action();
+                            }
+                        const raw: { [key: string]: () => string|void } = {
+                            'y': dateProc(() => { let year = releaseDate!.getFullYear().toString(); return (size < 3) ? year.slice(2): year}),
+                            'm': dateProc(() => releaseDate!.getMonth().toString()),
+                            'd': dateProc(() => releaseDate!.getDay().toString()),
+                            'h': dateProc(() => releaseDate!.getHours().toString()),
+                            'u': dateProc(() => releaseDate!.getMinutes().toString()),
+                            's': dateProc(() => releaseDate!.getSeconds().toString()),
+                            'n': dateProc(() => {rs(); let month = calendar[releaseDate!.getMonth()]; return uppercase ? month: month.slice(0, 3)}),
+                            'c': () => {rs(); return (!uppercase && chpName) ? chpName: chpNum.toString()},
+                            'p': () => {rs(); return (!uppercase && pageName) ? pageName: pageNum.toString()},
+                            'f': () => {rs(); return pageURL.slice(pageURL.lastIndexOf('/') + 1)},
+                            '': () => ''
                         }
-                        result = guide.join("/");
-                        //console.log(result,guide,nT);
-                        break;
-                    default:
-                        result += modify;
+                        const short = <string>(raw[cmd] || raw[''])();
+                        if (!short.length) return cmd;
+                        return short.padStart(size - short.length, '0');
+                    };
+                    let command: string[] = [];
+                    let result: string[] = [];
+
+                    for (let i = 0; i < format.length; i++) {
+                        if (command[0] !== format[i]) {
+                            try {
+                                result.push(evaluate(command[0], command.length));
+                            } catch (e) {
+                                console.log(e);
+                                return '';
+                            }
+                            command = [format[i]];
+                        } else {
+                            command.push(format[i]);
+                        }
+                    }
+                    result.push(evaluate(command[0], command.length));
+                    state = result.join('');
                 }
-                //if(cG.avx[0]>0&&cG.avx[1]>0) 
-                cG.verbose(1, name, "Pushing state:", result);
-                if (cG.fBox.pgepsh)
-                    history.pushState({}, '', "#/" + result);
-            }
-            if (cG.queue.stageChange !== void 0)
-                for (var ftn in cG.queue.stageChange) {
-                    if (cG.queue.stageChange.hasOwnProperty(ftn))
-                        cG.queue.stageChange[ftn](cG.cPanel[ /*"def_"+*/name]);
-                }
-            var strct = cG.cPanel[ /*"def_"+*/name].data(cG.cPanel[ /*"def_"+*/name].current()).special;
-            var zombie = document.getElementById(name + "_tempScript"); //fetch zombie child
-            var preload = stick(cG.cPanel[ /*"def_"+*/name].canvi[0], null, null, 0);
-            var display = stick(cG.cPanel[ /*"def_"+*/name].canvi[1], null, null, 1);
-            if (zombie !== void 0 && zombie !== null) {
-                anchor.removeChild(zombie); //kill the zombie
-                //if(cG.avx[0]>1&&cG.avx[1]>0){}
-                preload._show();
-                display._show();
-            }
-            if (strct !== null && strct !== void 0 && strct != "") {
-                //anchor.innerHTML += anchor.innerHTML+strct;//this breaks the cavases
-                var spanr = document.createElement("SPAN");
-                spanr.setAttribute("id", name + "_tempScript");
-                spanr.innerHTML = strct;
-                anchor.appendChild(spanr);
-                //if(cG.avx[0]>1&&cG.avx[1]>0){}
-                preload._hide();
-                display._hide();
+                
+                console.log(`Pushing state: ${state}`);
+                history.pushState({}, '', `#/${state}`);
             }
         });
     }

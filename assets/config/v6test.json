@@ -1,37 +1,37 @@
 {
-  "orderby":0,//controls how the url of the page appears, 0 for by page, 1 for by chapter/page, 2 by year, chapter and page are affected by page/chapterstartnum
-  "dateformat":"MMDDYY",
   "pageSave": true,
   "pagePush": true,
   "config": {
     "dir": "",
     "startpage": 0,
-    "pagestartnum": false,
-    "chapterstartnum": false,
+    "chapterStartAt": 1,
+    "pageStartAt": 1,
     "imgprebuffer": 5,
-    "imgpostbuffer": 5
+    "imgpostbuffer": 5,
+    "startDate": 0,
+    "format":"C/PP"
   },
   "loading": {
     "back": "#fff",
     "diameter": 250,
     "lines": 16,
     "rate": 33.333333333333336,
-    "xpos": 0.5,
-    "ypos": 0.5,
     "color": "#373737"
   },
   "pages": [
     {
-      "alt": "",
+      "altText": "",
       "hover": "",
       "title": "",
-      "perm": false,
-      "anim8": false,
+      "permanent": false,
+      "animate": false,
+      "script": "",
+      "absolute": false,
       "special": "",
       "url": [
         "http://pre13.deviantart.net/ef3b/th/pre/f/2014/301/3/1/how_to_po__a_comipo_tutorial_by_ladisilverfox-d84ivkx.jpg"
       ],
-      "release": "0",
+      "release": 0,
       "note": ""
     },
     {

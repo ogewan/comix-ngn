@@ -1,6 +1,7 @@
 import direction from './lib/directionx.js';
 import pegasus from './lib/pegasus.min.js';
 import Path from './lib/path.min.js';
+export { Hexstring, Version, Page, Chapter, Schema, comixngn };
 console.log('comix-ngn v2');
 class Hexstring {
     constructor(input) {
@@ -40,6 +41,9 @@ class Page {
         else {
             Object.assign(this, config);
         }
+        if (this.release) {
+            this.release = new Date(this.release);
+        }
     }
     collapse() {
         return this.url.length ? this.url[0] : '';
@@ -67,8 +71,10 @@ class Schema {
         this.pages = [];
         this.chapters = [];
         this.config = {
-            chapterStartAt: 0,
-            pageStartAt: 0,
+            format: "C/PP",
+            startDate: void (0),
+            chapterStartAt: 1,
+            pageStartAt: 1,
             dir: '',
             imgpostbuffer: 5,
             imgprebuffer: 5,
@@ -101,6 +107,10 @@ class Schema {
             }
             if (raw.chapters.length) {
                 raw.chapters = raw.chapters.map((e) => new Chapter(e.start, e.title, e.description)).sort((a, b) => a.start - b.start);
+            }
+            if (raw.config.startDate) {
+                // TODO: make more robust
+                raw.config.startDate = new Date(raw.config.startDate);
             }
             Object.assign(this, raw);
         }
@@ -158,6 +168,10 @@ class Comixngn {
         this._priority = false;
         this._sysmsg = `%c %c %c comix-ngn v${this.coreVersion} %c \u262F %c \u00A9 2020 Oluwaseun Ogedengbe %c`;
         this._sysclr = ["color:white; background:#2EB531", "background:purple", "color:white; background:#32E237", 'color:red; background:black', "color:white; background:#2EB531", "color:white; background:purple"];
+        this._setting = {
+            pageSave: true,
+            pagePush: false
+        };
         this.defRoute = "#/:v1(/:v2/:v3/:v4/:v5/:v6/:v7/:v8/:v9)";
         const { defRoute, routing } = this;
         console.log(this._sysmsg, ...this._sysclr);
@@ -166,6 +180,7 @@ class Comixngn {
     get setting() {
         return this._setting;
     }
+    //TODO: Support html5pushstate routing, and route decode in general
     routing() { }
     priorityConfig(setting) {
         this.config(setting, true);
@@ -223,7 +238,7 @@ class CmxBook extends HTMLElement {
         this._active = false;
         this._core = comixngn();
         const { core } = this;
-        let j = 1;
+        let j = 0;
         let uid = `STG${j}`;
         while (core.bookMap.get(uid)) {
             uid = `STG${++j}`;
@@ -283,11 +298,13 @@ class CmxBook extends HTMLElement {
     }
     defineMethods(base) {
         // DIRECTION specific
+        let options = Object.assign({}, this._core.setting);
         let pageToChapter = (a) => 0;
         let chapterToPage = (a) => 0;
         if (this._schema) {
             pageToChapter = this._schema.pageToChapter;
             chapterToPage = this._schema.chapterToPage;
+            options = Object.assign({}, options, this._schema);
         }
         this.rand = base.rand;
         this.go = base.go;
@@ -320,6 +337,95 @@ class CmxBook extends HTMLElement {
                 return this._schema.chapters[to || this.ch_current() || 0];
             }
         };
+        base.callback(1, () => {
+            const currentPageId = this.current();
+            const currentPage = this._schema.pages[currentPageId];
+            if (localStorage && options.pageSave) {
+                const { _cid, _uid } = this;
+                localStorage.setItem(`${_cid}|${_uid}|current`, currentPageId.toString());
+            }
+            if (options.pagePush) {
+                /* FORMAT STRING
+                Numbers form fill, that is, a number will fill as many spots as it needs
+                if the template is bigger than that it is zero padded
+                Y - Year (defaults to two form year, until 3 digits)
+                M - Month (#)
+                D - Day
+                H - Hour
+                U - Minute
+                S - Second
+                //Standard
+                N - Month (Name full)/n - Month (Name acroynm)
+                C - Chapter (#)/c - Chapter (Title), fallback to number
+                P - Page (#)/p - Page (Title), fallback to number
+                F - Filename
+                ex: 2017//05/04
+                YYY/MM/DD
+                 */
+                let state = '';
+                if (options.config.format) {
+                    const { format, chapterStartAt, pageStartAt, startDate } = options.config;
+                    const releaseDate = currentPage.release;
+                    const pageName = currentPage.title;
+                    const pageURL = currentPage.url[0];
+                    const pageNum = currentPageId + pageStartAt;
+                    const chpNum = this._schema.pageToChapter(currentPageId) + chapterStartAt;
+                    const chpName = this.ch_data() ? this.ch_data().title : '';
+                    const calendar = ['january', 'febuary', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
+                    const evaluate = (cmd, size) => {
+                        if (!cmd)
+                            return '';
+                        const uppercase = cmd === cmd.toUpperCase();
+                        cmd = cmd.toLowerCase();
+                        const rs = () => size = 0;
+                        const dateProc = (action) => () => {
+                            if (!releaseDate)
+                                throw new Error(`Date required for format of ${format}`);
+                            // TODO: fallback calculate release date by startdate if consecutive release is set
+                            return action();
+                        };
+                        const raw = {
+                            'y': dateProc(() => { let year = releaseDate.getFullYear().toString(); return (size < 3) ? year.slice(2) : year; }),
+                            'm': dateProc(() => releaseDate.getMonth().toString()),
+                            'd': dateProc(() => releaseDate.getDay().toString()),
+                            'h': dateProc(() => releaseDate.getHours().toString()),
+                            'u': dateProc(() => releaseDate.getMinutes().toString()),
+                            's': dateProc(() => releaseDate.getSeconds().toString()),
+                            'n': dateProc(() => { rs(); let month = calendar[releaseDate.getMonth()]; return uppercase ? month : month.slice(0, 3); }),
+                            'c': () => { rs(); return (!uppercase && chpName) ? chpName : chpNum.toString(); },
+                            'p': () => { rs(); return (!uppercase && pageName) ? pageName : pageNum.toString(); },
+                            'f': () => { rs(); return pageURL.slice(pageURL.lastIndexOf('/') + 1); },
+                            '': () => ''
+                        };
+                        const short = (raw[cmd] || raw[''])();
+                        if (!short.length)
+                            return cmd;
+                        return short.padStart(size - short.length, '0');
+                    };
+                    let command = [];
+                    let result = [];
+                    for (let i = 0; i < format.length; i++) {
+                        if (command[0] !== format[i]) {
+                            try {
+                                result.push(evaluate(command[0], command.length));
+                            }
+                            catch (e) {
+                                console.log(e);
+                                return '';
+                            }
+                            command = [format[i]];
+                        }
+                        else {
+                            command.push(format[i]);
+                        }
+                    }
+                    result.push(evaluate(command[0], command.length));
+                    state = result.join('');
+                }
+                console.log(`Pushing state: ${state}`);
+                history.pushState({}, '', `#/${state}`);
+            }
+        });
     }
     exportSchema() {
         return JSON.stringify(this._schema);
