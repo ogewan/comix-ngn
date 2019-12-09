@@ -94,6 +94,7 @@ declare class CmxBook extends HTMLElement {
     private initializeControls;
     private defineMethods;
     exportSchema(): string;
+    changeId(key: string, value: string): void;
     uid: string;
     cid: string;
     schema: any;
