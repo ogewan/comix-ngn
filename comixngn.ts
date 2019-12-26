@@ -234,6 +234,18 @@ class CmxCore extends HTMLElement {
     attributeChangedCallback(name: string, oldVal: string, newVal: string) {
         this.setCore(newVal);
     }
+    set config(val: string|null) {
+        if (this.getAttribute('config') !== val) {
+            if (val) {
+                this.setAttribute('config', val);
+            } else {
+                this.removeAttribute('config');
+            }
+        }
+    }
+    get config() {
+        return this.getAttribute('config');
+    }
 }
 class CmxBook extends HTMLElement {
     [key: string]: any;
@@ -250,13 +262,16 @@ class CmxBook extends HTMLElement {
         this._core = comixngn();
         const { core } = this;
 
-        let j = 0;
-        let uid = `STG${j}`;
-        while (core.bookMap.get(uid)) {
-            uid = `STG${++j}`;
+        let uid = this.getAttribute('uid');
+        if (!uid) {
+            let j = 0;
+            uid = `STG${j}`;
+            while (core.bookMap.get(uid)) {
+                uid = `STG${++j}`;
+            }
         }
-        this._uid = uid;
-        core.bookMap.set(uid, this);
+        this._uid = uid!;
+        core.bookMap.set(uid!, this);
 
         this._cid = window.location.host;
         this.shadow = this.attachShadow({ mode: 'open' });
@@ -357,7 +372,7 @@ class CmxBook extends HTMLElement {
             const currentPage = this._schema!.pages[currentPageId];
             if (localStorage && options.pageSave) {
                 const {_cid, _uid} = this;
-                localStorage.setItem(`${_cid }|${_uid}|current`, currentPageId.toString());
+                localStorage.setItem(`${_cid}|${_uid}|current`, currentPageId.toString());
             }
             if (options.pagePush) {
                 /* FORMAT STRING
@@ -443,21 +458,30 @@ class CmxBook extends HTMLElement {
     exportSchema() {
         return JSON.stringify(this._schema);
     }
+    changeId(key: string, value: string) {
+        const {_cid, _uid} = this;
+        const oldKey = `${_cid}|${_uid}|current`;
+        this[key] = value;
+        const newKey = `${_cid}|${_uid}|current`;
+        const data = localStorage.getItem(oldKey);
+        if (data) {
+            localStorage.removeItem(oldKey);
+            localStorage.setItem(newKey, data);
+        }
+    }
     set uid(val: string) {
         if (this.core.bookMap.has(val)) {
-            console.error(`CmxBook with uid ${val} already exist.`);
+            console.error(`CmxBook with uid ${val} already exists.`);
         } else {
             this.core.bookMap.set(val, this);
             this.core.bookMap.delete(this._uid);
-            this._uid = val;
+            this.changeId('_uid', val);
+            if (this.getAttribute('uid') !== val) this.setAttribute('uid', val);
         }
     }
     set cid(val: string) {
-        //delete old local storage
-        this._cid;
-        //add new local storage
-        this._cid = val;
-
+        this.changeId('_cid', val)
+        if (this.getAttribute('cid') !== val) this.setAttribute('cid', val);
     }
     set schema(input: any) {
         const setUpdate = (data: any) => {
@@ -477,8 +501,10 @@ class CmxBook extends HTMLElement {
             } catch {
                 (<any>pegasus)(input).then(setUpdate);
             }
+            if (this.getAttribute('schema') !== input) this.setAttribute('schema', input);
         } else {
             setUpdate(input);
+            if (this.getAttribute('schema') !== JSON.stringify(input)) this.setAttribute('schema', JSON.stringify(input));
         }
     }
     set config(configPath: string|null) {
@@ -494,6 +520,7 @@ class CmxBook extends HTMLElement {
             } catch {
                 (<any>pegasus)(configPath).then(setUpdate);
             }
+            if (this.getAttribute('config') !== configPath) this.setAttribute('config', configPath);
         }
     }
     get uid() { return this._uid; };
@@ -505,9 +532,8 @@ class CmxBook extends HTMLElement {
     }
     attributeChangedCallback(name: string, oldVal: string, newVal: string) {
         oldVal;
-        this[name] = newVal;
+        if (this[name] !== newVal) this[name] = newVal;
     }
-    //_oldAttributeValue: any;
 
     rand(): number | void { };
     go(to?: number): number | void { };
