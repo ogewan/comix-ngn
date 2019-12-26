@@ -154,9 +154,9 @@ let comixngn;
 (() => {
     let core;
     comixngn = () => {
-        if (core)
-            return core;
-        return new Comixngn();
+        if (!core)
+            core = new Comixngn();
+        return core;
     };
 })();
 class Comixngn {
