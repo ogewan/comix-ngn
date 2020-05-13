@@ -1,7 +1,7 @@
 import direction from './lib/directionx.js';
-import pegasus from './lib/pegasus.min.js';
 import Path from './lib/path.min.js';
-export { Hexstring, Version, Page, Chapter, Schema, comixngn };
+import pegasus from './lib/pegasus.min.js';
+export { Chapter, comixngn, Hexstring, Page, Schema, Version };
 console.log('comix-ngn v2');
 class Hexstring {
     constructor(input) {
@@ -71,7 +71,7 @@ class Schema {
         this.pages = [];
         this.chapters = [];
         this.config = {
-            format: "C/PP",
+            format: 'C/PP',
             startDate: void (0),
             chapterStartAt: 1,
             pageStartAt: 1,
@@ -85,8 +85,8 @@ class Schema {
             diameter: 250,
             lines: 16,
             rate: 1000 / 30,
-            back: new Hexstring("#FFF"),
-            color: new Hexstring("#373737")
+            back: new Hexstring('#FFF'),
+            color: new Hexstring('#373737')
         };
         this.pageChapterMap = new Map();
         try {
@@ -94,10 +94,18 @@ class Schema {
             if (typeof script === 'string') {
                 raw = JSON.parse(script);
             }
-            else {
-                raw = script;
+            else if (script.length) {
+                const pageWriter = (typeof script[0] === 'string') ? (link) => {
+                    return { url: link };
+                } : (data) => {
+                    return Object.assign({}, data, { url: [data.link], link: undefined });
+                };
+                raw = { pages: script.map(pageWriter) };
             }
-            if (raw.pages.length) {
+            else {
+                raw = (script && script.length === undefined) ? script : {};
+            }
+            if (raw.pages && raw.pages.length) {
                 raw.pages = raw.pages.map((e) => {
                     if (e.url) {
                         return new Page(null, e);
@@ -105,10 +113,12 @@ class Schema {
                     return new Page(e);
                 });
             }
-            if (raw.chapters.length) {
-                raw.chapters = raw.chapters.map((e) => new Chapter(e.start, e.title, e.description)).sort((a, b) => a.start - b.start);
+            if (raw.chapters && raw.chapters.length) {
+                raw.chapters = raw.chapters
+                    .map((e) => new Chapter(e.start, e.title, e.description))
+                    .sort((a, b) => a.start - b.start);
             }
-            if (raw.config.startDate) {
+            if (raw.config && raw.config.startDate) {
                 // TODO: make more robust
                 raw.config.startDate = new Date(raw.config.startDate);
             }
@@ -123,7 +133,8 @@ class Schema {
         if (ids.length) {
             let idMap = new Map();
             ids.reduce((map, key) => map.set(key, true), new Map());
-            return this.pages.filter((page, id) => idMap.set(id, true)).map((page) => page.collapse());
+            return this.pages.filter((page, id) => idMap.set(id, true))
+                .map((page) => page.collapse());
         }
         return this.pages.map((page) => page.collapse());
     }
@@ -150,7 +161,7 @@ class Schema {
     }
 }
 let comixngn;
-//generate_comixngn 
+// generate_comixngn
 (() => {
     let core;
     comixngn = () => {
@@ -161,18 +172,19 @@ let comixngn;
 })();
 class Comixngn {
     constructor() {
-        //SINGLETON
+        // SINGLETON
         this.coreVersion = new Version(2, 0, 0);
         this.cxxVersion = new Version(0, 0, 2);
         this.bookMap = new Map();
         this._priority = false;
         this._sysmsg = `%c %c %c comix-ngn v${this.coreVersion} %c \u262F %c \u00A9 2020 Oluwaseun Ogedengbe %c`;
-        this._sysclr = ["color:white; background:#2EB531", "background:purple", "color:white; background:#32E237", 'color:red; background:black', "color:white; background:#2EB531", "color:white; background:purple"];
-        this._setting = {
-            pageSave: true,
-            pagePush: false
-        };
-        this.defRoute = "#/:v1(/:v2/:v3/:v4/:v5/:v6/:v7/:v8/:v9)";
+        this._sysclr = [
+            'color:white; background:#2EB531', 'background:purple', 'color:white; background:#32E237',
+            'color:red; background:black', 'color:white; background:#2EB531',
+            'color:white; background:purple'
+        ];
+        this._setting = { pageSave: true, pagePush: false };
+        this.defRoute = '#/:v1(/:v2/:v3/:v4/:v5/:v6/:v7/:v8/:v9)';
         const { defRoute, routing } = this;
         console.log(this._sysmsg, ...this._sysclr);
         Path.map(defRoute).to(routing);
@@ -180,7 +192,7 @@ class Comixngn {
     get setting() {
         return this._setting;
     }
-    //TODO: Support html5pushstate routing, and route decode in general
+    // TODO: Support html5pushstate routing, and route decode in general
     routing() { }
     priorityConfig(setting) {
         this.config(setting, true);
@@ -204,7 +216,9 @@ class Comixngn {
     }
 }
 class CmxCore extends HTMLElement {
-    get core() { return this._core; }
+    get core() {
+        return this._core;
+    }
     get initialized() {
         return true;
     }
@@ -265,7 +279,9 @@ class CmxBook extends HTMLElement {
         this.shadow = this.attachShadow({ mode: 'open' });
         console.log('construct cmxbook');
     }
-    get core() { return this._core; }
+    get core() {
+        return this._core;
+    }
     ;
     convertToDirectionSetting() {
         const { _schema, _core } = this;
@@ -291,7 +307,7 @@ class CmxBook extends HTMLElement {
     initializeDisplay() {
         // DIRECTION specific
         const { shadow } = this;
-        //call custom constructor
+        // call custom constructor
         const pages = this._schema ? this._schema.exportPages() : [];
         const settings = this._schema ? this.convertToDirectionSetting() : {};
         const base = new direction(pages, Object.assign({}, settings, { anchor: shadow }));
@@ -341,7 +357,9 @@ class CmxBook extends HTMLElement {
             base.setupShaders(settings);
         };
         this.current = base.current;
-        this.ch_current = () => { pageToChapter(this.current()); };
+        this.ch_current = () => {
+            pageToChapter(this.current());
+        };
         this.rawData = base.data;
         this.pg_data = (to) => {
             if (this._schema && this._schema.pages.length) {
@@ -387,7 +405,10 @@ class CmxBook extends HTMLElement {
                     const pageNum = currentPageId + pageStartAt;
                     const chpNum = this._schema.pageToChapter(currentPageId) + chapterStartAt;
                     const chpName = this.ch_data() ? this.ch_data().title : '';
-                    const calendar = ['january', 'febuary', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
+                    const calendar = [
+                        'january', 'febuary', 'march', 'april', 'may', 'june', 'july', 'august', 'september',
+                        'october', 'november', 'december'
+                    ];
                     const evaluate = (cmd, size) => {
                         if (!cmd)
                             return '';
@@ -401,16 +422,32 @@ class CmxBook extends HTMLElement {
                             return action();
                         };
                         const raw = {
-                            'y': dateProc(() => { let year = releaseDate.getFullYear().toString(); return (size < 3) ? year.slice(2) : year; }),
+                            'y': dateProc(() => {
+                                let year = releaseDate.getFullYear().toString();
+                                return (size < 3) ? year.slice(2) : year;
+                            }),
                             'm': dateProc(() => releaseDate.getMonth().toString()),
                             'd': dateProc(() => releaseDate.getDay().toString()),
                             'h': dateProc(() => releaseDate.getHours().toString()),
                             'u': dateProc(() => releaseDate.getMinutes().toString()),
                             's': dateProc(() => releaseDate.getSeconds().toString()),
-                            'n': dateProc(() => { rs(); let month = calendar[releaseDate.getMonth()]; return uppercase ? month : month.slice(0, 3); }),
-                            'c': () => { rs(); return (!uppercase && chpName) ? chpName : chpNum.toString(); },
-                            'p': () => { rs(); return (!uppercase && pageName) ? pageName : pageNum.toString(); },
-                            'f': () => { rs(); return pageURL.slice(pageURL.lastIndexOf('/') + 1); },
+                            'n': dateProc(() => {
+                                rs();
+                                let month = calendar[releaseDate.getMonth()];
+                                return uppercase ? month : month.slice(0, 3);
+                            }),
+                            'c': () => {
+                                rs();
+                                return (!uppercase && chpName) ? chpName : chpNum.toString();
+                            },
+                            'p': () => {
+                                rs();
+                                return (!uppercase && pageName) ? pageName : pageNum.toString();
+                            },
+                            'f': () => {
+                                rs();
+                                return pageURL.slice(pageURL.lastIndexOf('/') + 1);
+                            },
                             '': () => ''
                         };
                         const short = (raw[cmd] || raw[''])();
@@ -494,13 +531,12 @@ class CmxBook extends HTMLElement {
             catch (_a) {
                 pegasus(input).then(setUpdate);
             }
-            if (this.getAttribute('schema') !== input)
-                this.setAttribute('schema', input);
+            // if (this.getAttribute('schema') !== input) this.setAttribute('schema', input);
         }
         else {
             setUpdate(input);
-            if (this.getAttribute('schema') !== JSON.stringify(input))
-                this.setAttribute('schema', JSON.stringify(input));
+            // if (this.getAttribute('schema') !== JSON.stringify(input)) this.setAttribute('schema',
+            // JSON.stringify(input));
         }
     }
     set config(configPath) {
@@ -521,12 +557,20 @@ class CmxBook extends HTMLElement {
                 this.setAttribute('config', configPath);
         }
     }
-    get uid() { return this._uid; }
+    get uid() {
+        return this._uid;
+    }
     ;
-    get cid() { return this._cid; }
+    get cid() {
+        return this._cid;
+    }
     ;
-    get config() { return this.getAttribute('config'); }
-    get schema() { return this._schema; }
+    get config() {
+        return this.getAttribute('config');
+    }
+    get schema() {
+        return this._schema;
+    }
     ;
     static get observedAttributes() {
         return ['cid', 'uid', 'schema', 'config'];
@@ -606,11 +650,8 @@ class CmxCtrl extends HTMLElement {
         const defaultCtrl = document.createElement('ol');
         const { makeButton } = this;
         this._ctrlarray = [
-            makeButton('|<', ['frst']),
-            makeButton('< Prev', ['prev']),
-            makeButton('Random', ['rand']),
-            makeButton('Next >', ['next']),
-            makeButton('>|', ['last'])
+            makeButton('|<', ['frst']), makeButton('< Prev', ['prev']), makeButton('Random', ['rand']),
+            makeButton('Next >', ['next']), makeButton('>|', ['last'])
         ];
         if (book) {
             this._book = book;
@@ -640,7 +681,9 @@ class CmxCtrl extends HTMLElement {
     get book() {
         return this._book;
     }
-    bookId() { return this._book ? this._book.uid : void (0); }
+    bookId() {
+        return this._book ? this._book.uid : void (0);
+    }
 }
 customElements.define('comix-core', CmxCore);
 customElements.define('comix-ngn', CmxBook);

@@ -1,4 +1,4 @@
-export { Hexstring, Version, Page, Chapter, Schema, comixngn };
+export { Chapter, comixngn, Hexstring, Page, Schema, Version };
 declare class Hexstring {
     value: number;
     toString: () => string;
@@ -55,7 +55,7 @@ declare class Schema {
         color: Hexstring;
     };
     private pageChapterMap;
-    constructor(script: any);
+    constructor(script?: any);
     exportPages(ids?: number[]): string[];
     mapPageChapter(indicies?: number[]): void;
     pageToChapter(id?: number): number;
@@ -127,7 +127,7 @@ declare class CmxCtrl extends HTMLElement {
     [key: string]: any;
     private makeButton;
     private btnAssign;
-    constructor(book: CmxBook | null, template?: any);
+    constructor(book?: CmxBook, template?: any);
     static readonly observedAttributes: string[];
     attributeChangedCallback(name: string, oldVal: string, newVal: string): void;
     book: string;
