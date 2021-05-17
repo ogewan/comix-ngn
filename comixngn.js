@@ -36,7 +36,7 @@ class Page {
             else {
                 url = input;
             }
-            Object.assign(this, Object.assign({}, config, { url }));
+            Object.assign(this, Object.assign(Object.assign({}, config), { url }));
         }
         else {
             Object.assign(this, config);
@@ -98,7 +98,7 @@ class Schema {
                 const pageWriter = (typeof script[0] === 'string') ? (link) => {
                     return { url: link };
                 } : (data) => {
-                    return Object.assign({}, data, { url: [data.link], link: undefined });
+                    return Object.assign(Object.assign({}, data), { url: [data.link], link: undefined });
                 };
                 raw = { pages: script.map(pageWriter) };
             }
@@ -216,17 +216,17 @@ class Comixngn {
     }
 }
 class CmxCore extends HTMLElement {
-    get core() {
-        return this._core;
-    }
-    get initialized() {
-        return true;
-    }
     constructor() {
         super();
         this.innerHTML = '';
         this._core = comixngn();
         this.setCore(this.getAttribute('config'));
+    }
+    get core() {
+        return this._core;
+    }
+    get initialized() {
+        return true;
     }
     setCore(configPath) {
         const core = this._core;
@@ -310,7 +310,7 @@ class CmxBook extends HTMLElement {
         // call custom constructor
         const pages = this._schema ? this._schema.exportPages() : [];
         const settings = this._schema ? this.convertToDirectionSetting() : {};
-        const base = new direction(pages, Object.assign({}, settings, { anchor: shadow }));
+        const base = new direction(pages, Object.assign(Object.assign({}, settings), { anchor: shadow }));
         this.defineMethods(base);
         console.log('Intialize Display');
         this._active = true;
@@ -336,7 +336,7 @@ class CmxBook extends HTMLElement {
         if (this._schema) {
             pageToChapter = this._schema.pageToChapter;
             chapterToPage = this._schema.chapterToPage;
-            options = Object.assign({}, options, this._schema);
+            options = Object.assign(Object.assign({}, options), this._schema);
         }
         this.rand = base.rand;
         this.go = base.go;
@@ -353,9 +353,10 @@ class CmxBook extends HTMLElement {
             const swap = base.swap;
             const pages = this._schema ? this._schema.exportPages() : [];
             const settings = this._schema ? this.convertToDirectionSetting() : {};
-            swap(pages, Object.assign({}, settings, { anchor: this.shadow }));
+            swap(pages, Object.assign(Object.assign({}, settings), { anchor: this.shadow }));
             base.setupShaders(settings);
         };
+        this.resize = base.resize;
         this.current = base.current;
         this.ch_current = () => {
             pageToChapter(this.current());
@@ -609,33 +610,17 @@ class CmxBook extends HTMLElement {
     ch_current() { }
     ;
     rawData(to) { }
+    ;
     pg_data(to) { }
+    ;
     ch_data(to) { }
+    ;
     setupShaders(options) { }
+    ;
+    resize(sz, redraw = true, reset = false) { }
+    ;
 }
 class CmxCtrl extends HTMLElement {
-    makeButton(txt, classes, click) {
-        const liNode = document.createElement('li');
-        const button = document.createElement('button');
-        button.innerText = txt || '';
-        if (classes) {
-            button.classList.add(...classes);
-        }
-        if (click) {
-            button.onclick = click;
-        }
-        liNode.appendChild(button);
-        return liNode;
-    }
-    btnAssign() {
-        const book = this._book;
-        if (book) {
-            const cmdarray = [book.frst, book.prev, book.rand, book.next, book.last];
-            this._ctrlarray.map((e, i) => {
-                e.onclick = cmdarray[i];
-            });
-        }
-    }
     constructor(book, template) {
         super();
         this.shadow = this.attachShadow({ mode: 'open' });
@@ -665,6 +650,28 @@ class CmxCtrl extends HTMLElement {
         }
         defaultCtrl.append(...this._ctrlarray);
         this.shadow.appendChild(defaultCtrl);
+    }
+    makeButton(txt, classes, click) {
+        const liNode = document.createElement('li');
+        const button = document.createElement('button');
+        button.innerText = txt || '';
+        if (classes) {
+            button.classList.add(...classes);
+        }
+        if (click) {
+            button.onclick = click;
+        }
+        liNode.appendChild(button);
+        return liNode;
+    }
+    btnAssign() {
+        const book = this._book;
+        if (book) {
+            const cmdarray = [book.frst, book.prev, book.rand, book.next, book.last];
+            this._ctrlarray.map((e, i) => {
+                e.onclick = cmdarray[i];
+            });
+        }
     }
     static get observedAttributes() {
         return ['book'];

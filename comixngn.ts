@@ -375,6 +375,7 @@ class CmxBook extends HTMLElement {
       swap(pages, {...settings, anchor: this.shadow});
       base.setupShaders(settings);
     };
+    this.resize = base.resize;
     this.current = base.current;
     this.ch_current = () => {
       pageToChapter(this.current())
@@ -599,10 +600,13 @@ class CmxBook extends HTMLElement {
   update(): void{};
   current(): number|void{};
   ch_current(): number|void{};
-  rawData(to?: number): any|void {}
-  pg_data(to?: number): Page|void {}
-  ch_data(to?: number): Chapter|void {}
-  setupShaders(options?: number): void {}
+  rawData(to?: number): any|void{};
+  pg_data(to?: number): Page|void{};
+  ch_data(to?: number): Chapter|void{};
+  setupShaders(options?: number): void{};
+  resize(
+      sz?: {w?: number, h?: number, s2w?: boolean, s2h?: boolean}|0, redraw: boolean = true,
+      reset: boolean = false): void{};
 }
 class CmxCtrl extends HTMLElement {
   shadow: ShadowRoot;

@@ -70,7 +70,7 @@ declare class Comixngn {
     private _sysmsg;
     private _sysclr;
     private _setting;
-    readonly setting: any;
+    get setting(): any;
     private defRoute;
     private routing;
     constructor();
@@ -86,7 +86,7 @@ declare class CmxBook extends HTMLElement {
     private _cid;
     private _core;
     private _active;
-    readonly core: Comixngn;
+    get core(): Comixngn;
     shadow: ShadowRoot;
     constructor();
     private convertToDirectionSetting;
@@ -95,11 +95,15 @@ declare class CmxBook extends HTMLElement {
     private defineMethods;
     exportSchema(): string;
     changeId(key: string, value: string): void;
-    uid: string;
-    cid: string;
-    schema: any;
-    config: string | null;
-    static readonly observedAttributes: string[];
+    set uid(val: string);
+    set cid(val: string);
+    set schema(input: any);
+    set config(configPath: string | null);
+    get uid(): string;
+    get cid(): string;
+    get config(): string | null;
+    get schema(): any;
+    static get observedAttributes(): string[];
     attributeChangedCallback(name: string, oldVal: string, newVal: string): void;
     rand(): number | void;
     go(to?: number): number | void;
@@ -119,6 +123,12 @@ declare class CmxBook extends HTMLElement {
     pg_data(to?: number): Page | void;
     ch_data(to?: number): Chapter | void;
     setupShaders(options?: number): void;
+    resize(sz?: {
+        w?: number;
+        h?: number;
+        s2w?: boolean;
+        s2h?: boolean;
+    } | 0, redraw?: boolean, reset?: boolean): void;
 }
 declare class CmxCtrl extends HTMLElement {
     shadow: ShadowRoot;
@@ -128,8 +138,9 @@ declare class CmxCtrl extends HTMLElement {
     private makeButton;
     private btnAssign;
     constructor(book?: CmxBook, template?: any);
-    static readonly observedAttributes: string[];
+    static get observedAttributes(): string[];
     attributeChangedCallback(name: string, oldVal: string, newVal: string): void;
-    book: string;
+    set book(id: string);
+    get book(): string;
     bookId(): string | undefined;
 }
