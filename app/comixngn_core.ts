@@ -25,7 +25,7 @@ export class Comixngn {
 
   private _priority = false;
   private _sysmsg =
-      `%c %c %c comix-ngn v${this.coreVersion} %c \u262F %c \u00A9 2020 Oluwaseun Ogedengbe %c`;
+      `%c %c %c comix-ngn v${this.coreVersion} %c \u262F %c \u00A9 2023 Oluwaseun Ogedengbe %c`;
   private _sysclr = [
     'color:white; background:#2EB531', 'background:purple', 'color:white; background:#32E237',
     'color:red; background:black', 'color:white; background:#2EB531',
