@@ -58,7 +58,7 @@
     "app/util.ts",
     "app/data.ts",
     "app/schema.ts",
-    "app/comixngn.core.ts",
+    "app/comixngn_core.ts",
     "app/cmxctrl.ts",
     "app/cmxbook.ts",
   ]

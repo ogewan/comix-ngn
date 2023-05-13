@@ -10,7 +10,7 @@
     "@types/node": "^10.12.24"
   },
   "scripts": {
-    "build": "node compile.js"
+    "build": "node ./tools/compile.js"
   },
   "repository": {
     "type": "git",

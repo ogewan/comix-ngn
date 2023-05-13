@@ -3,15 +3,18 @@
 
 
 "@types/node@^10.12.24":
-  version "10.12.25"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-10.12.25.tgz#0d01a7dd6127de60d861ece4a650963042abb538"
+  "integrity" "sha512-V8wj+w2YMNvGuhgl/MA5fmTxgjmVHVoasfIaxMMZJV6Y8Kk+Ydpi1z2whoShDCJ2BuNVoqH/h1hrygnBxkrw/Q=="
+  "resolved" "https://registry.npmjs.org/@types/node/-/node-10.14.10.tgz"
+  "version" "10.14.10"
 
-fast-diff@^1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/fast-diff/-/fast-diff-1.2.0.tgz#73ee11982d86caaf7959828d519cfe927fac5f03"
+"fast-diff@1.2.0":
+  "integrity" "sha512-xJuoT5+L99XlZ8twedaRf6Ax2TgQVxvgZOYoPKqZufmJib0tL2tegPBOZb1pVNgIhlqDlA0eO0c3wBvQcmzx4w=="
+  "resolved" "https://registry.npmjs.org/fast-diff/-/fast-diff-1.2.0.tgz"
+  "version" "1.2.0"
 
-pastaa@^0.0.5:
-  version "0.0.5"
-  resolved "https://registry.yarnpkg.com/pastaa/-/pastaa-0.0.5.tgz#97564dc79cd93dda7e9bff581662b08e5a24ca72"
+"pastaa@^0.0.5":
+  "integrity" "sha512-xyrL5Oc/ig0A5EB9M1yGTxyfISZXJkxMM7G56jJHJ2eSk5EWEFZeiHIdKulZNWIam2Pc8i/Aq99pyejmktGltw=="
+  "resolved" "https://registry.npmjs.org/pastaa/-/pastaa-0.0.5.tgz"
+  "version" "0.0.5"
   dependencies:
-    fast-diff "^1.2.0"
+    "fast-diff" "1.2.0"
